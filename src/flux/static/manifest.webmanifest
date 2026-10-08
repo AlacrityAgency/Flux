@@ -1,0 +1,20 @@
+{
+  "name": "Flux — فضای شخصی پنج Agent",
+  "short_name": "Flux",
+  "description": "فضای شخصی دسکتاپ با ۵ نقش هوشمند، مدیریت پروژه‌ها و پوشه‌ها، و کنترل بودجه",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#212121",
+  "theme_color": "#171717",
+  "orientation": "any",
+  "lang": "fa",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/static/flux.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

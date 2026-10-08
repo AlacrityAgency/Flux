@@ -1,0 +1,269 @@
+[tests/test_local_agents.py::test_timeout_and_recovery_without_replay]
+@pytest.mark.asyncio
+async def test_timeout_and_recovery_without_replay(local_app):
+    _, runtime, root = local_app
+    runtime.timeout = .15
+    chat = runtime.create_chat(ChatSpec(cwd=str(root)))
+    turn = runtime.submit(chat["id"], TurnSpec(prompt="WAIT_FOREVER", request_key="timeout"))
+    result = await finish(runtime, turn["id"])
+    assert result["state"] == "failed" and "مهلت" in result["error"]
+    runtime.update(turn["id"], state="running")
+    runtime.recover()
+    assert runtime.turn(turn["id"])["state"] == "interrupted"
+    assert not runtime.jobs
+
+[src/flux/api/app.py::create_app.lifespan]
+    @asynccontextmanager
+    async def lifespan(app):
+        local_runtime.recover()
+        # Never replay an in-flight provider request after an interrupted process.
+        if owned:
+            for record in engine.repo.list_runs(limit=10000):
+                if record["status"] in ACTIVE:
+                    engine.repo.update_run_status(record["run_id"], "FAILED", "اجرای قبلی قطع شده است؛ برای جلوگیری از مصرف تکراری خودکار ادامه داده نشد.")
+        yield
+        await local_runtime.close()
+        for run_id, job in list(jobs.items()):
+            engine.cancel_run(run_id)
+            job.cancel()
+        await asyncio.gather(*jobs.values(), return_exceptions=True)
+        if owned:
+            engine.repo.conn.close()
+
+[src/flux/local_agents/runtime.py::LocalRuntime.recover]
+    def recover(self):
+        with self.conn:
+            self.conn.execute("UPDATE local_turns SET state='interrupted', error=?, updated_at=? WHERE state IN ('queued','running')",
+                              ("برنامه در اجرای قبلی بسته شد. ادامه فقط با پیام تازه انجام می‌شود.", now()))
+
+[tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations]
+@pytest.mark.asyncio
+async def test_restart_preserves_runs_counters_and_reservations(sample_task_data):
+    """Verifies that closing and reopening the SQLite database does not lose
+    runs, subtasks, events, counters, or budget reservations.
+    """
+    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
+        db_path = f.name
+
+    try:
+        # Phase 1: Initialize, submit and run
+        conn1 = init_db(db_path)
+        repo1 = Repository(conn1)
+        provider1 = FakeProvider()
+        engine1 = FluxEngine(repo=repo1, provider=provider1)
+
+        run_id, _ = engine1.submit_run(sample_task_data, idempotency_key="restart_key_1")
+        result1 = await engine1.execute_run(run_id)
+        assert result1.status == "ACCEPT_CANDIDATE"
+
+        usage1 = repo1.get_usage_summary(run_id)
+        events1 = repo1.get_events(run_id)
+        subtasks1 = repo1.get_subtasks(run_id)
+
+        # Close database connection (simulating process restart)
+        conn1.close()
+
+        # Phase 2: Reopen from same file with new connection and repo
+        conn2 = init_db(db_path)
+        repo2 = Repository(conn2)
+
+        run_rec = repo2.get_run(run_id)
+        assert run_rec is not None
+        assert run_rec["status"] == "ACCEPT_CANDIDATE"
+        assert run_rec["total_calls"] == len(provider1.recorded_calls)
+
+        usage2 = repo2.get_usage_summary(run_id)
+        assert usage2["spent_cost_usd"] == usage1["spent_cost_usd"]
+        assert usage2["total_calls"] == usage1["total_calls"]
+
+        events2 = repo2.get_events(run_id)
+        assert len(events2) == len(events1)
+
+        subtasks2 = repo2.get_subtasks(run_id)
+        assert len(subtasks2) == len(subtasks1)
+
+        conn2.close()
+    finally:
+        if os.path.exists(db_path):
+            try:
+                os.remove(db_path)
+            except OSError:
+                pass
+
+[mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1]
+۸. ذخیره‌سازی و API
+## ۸. ذخیره‌سازی و API
+
+| Entity | دادهٔ ضروری |
+|---|---|
+| runs | run_id، task/root/project، قرارداد و hash، state/version، checkpoint، counters، زمان فعال، idempotency و payload hash |
+| subtasks | plan معتبر، DAG، role، attempt، lease و نتیجه |
+| agent_calls | request hash، model واقعی، prompt version، dispatch state، latency، provider request id، error |
+| artifacts | ref، revision، hash، data_class، منشأ و run |
+| checks | criterion، وضعیت، evidence refs و ابزار تولیدکننده |
+| decisions | review، issues، artifact hash و صادرکننده |
+| budget_reservations | root، call، مقدار، price snapshot، وضعیت تسویه/unknown |
+| usage_records | توکن‌ها، هزینه تخمینی/واقعی nullable، attempt |
+| events | sequence افزایشی، transition، reason، timestamp و metadata پاک‌سازی‌شده |
+
+تغییر state و event متناظر اتمی هستند. فایل artifact ابتدا در فایل موقت نوشته و به‌صورت اتمی نهایی، سپس در DB ارجاع می‌شود؛ recovery فایل بدون رکورد یا ref ناقص را شناسایی کند. migration نسخه‌دار و بازیابی پشتیبان لازم است.
+
+| Endpoint | قرارداد پیشنهادی |
+|---|---|
+| POST /runs | body شامل task و idempotency_key؛ 202 با run_id/state؛ همان کلید و payload نتیجهٔ قبلی، payload متفاوت 409؛ ورودی نامعتبر 422 |
+| GET /runs/:id | state، reason، subtasks، نتیجه و artifact refs؛ ناشناخته 404 |
+| POST /runs/:id/cancel | لغو تکراری بی‌اثر؛ وضعیت پایانی دیگر 409 |
+| POST /runs/:id/resume | توضیح/رفع مانع و expected_version؛ تضاد نسخه یا وضعیت 409؛ حفظ شمارنده‌ها |
+| GET /runs/:id/events | صفحه‌بندی با after_sequence و limit؛ بدون نیاز به SSE در MVP |
+| GET /runs/:id/usage | spent، reserved، unknown، remaining و تفکیک call/model |
+| GET /models/status | قابلیت و قیمت ثبت‌شده، verified_at و علت عدم دسترسی |
+
+در MVP هر POST یک root Task مستقل ثبت می‌کند؛ `root_id=task_id` و Task/project تکراری با کلید تازه دوباره اجرا نمی
+
+[test_sol_fail.py::run_test]
+async def run_test():
+    print("Calling provider.generate for sol...")
+    try:
+        resp = await provider.generate("gpt-5.6-sol", messages, 3500)
+        print("Success! Resp length:", len(resp.content))
+        with open("sol_response.txt", "w", encoding="utf-8") as out:
+            out.write(resp.content)
+        print("Wrote sol_response.txt")
+    except Exception as e:
+        import traceback
+        print("FAILED WITH ERROR:", type(e), e)
+        traceback.print_exc()
+
+[src/flux/contracts/envelope.py::ArtifactSpec]
+class ArtifactSpec(BaseModel):
+    type: ArtifactType = Field(..., description="Type of artifact produced")
+    ref: str = Field(..., description="Reference path or identifier of artifact")
+    description: str = Field(default="", description="Description of the artifact")
+
+[tests/test_dag_validation.py::test_engine_rejects_too_many_subtasks_from_head]
+@pytest.mark.asyncio
+async def test_engine_rejects_too_many_subtasks_from_head(engine, fake_provider, sample_task_data):
+    """Integration test: More than 5 subtasks from Head Agent causes run to fail."""
+    fake_provider.scenario = "too_many_subtasks"
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "FAILED"
+    assert fake_provider.call_count == 1
+
+[src/flux/storage/workspace.py::Workspace.complete_project_task_for_run]
+    def complete_project_task_for_run(self, run_id):
+        """Mark the linked project task complete after the user accepts its output."""
+        with self.repo._lock, self.conn:
+            self.conn.execute(
+                "UPDATE project_tasks SET status='COMPLETED', updated_at=? WHERE last_run_id=?",
+                (now(), run_id),
+            )
+
+[src/flux/storage/repository.py::Repository.record_active_time]
+    def record_active_time(self, run_id: str, seconds: float):
+        with self._lock:
+            self.conn.execute(
+                """
+                UPDATE runs
+                SET active_runtime_seconds = active_runtime_seconds + ?, updated_at = ?
+                WHERE run_id = ?
+                """,
+                (seconds, utc_now_iso(), run_id)
+            )
+            self.conn.commit()
+
+[tests/test_restart_recovery.py::<module>]
+"""Test 10: restart باعث گم‌شدن Run یا رزرو نشود (Persistence across restarts)."""
+
+import os
+import tempfile
+import pytest
+from flux.storage.database import init_db
+from flux.storage.repository import Repository
+from flux.engine.orchestrator import FluxEngine
+from flux.providers.fake import FakeProvider
+
+[tests/test_workspace.py::test_ordinary_agent_retries_are_individually_reserved]
+@pytest.mark.asyncio
+async def test_ordinary_agent_retries_are_individually_reserved(engine, fake_provider, sample_task_data):
+    original = fake_provider.generate
+    failed = 0
+    async def flaky(model_id, *args, **kwargs):
+        nonlocal failed
+        if model_id == 'gpt-5.6-luna' and failed < 2:
+            failed += 1
+            raise ProviderError('temporary', is_transient=True, status_code=503)
+        return await original(model_id, *args, **kwargs)
+    fake_provider.generate = flaky
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+    assert result.status == 'ACCEPT_CANDIDATE'
+    assert result.total_calls == 5
+    assert result.unknown_cost_usd > 0
+    statuses = [r[0] for r in engine.repo.conn.execute('SELECT status FROM budget_reservations WHERE run_id=?',(run_id,))]
+    assert statuses.count('held_unknown') == 2
+
+[src/flux/local_agents/runtime.py::LocalRuntime.execute]
+    async def execute(self, ident, chat, context):
+    ...
+                        if kind != "text":
+                            self.emit(ident, kind, payload)
+                    if parser.session_id and parser.session_id != chat.get("session_id"):
+                        with self.conn:
+                            self.conn.execute("UPDATE local_chats SET session_id=? WHERE id=?", (parser.session_id, chat["id"]))
+                        chat["session_id"] = parser.session_id
+                    if time.monotonic() - last_save > .15:
+                        self.update(ident, text=parser.text)
+                        last_save = time.monotonic()
+                await asyncio.gather(writer, *readers)
+                code = await asyncio.to_thread(process.wait)
+            if parser.blocked:
+                self.update(ident, state="needs_input", text=parser.text, error="بعضی ابزارها مجوز نداشتند. فعالیت اجرا را بررسی کنید.")
+            elif code != 0 or not parser.complete or not parser.text.strip():
+                raise RuntimeError(parser.error or stderr.strip() or "اجرا بدون پاسخ کامل پایان یافت.")
+            else:
+                self.update(ident, state="completed", text=parser.text, usage=json.dumps(parser.usage))
+        except asyncio.CancelledError:
+            stopping.set()
+            if process:
+                await asyncio.to_thread(kill_tree, process)
+            self.update(ident, state="cancelled", text=parser.text)
+        except Exception as exc:
+            stopping.set()
+            if process:
+                await asyncio.to_thread(kill_tree, process)
+            message = "مهلت اجرا تمام شد؛ برای ادامه پیام تازه بفرستید." if isinstance(exc, TimeoutError) else str(exc)
+            self.update(ident, state="failed", text=parser.text, error=message[-8000:])
+        finally:
+            stopping.set()
+            if process:
+                await asyncio.to_thread(kill_tree, process)
+                await asyncio.to_thread(process.wait)
+            pending_tasks = readers + ([writer] if writer else [])
+            if pending_tasks:
+                await asyncio.gather(*pending_tasks, return_exceptions=True)
+            if process:
+                for stream in (process.stdout, process.stderr):
+    ...
+
+[tests/test_dag_validation.py::test_engine_rejects_cycle_from_head]
+@pytest.mark.asyncio
+async def test_engine_rejects_cycle_from_head(engine, fake_provider, sample_task_data):
+    """Integration test: Cycle generated by Head Agent causes run to fail safely."""
+    fake_provider.scenario = "cycle"
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "FAILED"
+    assert "DAG" in result.summary or "Cycle" in result.summary
+    # No subtasks were executed (only Head ran)
+    assert fake_provider.call_count == 1
+
+[src/flux/api/app.py::create_app.events]
+    @app.get("/runs/{run_id}/events")
+    async def events(run_id: str, after_sequence: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=500)):
+        require_run(run_id)
+        return {"run_id": run_id, "events": engine.repo.get_events(run_id, after_sequence, limit)}

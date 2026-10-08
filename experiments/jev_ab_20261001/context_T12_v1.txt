@@ -1,0 +1,238 @@
+[src/flux/engine/orchestrator.py::FluxEngine._workflow#s1/6]
+    async def _workflow(self, run_id, payload):
+        if self.repo.get_run(run_id)["status"] == "NEW":
+            self._transition(run_id, "VALIDATING", "هدف و معیارهای کار بررسی می‌شوند.")
+        task = TaskInput(**payload)
+        profile = PROFILES[task.workflow]
+        valid, error = validate_task_pre_api(task)
+        if not valid:
+            raise ValueError(error)
+        self._transition(run_id, "PLANNING", "مدیر Agentها در حال تنظیم برنامهٔ کار است.")
+        head_call = await self._call(run_id, "head", task.agent_settings.model_overrides.get("head", profile.models["head"]),
+            self._context(build_head_prompt(task), task), profile.head_tokens)
+        head = HeadOutput(**parse_llm_json(head_call.content))
+        if head.company_relevance == "invalid":
+            self._transition(run_id, "REJECTED", head.reason)
+            return
+        if head.company_relevance == "unclear" or head.requires_human_input:
+            self._transition(run_id, "NEEDS_INPUT", head.summary)
+            return
+        DAGValidator.validate_and_tier(head.subtasks)
+        if any(s.subtask_id.startswith('custom_') for s in head.subtasks):
+            raise ValueError('Reserved custom agent identifier')
+        if head.subtasks:
+            for agent in task.agent_settings.custom_agents:
+                if agent.enabled:
+                    head.subtasks.append(SubtaskSpec(subtask_id=agent.id, assigned_agent=agent.role,
+
+[src/flux/agents/head.py::<module>#s2/3]
+"""Head Agent profile (Claude Fable 5)."""
+    ...
+1. Validate task objective and assess if it belongs to legitimate company scope (company_relevance: valid, unclear, invalid).
+2. Determine task_type: planning, operations, documentation, technical, review, or mixed.
+3. Formulate up to 5 subtasks. Each subtask MUST have a unique subtask_id, objective, assigned_agent (opus, sol, luna, or qwen), acceptance_criteria, dependencies (must be a DAG without cycles), and max_output_tokens.
+4. Select final_review_agent: qwen, sol, or fable.
+5. Identify ambiguities, assess risk_level (low, medium, high), and state whether human input is required.
+
+CRITICAL CONSTRAINTS:
+- When reference context includes a local project snapshot, it is evidence you can analyze. Do not
+  request human input merely because tools or shell access are unavailable; produce the best bounded
+  analysis from the snapshot and state any coverage limits in the worker output.
+- Output ONLY valid JSON matching this schema:
+{
+  "task_type": "planning|operations|documentation|technical|review|mixed",
+  "company_relevance": "valid|unclear|invalid",
+  "summary": "string",
+  "ambiguities": ["string"],
+  "risk_level": "low|medium|high",
+  "requires_human_input": false,
+  "subtasks": [
+    {
+      "subtask_id": "string",
+      "objective": "string",
+      "assigned_agent": "opus|sol|luna|qwen",
+      "acceptance_criteria": ["string"],
+      "dependencies": ["subtask_id"],
+
+[src/flux/static/fonts/OFL.txt@L1#s3/3]
+Copyright 2015 The Vazirmatn Project Authors (https://github.com/rastikerdar/vazirmatn)
+    ...
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+
+[tests/test_agent_settings.py::test_saved_models_custom_execution_and_snapshot]
+async def test_saved_models_custom_execution_and_snapshot(engine, fake_provider, sample_task_data):
+    async with AsyncClient(transport=ASGITransport(app=create_app(engine=engine)), base_url='http://test') as client:
+        config = {'model_overrides': {'head': 'gpt-5.6-luna', 'verification': 'gpt-5.6-sol'}, 'custom_agents': [custom()]}
+        assert (await client.put('/settings/agents', json=config)).status_code == 200
+        # Configuration survives recreating the engine against the same database.
+        assert FluxEngine(engine.repo, fake_provider).get_agent_settings().model_dump() == config
+        run_id, _ = engine.submit_run({**sample_task_data, 'workflow': 'low', 'budget_cap_usd': 2})
+        await client.put('/settings/agents', json={'model_overrides': {}, 'custom_agents': []})
+        result = await engine.execute_run(run_id)
+        assert result.status == 'ACCEPT_CANDIDATE'
+        detail = (await client.get('/runs/' + run_id)).json()
+        assert detail['task']['agent_settings'] == config
+        assert [c['agent_role'] for c in detail['calls']] == ['head', 'luna', 'custom_12345678', 'verification']
+        assert [c['model_id'] for c in detail['calls']] == ['gpt-5.6-luna', 'gpt-5.6-luna', 'gpt-5.6-sol', 'gpt-5.6-sol']
+        prompt = fake_provider.recorded_calls[2]['messages']
+        assert custom()['instructions'] in prompt[0]['content']
+        assert json.loads(prompt[-1]['content'])['dependency_outputs']
+        assert detail['spent_cost_usd'] > 0
+
+[src/flux/agents/head.py::<module>#s1/3]
+"""Head Agent profile (Claude Fable 5)."""
+
+import json
+from typing import Dict, List
+from flux.contracts.head import HeadOutput
+from flux.contracts.task import TaskInput
+
+
+HEAD_MODEL_ID = "claude-fable-5"
+
+HEAD_SYSTEM_PROMPT = """You are Head Agent (Claude Fable 5) for the user's personal Flux workspace.
+Use the task's stated scope to determine relevance; this is a one-user local demo.
+For workflow='high' or 'team', use planning (opus), technical (sol), then execution (luna) as three dependent subtasks.
+For workflow='auto' or 'medium', select only the roles actually needed.
+For workflow='low', create one focused subtask using the most suitable role; avoid unnecessary decomposition.
+Qwen verification is always invoked separately by the engine. Do not assign qwen as a subtask.
+Set final_review_agent to qwen for this demo.
+Your responsibilities:
+1. Validate task objective and assess if it belongs to legitimate company scope (company_relevance: valid, unclear, invalid).
+2. Determine task_type: planning, operations, documentation, technical, review, or mixed.
+3. Formulate up to 5 subtasks. Each subtask MUST have a unique subtask_id, objective, assigned_agent (opus, sol, luna, or qwen), acceptance_criteria, dependencies (must be a DAG without cycles), and max_output_tokens.
+4. Select final_review_agent: qwen, sol, or fable.
+5. Identify ambiguities, assess risk_level (low, medium, high), and state whether human input is required.
+
+CRITICAL CONSTRAINTS:
+
+[tests/test_concurrency.py::test_concurrency_never_exceeds_two#s1/2]
+@pytest.mark.asyncio
+async def test_concurrency_never_exceeds_two(engine, fake_provider, sample_task_data, limiter):
+    """Verifies that even with multiple independent subtasks,
+    at most 2 agents run concurrently at any given moment.
+    """
+    # Configure Head agent to create 4 independent parallel subtasks
+    fake_provider.custom_responses["claude-fable-5"] = json.dumps({
+        "task_type": "operations",
+        "company_relevance": "valid",
+        "summary": "4 parallel subtasks",
+        "ambiguities": [],
+        "risk_level": "low",
+        "requires_human_input": False,
+        "subtasks": [
+            {
+                "subtask_id": f"sub_{i}",
+                "objective": f"Subtask {i}",
+                "assigned_agent": "luna",
+                "acceptance_criteria": ["Complete"],
+                "dependencies": [],
+                "max_output_tokens": 1000
+            }
+            for i in range(1, 5)
+        ],
+        "final_review_agent": "qwen",
+
+[src/flux/engine/orchestrator.py::<module>#s1/2]
+"""Bounded, persistent orchestration for the personal Flux workspace."""
+import asyncio
+import json
+import time
+import uuid
+from datetime import datetime, timezone
+
+from flux.contracts.task import TaskInput, validate_task_pre_api
+from flux.contracts.head import HeadOutput, SubtaskSpec
+from flux.contracts.agents import AgentSettings
+from flux.contracts.envelope import EnvelopeOutput, ArtifactSpec, CheckSpec
+from flux.contracts.reviewer import ReviewDecision
+from flux.contracts.run import RunResult
+from flux.budget.ledger import BudgetLedger, BudgetExceededError
+from flux.engine.dag import DAGValidator, DAGValidationError
+from flux.engine.state_machine import validate_transition
+from flux.engine.scheduler import ConcurrencyLimiter
+from flux.engine.profiles import PROFILES, LEGACY_MODELS
+from flux.engine.json_parser import parse_llm_json
+from flux.providers.base import ProviderError
+from flux.agents.head import HEAD_MODEL_ID, build_head_prompt
+from flux.agents.planning import PLANNING_MODEL_ID, build_planning_prompt
+from flux.agents.technical import TECHNICAL_MODEL_ID, build_technical_prompt
+from flux.agents.execution import EXECUTION_MODEL_ID, build_execution_prompt
+from flux.agents.verification import VERIFICATION_MODEL_ID, build_verification_prompt
+
+[src/flux/contracts/head.py::HeadOutput]
+class HeadOutput(BaseModel):
+    task_type: TaskType = Field(..., description="Categorized task type")
+    company_relevance: CompanyRelevance = Field(..., description="Relevance to company operations")
+    summary: str = Field(..., description="Analysis summary")
+    ambiguities: List[str] = Field(default_factory=list, description="Identified ambiguities")
+    risk_level: RiskLevel = Field(default="low", description="Assessed risk level")
+    requires_human_input: bool = Field(default=False, description="Whether human clarification is needed")
+    subtasks: List[SubtaskSpec] = Field(default_factory=list, description="Up to 5 decomposed subtasks")
+    final_review_agent: FinalReviewAgent = Field(default="qwen", description="Agent designated for final review")
+    reason: str = Field(default="", description="Reasoning behind routing and planning")
+
+[src/flux/api/app.py::build_project_context#s3/3]
+def build_project_context(project: dict) -> dict | None:
+    ...
+        entries, excerpts = [], []
+
+    manifest = "\n".join(entries[:80]) or "(No supported text files were readable.)"
+    content = (
+        f"Project: {project['name']}\nFolder: {root}\n"
+        "This is a read-only local snapshot. Analyze only the supplied files; identify gaps rather than requesting tools.\n"
+        f"Source tree (up to {len(entries)} files):\n{manifest}\n"
+        f"Source excerpts (up to {len(excerpts)} files):\n{''.join(excerpts) or '(No source excerpts available.)'}"
+    )
+    return {"ref": f"folder:{root}", "title": f"پوشهٔ کاری {project['name']}", "content": content[:10_000]}
+
+[src/flux/agents/head.py::build_head_prompt]
+def build_head_prompt(task: TaskInput) -> List[Dict[str, str]]:
+    user_content = {
+        "task_id": task.task_id,
+        "project_id": task.project_id,
+        "objective": task.objective,
+        "scope": task.scope,
+        "out_of_scope": task.out_of_scope,
+        "acceptance_criteria": task.acceptance_criteria,
+        "allowed_tools": task.allowed_tools,
+        "allowed_paths": task.allowed_paths,
+        "priority": task.priority,
+        "data_class": task.data_class,
+        "workflow": task.workflow,
+        "context": task.context,
+    }
+    return [
+        {"role": "system", "content": HEAD_SYSTEM_PROMPT},
+        {"role": "user", "content": f"Analyze and route the following organizational task:\n{json.dumps(user_content, ensure_ascii=False, indent=2)}"}
+    ]
+
+[src/flux/engine/dag.py::<module>]
+"""DAG Validator and topological scheduler for subtasks."""
+
+from typing import Dict, List, Set
+from collections import defaultdict, deque
+from flux.contracts.head import SubtaskSpec

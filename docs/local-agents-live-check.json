@@ -1,0 +1,169 @@
+{
+  "timestamp": "2026-10-01T00:24:42.499801+00:00",
+  "providers": {
+    "codex": {
+      "turns": [
+        {
+          "state": "completed",
+          "text": "فایل را ایجاد می‌کنم و سپس محتوایش را می‌خوانم.\n\n\nFLUX_OK",
+          "error": "",
+          "usage": {
+            "input_tokens": 48148,
+            "cached_input_tokens": 37248,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 136,
+            "reasoning_output_tokens": 0
+          },
+          "tool_events": 4
+        },
+        {
+          "state": "completed",
+          "text": "فایل را می‌خوانم و محتوایش را بررسی می‌کنم.\n\n\nFLUX_RESUME_OK",
+          "error": "",
+          "usage": {
+            "input_tokens": 96931,
+            "cached_input_tokens": 85376,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 283,
+            "reasoning_output_tokens": 36
+          },
+          "tool_events": 2
+        }
+      ],
+      "file_verified": true,
+      "session_saved": true
+    },
+    "claude": {
+      "turns": [
+        {
+          "state": "completed",
+          "text": "FLUX_OK",
+          "error": "",
+          "usage": {
+            "input_tokens": 6,
+            "cache_creation_input_tokens": 14296,
+            "cache_read_input_tokens": 28098,
+            "output_tokens": 225,
+            "output_tokens_details": {
+              "thinking_tokens": 0
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 14296,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 9,
+                "cache_read_input_tokens": 14160,
+                "cache_creation_input_tokens": 136,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 136
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "provider_cost_estimate_usd": 0.1245116,
+            "cost_scope": "session_estimate",
+            "billing": "subscription"
+          },
+          "tool_events": 4
+        },
+        {
+          "state": "completed",
+          "text": "FLUX_RESUME_OK",
+          "error": "",
+          "usage": {
+            "input_tokens": 4,
+            "cache_creation_input_tokens": 805,
+            "cache_read_input_tokens": 29261,
+            "output_tokens": 105,
+            "output_tokens_details": {
+              "thinking_tokens": 0
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 805,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 14,
+                "cache_read_input_tokens": 14965,
+                "cache_creation_input_tokens": 136,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 136
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "provider_cost_estimate_usd": 0.1389198,
+            "cost_scope": "session_estimate",
+            "billing": "subscription"
+          },
+          "tool_events": 2
+        }
+      ],
+      "file_verified": true,
+      "session_saved": true
+    }
+  },
+  "connections": {
+    "providers": [
+      {
+        "id": "codex",
+        "installed": true,
+        "authenticated": true,
+        "version": "codex-cli 0.159.2",
+        "path": "C:\\Users\\xio\\AppData\\Local\\OpenAI\\Codex\\bin\\c6fe824d725f02d7\\codex.EXE",
+        "detail": "ورود با حساب اشتراکی آماده است."
+      },
+      {
+        "id": "claude",
+        "installed": true,
+        "authenticated": true,
+        "version": "2.1.283 (Claude Code)",
+        "path": "C:\\Users\\xio\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Anthropic.ClaudeCode_Microsoft.Winget.Source_8wekyb3d8bbwe\\claude.exe",
+        "detail": "ورود با حساب اشتراکی آماده است."
+      }
+    ],
+    "models": {
+      "codex": [
+        "gpt-6.1-sol",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6-luna",
+        "gpt-reserve",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-5.6-luna",
+        "gpt-5.5",
+        "codex-auto-review"
+      ],
+      "claude": [
+        "sonnet",
+        "opus",
+        "haiku"
+      ]
+    },
+    "default_cwd": "D:\\project\\Alacrity\\Flux",
+    "billing": "subscription",
+    "catalog_is_entitlement": false
+  }
+}

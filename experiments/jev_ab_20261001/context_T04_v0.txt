@@ -1,0 +1,182 @@
+[tests/test_retry_limits.py::test_transient_error_retries_at_most_twice]
+@pytest.mark.asyncio
+async def test_transient_error_retries_at_most_twice(engine, fake_provider, sample_task_data):
+    """When a transient error (429) occurs, engine retries at most 2 times.
+    Head has its stricter two-send cap; one retry may succeed.
+    """
+    fake_provider.transient_error_countdown = 1
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "ACCEPT_CANDIDATE"
+    # The Head call had one failure and one success, both accounted for.
+    assert fake_provider.call_count == 4
+    assert result.total_calls == 4
+    assert result.unknown_cost_usd > 0
+
+[tests/test_retry_limits.py::test_permanent_error_not_retried]
+@pytest.mark.asyncio
+async def test_permanent_error_not_retried(engine, fake_provider, sample_task_data):
+    """Permanent error (401 auth error) is never retried (0 retries)."""
+    fake_provider.permanent_error = True
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "FAILED"
+    # Exactly 1 call was attempted (0 retries)
+    assert fake_provider.call_count == 1
+
+[tests/test_retry_limits.py::test_transient_error_fails_if_exceeding_two_retries]
+@pytest.mark.asyncio
+async def test_transient_error_fails_if_exceeding_two_retries(engine, fake_provider, sample_task_data):
+    """If transient error occurs 3 times (more than 2 retries allowed),
+    it fails without doing infinite or excess retries.
+    """
+    fake_provider.transient_error_countdown = 3  # Needs 3 retries, but max is 2
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "FAILED"
+    # Head is capped at two sends, even though ordinary agents allow three.
+    assert fake_provider.call_count == 2
+
+[tests/test_retry_limits.py::<module>]
+"""Test 7: retry بیشتر از حد تعریف‌شده انجام نشود (Retry limit enforced)."""
+
+import pytest
+from flux.providers.base import ProviderError
+
+[tests/test_head_rejection.py::test_task_outside_company_rejected]
+@pytest.mark.asyncio
+async def test_task_outside_company_rejected(engine, fake_provider, sample_task_data):
+    """When Head Agent detects company_relevance == 'invalid',
+    run must transition to REJECTED and NO specialized agents (Opus, Sol, Luna, Qwen) must run.
+    """
+    fake_provider.scenario = "out_of_company"
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "REJECTED"
+    # Exactly 1 provider call (Head Agent only)
+    assert fake_provider.call_count == 1
+    recorded = fake_provider.recorded_calls
+    assert len(recorded) == 1
+    assert recorded[0]["model_id"] == "claude-fable-5"
+
+[src/flux/providers/base.py::ProviderError]
+class ProviderError(Exception):
+    """Base exception for provider errors."""
+
+[mem:dec_retry_current rev2]
+تصمیم فعلی: سقف تلاش مجدد
+FluxEngine._call برای Head حداکثر دو ارسال و برای سایر نقش‌ها حداکثر سه ارسال انجام می‌دهد؛ فقط خطای گذرا (ProviderError.is_transient) دوباره ارسال می‌شود و هر run حداکثر بیست تماس دارد.
+
+[mem:dec_ctx_current rev3]
+تصمیم فعلی: Context پروژه در هر تماس
+reference_context در تابع FluxEngine._context به همهٔ تماس‌های Head، کارگرها و بازبین اضافه می‌شود. build_head_prompt نیز فیلد context را در درخواست Head می‌گذارد، پس Head دو نسخه می‌گیرد. اصلاح پیشنهادی: حذف فیلد context از build_head_prompt.
+
+[src/flux/contracts/reviewer.py::ReviewDecision.validate_rules]
+    @model_validator(mode="after")
+    def validate_rules(self) -> "ReviewDecision":
+        # Rule: REVISE must provide at least one blocking issue
+        if self.decision == "REVISE" and not self.blocking_issues:
+            raise ValueError("Decision 'REVISE' requires at least one precise blocking issue.")
+        # Rule: ACCEPT_CANDIDATE cannot have blocking issues or failed criteria
+        if self.decision == "ACCEPT_CANDIDATE":
+            if self.blocking_issues:
+                raise ValueError("Decision 'ACCEPT_CANDIDATE' cannot contain blocking issues.")
+            if self.failed_criteria:
+                raise ValueError("Decision 'ACCEPT_CANDIDATE' cannot contain failed criteria.")
+        return self
+
+[src/flux/providers/fake.py::FakeProvider.__init__]
+    def __init__(self):
+        self.call_count = 0
+        self.delay_seconds = 0
+        self.recorded_calls = []
+        # Hooks to customize responses or inject errors
+        self.custom_responses: Dict[str, str] = {}
+        self.transient_error_countdown: int = 0
+        self.permanent_error: bool = False
+        self.simulate_missing_usage: bool = False
+        self.simulate_invalid_json: bool = False
+        self.scenario: str = "default"  # "default", "out_of_company", "cycle", "too_many_subtasks", "not_run_check"
+
+[src/flux/static/local.html@L1]
+<!doctype html>
+    ...
+</aside>
+<main>
+ <header class="topbar"><div class="workspace-heading"><button id="menu-button" class="icon-button mobile" aria-label="نمایش گفتگوها" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="/static/ui-icons.svg#sidebar"/></svg></button><strong id="chat-title">Flux</strong><span id="chat-subtitle">فضای کار شما</span></div><button id="activity-toggle" class="toolbar-button" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="/static/ui-icons.svg#activity"/></svg><span>فعالیت</span></button></header>
+ <div class="chat-stage">
+  <section class="conversation" id="conversation" aria-label="گفتگو"><div id="welcome" class="welcome"><div class="welcome-brand"><img src="/static/alacrity-mark.png" alt="" width="36" height="36"><span>ALACRITY <span class="brand-divider">/</span> FLUX</span></div><h1>چه کاری در ذهن داری؟</h1></div><div id="messages" aria-live="off"></div></section>
+  <div class="composer-wrap"><div id="error" role="alert" hidden></div><form id="composer">
+   <label for="prompt" class="sr-only">پیام شما</label><textarea id="prompt" rows="2" placeholder="برای شروع، هر چیزی در ذهن داری بنویس…" required></textarea>
+   <div class="composer-controls"><div class="composer-tools"><button id="composer-settings" type="button" class="icon-button" title="مدل و تنظیمات اجرا" aria-label="مدل و تنظیمات اجرا"><svg class="icon" aria-hidden="true"><use href="/static/ui-icons.svg#sliders"/></svg></button><label for="provider" class="sr-only">انتخاب دستیار</label><span class="provider-control"><select id="provider"><option value="codex">Codex</option><option value="claude">Claude</option></select><svg class="icon" aria-hidden="true"><use href="/static/ui-icons.svg#chevron"/></svg></span><button id="model-settings" type="button" class="model-button" aria-label="انتخاب مدل"><span id="model-label">پیش‌فرض</span><svg class="icon" aria-hidden="true"><use href="/static/ui-icons.svg#chevron"/></svg></button></div><button id="send" class="send-button" type="submit" title="ارسال پیام" aria-label="ارسال پیام"><svg class="icon" aria-hidden="true"><use id="send-icon" href="/static/ui-icons.svg#arrow"/></svg></button></div>
+    ...
+
+[mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1]
+۸. ذخیره‌سازی و API
+## ۸. ذخیره‌سازی و API
+
+| Entity | دادهٔ ضروری |
+|---|---|
+| runs | run_id، task/root/project، قرارداد و hash، state/version، checkpoint، counters، زمان فعال، idempotency و payload hash |
+| subtasks | plan معتبر، DAG، role، attempt، lease و نتیجه |
+| agent_calls | request hash، model واقعی، prompt version، dispatch state، latency، provider request id، error |
+| artifacts | ref، revision، hash، data_class، منشأ و run |
+| checks | criterion، وضعیت، evidence refs و ابزار تولیدکننده |
+| decisions | review، issues، artifact hash و صادرکننده |
+| budget_reservations | root، call، مقدار، price snapshot، وضعیت تسویه/unknown |
+| usage_records | توکن‌ها، هزینه تخمینی/واقعی nullable، attempt |
+| events | sequence افزایشی، transition، reason، timestamp و metadata پاک‌سازی‌شده |
+
+تغییر state و event متناظر اتمی هستند. فایل artifact ابتدا در فایل موقت نوشته و به‌صورت اتمی نهایی، سپس در DB ارجاع می‌شود؛ recovery فایل بدون رکورد یا ref ناقص را شناسایی کند. migration نسخه‌دار و بازیابی پشتیبان لازم است.
+
+| Endpoint | قرارداد پیشنهادی |
+|---|---|
+| POST /runs | body شامل task و idempotency_key؛ 202 با run_id/state؛ همان کلید و payload نتیجهٔ قبلی، payload متفاوت 409؛ ورودی نامعتبر 422 |
+| GET /runs/:id | state، reason، subtasks، نتیجه و artifact refs؛ ناشناخته 404 |
+| POST /runs/:id/cancel | لغو تکراری بی‌اثر؛ وضعیت پایانی دیگر 409 |
+| POST /runs/:id/resume | توضیح/رفع مانع و expected_version؛ تضاد نسخه یا وضعیت 409؛ حفظ شمارنده‌ها |
+| GET /runs/:id/events | صفحه‌بندی با after_sequence و limit؛ بدون نیاز به SSE در MVP |
+| GET /runs/:id/usage | spent، reserved، unknown، remaining و تفکیک call/model |
+| GET /models/status | قابلیت و قیمت ثبت‌شده، verified_at و علت عدم دسترسی |
+
+در MVP هر POST یک root Task مستقل ثبت می‌کند؛ `root_id=task_id` و Task/project تکراری با کلید تازه دوباره اجرا نمی
+
+[tests/test_agent_settings.py::test_custom_agent_still_obeys_budget]
+async def test_custom_agent_still_obeys_budget(engine, fake_provider, sample_task_data):
+    task = {**sample_task_data, 'workflow': 'low', 'budget_cap_usd': .01,
+            'agent_settings': {'custom_agents': [{**custom(), 'model_id': 'claude-opus-5'}]}}
+    run_id, _ = engine.submit_run(task)
+    result = await engine.execute_run(run_id)
+    assert result.status == 'PAUSED_BUDGET'
+    assert all(c['model_id'] == 'gpt-5.6-luna' for c in fake_provider.recorded_calls)
+    assert result.spent_cost_usd + result.reserved_cost_usd + result.unknown_cost_usd <= .01
+
+[src/flux/providers/gapgpt.py::GapGPTAdapter._get_client]
+    def _get_client(self) -> AsyncOpenAI:
+        key = self._api_key or os.environ.get("GAPGPT_API_KEY", "")
+        if not key:
+            raise ProviderError(
+                "GAPGPT_API_KEY environment variable is not set. Live API calls require GAPGPT_API_KEY.",
+                is_transient=False,
+                status_code=401
+            )
+        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY") or os.environ.get("ALL_PROXY")
+        http_client = None
+        if proxy:
+            import httpx
+            http_client = httpx.AsyncClient(proxy=proxy, timeout=120.0)
+        return AsyncOpenAI(
+            base_url=self.base_url,
+            api_key=key,
+            http_client=http_client,
+            max_retries=0,  # Retries are managed deterministically by Flux engine
+            timeout=120.0
+        )

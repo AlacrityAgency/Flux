@@ -1,0 +1,19 @@
+{
+  "exe": "C:\\Users\\xio\\AppData\\Local\\Programs\\Flux\\Flux.exe",
+  "sha256": "4d2423b204d87315ab71d8faea11352cc16c46e5cea0dbb87bcbd9e49d574e4a",
+  "model_calls": 0,
+  "user_database_access": false,
+  "checks": [
+    "bundled source equals local.html",
+    "bundled source equals local.css",
+    "bundled source equals local.js",
+    "bundled source equals project-memory.js",
+    "bundled source equals head.html",
+    "bundled source equals head.js",
+    "bundled source equals head.css",
+    "packaged current page and explicit legacy route",
+    "HEAD contract/gate and project-scoped bounded retrieval in packaged runtime",
+    "project create/edit and memory create/read/delete on isolated DB"
+  ],
+  "passed": true
+}

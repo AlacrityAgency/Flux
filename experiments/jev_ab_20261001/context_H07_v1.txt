@@ -1,0 +1,317 @@
+[src/flux/settings.py::Settings]
+class Settings(BaseModel):
+    gapgpt_base_url: str = Field(default="https://api.gapgpt.app/v1")
+    enable_live: bool = Field(default=False)
+    default_provider: str = Field(default="fake")  # "fake" or "gapgpt"
+    db_path: str = Field(default="var/flux.db")
+
+    # Hard execution constraints
+    max_subtasks: int = 5
+    max_subtask_attempts: int = 3
+    max_concurrent_agents: int = 2
+    max_root_calls: int = 20
+    max_fable_calls: int = 2
+    max_active_runtime_seconds: int = 20 * 60  # 20 minutes
+    max_network_retries: int = 2
+
+[tests/test_retry_limits.py::<module>]
+"""Test 7: retry بیشتر از حد تعریف‌شده انجام نشود (Retry limit enforced)."""
+
+import pytest
+from flux.providers.base import ProviderError
+
+[tests/test_retry_limits.py::test_transient_error_retries_at_most_twice]
+@pytest.mark.asyncio
+async def test_transient_error_retries_at_most_twice(engine, fake_provider, sample_task_data):
+    """When a transient error (429) occurs, engine retries at most 2 times.
+    Head has its stricter two-send cap; one retry may succeed.
+    """
+    fake_provider.transient_error_countdown = 1
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "ACCEPT_CANDIDATE"
+    # The Head call had one failure and one success, both accounted for.
+    assert fake_provider.call_count == 4
+    assert result.total_calls == 4
+    assert result.unknown_cost_usd > 0
+
+[tests/test_local_agents.py::test_timeout_and_recovery_without_replay]
+@pytest.mark.asyncio
+async def test_timeout_and_recovery_without_replay(local_app):
+    _, runtime, root = local_app
+    runtime.timeout = .15
+    chat = runtime.create_chat(ChatSpec(cwd=str(root)))
+    turn = runtime.submit(chat["id"], TurnSpec(prompt="WAIT_FOREVER", request_key="timeout"))
+    result = await finish(runtime, turn["id"])
+    assert result["state"] == "failed" and "مهلت" in result["error"]
+    runtime.update(turn["id"], state="running")
+    runtime.recover()
+    assert runtime.turn(turn["id"])["state"] == "interrupted"
+    assert not runtime.jobs
+
+[src/flux/contracts/head.py::HeadOutput.validate_subtasks_count]
+    @field_validator("subtasks")
+    @classmethod
+    def validate_subtasks_count(cls, v: List[SubtaskSpec]) -> List[SubtaskSpec]:
+        if len(v) > 5:
+            raise ValueError(f"Head Agent cannot create more than 5 subtasks. Received: {len(v)}")
+        # Verify unique subtask_ids
+        ids = [s.subtask_id for s in v]
+        if len(ids) != len(set(ids)):
+            raise ValueError("Duplicate subtask_id found in subtasks list.")
+        return v
+
+[test_ageis_e2e.py::<module>#s4/5]
+import sys
+    ...
+    run_id=run_id, task_id=task_id, root_id=task_id,
+    project_id='proj_acd3bf5499f5', human_owner='Me',
+    task_payload=task_payload, budget_cap_usd=0.5
+)
+
+# Define the subtasks
+subtasks = [
+    SubtaskSpec(
+        subtask_id='st1_planning',
+        objective='تدوین برنامهٔ بررسی پروژهٔ Ageis: تعیین ۶ بعد ارزیابی، معیارهای تشخیص اشکالات و چارچوب گزارش نهایی',
+        assigned_agent='opus',
+        acceptance_criteria=['تعریف ابعاد ارزیابی و ساختار گزارش نهایی به زبان فارسی'],
+        dependencies=[],
+        max_output_tokens=2500
+    ),
+    SubtaskSpec(
+        subtask_id='st2_technical',
+        objective='تحلیل فنی و معماری بر اساس برنامه st1: بررسی اشکالات محتمل ساختاری، تفکیک ریسک‌ها بر اساس شواهد موجود',
+        assigned_agent='sol',
+        acceptance_criteria=['ارائه تحلیل فنی و دسته‌بندی اشکالات با سطح شدت'],
+        dependencies=['st1_planning'],
+        max_output_tokens=3500
+    ),
+    SubtaskSpec(
+        subtask_id='st3_execution',
+
+[inspect_call.py::<module>#s1/2]
+import sqlite3, os, json
+from pathlib import Path
+
+db_path = Path(os.environ['LOCALAPPDATA']) / 'FluxDemo' / 'flux.db'
+conn = sqlite3.connect(db_path)
+conn.row_factory = sqlite3.Row
+
+call = conn.execute("SELECT * FROM agent_calls WHERE call_id='call_dabc73f45029'").fetchone()
+if call:
+    print('Call status:', call['status'])
+    print('Call err:', call['error_message'])
+    print('Call prompt_hash:', call['prompt_hash'])
+
+res = conn.execute("SELECT * FROM budget_reservations WHERE call_id='call_dabc73f45029'").fetchone()
+if res:
+    print('Reservation status:', res['status'])
+    print('Reserved amount:', res['reserved_amount_usd'])
+
+# Also let's check subtasks for that run
+subtasks = conn.execute("SELECT * FROM subtasks WHERE run_id='run_d01a439e54fc'").fetchall()
+for s in subtasks:
+    print(f"Subtask {s['subtask_id']} ({s['assigned_agent']}): status={s['status']}")
+    if s['assigned_agent'] == 'opus':
+        print(f"  Opus output length: {len(s['output'] or '')}")
+        with open('opus_subtask_output.txt', 'w', encoding='utf-8') as f:
+
+[src/flux/local_agents/runtime.py::LocalRuntime.execute#s3/7]
+    async def execute(self, ident, chat, context):
+    ...
+                    try:
+                        pending.result(timeout=.2)
+                        return
+                    except FutureTimeout:
+                        continue
+                pending.cancel()
+
+            def read_stream(stream, source):
+                try:
+                    while not stopping.is_set():
+                        line = stream.readline(2_000_001)
+                        if not line:
+                            break
+                        if len(line) > 2_000_000:
+                            raise RuntimeError("خروجی ابزار بیش از اندازهٔ مجاز است.")
+                        enqueue((source, line.decode("utf-8", errors="replace")))
+                except Exception as exc:
+                    enqueue(("stderr", str(exc)))
+                finally:
+                    enqueue((source, None))
+
+            def send_input():
+                try:
+                    process.stdin.write(prompt.encode("utf-8"))
+                    process.stdin.flush()
+
+[src/flux/providers/fake.py::FakeProvider._generate_scenario_content#s4/11]
+    def _generate_scenario_content(self, model_id: str) -> str:
+    ...
+                    "subtasks": [
+                        {
+                            "subtask_id": f"sub_{i}",
+                            "objective": f"Subtask {i}",
+                            "assigned_agent": "luna",
+                            "acceptance_criteria": ["Done"],
+                            "dependencies": [],
+                            "max_output_tokens": 1000
+                        }
+                        for i in range(1, 7)
+                    ],
+                    "final_review_agent": "qwen",
+                    "reason": "Testing subtask count limit"
+                })
+
+            # Default Head Plan: 2 subtasks (execution by Luna, verification by Qwen)
+            return json.dumps({
+                "task_type": "documentation",
+                "company_relevance": "valid",
+                "summary": "Verified company relevance. Decomposing documentation task into drafting subtask.",
+                "ambiguities": [],
+                "risk_level": "low",
+                "requires_human_input": False,
+                "subtasks": [
+                    {
+
+[src/flux/engine/scheduler.py::<module>]
+"""Execution Scheduler with strict concurrency limits."""
+
+import asyncio
+from typing import Optional
+
+[var/patch_orchestrator.py::<module>#s2/6]
+with open('src/flux/engine/orchestrator.py', 'r', encoding='utf-8') as f:
+    ...
+        max_sends = 2 if role == "head" else 3
+        for attempt in range(1, max_sends + 1):
+            await self.limiter.acquire()
+            try:
+                self._check_cancelled(run_id)
+                run = self.repo.get_run(run_id)
+                if run["total_calls"] >= 20:
+                    raise ValueError("Call limit reached")
+                if role == "head" and self.repo.conn.execute("SELECT COUNT(*) FROM agent_calls WHERE run_id=? AND agent_role='head'", (run_id,)).fetchone()[0] >= 2:
+                    raise ValueError("Head call limit reached")
+                call_id = "call_" + uuid.uuid4().hex[:12]
+                res_id, estimated, _ = self.budget_ledger.reserve_for_call(run_id, call_id, model_id,
+                    json.dumps(messages, ensure_ascii=False), max_tokens)
+                self.repo.add_call(call_id, run_id, call_role or role, model_id, subtask_id=subtask_id, attempt=attempt)
+                try:
+                    response = await self.provider.generate(model_id, messages, max_tokens)
+                except BaseException as exc:
+                    self.repo.update_call_status(call_id, "failed", error_message=type(exc).__name__)
+                    self.budget_ledger.settle_call(res_id, "usage_"+call_id, run_id, call_id, model_id, 0, 0, 0, estimated, is_unknown=True)
+                    if isinstance(exc, ProviderError) and exc.is_transient and attempt < max_sends:
+                        retry = True
+                    else:
+                        raise
+                else:
+                    self.repo.update_call_status(call_id, "completed", latency_ms=response.latency_ms)
+
+[src/flux/local_agents/runtime.py::<module>]
+"""Drive the official CLIs without copying credentials or running a shell wrapper."""
+import asyncio
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import time
+import threading
+from concurrent.futures import TimeoutError as FutureTimeout
+import uuid
+
+import psutil
+from pydantic import BaseModel, Field, field_validator
+from typing import Literal
+
+from flux.storage.workspace import now
+
+ACTIVE = {"queued", "running"}
+
+[src/flux/engine/dag.py::DAGValidator.validate_and_tier#s2/3]
+    @staticmethod
+    ...
+            subtask_map[s.subtask_id] = s
+            in_degree[s.subtask_id] = 0
+
+        # Build graph
+        for s in subtasks:
+            for dep in s.dependencies:
+                if dep == s.subtask_id:
+                    raise DAGValidationError(f"Subtask '{s.subtask_id}' cannot depend on itself.")
+                if dep not in subtask_map:
+                    raise DAGValidationError(f"Subtask '{s.subtask_id}' references unknown dependency '{dep}'.")
+                adj[dep].append(s.subtask_id)
+                in_degree[s.subtask_id] += 1
+
+        # Kahn's algorithm with tiering
+        queue = deque([sid for sid, deg in in_degree.items() if deg == 0])
+        tiers: List[List[SubtaskSpec]] = []
+        visited_count = 0
+
+        while queue:
+            current_tier = []
+            tier_size = len(queue)
+            for _ in range(tier_size):
+                curr_id = queue.popleft()
+                current_tier.append(subtask_map[curr_id])
+                visited_count += 1
+
+[src/flux/local_agents/runtime.py::LocalRuntime.execute#s4/7]
+    async def execute(self, ident, chat, context):
+    ...
+                finally:
+                    enqueue((source, None))
+
+            def send_input():
+                try:
+                    process.stdin.write(prompt.encode("utf-8"))
+                    process.stdin.flush()
+                finally:
+                    process.stdin.close()
+
+            readers = [asyncio.create_task(asyncio.to_thread(read_stream, process.stdout, "stdout")),
+                       asyncio.create_task(asyncio.to_thread(read_stream, process.stderr, "stderr"))]
+            writer = asyncio.create_task(asyncio.to_thread(send_input))
+            stderr = ""
+            closed = 0
+            last_save = 0
+            async with asyncio.timeout(self.timeout):
+                while closed < 2:
+                    source, line = await queue.get()
+                    if line is None:
+                        closed += 1
+                        continue
+                    if source == "stderr":
+                        stderr = (stderr + line)[-8000:]
+                        continue
+
+[src/flux/engine/dag.py::DAGValidator.validate_and_tier#s3/3]
+    @staticmethod
+    ...
+        while queue:
+            current_tier = []
+            tier_size = len(queue)
+            for _ in range(tier_size):
+                curr_id = queue.popleft()
+                current_tier.append(subtask_map[curr_id])
+                visited_count += 1
+                for neighbor in adj[curr_id]:
+                    in_degree[neighbor] -= 1
+                    if in_degree[neighbor] == 0:
+                        queue.append(neighbor)
+            tiers.append(current_tier)
+
+        if visited_count != len(subtasks):
+            raise DAGValidationError("Cycle detected in subtask dependency graph! Graph must be an acyclic DAG.")
+
+        return tiers
+
+[src/flux/local_agents/runtime.py::LocalRuntime]
+class LocalRuntime:

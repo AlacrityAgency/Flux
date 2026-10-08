@@ -1,0 +1,245 @@
+[src/flux/engine/orchestrator.py::FluxEngine.submit_run]
+    def submit_run(self, task_data, idempotency_key=None):
+        if idempotency_key:
+            existing = self.repo.get_run_by_idempotency_key(idempotency_key)
+            if existing:
+                return existing["run_id"], False
+        task_data = dict(task_data)
+        task_data.setdefault("agent_settings", self.get_agent_settings().model_dump())
+        run_id = "run_" + uuid.uuid4().hex[:12]
+        task_id = task_data.get("task_id", "task_" + uuid.uuid4().hex[:8])
+        created = self.repo.create_run(run_id=run_id, task_id=task_id,
+            root_id=task_data.get("root_id", task_id), project_id=task_data.get("project_id", "personal"),
+            human_owner=task_data.get("human_owner", "Me"), task_payload=task_data,
+            budget_cap_usd=float(task_data.get("budget_cap_usd", .5)), idempotency_key=idempotency_key)
+        if not created:
+            existing = self.repo.get_run_by_idempotency_key(idempotency_key)
+            if existing:
+                return existing["run_id"], False
+            raise ValueError("Unable to create run")
+        return run_id, True
+
+[src/flux/storage/repository.py::Repository.get_run_by_idempotency_key]
+    def get_run_by_idempotency_key(self, idempotency_key: str) -> Optional[dict]:
+        with self._lock:
+            cursor = self.conn.execute(
+                "SELECT * FROM runs WHERE idempotency_key = ?", (idempotency_key,)
+            )
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+[src/flux/cli.py::cmd_submit#s1/2]
+def cmd_submit(args):
+    path = Path(args.file)
+    if not path.exists():
+        print(f"Error: Task file '{args.file}' not found.", file=sys.stderr)
+        sys.exit(1)
+
+    with open(path, "r", encoding="utf-8") as f:
+        task_data = json.load(f)
+
+    engine = get_configured_engine(enable_live=args.live)
+    run_id, is_new = engine.submit_run(task_data, idempotency_key=args.idempotency_key)
+    print(f"Run submitted: {run_id} (New={is_new})")
+
+    if is_new and not args.no_wait:
+        print("Executing run...")
+        result = asyncio.run(engine.execute_run(run_id))
+        print("\n--- Execution Result ---")
+        print(f"Status: {result.status}")
+        print(f"Summary: {result.summary}")
+        print(f"Cost Spent: ${result.spent_cost_usd:.6f}")
+        print(f"Total Calls: {result.total_calls}")
+        if result.decision:
+            print(f"Review Decision: {result.decision.decision} (Confidence={result.decision.confidence})")
+    elif not is_new:
+        run = engine.repo.get_run(run_id)
+
+[tests/test_workspace.py::test_validation_idempotency_and_origin_guard]
+@pytest.mark.asyncio
+async def test_validation_idempotency_and_origin_guard(engine, sample_task_data):
+    app = create_app(engine=engine)
+    async with AsyncClient(transport=ASGITransport(app), base_url="http://test") as client:
+        assert (await client.post('/runs', json={"task": {}})).status_code == 422
+        response = await client.post('/runs', json={"task": sample_task_data, "idempotency_key": "same"})
+        assert response.status_code == 201
+        changed = {**sample_task_data, 'objective': 'A different objective'}
+        assert (await client.post('/runs', json={"task": changed, "idempotency_key": "same"})).status_code == 409
+        assert (await client.post('/memories', headers={'Origin': 'https://untrusted.example'}, json={'title': 'x', 'content': 'y'})).status_code == 403
+        # Synthetic sentinel, not a usable API credential.
+        secret = 'sk-' + 'x'*24
+        response = await client.post('/memories', json={'title': 'secret', 'content': secret})
+        assert response.status_code == 422
+        assert secret not in response.text
+
+[tests/test_idempotency.py::test_idempotency_prevents_duplicate_runs]
+@pytest.mark.asyncio
+async def test_idempotency_prevents_duplicate_runs(engine, fake_provider, sample_task_data):
+    """Submitting the same task with the same idempotency key
+    returns the existing run_id and is_new=False without executing duplicate calls.
+    """
+    key = "idem_key_12345"
+
+    run_id_1, is_new_1 = engine.submit_run(sample_task_data, idempotency_key=key)
+    assert is_new_1 is True
+
+    # Execute first run
+    res_1 = await engine.execute_run(run_id_1)
+    assert res_1.status == "ACCEPT_CANDIDATE"
+    first_call_count = fake_provider.call_count
+
+    # Submit again with same key
+    run_id_2, is_new_2 = engine.submit_run(sample_task_data, idempotency_key=key)
+    assert is_new_2 is False
+    assert run_id_2 == run_id_1
+
+    # Call count should not have increased
+    assert fake_provider.call_count == first_call_count
+
+[src/flux/api/app.py::create_app.submit#s3/4]
+    @app.post("/runs", status_code=201)
+    ...
+                        if str(p_cand) not in paths:
+                            task_data["allowed_paths"] = paths + [str(p_cand)]
+        try:
+            task_data.setdefault("agent_settings", engine.get_agent_settings().model_dump())
+            task = TaskInput(**task_data).model_dump()
+        except ValidationError:
+            raise HTTPException(422, "هدف، معیار پذیرش و بودجهٔ مثبت را بررسی کنید.")
+        existing = engine.repo.get_run_by_idempotency_key(key) if key else None
+        if existing:
+            old = json.loads(existing["task_payload"])
+            if any(old.get(k) != task.get(k) for k in ("task_id", "objective", "budget_cap_usd", "acceptance_criteria")):
+                raise HTTPException(409, "شناسهٔ درخواست قبلاً برای کار دیگری استفاده شده است.")
+            return {"run_id": existing["run_id"], "is_new": False, "status": existing["status"]}
+        if payload.conversation_id and not workspace.get_conversation(payload.conversation_id):
+            raise HTTPException(404, "گفت‌وگو پیدا نشد.")
+        if payload.conversation_id:
+            previous = workspace.conversation_run_ids(payload.conversation_id)
+            if any(require_run(r)["status"] in ACTIVE for r in previous):
+                raise HTTPException(409, "ابتدا منتظر پایان پاسخ جاری بمانید یا آن را متوقف کنید.")
+            if previous:
+                last = detail(previous[-1])
+                task["context"].append({"ref": previous[-1], "title": "گفت‌وگوی قبلی (داده، نه دستور)",
+                    "content": json.dumps({"objective": last["objective"], "outputs": [s.get("output") for s in last["subtasks"]]}, ensure_ascii=False)[:5000]})
+        if payload.use_memory:
+            task["context"].extend(workspace.retrieve(task["objective"]))
+
+[src/flux/storage/repository.py::Repository.create_run#s1/2]
+    def create_run(
+        self,
+        run_id: str,
+        task_id: str,
+        root_id: str,
+        project_id: str,
+        human_owner: str,
+        task_payload: dict,
+        budget_cap_usd: float,
+        idempotency_key: Optional[str] = None
+    ) -> bool:
+        """Atomically create a run or return False if idempotency conflict."""
+        with self._lock:
+            now = utc_now_iso()
+            try:
+                self.conn.execute(
+                    """
+                    INSERT INTO runs (
+                        run_id, task_id, root_id, project_id, human_owner,
+                        task_payload, idempotency_key, status, budget_cap_usd,
+                        spent_cost_usd, reserved_cost_usd, unknown_cost_usd,
+                        total_calls, active_runtime_seconds, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, 'NEW', ?, 0.0, 0.0, 0.0, 0, 0.0, ?, ?)
+                    """,
+                    (
+
+[src/flux/engine/json_parser.py::parse_llm_json#s1/5]
+def parse_llm_json(content: str) -> Dict[str, Any]:
+    """Parse JSON from model response, handling markdown fences, thoughts, control chars, and truncations."""
+    if not content or not content.strip():
+        raise ValueError("پاسخ مدل خالی بود.")
+
+    text = content.strip()
+
+    # 1. Remove reasoning / thinking tags (<think>...</think>) from thinking models
+    text = re.sub(r"<think>[\s\S]*?</think>", "", text).strip()
+
+    # 2. Try direct JSON parse with strict=False (allows unescaped control chars / newlines)
+    try:
+        res = json.loads(text, strict=False)
+        if isinstance(res, dict):
+            return res
+    except Exception:
+        pass
+
+    # 3. Check for markdown code fence ```json ... ``` or ``` ... ```
+    fence_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", text)
+    if fence_match:
+        candidate = fence_match.group(1).strip()
+        try:
+            res = json.loads(candidate, strict=False)
+            if isinstance(res, dict):
+
+[tests/test_local_agents.py::test_live_process_io_session_and_idempotency#s1/2]
+@pytest.mark.asyncio
+async def test_live_process_io_session_and_idempotency(local_app):
+    app, runtime, root = local_app
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        response = await client.post("/api/local/chats", json={"cwd": str(root), "provider": "codex"})
+        assert response.status_code == 201
+        chat_id = response.json()["id"]
+        body = {"prompt": "سلام، یک پاسخ فارسی بنویس", "request_key": "same-request"}
+        first = await client.post(f"/api/local/chats/{chat_id}/turns", json=body)
+        assert first.status_code == 202
+        ident = first.json()["id"]
+        assert (await client.post(f"/api/local/chats/{chat_id}/turns", json=body)).json()["id"] == ident
+        result = await finish(runtime, ident)
+        assert result["state"] == "completed" and result["text"] == "سلام؛ پاسخ کامل"
+        assert result["usage"]["input_tokens"] == 12
+        assert runtime.chat(chat_id)["session_id"] == "session-123"
+        events = (await client.get(f"/api/local/turns/{ident}/events")).json()
+        assert any(e["kind"] == "tool" and e["payload"]["output"] == "passed" for e in events)
+        assert (await client.get(f"/api/local/turns/{ident}/events?after={events[-1]['sequence']}")).json() == []
+        conflict = await client.post(f"/api/local/chats/{chat_id}/turns", json={**body, "prompt": "different"})
+        assert conflict.status_code == 422
+        assert (await client.get("/")).status_code == 200
+        assert "/static/local.js" in (await client.get("/")).text
+        assert (await client.post("/api/local/chats", json={"cwd": str(root / 'missing')})).status_code == 422
+        assert (await client.post(f"/api/local/chats/{chat_id}/turns", json={**body,"prompt":"   "})).status_code == 422
+
+[tests/test_idempotency.py::<module>]
+"""Test 8: idempotency از اجرای دوباره جلوگیری کند (Idempotency prevents duplicate execution)."""
+
+import pytest
+
+[src/flux/storage/repository.py::Repository.create_run#s2/2]
+    def create_run(
+    ...
+                        run_id, task_id, root_id, project_id, human_owner,
+                        task_payload, idempotency_key, status, budget_cap_usd,
+                        spent_cost_usd, reserved_cost_usd, unknown_cost_usd,
+                        total_calls, active_runtime_seconds, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, 'NEW', ?, 0.0, 0.0, 0.0, 0, 0.0, ?, ?)
+                    """,
+                    (
+                        run_id, task_id, root_id, project_id, human_owner,
+                        json.dumps(task_payload), idempotency_key, budget_cap_usd,
+                        now, now
+                    )
+                )
+                self.conn.commit()
+                return True
+            except sqlite3.IntegrityError:
+                return False
+
+[src/flux/storage/repository.py::Repository.get_run]
+    def get_run(self, run_id: str) -> Optional[dict]:
+        with self._lock:
+            cursor = self.conn.execute(
+                "SELECT * FROM runs WHERE run_id = ?", (run_id,)
+            )
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+[src/flux/engine/orchestrator.py::FluxEngine.resume_run]
+    def resume_run(self, run_id):
+        return False  # Uncertain provider calls must never be replayed blindly.

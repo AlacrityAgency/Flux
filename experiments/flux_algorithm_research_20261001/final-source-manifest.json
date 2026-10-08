@@ -1,0 +1,140 @@
+{
+  "source_version": "0.5.1",
+  "client_date": "2026-10-01",
+  "phase": "research-only",
+  "initial_manifest_preserved": true,
+  "external_changes_observed": [
+    "src/flux/local_agents/runtime.py",
+    "tests/test_design_v2.py"
+  ],
+  "files": [
+    {
+      "path": "pyproject.toml",
+      "sha256": "fbccbf27438b5ae242df819a602ce9d7c59b77887fd37524385bb1a1039506e6",
+      "bytes": 773
+    },
+    {
+      "path": "README.md",
+      "sha256": "323ded2b42288d10593fad9f6b40a2a1e822cd668adc4b163bb563c4ec5b872b",
+      "bytes": 10653
+    },
+    {
+      "path": "src/flux/core/contracts.py",
+      "sha256": "3d2fe7caeb13b5137ab969dfd65086cee595ad432710ba36e0dcc941fef5f326",
+      "bytes": 5365
+    },
+    {
+      "path": "src/flux/core/service.py",
+      "sha256": "2e8e0ee9541484c02e3a0b3192d7dde293221b2a71b530ff927c74ac3d6a7833",
+      "bytes": 37814
+    },
+    {
+      "path": "src/flux/core/context.py",
+      "sha256": "12e1ea8f900ab051fa23b1c4128f2988edc7c48f1810e74c35de70b2afa9778a",
+      "bytes": 808
+    },
+    {
+      "path": "src/flux/core/budget.py",
+      "sha256": "20f3157270801a5b738d49bf68dd02baa2b9cabf39836d97f4456a58a9ad8f3d",
+      "bytes": 6627
+    },
+    {
+      "path": "src/flux/core/api.py",
+      "sha256": "fe3d20cb7eb02902eedeef7bc8ccb77d63e86318fabffe50eeed223cb6add7a5",
+      "bytes": 19481
+    },
+    {
+      "path": "src/flux/knowledge/retrieval.py",
+      "sha256": "5393a564d4d40230833b174a89a1b60c1639f66d66b8cf32c759cc7e53b84113",
+      "bytes": 4116
+    },
+    {
+      "path": "src/flux/knowledge/sources.py",
+      "sha256": "c7de37ac789a845a1c107b0424336ddb596cf8964ecb37996aeee8ed65b6ad63",
+      "bytes": 5953
+    },
+    {
+      "path": "src/flux/storage/workspace.py",
+      "sha256": "561a0a43eafc7f7b8e2e6630a85cdbf48cb5404506670142ebeb5836efcbba46",
+      "bytes": 25508
+    },
+    {
+      "path": "src/flux/local_agents/runtime.py",
+      "sha256": "49147931d1272342cb09186bcc9183c6e5623c9fc3bda0cc6a4f5e03e1b25dc4",
+      "bytes": 43030
+    },
+    {
+      "path": "src/flux/api/app.py",
+      "sha256": "7381084c800346bcc15f54c375df1486e3f3546df1e91e10db1bd2d94f6a383b",
+      "bytes": 33942
+    },
+    {
+      "path": "tests/test_core.py",
+      "sha256": "9eca7757901a6983f5c831ecba38a599dfa1b2046f48b69f34df5dccf8c02dec",
+      "bytes": 23563
+    },
+    {
+      "path": "tests/test_workspace.py",
+      "sha256": "a980de785e3ab168e3f9949ec035ff82cdc0abb1bd7611ba2e06c12d8fc62853",
+      "bytes": 8734
+    },
+    {
+      "path": "tests/test_budget_ledger.py",
+      "sha256": "260a59f66668396ee5c0e2b771129cd190e3b9ea4871bd5cb5aab5a57c6bdd04",
+      "bytes": 1703
+    },
+    {
+      "path": "tests/test_design_v2.py",
+      "sha256": "13edf980f5237238fa0737acb00dcd85ba472c49165a7bdd24e51120a8e6855d",
+      "bytes": 5388
+    },
+    {
+      "path": "docs/architecture.fa.md",
+      "sha256": "a7141fe1dcf5ac10aca3754a157a1e6b51298df658c4edda5303aab5b2eb6b5b",
+      "bytes": 30671
+    },
+    {
+      "path": "docs/algorithms/00-head-brief.fa.md",
+      "sha256": "51bb19e60c4ea11f074622d6b10bf9ec79d6438658bef238fbdbdeb3b23034f1",
+      "bytes": 14476
+    },
+    {
+      "path": "docs/algorithms/02-token-management.fa.md",
+      "sha256": "45fc8792077064e722edccddff2ff799631a7a381efec8027db3c864cba6c41d",
+      "bytes": 43650
+    },
+    {
+      "path": "docs/algorithms/03-decision-making.fa.md",
+      "sha256": "ec0db6519443441e4fb95c355fbb399ceffe7edd11d09f157a57a44457f9ae84",
+      "bytes": 53184
+    },
+    {
+      "path": "docs/algorithms/04-memory-and-rag.fa.md",
+      "sha256": "4fdc0382c6706bcf3a7194d13ca445d058bdcdcf74f71e8ff6fc974aa17338dc",
+      "bytes": 58951
+    },
+    {
+      "path": "docs/algorithms/05-implementation-v0.5.fa.md",
+      "sha256": "c4385775b47aca36e35d5a6cb4a8440c944adbce20d2faddab72c770dff1f326",
+      "bytes": 27760
+    },
+    {
+      "path": "docs/design-v2/README.fa.md",
+      "sha256": "6714b45aeea3c5e8fd1280beef234b1f5ffd6d63b4e869fe5b1fa6ea31140275",
+      "bytes": 2955
+    },
+    {
+      "path": "tmp/pdfs/whitepaper-readable.md",
+      "sha256": "0b107e6144d87850c89a2ebc2b672c0a773bb6e8e1cfcad5fce7ffed7a39554a",
+      "bytes": 54553
+    },
+    {
+      "path": "experiments/jev_v2_rewrite_20261001/summary.json",
+      "sha256": "0c77ab136d1b96e44a0a1fca5632e257faa00fbbc828acbb24e86f8e918ce58e",
+      "bytes": 3904
+    }
+  ],
+  "final_test_command": "python -B -m pytest -q -p no:cacheprovider",
+  "final_test_result": "124 passed in 24.08s",
+  "changed_after_final_snapshot": []
+}

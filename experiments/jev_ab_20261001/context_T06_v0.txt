@@ -1,0 +1,304 @@
+[src/flux/budget/estimator.py::estimate_call_cost]
+def estimate_call_cost(
+    model_id: str,
+    prompt_text: str,
+    max_output_tokens: int
+) -> tuple[int, float]:
+    """Returns (estimated_input_tokens, estimated_total_cost_usd)."""
+    in_tokens = estimate_tokens_from_text(prompt_text)
+    pricing = get_model_price(model_id)
+    cost = pricing.calculate_cost(in_tokens, max_output_tokens)
+    return in_tokens, cost
+
+[src/flux/budget/ledger.py::BudgetLedger.reserve_for_call]
+    def reserve_for_call(
+        self,
+        run_id: str,
+        call_id: str,
+        model_id: str,
+        prompt_text: str,
+        max_output_tokens: int
+    ) -> tuple[str, float, int]:
+        """Calculates estimated cost and reserves budget.
+        Returns (reservation_id, estimated_cost_usd, estimated_input_tokens).
+        Raises BudgetExceededError if budget cap would be exceeded.
+        """
+        in_tokens, estimated_cost = estimate_call_cost(model_id, prompt_text, max_output_tokens)
+        pricing = get_model_price(model_id)
+        reservation_id = f"res_{uuid.uuid4().hex[:12]}"
+
+        success = self.repo.reserve_budget(
+            reservation_id=reservation_id,
+            run_id=run_id,
+            call_id=call_id,
+            model_id=model_id,
+            amount_usd=estimated_cost,
+            price_input=pricing.input_per_million,
+            price_output=pricing.output_per_million
+        )
+        if not success:
+            raise BudgetExceededError(
+                f"Cannot reserve ${estimated_cost:.6f} for call {call_id} (model {model_id}). Budget cap exceeded!"
+            )
+        return reservation_id, estimated_cost, in_tokens
+
+[src/flux/budget/ledger.py::BudgetLedger.settle_call]
+    def settle_call(
+        self,
+        reservation_id: str,
+        usage_id: str,
+        run_id: str,
+        call_id: str,
+        model_id: str,
+        input_tokens: int,
+        cached_input_tokens: int,
+        output_tokens: int,
+        estimated_cost_usd: float,
+        actual_cost_usd: Optional[float] = None,
+        is_unknown: bool = False
+    ):
+        """Settles reservation with actual cost and records usage."""
+        if actual_cost_usd is None and not is_unknown:
+            # Calculate from tokens and pricing snapshot
+            snapshot = self.repo.conn.execute(
+                "SELECT price_snapshot_input,price_snapshot_output FROM budget_reservations WHERE reservation_id=?",
+                (reservation_id,)
+            ).fetchone()
+            if snapshot is None:
+                raise ValueError("Missing price snapshot")
+            actual_cost_usd = (input_tokens * snapshot[0] + output_tokens * snapshot[1]) / 1_000_000
+
+        self.repo.record_usage(
+            usage_id=usage_id,
+            run_id=run_id,
+            call_id=call_id,
+            model_id=model_id,
+            input_tokens=input_tokens,
+            cached_input_tokens=cached_input_tokens,
+            output_tokens=output_tokens,
+            estimated_cost_usd=estimated_cost_usd,
+            actual_cost_usd=actual_cost_usd,
+            is_unknown=is_unknown
+        )
+
+        self.repo.settle_reservation(
+            reservation_id=reservation_id,
+            actual_cost_usd=actual_cost_usd,
+            is_unknown=is_unknown
+        )
+
+[src/flux/engine/orchestrator.py::FluxEngine._call]
+    async def _call(self, run_id, role, model_id, messages, max_tokens, subtask_id=None, call_role=None):
+        messages = [dict(message) for message in messages]
+        legacy_role = LEGACY_MODELS.get(role)
+        if legacy_role:
+            messages[0]["content"] = messages[0]["content"].replace(legacy_role, model_id)
+        messages[0]["content"] += f"\nFlux role: {role}. Actual model_id: {model_id}. Be concise; return complete valid JSON within {max_tokens} tokens."
+        max_sends = 2 if role == "head" else 3
+        for attempt in range(1, max_sends + 1):
+            retry = False
+            await self.limiter.acquire()
+            try:
+                self._check_cancelled(run_id)
+                run = self.repo.get_run(run_id)
+                if run["total_calls"] >= 20:
+                    raise ValueError("Call limit reached")
+                if role == "head" and self.repo.conn.execute("SELECT COUNT(*) FROM agent_calls WHERE run_id=? AND agent_role='head'", (run_id,)).fetchone()[0] >= 2:
+                    raise ValueError("Head call limit reached")
+                call_id = "call_" + uuid.uuid4().hex[:12]
+                res_id, estimated, _ = self.budget_ledger.reserve_for_call(run_id, call_id, model_id,
+                    json.dumps(messages, ensure_ascii=False), max_tokens)
+                self.repo.add_call(call_id, run_id, call_role or role, model_id, subtask_id=subtask_id, attempt=attempt)
+                try:
+                    response = await self.provider.generate(model_id, messages, max_tokens)
+                except BaseException as exc:
+                    err_msg = f"{type(exc).__name__}: {str(exc)}".strip()
+                    self.repo.update_call_status(call_id, "failed", error_message=err_msg[:500])
+                    self.budget_ledger.settle_call(res_id, "usage_"+call_id, run_id, call_id, model_id, 0, 0, 0, estimated, is_unknown=True)
+                    if isinstance(exc, ProviderError) and exc.is_transient and attempt < max_sends:
+                        retry = True
+                    else:
+                        raise
+                else:
+                    self.repo.update_call_status(call_id, "completed", latency_ms=response.latency_ms)
+                    self.budget_ledger.settle_call(res_id, "usage_"+call_id, run_id, call_id, model_id,
+                        response.input_tokens, response.cached_input_tokens, response.output_tokens, estimated,
+                        is_unknown=not response.usage_available)
+                    self._check_cancelled(run_id)
+                    return response
+            finally:
+                await self.limiter.release()
+            if retry:
+                await asyncio.sleep(.1 * 2 ** (attempt - 1))
+        raise ValueError("Retry limit")
+
+[mem:mem_fx_mvp-design#۵. چرخهٔ اجرا و State Machine rev1]
+۵. چرخهٔ اجرا و State Machine
+## ۵. چرخهٔ اجرا و State Machine
+
+ورودی معتبر → ثبت اتمی Run → Head → اعتبارسنجی plan → صف → اجرای گراف با دو slot → شواهد و بررسی مستقل → خروجی نهایی. برای سند ساده: Head، Luna، Qwen؛ Opus و Sol فقط طبق نیاز. جمع‌بندی ساده با قالب کدی انجام می‌شود.
+
+Transitionهای پیشنهادی زیر exhaustive هستند؛ هر مسیر دیگر رد و audit شود:
+
+| مبدأ | مقصد مجاز |
+|---|---|
+| NEW | VALIDATING، CANCELLED |
+| VALIDATING | PLANNING، NEEDS_INPUT، REJECTED، FAILED، CANCELLED |
+| PLANNING | QUEUED، NEEDS_INPUT، ESCALATED، REJECTED، PAUSED_BUDGET، FAILED، CANCELLED |
+| QUEUED | RUNNING، NEEDS_INPUT، ESCALATED، PAUSED_BUDGET، FAILED، CANCELLED |
+| RUNNING | VERIFYING، NEEDS_INPUT، ESCALATED، REJECTED، PAUSED_BUDGET، FAILED، CANCELLED |
+| VERIFYING | ACCEPT_CANDIDATE، REVISE، NEEDS_INPUT، ESCALATED، REJECTED، PAUSED_BUDGET، FAILED، CANCELLED |
+| REVISE | QUEUED، ESCALATED، PAUSED_BUDGET، FAILED، CANCELLED |
+| NEEDS_INPUT | VALIDATING، CANCELLED |
+| PAUSED_BUDGET | VALIDATING، CANCELLED |
+| ESCALATED | VALIDATING، CANCELLED |
+| ACCEPT_CANDIDATE، REJECTED، FAILED، CANCELLED | ندارد |
+
+Resume فقط برای سه وضعیت قابل توقف است؛ رفع مانع باید توسط caller محلی ثبت شود. دوباره‌اعتبارسنجی از checkpoint ادامه می‌دهد و بدون ضرورت Head را تکرار نمی‌کند؛ مسیر فازهای عبوری بدون dispatch دوباره ثبت می‌شود. سقف شمارنده‌ها و زمان reset نمی‌شوند. افزایش سقف بودجه فقط با override صریح انسانی و event قبل/بعد مجاز است؛ Agent اختیار آن را ندارد. resume عادی صرفاً کمبود بودجه را نادیده نمی‌گیرد.
+
+۲۰ دقیقه زمان فعال، زمان دیواری scheduler و فراخوانی/ابزار/backoff فعال است؛ جمع زمان دو Agent نیست. انتظار صف بدون کار فعال و انتظار انسان حساب جدا دارند. intervalهای فعال و deadline پایدارند؛ پس از crash بازهٔ نامعلوم محافظه‌کارانه حساب می‌شود. پایان زمان یا فراخوانی/تلاش بدون امکان ادامه به ESCALATED با reason مشخص می‌رود.
+
+Ca
+
+[tools/estimate.py::<module>]
+"""Offline, assumption-based Flux token forecast. No network or model calls."""
+
+import argparse
+import json
+import math
+from pathlib import Path
+
+
+
+
+
+
+if __name__ == "__main__":
+    main()
+
+[src/flux/budget/estimator.py::<module>]
+"""Token and cost estimation utility."""
+
+from flux.budget.pricing import get_model_price, ModelPrice
+
+[src/flux/engine/scheduler.py::ConcurrencyLimiter.acquire]
+    async def acquire(self):
+        await self.semaphore.acquire()
+        async with self._lock:
+            self.active_count += 1
+            if self.active_count > self.max_observed_concurrency:
+                self.max_observed_concurrency = self.active_count
+
+[src/flux/storage/database.py::<module>]
+"""SQLite Database connection and table schemas."""
+    ...
+    latency_ms INTEGER DEFAULT 0,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS artifacts (
+    artifact_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    subtask_id TEXT,
+    type TEXT NOT NULL,
+    ref TEXT NOT NULL,
+    description TEXT,
+    content_hash TEXT,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS checks (
+    check_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    subtask_id TEXT,
+    name TEXT NOT NULL,
+    status TEXT NOT NULL,
+    evidence TEXT,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS decisions (
+    decision_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    decision TEXT NOT NULL,
+    blocking_issues TEXT,
+    passed_criteria TEXT,
+    failed_criteria TEXT,
+    confidence TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS budget_reservations (
+    reservation_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    call_id TEXT NOT NULL,
+    model_id TEXT NOT NULL,
+    reserved_amount_usd REAL NOT NULL,
+    price_snapshot_input REAL NOT NULL,
+    price_snapshot_output REAL NOT NULL,
+    settled_amount_usd REAL,
+    status TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS usage_records (
+    usage_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    call_id TEXT NOT NULL,
+    model_id TEXT NOT NULL,
+    input_tokens INTEGER NOT NULL,
+    cached_input_tokens INTEGER DEFAULT 0,
+    output_tokens INTEGER NOT NULL,
+    estimated_cost_usd REAL NOT NULL,
+    actual_cost_usd REAL,
+    is_unknown INTEGER DEFAULT 0,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    run_id TEXT NOT NULL,
+    sequence INTEGER NOT NULL,
+    from_state TEXT,
+    to_state TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    metadata TEXT,
+    created_at TEXT NOT NULL,
+    ...
+
+[src/flux/api/app.py::create_app.all_usage]
+    @app.get("/usage")
+    async def all_usage():
+        return {**workspace.usage(), "demo": isinstance(engine.provider, FakeProvider)}
+
+[tests/test_local_agents.py::<module>]
+"""Exercise real subprocess I/O, recovery, cancellation, and provider event contracts offline."""
+import asyncio
+import json
+import sys
+
+import pytest
+from httpx import ASGITransport, AsyncClient
+
+from flux.api.app import create_app
+from flux.engine.orchestrator import FluxEngine
+from flux.providers.fake import FakeProvider
+from flux.local_agents import runtime as module
+from flux.local_agents.runtime import ChatSpec, TurnSpec, EventParser, command_for, cli_environment
+from flux.storage.database import init_db
+from flux.storage.repository import Repository
+
+[src/flux/budget/ledger.py::<module>]
+"""Budget ledger service."""
+
+import uuid
+from typing import Optional
+from flux.budget.estimator import estimate_call_cost
+from flux.budget.pricing import get_model_price
+from flux.storage.repository import Repository

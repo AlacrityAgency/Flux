@@ -1,0 +1,172 @@
+[
+  {
+    "id": "overview",
+    "page": 1,
+    "height": 1122.515625,
+    "bodyBottom": 921.5625,
+    "footerTop": 1055.453125,
+    "footerGap": 133.890625,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "hypothesis",
+    "page": 2,
+    "height": 1122.515625,
+    "bodyBottom": 983.640625,
+    "footerTop": 1055.453125,
+    "footerGap": 71.8125,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "versions",
+    "page": 3,
+    "height": 1122.515625,
+    "bodyBottom": 815.90625,
+    "footerTop": 1055.453125,
+    "footerGap": 239.546875,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "v3",
+    "page": 4,
+    "height": 1122.515625,
+    "bodyBottom": 998.671875,
+    "footerTop": 1055.453125,
+    "footerGap": 56.78125,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "v4",
+    "page": 5,
+    "height": 1122.515625,
+    "bodyBottom": 984.71875,
+    "footerTop": 1055.453125,
+    "footerGap": 70.734375,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "architecture",
+    "page": 6,
+    "height": 1122.515625,
+    "bodyBottom": 957.953125,
+    "footerTop": 1055.453125,
+    "footerGap": 97.5,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "memory",
+    "page": 7,
+    "height": 1122.515625,
+    "bodyBottom": 1018.140625,
+    "footerTop": 1055.453125,
+    "footerGap": 37.3125,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "tokens",
+    "page": 8,
+    "height": 1122.515625,
+    "bodyBottom": 1036.203125,
+    "footerTop": 1055.453125,
+    "footerGap": 19.25,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "decision",
+    "page": 9,
+    "height": 1122.515625,
+    "bodyBottom": 952.4375,
+    "footerTop": 1055.453125,
+    "footerGap": 103.015625,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "offline",
+    "page": 10,
+    "height": 1122.515625,
+    "bodyBottom": 948.765625,
+    "footerTop": 1055.453125,
+    "footerGap": 106.6875,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "protocol",
+    "page": 11,
+    "height": 1122.515625,
+    "bodyBottom": 1017.125,
+    "footerTop": 1055.453125,
+    "footerGap": 38.328125,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "quality",
+    "page": 12,
+    "height": 1122.515625,
+    "bodyBottom": 1045.171875,
+    "footerTop": 1055.453125,
+    "footerGap": 10.28125,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "efficiency",
+    "page": 13,
+    "height": 1122.515625,
+    "bodyBottom": 919.34375,
+    "footerTop": 1055.453125,
+    "footerGap": 136.109375,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "answers-memory",
+    "page": 14,
+    "height": 1122.515625,
+    "bodyBottom": 1023.71875,
+    "footerTop": 1055.453125,
+    "footerGap": 31.734375,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "answers-reason",
+    "page": 15,
+    "height": 1122.515625,
+    "bodyBottom": 1005.03125,
+    "footerTop": 1055.453125,
+    "footerGap": 50.421875,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "implementation",
+    "page": 16,
+    "height": 1122.515625,
+    "bodyBottom": 989.46875,
+    "footerTop": 1055.453125,
+    "footerGap": 65.984375,
+    "clipped": [],
+    "svgOverlaps": []
+  },
+  {
+    "id": "evidence",
+    "page": 17,
+    "height": 1122.515625,
+    "bodyBottom": 981.796875,
+    "footerTop": 1055.453125,
+    "footerGap": 73.65625,
+    "clipped": [],
+    "svgOverlaps": []
+  }
+]

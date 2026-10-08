@@ -1,0 +1,1 @@
+{"sources_changed_after_freeze": ["src/flux/api/app.py", "src/flux/local_agents/api.py", "src/flux/local_agents/runtime.py", "src/flux/static/native.js", "src/flux/static/shell.js", "tests/test_design_v2.py", "docs/design-v2/03-10-workspace.js"]}

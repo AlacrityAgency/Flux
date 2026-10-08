@@ -1,0 +1,444 @@
+{
+ "date": "2026-10-02",
+ "arms": {
+  "luna_v4": "gpt-6-luna",
+  "sol_v4": "gpt-6.1-sol"
+ },
+ "samples": 2,
+ "reasoning_effort": "low",
+ "tasks": [
+  {
+   "id": "K00",
+   "family": "private_knowledge",
+   "corpus": "synthetic",
+   "query": "For private service svc01160, report owner, rare_code. Use current evidence; return null for unknown facts.",
+   "route": "knowledge",
+   "pack_tokens": 189,
+   "pack_ms": 1.6789999790489674,
+   "prompt_sha256": "a5b8161b54ae796cdfd4ddb5e6092310fadd6f2d851ca3ffa1e3fa3c824b0213"
+  },
+  {
+   "id": "K01",
+   "family": "private_knowledge",
+   "corpus": "synthetic",
+   "query": "برای سرویس خصوصی svc01136 مقدار owner و rare_code را از شاهد فعلی پیدا کن؛ مقدار نامعلوم را null بده.",
+   "route": "knowledge",
+   "pack_tokens": 189,
+   "pack_ms": 1.024700002744794,
+   "prompt_sha256": "2aff935193d9465e9555f7a2fa7c37ae3e8f5c0b7e0e9001348bfb9a3e768bf3"
+  },
+  {
+   "id": "K02",
+   "family": "private_knowledge",
+   "corpus": "synthetic",
+   "query": "For private service svc01184, report approval, scope, forbidden. Use current evidence; return null for unknown facts.",
+   "route": "knowledge",
+   "pack_tokens": 224,
+   "pack_ms": 1.0705000022426248,
+   "prompt_sha256": "dacbd2c6a91af20afd66aa4be663e3a7d17016bf33f5e59ac18184445c4d688b"
+  },
+  {
+   "id": "K03",
+   "family": "private_knowledge",
+   "corpus": "synthetic",
+   "query": "For private service svc01358, report approval, scope, forbidden. Use current evidence; return null for unknown facts.",
+   "route": "knowledge",
+   "pack_tokens": 222,
+   "pack_ms": 1.0154999326914549,
+   "prompt_sha256": "1f107900f2f2479482b1764f6c57c01ba12cb463a9c0595d476da080389a17b8"
+  },
+  {
+   "id": "K04",
+   "family": "private_knowledge",
+   "corpus": "synthetic",
+   "query": "Find the dependency of svc01233 and the owner of that dependency; report depends_on and dependency_owner.",
+   "route": "knowledge",
+   "pack_tokens": 309,
+   "pack_ms": 1.523400074802339,
+   "prompt_sha256": "82f0712afea3bb9b766fda24eb240efbc123c60c9457e1e271059fed4d59f4bc"
+  },
+  {
+   "id": "K05",
+   "family": "private_knowledge",
+   "corpus": "synthetic",
+   "query": "Find the dependency of svc01371 and the owner of that dependency; report depends_on and dependency_owner.",
+   "route": "knowledge",
+   "pack_tokens": 309,
+   "pack_ms": 1.4198999851942062,
+   "prompt_sha256": "359fb40bc969285febcf8afebfc3eeb5df107dd2058b88cc3e62e141f11ab977"
+  },
+  {
+   "id": "F00",
+   "family": "project_knowledge",
+   "corpus": "real",
+   "query": "In this Flux snapshot, what are the default input_budget, output_reserve and window of admit_context? Return numbers.",
+   "route": "knowledge",
+   "pack_tokens": 1871,
+   "pack_ms": 2.6015000184997916,
+   "prompt_sha256": "2d296d73b999e6a453f08d51d8584154c28f98804b5504ae60a9ff54e2fe9e06"
+  },
+  {
+   "id": "F01",
+   "family": "project_knowledge",
+   "corpus": "real",
+   "query": "In this Flux snapshot, what exact strings are the only allowed Contract tenant_id and human_owner?",
+   "route": "knowledge",
+   "pack_tokens": 2070,
+   "pack_ms": 2.5584999239072204,
+   "prompt_sha256": "e513ef9f4e7b8ab38fe80cc2c90e077e3ad8865a19ffcfe6a4009b17a1f5147f"
+  },
+  {
+   "id": "R00",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "A test has sensitivity 0.94 and false-positive rate 0.061. Prevalence is 0.013. Given a positive result, compute the probability of the condition, rounded to six decimals.",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.13890000991523266,
+   "prompt_sha256": "de37b115d975c1b201dcc6e1b0666b8c48219fdbd3cad8555c5ecde754cb9ac6"
+  },
+  {
+   "id": "R01",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "Among 420 items, set A has 171, B has 183, C has 149. Pair intersections AB=68, AC=52, BC=61, and triple ABC=27. How many items are in exactly one set?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.10020006448030472,
+   "prompt_sha256": "f5f8ee99d8fe7da8c01317ad496d53697cb8825e8b85a7eff37262c45ff8ec77"
+  },
+  {
+   "id": "R02",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "Count binary strings of length 18 that have exactly seven ones and no adjacent ones.",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.08019991219043732,
+   "prompt_sha256": "26127362db02beb7d697c247034cb3a3137d70e073d5830de2aa4bef7fb4d741"
+  },
+  {
+   "id": "R03",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "What is the smallest nonnegative integer x satisfying x mod 12=7, x mod 17=11, and x mod 19=3?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.07830001413822174,
+   "prompt_sha256": "1045f8191f0bb26352c740e008b98d8ddf043e7a4f15981ff0cadd925521a25c"
+  },
+  {
+   "id": "R04",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "A fair die is rolled repeatedly. Find the expected number of rolls until the consecutive pattern 6,6,5 occurs. Give the exact numeric expectation.",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.09250000584870577,
+   "prompt_sha256": "52a9ce5893315cef03a5b42844a486d0321bafd8dff6a246b28f03ebc5a5ee49"
+  },
+  {
+   "id": "R05",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "There are distinct coin types of values 3,5,7,11, each with unlimited count. How many combinations of counts (a,b,c,d), all nonnegative integers, satisfy 3a+5b+7c+11d=53?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.09990006219595671,
+   "prompt_sha256": "90559ec22dda967754ca6cfea70fc918e139d8561bd182a4d242e4d33bf5a2d5"
+  },
+  {
+   "id": "R06",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "A weighted directed graph has edges A-B:4,A-C:2,C-B:1,B-D:5,C-D:8,C-E:10,D-E:2,E-F:3,D-F:9. Find shortest-path distance from A to F.",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.09089999366551638,
+   "prompt_sha256": "035d1f57798dd0de5367b1e210116bd7a12893a0414e8d0fdbdef0462f82ba84"
+  },
+  {
+   "id": "R07",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "A bag contains 8 red, 6 blue and 5 green balls. Draw five balls uniformly without replacement. What is the probability that exactly three colors are present, rounded to six decimals?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.10109995491802692,
+   "prompt_sha256": "ed704a29beccdb34ef7d563c67e5acd48650785d47500f53c04a30e95b8f85de"
+  },
+  {
+   "id": "C00",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(rows) returning a sorted list of eligible record refs. Canonicalize each ref to latest non-proposed revision before filtering: verified and enabled (default True) survive. Proposed edits do not supersede canonical records; latest deleted/stale hides old verified records. rows are dicts with ref,revision,status,enabled. No external files or tools.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.16599998343735933,
+   "prompt_sha256": "a2bc976aae758aa58445c6166d48cb79dccfaa52c324eb3ac72de1b2674bc0c5"
+  },
+  {
+   "id": "C01",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(jobs) that returns maximum total weight of non-overlapping intervals. Each job is [start,end,weight], integer start<end. Adjacent intervals (end==start) do not overlap. Input unsorted, may be empty; negative weights can be skipped. Do not mutate input. No external files or tools.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.1398999011144042,
+   "prompt_sha256": "7e097e8ecd6324a5d6fdc9926e5aac126d9c509e8666950b1ebb20e4d19eb694"
+  },
+  {
+   "id": "C02",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(data). data has n and edges, where each directed edge is [u,v,w], vertices 0..n-1. Return shortest distance from 0 to n-1, or None if unreachable. Weights are nonnegative integers; duplicate edges and zero weights allowed. For n=1 return 0. No external files or tools.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.15059998258948326,
+   "prompt_sha256": "4bdcb0bb96c809e83a6cbb8fdd89341e4f0accb16fe99adffe0b22ebefea39d4"
+  },
+  {
+   "id": "C03",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(items). Input list [key,start,end] represents intervals per key. Merge overlapping or touching intervals only within the same key, including transitive overlaps. Return sorted [key,start,end] triples ordered by key then start. Input unsorted; no mutation; empty input returns []. No external files or tools.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.14600006397813559,
+   "prompt_sha256": "7f7c62d84eb75b8ec435d190c91407745fbd5ce2e9cf7d0930a5220692e0d265"
+  },
+  {
+   "id": "N00",
+   "family": "private_knowledge",
+   "corpus": "synthetic_new",
+   "query": "For private service svc01217, report owner, rare_code. Use current evidence; return null for unknown facts.",
+   "route": "knowledge",
+   "pack_tokens": 189,
+   "pack_ms": 1.030400046147406,
+   "prompt_sha256": "40b36ee3552b1209f23e4578ffc0eedb76e714a7138dff13a45291790635749d"
+  },
+  {
+   "id": "N01",
+   "family": "private_knowledge",
+   "corpus": "synthetic_new",
+   "query": "برای سرویس خصوصی svc01327 مقدار owner و rare_code را از شاهد فعلی پیدا کن؛ مقدار نامعلوم را null بده.",
+   "route": "knowledge",
+   "pack_tokens": 189,
+   "pack_ms": 1.160499989055097,
+   "prompt_sha256": "2e2195b83804c3bd4a895cfe8afa1cdddc72569ea29544a84722a60e1ba760b4"
+  },
+  {
+   "id": "N02",
+   "family": "private_knowledge",
+   "corpus": "synthetic_new",
+   "query": "For private service svc01004, report approval, scope, forbidden. Use current evidence; return null for unknown facts.",
+   "route": "knowledge",
+   "pack_tokens": 224,
+   "pack_ms": 1.4477000804618,
+   "prompt_sha256": "793b1f6efd80adeaeaf71f15e83765933b82ad020ab2a68bb8faf26e43111535"
+  },
+  {
+   "id": "N03",
+   "family": "private_knowledge",
+   "corpus": "synthetic_new",
+   "query": "For private service svc01030, report approval, scope, forbidden. Use current evidence; return null for unknown facts.",
+   "route": "knowledge",
+   "pack_tokens": 224,
+   "pack_ms": 1.2168000685051084,
+   "prompt_sha256": "9a85068b78ab4f6d22603765935b9d58d9f7e582eb5790f38e86612429388442"
+  },
+  {
+   "id": "N04",
+   "family": "private_knowledge",
+   "corpus": "synthetic_new",
+   "query": "Find the dependency of svc01055 and the owner of that dependency; report depends_on and dependency_owner.",
+   "route": "knowledge",
+   "pack_tokens": 309,
+   "pack_ms": 1.181200030259788,
+   "prompt_sha256": "a3f09e9b9289d970788e467f7537ad8b20dfd2dba7fcfb25a754a12303b3ff14"
+  },
+  {
+   "id": "N05",
+   "family": "private_knowledge",
+   "corpus": "synthetic_new",
+   "query": "Find the dependency of svc01002 and the owner of that dependency; report depends_on and dependency_owner.",
+   "route": "knowledge",
+   "pack_tokens": 309,
+   "pack_ms": 0.9920999873429537,
+   "prompt_sha256": "cf3896cd85bcd71537d7c8b6cda428c69b736ccf7575ad73ad5d6353a4f0d926"
+  },
+  {
+   "id": "HR02",
+   "family": "project_knowledge",
+   "corpus": "real",
+   "query": "In this Flux snapshot, what input and output price per million does get_model_price return for an unknown model? Return answer keys input_per_million and output_per_million.",
+   "route": "knowledge",
+   "pack_tokens": 2372,
+   "pack_ms": 2.6285999920219183,
+   "prompt_sha256": "41cfbbf916610028b5f1e94b164b34944af3ce13695a7048de0653aeca30e379"
+  },
+  {
+   "id": "HR06",
+   "family": "project_knowledge",
+   "corpus": "real",
+   "query": "In this Flux snapshot, what are the default values of max_subtasks, max_concurrent_agents and max_root_calls in Settings? Return answer keys max_subtasks, max_concurrent_agents and max_root_calls.",
+   "route": "knowledge",
+   "pack_tokens": 1194,
+   "pack_ms": 2.0191000076010823,
+   "prompt_sha256": "a7711100e19a7af38f7a3f12677de7782c0553aea1b8c3c213da02bf19d8968c"
+  },
+  {
+   "id": "HR08",
+   "family": "project_knowledge",
+   "corpus": "real",
+   "query": "In this Flux snapshot, what is the default max_concurrent of ConcurrencyLimiter? Return answer key max_concurrent.",
+   "route": "knowledge",
+   "pack_tokens": 788,
+   "pack_ms": 1.4729000395163894,
+   "prompt_sha256": "c1104bfb9f5d0fdf0c4b2c46cf06bb79a731dddf12b0b2fedff0aede57d41e33"
+  },
+  {
+   "id": "HR10",
+   "family": "project_knowledge",
+   "corpus": "real",
+   "query": "In this Flux snapshot, what input and output price per million does the pricing table give gpt-5.6-luna? Return answer keys input_per_million and output_per_million.",
+   "route": "knowledge",
+   "pack_tokens": 1775,
+   "pack_ms": 2.0061000250279903,
+   "prompt_sha256": "47bf8b59e854c2c745bd23baa3b37c3b501dd21ae63af2a4d56898553756246b"
+  },
+  {
+   "id": "R08",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "How many lattice paths from (0,0) to (8,6) using unit steps right or up avoid the point (3,2)?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.11599995195865631,
+   "prompt_sha256": "8c52f4c3ef261ab276b593b5b0a8d8de3ee8d5d57d216964fa176b74df945e2b"
+  },
+  {
+   "id": "R09",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "How many integer solutions does x1+x2+x3+x4=20 have with 0<=xi<=7 for every i?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.08899997919797897,
+   "prompt_sha256": "dcae74037cffa4054557b2883a478bd14ccb76a9377502888ecebb73f3d2d395"
+  },
+  {
+   "id": "R10",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "What are the last three digits of 7^2026? Give them as an integer.",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.08080003317445517,
+   "prompt_sha256": "4d78b1888eb0d5b6555c29201607794fb80dc7e9daaaa9995ffa2cae83929cac"
+  },
+  {
+   "id": "R11",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "How many derangements (permutations with no fixed point) of 9 distinct objects are there?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.07680000271648169,
+   "prompt_sha256": "37271e33772c6b098743db5442f0c37e12a091e1111e3dd8e015d055c739a05e"
+  },
+  {
+   "id": "R12",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "Using unlimited coins of values 1, 7, 23 and 41, what is the minimum number of coins that sum to exactly 289?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.08180004078894854,
+   "prompt_sha256": "92a7ef6a210c98a7fbecfe69b1c8cf71412a198a84b53a3e93b8826eb06c1746"
+  },
+  {
+   "id": "R13",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "A 5-card hand is dealt from a standard 52-card deck. What is the probability of exactly two pairs (not a full house), rounded to six decimals?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.0950000248849392,
+   "prompt_sha256": "5ecaa4136ea4f7431b0a5ca14865e66fa0a1d458fd1e019ff0b0ed659a5910dc"
+  },
+  {
+   "id": "R14",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "What is the length of the longest strictly increasing subsequence of [5, 2, 8, 6, 3, 6, 9, 7, 4, 10, 1, 11, 5, 12]?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.07539999205619097,
+   "prompt_sha256": "290a092422ca884bf90f66dbb121094aeb92cbd48e75ce95ac8ea8585e8ea715"
+  },
+  {
+   "id": "R15",
+   "family": "closed_reasoning",
+   "corpus": "synthetic",
+   "query": "How many spanning trees does the complete bipartite graph K_{3,4} have?",
+   "route": "reasoning",
+   "pack_tokens": 0,
+   "pack_ms": 0.07189996540546417,
+   "prompt_sha256": "3b2b8b37cb5451a4470a0a5058d66c1565fe81df268d4029b040c72be95854b6"
+  },
+  {
+   "id": "C04",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(s) that evaluates an arithmetic expression string containing non-negative integers, + - * /, parentheses and unary minus or plus, with optional whitespace. * and / bind tighter than + and -; unary operators bind tighter than * and /. Division truncates toward zero. Return an int. Do not use eval.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.14290004037320614,
+   "prompt_sha256": "d1700e472bb87e7a80012eb80e815d0437c05562716e93bc549cc06b82517f13"
+  },
+  {
+   "id": "C05",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(data). data has 'durations' (dict task->non-negative int) and 'deps' (list of [before, after] pairs). A task starts when all its prerequisites finish; independent tasks run in parallel. Return the minimum time to finish all tasks, 0 when there are no tasks, or None if deps contain a cycle or name an unknown task. Duplicate deps are allowed. Do not mutate input.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.16980001237243414,
+   "prompt_sha256": "3c1ac36ae4c490d727a7fd8930f80f2a3f5d93f74dcbf924d65f8dad08b20fd5"
+  },
+  {
+   "id": "C06",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(ops) that simulates an LRU cache. ops[0] is ['init', capacity]; each later op is ['put', key, value] or ['get', key]. Return the list of get results (the value, or -1 if missing). get and put both make the key most recently used; put on an existing key updates its value; when size exceeds capacity evict the least recently used key; capacity 0 stores nothing. Do not mutate input.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.16759999562054873,
+   "prompt_sha256": "4d26a9d4a5fe0a652f1eece93763a349005499c0b9671d8387497e6d68353559"
+  },
+  {
+   "id": "C07",
+   "family": "executable_code",
+   "corpus": "synthetic",
+   "query": "Write Python function solve(words). words is a list of lowercase words sorted in an unknown alphabet's order. Return a string with every letter that appears, in an order consistent with the list; if several orders are valid return the lexicographically smallest one (by normal a-z order). Return '' if no order is valid, including when a word comes before its own proper prefix. Do not mutate input.",
+   "route": "code",
+   "pack_tokens": 0,
+   "pack_ms": 0.16920000780373812,
+   "prompt_sha256": "c72d1d5110c72b6760e60a462b3353d158bc681af5557e1f3d705f6e86e97ddb"
+  }
+ ],
+ "calls": 168,
+ "code_hashes": {
+  "run_pilot.py": "c178025d7903dfdf8f22dcbf94b82799649448f00dc9544d6d84c899c04ee8b9",
+  "tasks.py": "e09ebf0000e923524daf447f33451cc4725a21ece06051ca0c7a561bf9382366",
+  "code_worker.py": "b30f1e4aeacb3033d792e7426c046686011e6448426dffebf942c26df36976ee",
+  "engine_v4.py": "dc30b240e400fc625775478c0c1756081d6ad9f1af7b40529c223a87d748313e"
+ },
+ "router_policies": {
+  "R1": "knowledge->luna, code->luna, reasoning->sol",
+  "R2": "knowledge->luna, code->sol, reasoning->sol"
+ },
+ "primary": "R1 pass rate vs sol_v4 pass rate, paired by task; sol call share",
+ "limits": "Small pilot; one corpus family; low reasoning effort; no dollar billing available"
+}

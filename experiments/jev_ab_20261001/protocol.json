@@ -1,0 +1,49 @@
+{
+  "budgets": [
+    1500,
+    3000,
+    6000
+  ],
+  "tokenizer": "o200k_base",
+  "count_override": true,
+  "flags": {
+    "v0": {
+      "project_filter": true,
+      "stale_filter": true,
+      "glossary": true,
+      "greedy_coverage": true,
+      "adaptive_stop": true,
+      "dedup": true,
+      "window_large": true,
+      "stemming": false,
+      "subchunk": false,
+      "selector": "coverage",
+      "prf": false,
+      "theta": 0.35
+    },
+    "v1": {
+      "project_filter": true,
+      "stale_filter": true,
+      "glossary": true,
+      "greedy_coverage": true,
+      "adaptive_stop": true,
+      "dedup": true,
+      "window_large": true,
+      "stemming": false,
+      "subchunk": true,
+      "selector": "per_criterion",
+      "prf": false,
+      "theta": 0.35
+    }
+  },
+  "chunk_count": 614,
+  "memory_count": 440,
+  "invalid_ground_truth": [],
+  "limits": [
+    "Local lexical selectors, not TypeSafe Jev",
+    "Evidence presence, not answer quality",
+    "Existing ten additional cases are reused; this is not a new blind holdout",
+    "Source-derived memories plus synthetic decisions/noise",
+    "No end-to-end Flux execution"
+  ]
+}

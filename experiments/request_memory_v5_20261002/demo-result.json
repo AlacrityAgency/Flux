@@ -1,0 +1,107 @@
+{
+  "mode": "prepare_only",
+  "actual_model_calls": 0,
+  "request": {
+    "request_id": "demo-owner-1",
+    "query": "مالک انسانی پروژه چه کسی است؟",
+    "project": "experiment",
+    "epoch": "1",
+    "needs": [
+      {
+        "need_id": "n0",
+        "entity": "",
+        "field": "human_owner",
+        "namespace": "",
+        "value_type": "",
+        "proof_kind": "typed_fact",
+        "required": true,
+        "query": "مالک انسانی پروژه چه کسی است؟",
+        "via_field": "",
+        "membership": false
+      }
+    ],
+    "task_kind": "factual",
+    "memory_need": "auto",
+    "expression": "",
+    "public_tests": [],
+    "allow_partial": false
+  },
+  "snapshot_units": 8,
+  "pack": {
+    "status": "ready",
+    "payload": {
+      "request_id": "demo-owner-1",
+      "snapshot": "be30c6fc7be9eb9523775b8f14bfcc78053f52a0cee1c5b77c6834bd9f489142",
+      "project": "experiment",
+      "epoch": "1",
+      "route": "project_grounded",
+      "bindings": {
+        "n0": {
+          "entity": "workspace",
+          "field": "human_owner",
+          "namespace": "",
+          "value_type": "string",
+          "proof_kind": "typed_fact",
+          "evidence_refs": [
+            "workspace.txt:1"
+          ],
+          "bridge_refs": [],
+          "required": true,
+          "membership": false
+        }
+      },
+      "units": [
+        {
+          "unit_id": "workspace.txt:1",
+          "source_id": "workspace.txt",
+          "source_hash": "9319c4c01a483c6144cde1cae451b51d0784477305066bcb5a41aecb0f2e7449",
+          "line_start": 1,
+          "line_end": 1,
+          "text": "workspace human_owner: \"local-user\"",
+          "entity": "workspace",
+          "field": "human_owner",
+          "value": "local-user",
+          "value_type": "string",
+          "proof_kind": "typed_fact",
+          "role": "canonical",
+          "namespace": ""
+        }
+      ],
+      "relations": []
+    },
+    "rendered": "{\"bindings\":{\"n0\":{\"bridge_refs\":[],\"entity\":\"workspace\",\"evidence_refs\":[\"workspace.txt:1\"],\"field\":\"human_owner\",\"membership\":false,\"namespace\":\"\",\"proof_kind\":\"typed_fact\",\"required\":true,\"value_type\":\"string\"}},\"epoch\":\"1\",\"project\":\"experiment\",\"relations\":[],\"request_id\":\"demo-owner-1\",\"route\":\"project_grounded\",\"snapshot\":\"be30c6fc7be9eb9523775b8f14bfcc78053f52a0cee1c5b77c6834bd9f489142\",\"units\":[{\"entity\":\"workspace\",\"field\":\"human_owner\",\"line_end\":1,\"line_start\":1,\"namespace\":\"\",\"proof_kind\":\"typed_fact\",\"role\":\"canonical\",\"source_hash\":\"9319c4c01a483c6144cde1cae451b51d0784477305066bcb5a41aecb0f2e7449\",\"source_id\":\"workspace.txt\",\"text\":\"workspace human_owner: \\\"local-user\\\"\",\"unit_id\":\"workspace.txt:1\",\"value\":\"local-user\",\"value_type\":\"string\"}]}",
+    "token_count": 229,
+    "count_passes": 1,
+    "route": "project_grounded",
+    "gaps": [],
+    "required_ids": [
+      "workspace.txt:1"
+    ],
+    "matrix": [
+      {
+        "need_id": "n0",
+        "unit_id": "workspace.txt:1",
+        "hard_gate": true,
+        "identity_match": 1,
+        "field_match": 1,
+        "authority": 1,
+        "cost": 110,
+        "required": true,
+        "value_score": 13.89,
+        "weights": {
+          "identity": 8,
+          "field": 4,
+          "authority": 2,
+          "cost": -0.001
+        }
+      }
+    ],
+    "prepare_ms": 0.37070002872496843
+  },
+  "prompt_admission": {
+    "accepted": true,
+    "tokens": 433,
+    "prompt_hash": "22e292e80a0501d133640aa61b4f35957a4e11de52299b1dc266b72bee46811b",
+    "provider_scaffold_tokens": "unknown-until-provider-receipt"
+  }
+}

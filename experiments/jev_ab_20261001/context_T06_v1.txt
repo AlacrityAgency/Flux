@@ -1,0 +1,270 @@
+[src/flux/budget/estimator.py::estimate_call_cost]
+def estimate_call_cost(
+    model_id: str,
+    prompt_text: str,
+    max_output_tokens: int
+) -> tuple[int, float]:
+    """Returns (estimated_input_tokens, estimated_total_cost_usd)."""
+    in_tokens = estimate_tokens_from_text(prompt_text)
+    pricing = get_model_price(model_id)
+    cost = pricing.calculate_cost(in_tokens, max_output_tokens)
+    return in_tokens, cost
+
+[src/flux/budget/ledger.py::BudgetLedger.reserve_for_call#s1/2]
+    def reserve_for_call(
+        self,
+        run_id: str,
+        call_id: str,
+        model_id: str,
+        prompt_text: str,
+        max_output_tokens: int
+    ) -> tuple[str, float, int]:
+        """Calculates estimated cost and reserves budget.
+        Returns (reservation_id, estimated_cost_usd, estimated_input_tokens).
+        Raises BudgetExceededError if budget cap would be exceeded.
+        """
+        in_tokens, estimated_cost = estimate_call_cost(model_id, prompt_text, max_output_tokens)
+        pricing = get_model_price(model_id)
+        reservation_id = f"res_{uuid.uuid4().hex[:12]}"
+
+        success = self.repo.reserve_budget(
+            reservation_id=reservation_id,
+            run_id=run_id,
+            call_id=call_id,
+            model_id=model_id,
+            amount_usd=estimated_cost,
+            price_input=pricing.input_per_million,
+            price_output=pricing.output_per_million
+        )
+
+[src/flux/storage/database.py::<module>#s6/8]
+"""SQLite Database connection and table schemas."""
+    ...
+    blocking_issues TEXT,
+    passed_criteria TEXT,
+    failed_criteria TEXT,
+    confidence TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS budget_reservations (
+    reservation_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    call_id TEXT NOT NULL,
+    model_id TEXT NOT NULL,
+    reserved_amount_usd REAL NOT NULL,
+    price_snapshot_input REAL NOT NULL,
+    price_snapshot_output REAL NOT NULL,
+    settled_amount_usd REAL,
+    status TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (run_id) REFERENCES runs(run_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS usage_records (
+    usage_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+
+[src/flux/static/index.html@L121#s2/3]
+                <div>
+    ...
+            <div>
+              <h2>تسک‌های این پروژه</h2>
+              <p class="muted">وظایف تعریف‌شده برای اجرا توسط تیم ۵ Agent</p>
+            </div>
+            <button class="primary-button" id="add-project-task-btn"><span data-icon="plus"></span>تسک جدید</button>
+          </div>
+
+          <div class="project-tasks-grid" id="project-tasks-grid"></div>
+        </div>
+      </section>
+
+      <section class="page-view" id="memory-view" hidden>
+        <div class="page-heading"><div><div class="eyebrow">حافظهٔ محلی</div><h1>چیزهایی که به خاطر می‌سپاریم.</h1><p>قواعد، اطلاعات و تصمیم‌هایی که در کار بعدی به کمکمان می‌آیند.</p></div><button class="primary-button" id="add-memory"><span data-icon="plus"></span>یادداشت جدید</button></div>
+        <div class="search-field"><span data-icon="search"></span><input id="memory-search" placeholder="جست‌وجو در حافظه…" aria-label="جست‌وجو در حافظه"></div>
+        <div class="memory-grid" id="memory-grid"></div>
+        <p class="page-footnote"><span data-icon="lock"></span> فقط بخش مرتبط از یادداشت‌های فعال به زمینهٔ درخواست اضافه می‌شود.</p>
+      </section>
+      <section class="page-view" id="usage-view" hidden>
+        <div class="page-heading"><div><div class="eyebrow">شفاف، قبل و بعد از هر اجرا</div><h1>مصرف و بودجه</h1><p id="usage-description">مصرف امروز بر اساس دفتر ثبت‌شدهٔ همین دستگاه.</p></div><button class="secondary-button" id="export-usage"><span data-icon="download"></span>دریافت گزارش</button></div>
+        <div class="usage-stats" id="usage-stats"></div>
+        <div class="section-card"><div class="section-card-heading"><h2>مصرف به تفکیک مدل</h2><span class="muted">امروز · UTC</span></div><div id="model-usage"></div></div>
+        <div class="section-card budget-edit"><div><h2>سقف روزانه</h2><p>پیش از هر تماس، سهم آن از بودجه رزرو می‌شود.</p></div><form id="daily-budget-form"><label class="sr-only" for="daily-budget-input">سقف روزانه به دلار</label><input id="daily-budget-input" type="number" min="0.01" max="1000" step="0.01" required><span>دلار</span><button class="primary-button">ذخیره</button></form></div>
+      </section>
+      <aside class="agent-drawer" id="agent-drawer" hidden aria-label="تیم Agentها">
+        <div class="drawer-heading"><div><span class="eyebrow">تیم شخصی تو</span><h2>تیم Agentهای تو</h2></div><button class="icon-btn" id="close-agents" aria-label="بستن پنل Agentها" data-icon="close"></button></div>
+
+[src/flux/budget/estimator.py::estimate_tokens_from_text]
+def estimate_tokens_from_text(text: str) -> int:
+    """Conservative token estimator for mixed Persian/English text.
+    Persian UTF-8 text typically takes 1 token per 2-3 characters in subword tokenizers.
+    We conservatively estimate tokens = ceil(len(text) / 2.5) + 20 to avoid underestimating.
+    """
+    if not text:
+        return 0
+    # Conservative estimate
+    return int(len(text) / 2.5) + 20
+
+[src/flux/budget/ledger.py::BudgetLedger.settle_call#s2/2]
+    def settle_call(
+    ...
+                "SELECT price_snapshot_input,price_snapshot_output FROM budget_reservations WHERE reservation_id=?",
+                (reservation_id,)
+            ).fetchone()
+            if snapshot is None:
+                raise ValueError("Missing price snapshot")
+            actual_cost_usd = (input_tokens * snapshot[0] + output_tokens * snapshot[1]) / 1_000_000
+
+        self.repo.record_usage(
+            usage_id=usage_id,
+            run_id=run_id,
+            call_id=call_id,
+            model_id=model_id,
+            input_tokens=input_tokens,
+            cached_input_tokens=cached_input_tokens,
+            output_tokens=output_tokens,
+            estimated_cost_usd=estimated_cost_usd,
+            actual_cost_usd=actual_cost_usd,
+            is_unknown=is_unknown
+        )
+
+        self.repo.settle_reservation(
+            reservation_id=reservation_id,
+            actual_cost_usd=actual_cost_usd,
+            is_unknown=is_unknown
+        )
+
+[src/flux/engine/orchestrator.py::FluxEngine._call#s2/2]
+    async def _call(self, run_id, role, model_id, messages, max_tokens, subtask_id=None, call_role=None):
+    ...
+                res_id, estimated, _ = self.budget_ledger.reserve_for_call(run_id, call_id, model_id,
+                    json.dumps(messages, ensure_ascii=False), max_tokens)
+                self.repo.add_call(call_id, run_id, call_role or role, model_id, subtask_id=subtask_id, attempt=attempt)
+                try:
+                    response = await self.provider.generate(model_id, messages, max_tokens)
+                except BaseException as exc:
+                    err_msg = f"{type(exc).__name__}: {str(exc)}".strip()
+                    self.repo.update_call_status(call_id, "failed", error_message=err_msg[:500])
+                    self.budget_ledger.settle_call(res_id, "usage_"+call_id, run_id, call_id, model_id, 0, 0, 0, estimated, is_unknown=True)
+                    if isinstance(exc, ProviderError) and exc.is_transient and attempt < max_sends:
+                        retry = True
+                    else:
+                        raise
+                else:
+                    self.repo.update_call_status(call_id, "completed", latency_ms=response.latency_ms)
+                    self.budget_ledger.settle_call(res_id, "usage_"+call_id, run_id, call_id, model_id,
+                        response.input_tokens, response.cached_input_tokens, response.output_tokens, estimated,
+                        is_unknown=not response.usage_available)
+                    self._check_cancelled(run_id)
+                    return response
+            finally:
+                await self.limiter.release()
+            if retry:
+                await asyncio.sleep(.1 * 2 ** (attempt - 1))
+        raise ValueError("Retry limit")
+
+[src/flux/budget/estimator.py::<module>]
+"""Token and cost estimation utility."""
+
+from flux.budget.pricing import get_model_price, ModelPrice
+
+[src/flux/budget/ledger.py::BudgetLedger.settle_call#s1/2]
+    def settle_call(
+        self,
+        reservation_id: str,
+        usage_id: str,
+        run_id: str,
+        call_id: str,
+        model_id: str,
+        input_tokens: int,
+        cached_input_tokens: int,
+        output_tokens: int,
+        estimated_cost_usd: float,
+        actual_cost_usd: Optional[float] = None,
+        is_unknown: bool = False
+    ):
+        """Settles reservation with actual cost and records usage."""
+        if actual_cost_usd is None and not is_unknown:
+            # Calculate from tokens and pricing snapshot
+            snapshot = self.repo.conn.execute(
+                "SELECT price_snapshot_input,price_snapshot_output FROM budget_reservations WHERE reservation_id=?",
+                (reservation_id,)
+            ).fetchone()
+            if snapshot is None:
+                raise ValueError("Missing price snapshot")
+            actual_cost_usd = (input_tokens * snapshot[0] + output_tokens * snapshot[1]) / 1_000_000
+
+
+[src/flux/storage/repository.py::Repository.settle_reservation#s3/3]
+    def settle_reservation(
+    ...
+                    WHERE run_id = ?
+                    """,
+                    (reserved_amount, reserved_amount, now, run_id)
+                )
+            else:
+                self.conn.execute(
+                    """
+                    UPDATE budget_reservations
+                    SET settled_amount_usd = ?, status = 'settled'
+                    WHERE reservation_id = ?
+                    """,
+                    (actual_cost_usd, reservation_id)
+                )
+                self.conn.execute(
+                    """
+                    UPDATE runs
+                    SET reserved_cost_usd = MAX(0.0, reserved_cost_usd - ?),
+                        spent_cost_usd = spent_cost_usd + ?,
+                        updated_at = ?
+                    WHERE run_id = ?
+                    """,
+                    (reserved_amount, actual_cost_usd, now, run_id)
+                )
+            self.conn.commit()
+
+[tools/estimate.py::calculate#s2/5]
+def calculate(config, budget, evaluation, reserve, people, days, minutes,
+    ...
+    available = max(0, operating - fixed_cost)
+    rows = {}
+    for scenario in forecasts["scenarios"]:
+        probability = scenario["assumed_acceptance_rate"]
+        if not 0 < probability <= 1:
+            raise ValueError("Acceptance assumptions must be in (0, 1]")
+        base = sum(
+            call["count"]
+            * (call["input_tokens"] * rates[call["model"]]["input"]
+               + call["output_tokens"] * rates[call["model"]]["output"])
+            / unit
+            for call in scenario["calls"]
+        )
+        attempt = base * scenario["usage_multiplier"]
+        rows[scenario["id"]] = {
+            "base_usd": base,
+            "attempt_usd": attempt,
+            "acceptance_assumption": probability,
+            "usd_per_accepted_including_failures": attempt / probability,
+            "token_only_expected_accepted": math.floor(available / attempt) * probability,
+        }
+    mix = forecasts["default_mix"]
+    if any(weight < 0 for weight in mix.values()) or not math.isclose(sum(mix.values()), 1):
+        raise ValueError("Mix weights must be non-negative and sum to one")
+    attempt_cost = sum(mix[key] * rows[key]["attempt_usd"] for key in mix)
+
+[src/flux/budget/ledger.py::BudgetLedger.reserve_for_call#s2/2]
+    def reserve_for_call(
+    ...
+            run_id=run_id,
+            call_id=call_id,
+            model_id=model_id,
+            amount_usd=estimated_cost,
+            price_input=pricing.input_per_million,
+            price_output=pricing.output_per_million
+        )
+        if not success:
+            raise BudgetExceededError(
+                f"Cannot reserve ${estimated_cost:.6f} for call {call_id} (model {model_id}). Budget cap exceeded!"
+            )
+        return reservation_id, estimated_cost, in_tokens

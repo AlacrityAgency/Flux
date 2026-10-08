@@ -1,0 +1,406 @@
+{
+  "design_version": "0.3",
+  "status": "proposed_not_connected",
+  "pricing": {
+    "source": "User supplied; unverified provider aliases and prices",
+    "currency": "USD",
+    "assumed_token_unit": 1000000,
+    "models": {
+      "gapgpt-gemma-26b-a4b": {
+        "input": 0.15,
+        "output": 0.6
+      },
+      "gapgpt-qwen-3.6": {
+        "input": 0.25,
+        "output": 2.0
+      },
+      "gapgpt-qwen-3.6-thinking": {
+        "input": 0.25,
+        "output": 2.0
+      },
+      "gapgpt-qwen-3.8": {
+        "input": 0.25,
+        "output": 2.0
+      },
+      "gpt-5.6-luna": {
+        "input": 0.2,
+        "output": 1.2
+      },
+      "gpt-5.6-terra": {
+        "input": 2.0,
+        "output": 12.0
+      },
+      "gpt-5.6-sol": {
+        "input": 2.5,
+        "output": 15.0
+      },
+      "ceo-fable-5.1-unverified": {
+        "input": 10.0,
+        "output": 50.0,
+        "verification": "UNVERIFIED: placeholder estimate using user-supplied claude-fable-5 rate, NOT a verified Fable 5.1 price",
+        "api_model_id": null
+      },
+      "claude-opus-5": {
+        "input": 5.0,
+        "output": 25.0,
+        "verification": "User supplied, not independently verified"
+      }
+    }
+  },
+  "budget": {
+    "total_usd": 50,
+    "evaluation_usd": 5,
+    "operating_usd": 35,
+    "reserve_usd": 10,
+    "daily_usd": 5,
+    "reserve_requires_owner_release": true,
+    "task_caps_usd": {
+      "simple": 0.3,
+      "small_code": 0.75,
+      "complex": 4.0
+    }
+  },
+  "roles": {
+    "ceo": {
+      "candidate": "ceo-fable-5.1-unverified",
+      "reports_to": "human_ceo",
+      "human_owner": "دانیال"
+    },
+    "coo": {
+      "candidate": "claude-opus-5",
+      "reports_to": "human_coo",
+      "human_owner": "مبینا"
+    },
+    "cto": {
+      "candidate": "gpt-5.6-sol",
+      "reports_to": "human_cto",
+      "human_owner": "سعید"
+    },
+    "ops_planner": {
+      "candidate": "gapgpt-qwen-3.6-thinking",
+      "reports_to": "coo"
+    },
+    "ops_writer": {
+      "candidate": "gpt-5.6-luna",
+      "reports_to": "coo"
+    },
+    "ops_metrics": {
+      "candidate": "gapgpt-gemma-26b-a4b",
+      "reports_to": "coo"
+    },
+    "developer": {
+      "candidate": "gpt-5.6-luna",
+      "reports_to": "technical_human"
+    },
+    "tester": {
+      "candidate": "gapgpt-qwen-3.8",
+      "reports_to": "technical_human"
+    },
+    "technical_reviewer": {
+      "candidate": "gapgpt-qwen-3.6-thinking",
+      "reports_to": "technical_human"
+    }
+  },
+  "limits": {
+    "max_concurrent_executions": 2,
+    "max_children_per_root": 5,
+    "max_decomposition_depth": 1,
+    "max_generation_attempts_per_leaf": 3,
+    "max_model_promotions_per_leaf": 1,
+    "max_llm_calls_per_root": 32,
+    "max_transport_retries_per_call": 2,
+    "max_active_minutes_per_root": 20,
+    "max_human_wait_hours_before_reminder": 24,
+    "max_human_wait_hours_before_pause": 72,
+    "daily_budget_alert_fraction": 0.8
+  },
+  "execution": {
+    "event_driven": true,
+    "idle_llm_polling": false,
+    "human_final_acceptance_during_pilot": true,
+    "isolated_workspace_per_root": true,
+    "requires_provider_capability_probe_before_activation": true
+  },
+  "forecast": {
+    "warning": "Assumptions only; not measured quality, latency, or provider availability",
+    "default_mix": {
+      "simple": 0.25,
+      "small_code": 0.65,
+      "complex": 0.1
+    },
+    "default_human_capacity": {
+      "people": 2,
+      "days": 10,
+      "minutes_per_person_day": 30,
+      "minutes_per_attempt": 15,
+      "note": "Capacity scenario only: two active contributors at 30 minutes/day; all four humans (Danial, Mobina, Saeed, Ali) exist. Change people to model broader participation."
+    },
+    "scenarios": [
+      {
+        "id": "simple",
+        "example": "A bounded documentation update or ticket summary",
+        "usage_multiplier": 1.5,
+        "assumed_acceptance_rate": 0.85,
+        "calls": [
+          {
+            "role": "coo_plan",
+            "model": "claude-opus-5",
+            "count": 1,
+            "input_tokens": 4000,
+            "output_tokens": 800
+          },
+          {
+            "role": "ops_planner",
+            "model": "gapgpt-qwen-3.6-thinking",
+            "count": 1,
+            "input_tokens": 4000,
+            "output_tokens": 800
+          },
+          {
+            "role": "ops_writer",
+            "model": "gpt-5.6-luna",
+            "count": 1,
+            "input_tokens": 6000,
+            "output_tokens": 1800
+          },
+          {
+            "role": "ops_metrics",
+            "model": "gapgpt-gemma-26b-a4b",
+            "count": 1,
+            "input_tokens": 3000,
+            "output_tokens": 500
+          },
+          {
+            "role": "coo_review",
+            "model": "claude-opus-5",
+            "count": 1,
+            "input_tokens": 4000,
+            "output_tokens": 600
+          }
+        ]
+      },
+      {
+        "id": "small_code",
+        "example": "A small bug fix or bounded endpoint change with tests",
+        "usage_multiplier": 2.0,
+        "assumed_acceptance_rate": 0.7,
+        "calls": [
+          {
+            "role": "cto_plan",
+            "model": "gpt-5.6-sol",
+            "count": 1,
+            "input_tokens": 8000,
+            "output_tokens": 1800
+          },
+          {
+            "role": "developer",
+            "model": "gpt-5.6-luna",
+            "count": 1,
+            "input_tokens": 12000,
+            "output_tokens": 3500
+          },
+          {
+            "role": "tester",
+            "model": "gapgpt-qwen-3.8",
+            "count": 1,
+            "input_tokens": 12000,
+            "output_tokens": 3500
+          },
+          {
+            "role": "technical_reviewer",
+            "model": "gapgpt-qwen-3.6-thinking",
+            "count": 1,
+            "input_tokens": 12000,
+            "output_tokens": 1500
+          },
+          {
+            "role": "cto_review",
+            "model": "gpt-5.6-sol",
+            "count": 1,
+            "input_tokens": 14000,
+            "output_tokens": 1800
+          }
+        ]
+      },
+      {
+        "id": "complex",
+        "example": "A multi-file change requiring more context and repair",
+        "usage_multiplier": 2.5,
+        "assumed_acceptance_rate": 0.5,
+        "calls": [
+          {
+            "role": "coo_handoff",
+            "model": "claude-opus-5",
+            "count": 1,
+            "input_tokens": 8000,
+            "output_tokens": 1500
+          },
+          {
+            "role": "cto_plan",
+            "model": "gpt-5.6-sol",
+            "count": 1,
+            "input_tokens": 24000,
+            "output_tokens": 4000
+          },
+          {
+            "role": "developer",
+            "model": "gpt-5.6-luna",
+            "count": 4,
+            "input_tokens": 30000,
+            "output_tokens": 6000
+          },
+          {
+            "role": "tester",
+            "model": "gapgpt-qwen-3.8",
+            "count": 2,
+            "input_tokens": 30000,
+            "output_tokens": 6000
+          },
+          {
+            "role": "technical_reviewer",
+            "model": "gapgpt-qwen-3.6-thinking",
+            "count": 1,
+            "input_tokens": 30000,
+            "output_tokens": 3000
+          },
+          {
+            "role": "cto_review",
+            "model": "gpt-5.6-sol",
+            "count": 1,
+            "input_tokens": 45000,
+            "output_tokens": 4000
+          }
+        ]
+      }
+    ],
+    "fixed_calls": [
+      {
+        "role": "ceo_strategy_and_exceptions",
+        "model": "ceo-fable-5.1-unverified",
+        "count": 10,
+        "input_tokens": 4000,
+        "output_tokens": 800,
+        "usage_multiplier": 1.5
+      }
+    ],
+    "technical_review_capacity": {
+      "minutes_per_day": 30,
+      "minutes_per_technical_attempt": 10,
+      "scenario_ids": [
+        "small_code",
+        "complex"
+      ],
+      "note": "Ali review minutes are part of aggregate human time; coordination is included in the remaining average 15 minutes per attempt"
+    }
+  },
+  "organization": {
+    "type": "hierarchical",
+    "human_ceo": "دانیال",
+    "human_technical_lead": "علی",
+    "company_human_count": 4,
+    "note": "Four human members retain authority; the CEO, COO and CTO each have an AI assistant. Agent reporting and human reporting are explicit.",
+    "nodes": [
+      {
+        "id": "human_ceo",
+        "kind": "human",
+        "name": "دانیال",
+        "title": "CEO",
+        "reports_to": null
+      },
+      {
+        "id": "human_coo",
+        "kind": "human",
+        "name": "مبینا",
+        "title": "COO",
+        "reports_to": "human_ceo"
+      },
+      {
+        "id": "human_cto",
+        "kind": "human",
+        "name": "سعید",
+        "title": "CTO",
+        "reports_to": "human_ceo"
+      },
+      {
+        "id": "ceo",
+        "reports_to": "human_ceo",
+        "model": "ceo-fable-5.1-unverified",
+        "human_owner": "دانیال"
+      },
+      {
+        "id": "coo",
+        "reports_to": "human_coo",
+        "model": "claude-opus-5",
+        "human_owner": "مبینا"
+      },
+      {
+        "id": "cto",
+        "reports_to": "human_cto",
+        "model": "gpt-5.6-sol",
+        "human_owner": "سعید"
+      },
+      {
+        "id": "ops_planner",
+        "reports_to": "coo",
+        "model": "gapgpt-qwen-3.6-thinking"
+      },
+      {
+        "id": "ops_writer",
+        "reports_to": "coo",
+        "model": "gpt-5.6-luna"
+      },
+      {
+        "id": "ops_metrics",
+        "reports_to": "coo",
+        "model": "gapgpt-gemma-26b-a4b"
+      },
+      {
+        "id": "technical_human",
+        "reports_to": "human_cto",
+        "kind": "human",
+        "name": "علی"
+      },
+      {
+        "id": "developer",
+        "reports_to": "technical_human",
+        "model": "gpt-5.6-luna"
+      },
+      {
+        "id": "tester",
+        "reports_to": "technical_human",
+        "model": "gapgpt-qwen-3.8"
+      },
+      {
+        "id": "technical_reviewer",
+        "reports_to": "technical_human",
+        "model": "gapgpt-qwen-3.6-thinking"
+      }
+    ],
+    "human_coo": "مبینا",
+    "human_cto": "سعید"
+  },
+  "routing": {
+    "cross_branch_handoff": "coo_to_cto_via_structured_dependency",
+    "ceo_calls": "strategic_planning_or_exception_only",
+    "routine_work_skips_ceo_llm": true,
+    "escalation_preserves_root_budget": true,
+    "department_workers_shared_across_branches": false,
+    "technical_review_separate_context": true,
+    "escalation_routes": {
+      "developer": "cto",
+      "tester": "cto",
+      "technical_reviewer": "cto",
+      "ops_planner": "coo",
+      "ops_writer": "coo",
+      "ops_metrics": "coo",
+      "coo": "ceo",
+      "cto": "ceo"
+    },
+    "human_acceptance": {
+      "operations": "human_coo",
+      "technical": "human_cto",
+      "routine_technical_delegate": "technical_human",
+      "strategic": "human_ceo"
+    }
+  }
+}

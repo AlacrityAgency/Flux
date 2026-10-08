@@ -1,0 +1,494 @@
+[
+  {
+    "task": "T01",
+    "algorithm": "prior_v2",
+    "model": "gpt-5.6-luna",
+    "returned_model": "openai/gpt-5.6-luna",
+    "elapsed_seconds": 8.474884500028566,
+    "usage": {
+      "completion_tokens": 739,
+      "prompt_tokens": 3344,
+      "total_tokens": 4083,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 114,
+        "rejected_prediction_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "cache_write_tokens": 3341,
+        "video_tokens": 0
+      },
+      "cost": 0.00172265,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.00172265,
+        "upstream_inference_prompt_cost": 0.00083585,
+        "upstream_inference_completions_cost": 0.0008868
+      }
+    },
+    "finish_reason": "stop",
+    "raw": "{\n  \"summary\": \"علت ثبت‌شده این است که `reference_context` در `FluxEngine._context` به همهٔ تماس‌های `Head` اضافه می‌شود و `build_head_prompt` نیز همان Context را در فیلد `context` درخواست Head قرار می‌دهد؛ بنابراین Head دو نسخه دریافت می‌کند. کمترین تغییر پیشنهادی، حذف فیلد `context` از `build_head_prompt` است.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"محل ساخت درخواست Head و فیلد context داخل آن مشخص شود\",\n      \"status\": \"partial\",\n      \"answer\": \"`build_head_prompt` به‌عنوان محل قرار دادن فیلد `context` در درخواست Head مشخص شده است، اما مسیر فایل یا کد کامل محل ساخت درخواست ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `FluxEngine._context`، مقدار `reference_context` به همهٔ تماس‌های `Head`، کارگرها و بازبین اضافه می‌شود.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"هم‌زمانی دو مسیر به‌صورت توضیحی ثبت شده است: `FluxEngine._context` Context را به تماس اضافه می‌کند و `build_head_prompt` فیلد `context` را در درخواست می‌گذارد؛ اما فراخوانی یا کد مشخصی که هر دو را کنار هم نشان دهد ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود\",\n      \"status\": \"supported\",\n      \"answer\": \"تصمیم فعلی این است که Context پروژه در هر تماس وجود داشته باشد؛ با توجه به ثبت ارسال دو نسخه برای Head، اصلاح مصوب/پیشنهادی حذف فیلد `context` از `build_head_prompt` است تا Context فقط از مسیر `FluxEngine._context` اضافه شود.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"کد یا مسیر فایل واقعی `build_head_prompt` و محل دقیق ساخت درخواست Head ارائه نشده است.\",\n    \"کد فراخوانی `Head` که هم `FluxEngine._context` و هم `build_head_prompt` را به‌کار می‌گیرد ارائه نشده است.\",\n    \"شواهد اجرای تست یا بررسی پس از حذف فیلد `context` ارائه نشده است.\"\n  ]\n}",
+    "success": true,
+    "answer": {
+      "summary": "علت ثبت‌شده این است که `reference_context` در `FluxEngine._context` به همهٔ تماس‌های `Head` اضافه می‌شود و `build_head_prompt` نیز همان Context را در فیلد `context` درخواست Head قرار می‌دهد؛ بنابراین Head دو نسخه دریافت می‌کند. کمترین تغییر پیشنهادی، حذف فیلد `context` از `build_head_prompt` است.",
+      "criteria": [
+        {
+          "criterion": "محل ساخت درخواست Head و فیلد context داخل آن مشخص شود",
+          "status": "partial",
+          "answer": "`build_head_prompt` به‌عنوان محل قرار دادن فیلد `context` در درخواست Head مشخص شده است، اما مسیر فایل یا کد کامل محل ساخت درخواست ارائه نشده است.",
+          "evidence_ids": [
+            "mem:dec_ctx_current rev3"
+          ]
+        },
+        {
+          "criterion": "محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود",
+          "status": "supported",
+          "answer": "در `FluxEngine._context`، مقدار `reference_context` به همهٔ تماس‌های `Head`، کارگرها و بازبین اضافه می‌شود.",
+          "evidence_ids": [
+            "mem:dec_ctx_current rev3"
+          ]
+        },
+        {
+          "criterion": "فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود",
+          "status": "partial",
+          "answer": "هم‌زمانی دو مسیر به‌صورت توضیحی ثبت شده است: `FluxEngine._context` Context را به تماس اضافه می‌کند و `build_head_prompt` فیلد `context` را در درخواست می‌گذارد؛ اما فراخوانی یا کد مشخصی که هر دو را کنار هم نشان دهد ارائه نشده است.",
+          "evidence_ids": [
+            "mem:dec_ctx_current rev3"
+          ]
+        },
+        {
+          "criterion": "تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود",
+          "status": "supported",
+          "answer": "تصمیم فعلی این است که Context پروژه در هر تماس وجود داشته باشد؛ با توجه به ثبت ارسال دو نسخه برای Head، اصلاح مصوب/پیشنهادی حذف فیلد `context` از `build_head_prompt` است تا Context فقط از مسیر `FluxEngine._context` اضافه شود.",
+          "evidence_ids": [
+            "mem:dec_ctx_current rev3"
+          ]
+        }
+      ],
+      "missing_information": [
+        "کد یا مسیر فایل واقعی `build_head_prompt` و محل دقیق ساخت درخواست Head ارائه نشده است.",
+        "کد فراخوانی `Head` که هم `FluxEngine._context` و هم `build_head_prompt` را به‌کار می‌گیرد ارائه نشده است.",
+        "شواهد اجرای تست یا بررسی پس از حذف فیلد `context` ارائه نشده است."
+      ]
+    }
+  },
+  {
+    "task": "T01",
+    "algorithm": "rewrite",
+    "model": "gpt-5.6-luna",
+    "returned_model": "openai/gpt-5.6-luna",
+    "elapsed_seconds": 7.8653363000485115,
+    "usage": {
+      "completion_tokens": 796,
+      "prompt_tokens": 3367,
+      "total_tokens": 4163,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 34,
+        "rejected_prediction_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "cache_write_tokens": 3364,
+        "video_tokens": 0
+      },
+      "cost": 0.0017968,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.0017968,
+        "upstream_inference_prompt_cost": 0.0008416,
+        "upstream_inference_completions_cost": 0.0009552
+      }
+    },
+    "finish_reason": "stop",
+    "raw": "{\n  \"summary\": \"تکرار Context در درخواست Head به این دلیل است که `build_head_prompt` آن را در فیلد `context` داخل `user_content` قرار می‌دهد و سپس `FluxEngine._context` همان مقدار را دوباره با کلید `reference_context` به پیام کاربر اضافه می‌کند. کمترین تغییر ثبت‌شده، حذف فیلد `context` از `build_head_prompt` است.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"محل ساخت درخواست Head و فیلد context داخل آن مشخص شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `src/flux/agents/head.py::build_head_prompt` درخواست Head ساخته می‌شود. در `user_content`، فیلد `\\\"context\\\": task.context` قرار دارد و سپس کل ساختار در پیام `user` ارسال می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/agents/head.py::build_head_prompt chunk-lines:1-19\"\n      ]\n    },\n    {\n      \"criterion\": \"محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `src/flux/engine/orchestrator.py::FluxEngine._context`، یک پیام `user` جدید با `reference_context: task.context` به `messages` append می‌شود. همین تابع همچنین متن سیاستی مربوط به غیرقابل‌اعتماد بودن Context و خروجی وابستگی‌ها را به پیام `system` اضافه می‌کند.\",\n      \"evidence_ids\": [\n        \"src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5\",\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `FluxEngine._workflow`، فراخوانی Head با `self._context(build_head_prompt(task), task)` انجام می‌شود؛ بنابراین ابتدا `build_head_prompt` شامل `context` ساخته می‌شود و سپس `_context` همان Task را با `reference_context` دوباره اضافه می‌کند.\",\n      \"evidence_ids\": [\n        \"src/flux/engine/orchestrator.py::FluxEngine._workflow chunk-lines:1,4-17\",\n        \"src/flux/agents/head.py::build_head_prompt chunk-lines:1-19\",\n        \"src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5\"\n      ]\n    },\n    {\n      \"criterion\": \"تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود\",\n      \"status\": \"supported\",\n      \"answer\": \"تصمیم فعلی این است که Context پروژه در هر تماس به‌صورت `reference_context` توسط `_context` به Head، کارگرها و بازبین اضافه شود. چون `build_head_prompt` نیز `context` را مستقیماً در درخواست Head می‌گذارد، Head دو نسخه دریافت می‌کند. اصلاح پیشنهادی ثبت‌شده: حذف فیلد `context` از `build_head_prompt`.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"شواهدی دربارهٔ اجرای تست یا تأیید عملی اصلاح ارائه نشده است.\",\n    \"شواهدی دربارهٔ مسیر دقیق اعمال `_context` برای کارگرها و بازبین‌ها، به‌جز تصمیم ثبت‌شده، ارائه نشده است.\"\n  ]\n}",
+    "success": true,
+    "answer": {
+      "summary": "تکرار Context در درخواست Head به این دلیل است که `build_head_prompt` آن را در فیلد `context` داخل `user_content` قرار می‌دهد و سپس `FluxEngine._context` همان مقدار را دوباره با کلید `reference_context` به پیام کاربر اضافه می‌کند. کمترین تغییر ثبت‌شده، حذف فیلد `context` از `build_head_prompt` است.",
+      "criteria": [
+        {
+          "criterion": "محل ساخت درخواست Head و فیلد context داخل آن مشخص شود",
+          "status": "supported",
+          "answer": "در `src/flux/agents/head.py::build_head_prompt` درخواست Head ساخته می‌شود. در `user_content`، فیلد `\"context\": task.context` قرار دارد و سپس کل ساختار در پیام `user` ارسال می‌شود.",
+          "evidence_ids": [
+            "src/flux/agents/head.py::build_head_prompt chunk-lines:1-19"
+          ]
+        },
+        {
+          "criterion": "محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود",
+          "status": "supported",
+          "answer": "در `src/flux/engine/orchestrator.py::FluxEngine._context`، یک پیام `user` جدید با `reference_context: task.context` به `messages` append می‌شود. همین تابع همچنین متن سیاستی مربوط به غیرقابل‌اعتماد بودن Context و خروجی وابستگی‌ها را به پیام `system` اضافه می‌کند.",
+          "evidence_ids": [
+            "src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5",
+            "mem:dec_ctx_current rev3"
+          ]
+        },
+        {
+          "criterion": "فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود",
+          "status": "supported",
+          "answer": "در `FluxEngine._workflow`، فراخوانی Head با `self._context(build_head_prompt(task), task)` انجام می‌شود؛ بنابراین ابتدا `build_head_prompt` شامل `context` ساخته می‌شود و سپس `_context` همان Task را با `reference_context` دوباره اضافه می‌کند.",
+          "evidence_ids": [
+            "src/flux/engine/orchestrator.py::FluxEngine._workflow chunk-lines:1,4-17",
+            "src/flux/agents/head.py::build_head_prompt chunk-lines:1-19",
+            "src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5"
+          ]
+        },
+        {
+          "criterion": "تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود",
+          "status": "supported",
+          "answer": "تصمیم فعلی این است که Context پروژه در هر تماس به‌صورت `reference_context` توسط `_context` به Head، کارگرها و بازبین اضافه شود. چون `build_head_prompt` نیز `context` را مستقیماً در درخواست Head می‌گذارد، Head دو نسخه دریافت می‌کند. اصلاح پیشنهادی ثبت‌شده: حذف فیلد `context` از `build_head_prompt`.",
+          "evidence_ids": [
+            "mem:dec_ctx_current rev3"
+          ]
+        }
+      ],
+      "missing_information": [
+        "شواهدی دربارهٔ اجرای تست یا تأیید عملی اصلاح ارائه نشده است.",
+        "شواهدی دربارهٔ مسیر دقیق اعمال `_context` برای کارگرها و بازبین‌ها، به‌جز تصمیم ثبت‌شده، ارائه نشده است."
+      ]
+    }
+  },
+  {
+    "task": "H02",
+    "algorithm": "prior_v2",
+    "model": "gpt-5.6-luna",
+    "returned_model": "openai/gpt-5.6-luna",
+    "elapsed_seconds": 7.230834399990272,
+    "usage": {
+      "completion_tokens": 865,
+      "prompt_tokens": 3286,
+      "total_tokens": 4151,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 118,
+        "rejected_prediction_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "cache_write_tokens": 3283,
+        "video_tokens": 0
+      },
+      "cost": 0.00185935,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.00185935,
+        "upstream_inference_prompt_cost": 0.00082135,
+        "upstream_inference_completions_cost": 0.001038
+      }
+    },
+    "finish_reason": "stop",
+    "raw": "{\n  \"summary\": \"شواهد نشان می‌دهند کلید از متغیر محیطی خوانده می‌شود و مقدار پوشیده‌شده در رابط کاربری نمایش داده می‌شود؛ اما ساخت متن پوشیده، ذخیره‌سازی یا نوشتن کلید در فایل `.env`، و مدل درخواست اختصاصی برای ذخیرهٔ کلید به‌طور کامل ارائه نشده‌اند.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"ساخت متن پوشیدهٔ کلید نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"در `src/flux/static/app.js@L721 L36-46` مقدار آمادهٔ `state.models.masked_key` در متغیر `masked` گرفته و با تگ `<code>` نمایش داده می‌شود؛ اما منطق ساخت یا ماسک‌کردن خود کلید در شواهد موجود نیست.\",\n      \"evidence_ids\": [\n        \"src/flux/static/app.js@L721 L36-46\"\n      ]\n    },\n    {\n      \"criterion\": \"ذخیرهٔ کلید در محیط و فایل env نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"در `src/flux/settings.py::load_env_files L1-16` چند فایل `.env` از مسیرهای مشخص خوانده می‌شوند و در شواهد دیگر آمده است که ورود masked می‌تواند محیط پردازش را تنظیم کند. بااین‌حال، کد یا مدلی برای نوشتن/ذخیرهٔ کلید در محیط یا فایل `.env` نشان داده نشده است.\",\n      \"evidence_ids\": [\n        \"src/flux/settings.py::load_env_files L1-16\",\n        \"personal-demo.fa.md#کنترل مصرفی که حفظ می‌کنیم L6-10\"\n      ]\n    },\n    {\n      \"criterion\": \"خواندن کلید فقط از متغیر محیطی نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"صراحتاً ذکر شده است که کلید فقط از `GAPGPT_API_KEY` در محیط پردازش خوانده می‌شود و از CLI argument، config، prompt و log خوانده نمی‌شود. همچنین adapter فقط `GAPGPT_API_KEY` را می‌گیرد.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1\",\n        \"personal-demo.fa.md#کنترل مصرفی که حفظ می‌کنیم L6-10\",\n        \"demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT L1-10\"\n      ]\n    },\n    {\n      \"criterion\": \"مدل درخواست ذخیرهٔ کلید نشان داده شود\",\n      \"status\": \"missing\",\n      \"answer\": \"هیچ مدل درخواست، endpoint یا schema اختصاصی برای ذخیرهٔ کلید ارائه نشده است. قراردادهای API موجود مربوط به runs، cancel، resume، events، usage و models status هستند، نه ذخیرهٔ کلید.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"الگوریتم یا تابع ساخت مقدار `masked_key` و قواعد دقیق پوشاندن کلید\",\n    \"منطق ذخیره یا تنظیم کلید در محیط پردازش\",\n    \"منطق نوشتن کلید در فایل `.env` و سیاست امنیتی آن\",\n    \"مدل درخواست یا endpoint ذخیرهٔ کلید، در صورت وجود\"\n  ]\n}",
+    "success": true,
+    "answer": {
+      "summary": "شواهد نشان می‌دهند کلید از متغیر محیطی خوانده می‌شود و مقدار پوشیده‌شده در رابط کاربری نمایش داده می‌شود؛ اما ساخت متن پوشیده، ذخیره‌سازی یا نوشتن کلید در فایل `.env`، و مدل درخواست اختصاصی برای ذخیرهٔ کلید به‌طور کامل ارائه نشده‌اند.",
+      "criteria": [
+        {
+          "criterion": "ساخت متن پوشیدهٔ کلید نشان داده شود",
+          "status": "partial",
+          "answer": "در `src/flux/static/app.js@L721 L36-46` مقدار آمادهٔ `state.models.masked_key` در متغیر `masked` گرفته و با تگ `<code>` نمایش داده می‌شود؛ اما منطق ساخت یا ماسک‌کردن خود کلید در شواهد موجود نیست.",
+          "evidence_ids": [
+            "src/flux/static/app.js@L721 L36-46"
+          ]
+        },
+        {
+          "criterion": "ذخیرهٔ کلید در محیط و فایل env نشان داده شود",
+          "status": "partial",
+          "answer": "در `src/flux/settings.py::load_env_files L1-16` چند فایل `.env` از مسیرهای مشخص خوانده می‌شوند و در شواهد دیگر آمده است که ورود masked می‌تواند محیط پردازش را تنظیم کند. بااین‌حال، کد یا مدلی برای نوشتن/ذخیرهٔ کلید در محیط یا فایل `.env` نشان داده نشده است.",
+          "evidence_ids": [
+            "src/flux/settings.py::load_env_files L1-16",
+            "personal-demo.fa.md#کنترل مصرفی که حفظ می‌کنیم L6-10"
+          ]
+        },
+        {
+          "criterion": "خواندن کلید فقط از متغیر محیطی نشان داده شود",
+          "status": "supported",
+          "answer": "صراحتاً ذکر شده است که کلید فقط از `GAPGPT_API_KEY` در محیط پردازش خوانده می‌شود و از CLI argument، config، prompt و log خوانده نمی‌شود. همچنین adapter فقط `GAPGPT_API_KEY` را می‌گیرد.",
+          "evidence_ids": [
+            "mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1",
+            "personal-demo.fa.md#کنترل مصرفی که حفظ می‌کنیم L6-10",
+            "demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT L1-10"
+          ]
+        },
+        {
+          "criterion": "مدل درخواست ذخیرهٔ کلید نشان داده شود",
+          "status": "missing",
+          "answer": "هیچ مدل درخواست، endpoint یا schema اختصاصی برای ذخیرهٔ کلید ارائه نشده است. قراردادهای API موجود مربوط به runs، cancel، resume، events، usage و models status هستند، نه ذخیرهٔ کلید.",
+          "evidence_ids": [
+            "mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1"
+          ]
+        }
+      ],
+      "missing_information": [
+        "الگوریتم یا تابع ساخت مقدار `masked_key` و قواعد دقیق پوشاندن کلید",
+        "منطق ذخیره یا تنظیم کلید در محیط پردازش",
+        "منطق نوشتن کلید در فایل `.env` و سیاست امنیتی آن",
+        "مدل درخواست یا endpoint ذخیرهٔ کلید، در صورت وجود"
+      ]
+    }
+  },
+  {
+    "task": "H02",
+    "algorithm": "rewrite",
+    "model": "gpt-5.6-luna",
+    "returned_model": "openai/gpt-5.6-luna",
+    "elapsed_seconds": 8.133293000049889,
+    "usage": {
+      "completion_tokens": 957,
+      "prompt_tokens": 3373,
+      "total_tokens": 4330,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 109,
+        "rejected_prediction_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "cache_write_tokens": 3370,
+        "video_tokens": 0
+      },
+      "cost": 0.0019915,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.0019915,
+        "upstream_inference_prompt_cost": 0.0008431,
+        "upstream_inference_completions_cost": 0.0011484
+      }
+    },
+    "finish_reason": "stop",
+    "raw": "{\n  \"summary\": \"شواهد نشان می‌دهند کلید API از متغیر محیطی خوانده می‌شود، در محیط و فایل‌های `.env` ذخیره می‌گردد، و یک متن پوشیده برای پاسخ وضعیت مدل ساخته می‌شود. بااین‌حال، نمایش آن در مؤلفهٔ واقعی رابط کاربری مستقیماً نشان داده نشده است.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"ساخت متن پوشیدهٔ کلید نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"در endpoint `GET /models/status`، اگر کلید وجود داشته باشد، مقدار `masked_key` با قالب `۷ کاراکتر اول...۴ کاراکتر آخر` ساخته می‌شود؛ برای کلیدهای کوتاه‌تر از ۱۳ کاراکتر مقدار `***` برگردانده می‌شود. این شواهد ساخت متن پوشیده و ارسال آن در پاسخ API را نشان می‌دهند، اما کد مؤلفهٔ رابط کاربری که آن را نمایش دهد ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.models chunk-lines:1-16\"\n      ]\n    },\n    {\n      \"criterion\": \"ذخیرهٔ کلید در محیط و فایل env نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `set_api_key`، کلید در `os.environ[\\\"GAPGPT_API_KEY\\\"]` و وضعیت live در `os.environ[\\\"FLUX_ENABLE_LIVE\\\"]` ذخیره می‌شوند. سپس محتوای `.env` شامل `GAPGPT_API_KEY`، `FLUX_ENABLE_LIVE` و `GAPGPT_BASE_URL` ساخته شده و در مسیرهای کاندید با `write_text` نوشته می‌شود. همچنین `load_env_files` همین فایل‌های `.env` را بررسی می‌کند.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.set_api_key chunk-lines:1-25\",\n        \"src/flux/settings.py::load_env_files chunk-lines:1-17\"\n      ]\n    },\n    {\n      \"criterion\": \"خواندن کلید فقط از متغیر محیطی نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"خاصیت `Settings.gapgpt_api_key` صراحتاً کلید را فقط با `os.environ.get(\\\"GAPGPT_API_KEY\\\", \\\"\\\")` می‌خواند. `get_settings` نیز مقدار کلید را از همین متغیر محیطی دریافت می‌کند و ابتدا `load_env_files()` را برای بارگذاری مقادیر فایل‌های `.env` اجرا می‌کند.\",\n      \"evidence_ids\": [\n        \"src/flux/settings.py::Settings.gapgpt_api_key chunk-lines:1-4\",\n        \"src/flux/settings.py::get_settings chunk-lines:1-14\"\n      ]\n    },\n    {\n      \"criterion\": \"مدل درخواست ذخیرهٔ کلید نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"مدل `ApiKeyRequest` فیلد `api_key` از نوع `str` با مقدار پیش‌فرض خالی و حداکثر طول ۲۵۰، و فیلد `enable_live` از نوع `bool` با مقدار پیش‌فرض `True` دارد. این مدل برای endpoint `POST /settings/api-key` استفاده می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.ApiKeyRequest chunk-lines:1-3\",\n        \"src/flux/api/app.py::create_app.set_api_key chunk-lines:1-25\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"کد رابط کاربری که مقدار `masked_key` را واقعاً در صفحه نمایش دهد ارائه نشده است.\",\n    \"شواهدی دربارهٔ رفتار رابط کاربری در خطای نوشتن فایل‌های `.env` یا اعتبارسنجی فراتر از `max_length` ارائه نشده است.\"\n  ]\n}",
+    "success": true,
+    "answer": {
+      "summary": "شواهد نشان می‌دهند کلید API از متغیر محیطی خوانده می‌شود، در محیط و فایل‌های `.env` ذخیره می‌گردد، و یک متن پوشیده برای پاسخ وضعیت مدل ساخته می‌شود. بااین‌حال، نمایش آن در مؤلفهٔ واقعی رابط کاربری مستقیماً نشان داده نشده است.",
+      "criteria": [
+        {
+          "criterion": "ساخت متن پوشیدهٔ کلید نشان داده شود",
+          "status": "partial",
+          "answer": "در endpoint `GET /models/status`، اگر کلید وجود داشته باشد، مقدار `masked_key` با قالب `۷ کاراکتر اول...۴ کاراکتر آخر` ساخته می‌شود؛ برای کلیدهای کوتاه‌تر از ۱۳ کاراکتر مقدار `***` برگردانده می‌شود. این شواهد ساخت متن پوشیده و ارسال آن در پاسخ API را نشان می‌دهند، اما کد مؤلفهٔ رابط کاربری که آن را نمایش دهد ارائه نشده است.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.models chunk-lines:1-16"
+          ]
+        },
+        {
+          "criterion": "ذخیرهٔ کلید در محیط و فایل env نشان داده شود",
+          "status": "supported",
+          "answer": "در `set_api_key`، کلید در `os.environ[\"GAPGPT_API_KEY\"]` و وضعیت live در `os.environ[\"FLUX_ENABLE_LIVE\"]` ذخیره می‌شوند. سپس محتوای `.env` شامل `GAPGPT_API_KEY`، `FLUX_ENABLE_LIVE` و `GAPGPT_BASE_URL` ساخته شده و در مسیرهای کاندید با `write_text` نوشته می‌شود. همچنین `load_env_files` همین فایل‌های `.env` را بررسی می‌کند.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.set_api_key chunk-lines:1-25",
+            "src/flux/settings.py::load_env_files chunk-lines:1-17"
+          ]
+        },
+        {
+          "criterion": "خواندن کلید فقط از متغیر محیطی نشان داده شود",
+          "status": "supported",
+          "answer": "خاصیت `Settings.gapgpt_api_key` صراحتاً کلید را فقط با `os.environ.get(\"GAPGPT_API_KEY\", \"\")` می‌خواند. `get_settings` نیز مقدار کلید را از همین متغیر محیطی دریافت می‌کند و ابتدا `load_env_files()` را برای بارگذاری مقادیر فایل‌های `.env` اجرا می‌کند.",
+          "evidence_ids": [
+            "src/flux/settings.py::Settings.gapgpt_api_key chunk-lines:1-4",
+            "src/flux/settings.py::get_settings chunk-lines:1-14"
+          ]
+        },
+        {
+          "criterion": "مدل درخواست ذخیرهٔ کلید نشان داده شود",
+          "status": "supported",
+          "answer": "مدل `ApiKeyRequest` فیلد `api_key` از نوع `str` با مقدار پیش‌فرض خالی و حداکثر طول ۲۵۰، و فیلد `enable_live` از نوع `bool` با مقدار پیش‌فرض `True` دارد. این مدل برای endpoint `POST /settings/api-key` استفاده می‌شود.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.ApiKeyRequest chunk-lines:1-3",
+            "src/flux/api/app.py::create_app.set_api_key chunk-lines:1-25"
+          ]
+        }
+      ],
+      "missing_information": [
+        "کد رابط کاربری که مقدار `masked_key` را واقعاً در صفحه نمایش دهد ارائه نشده است.",
+        "شواهدی دربارهٔ رفتار رابط کاربری در خطای نوشتن فایل‌های `.env` یا اعتبارسنجی فراتر از `max_length` ارائه نشده است."
+      ]
+    }
+  },
+  {
+    "task": "H05",
+    "algorithm": "prior_v2",
+    "model": "gpt-5.6-luna",
+    "returned_model": "openai/gpt-5.6-luna",
+    "elapsed_seconds": 7.838182500039693,
+    "usage": {
+      "completion_tokens": 946,
+      "prompt_tokens": 3363,
+      "total_tokens": 4309,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 64,
+        "rejected_prediction_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "cache_write_tokens": 3360,
+        "video_tokens": 0
+      },
+      "cost": 0.0019758,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.0019758,
+        "upstream_inference_prompt_cost": 0.0008406,
+        "upstream_inference_completions_cost": 0.0011352
+      }
+    },
+    "finish_reason": "stop",
+    "raw": "{\n  \"summary\": \"شواهد نشان می‌دهند Flux هنگام startup، اجراهای فعال را شکست‌خورده علامت‌گذاری می‌کند و درخواست‌های provider را پس از قطع فرایند replay نمی‌کند. برای local runtime، وضعیت‌های queued و running به interrupted تبدیل می‌شوند و ادامه فقط با پیام تازه ممکن است. بااین‌حال، تعریف دقیق ACTIVE و بخش طراحی درباره interruption و cost در شواهد موجود نیست.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"Show the startup recovery loop\",\n      \"status\": \"supported\",\n      \"answer\": \"در lifespan برنامه ابتدا local_runtime.recover() اجرا می‌شود. سپس، اگر owned باشد، روی نتیجه engine.repo.list_runs(limit=10000) حلقه زده می‌شود؛ هر رکوردی که status آن در ACTIVE باشد با update_run_status به FAILED تبدیل می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan L1-10\"\n      ]\n    },\n    {\n      \"criterion\": \"Show the set of statuses considered active\",\n      \"status\": \"partial\",\n      \"answer\": \"برای local runtime، مجموعه وضعیت‌های بازیابی‌شونده به‌صراحت شامل queued و running است، چون recover آن‌ها را به interrupted تبدیل می‌کند. اما تعریف خودِ ACTIVE که در startup برای runها استفاده می‌شود در شواهد ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover L1-4\",\n        \"src/flux/api/app.py::create_app.lifespan L1-10\"\n      ]\n    },\n    {\n      \"criterion\": \"Show why interrupted runs are not resumed\",\n      \"status\": \"supported\",\n      \"answer\": \"کد startup صراحتاً می‌گوید درخواست provider درحال اجرا پس از فرایند قطع‌شده replay نشود. دلیل ثبت‌شده نیز جلوگیری از مصرف تکراری است؛ وضعیت run به FAILED و وضعیت local turn به interrupted تغییر می‌کند و پیام local runtime می‌گوید ادامه فقط با پیام تازه انجام می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan L1-10\",\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover L1-4\"\n      ]\n    },\n    {\n      \"criterion\": \"Reference the restart test\",\n      \"status\": \"partial\",\n      \"answer\": \"تست restart اتصال SQLite را می‌بندد، همان فایل را با اتصال و repository جدید باز می‌کند و حفظ runها، subtasks، events، counters و budget reservations را بررسی می‌کند. این تست صراحتاً startup recovery یا شکست‌دادن run فعال را نشان نمی‌دهد. تست دیگری recovery بدون replay را بررسی می‌کند: running پس از recover به interrupted تبدیل می‌شود و runtime.jobs خالی می‌ماند.\",\n      \"evidence_ids\": [\n        \"tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations L1-52\",\n        \"tests/test_local_agents.py::test_timeout_and_recovery_without_replay L2-12\"\n      ]\n    },\n    {\n      \"criterion\": \"Cross-check the design section on interruption and cost\",\n      \"status\": \"missing\",\n      \"answer\": \"بخش طراحی مشخصی درباره interruption و cost در شواهد ارائه نشده است. فقط یک فایل پیکربندی با pricing و منبع قیمتِ تأییدنشده دیده می‌شود و یک تست نیز unknown_cost_usd و budget reservations را بررسی می‌کند؛ این‌ها ارتباط طراحی‌شده بین interruption و cost را اثبات نمی‌کنند.\",\n      \"evidence_ids\": [\n        \"config/pilot.json@L1 L1-7\",\n        \"tests/test_workspace.py::test_ordinary_agent_retries_are_individually_reserved L2-18\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"تعریف دقیق ثابت یا مجموعه ACTIVE در کد.\",\n    \"بخش طراحی مستند درباره interruption و هزینه.\",\n    \"شواهدی که اجرای واقعی تست restart را تأیید کند؛ وجود تست در source به‌تنهایی اجرای آن را ثابت نمی‌کند.\"\n  ]\n}",
+    "success": true,
+    "answer": {
+      "summary": "شواهد نشان می‌دهند Flux هنگام startup، اجراهای فعال را شکست‌خورده علامت‌گذاری می‌کند و درخواست‌های provider را پس از قطع فرایند replay نمی‌کند. برای local runtime، وضعیت‌های queued و running به interrupted تبدیل می‌شوند و ادامه فقط با پیام تازه ممکن است. بااین‌حال، تعریف دقیق ACTIVE و بخش طراحی درباره interruption و cost در شواهد موجود نیست.",
+      "criteria": [
+        {
+          "criterion": "Show the startup recovery loop",
+          "status": "supported",
+          "answer": "در lifespan برنامه ابتدا local_runtime.recover() اجرا می‌شود. سپس، اگر owned باشد، روی نتیجه engine.repo.list_runs(limit=10000) حلقه زده می‌شود؛ هر رکوردی که status آن در ACTIVE باشد با update_run_status به FAILED تبدیل می‌شود.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.lifespan L1-10"
+          ]
+        },
+        {
+          "criterion": "Show the set of statuses considered active",
+          "status": "partial",
+          "answer": "برای local runtime، مجموعه وضعیت‌های بازیابی‌شونده به‌صراحت شامل queued و running است، چون recover آن‌ها را به interrupted تبدیل می‌کند. اما تعریف خودِ ACTIVE که در startup برای runها استفاده می‌شود در شواهد ارائه نشده است.",
+          "evidence_ids": [
+            "src/flux/local_agents/runtime.py::LocalRuntime.recover L1-4",
+            "src/flux/api/app.py::create_app.lifespan L1-10"
+          ]
+        },
+        {
+          "criterion": "Show why interrupted runs are not resumed",
+          "status": "supported",
+          "answer": "کد startup صراحتاً می‌گوید درخواست provider درحال اجرا پس از فرایند قطع‌شده replay نشود. دلیل ثبت‌شده نیز جلوگیری از مصرف تکراری است؛ وضعیت run به FAILED و وضعیت local turn به interrupted تغییر می‌کند و پیام local runtime می‌گوید ادامه فقط با پیام تازه انجام می‌شود.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.lifespan L1-10",
+            "src/flux/local_agents/runtime.py::LocalRuntime.recover L1-4"
+          ]
+        },
+        {
+          "criterion": "Reference the restart test",
+          "status": "partial",
+          "answer": "تست restart اتصال SQLite را می‌بندد، همان فایل را با اتصال و repository جدید باز می‌کند و حفظ runها، subtasks، events، counters و budget reservations را بررسی می‌کند. این تست صراحتاً startup recovery یا شکست‌دادن run فعال را نشان نمی‌دهد. تست دیگری recovery بدون replay را بررسی می‌کند: running پس از recover به interrupted تبدیل می‌شود و runtime.jobs خالی می‌ماند.",
+          "evidence_ids": [
+            "tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations L1-52",
+            "tests/test_local_agents.py::test_timeout_and_recovery_without_replay L2-12"
+          ]
+        },
+        {
+          "criterion": "Cross-check the design section on interruption and cost",
+          "status": "missing",
+          "answer": "بخش طراحی مشخصی درباره interruption و cost در شواهد ارائه نشده است. فقط یک فایل پیکربندی با pricing و منبع قیمتِ تأییدنشده دیده می‌شود و یک تست نیز unknown_cost_usd و budget reservations را بررسی می‌کند؛ این‌ها ارتباط طراحی‌شده بین interruption و cost را اثبات نمی‌کنند.",
+          "evidence_ids": [
+            "config/pilot.json@L1 L1-7",
+            "tests/test_workspace.py::test_ordinary_agent_retries_are_individually_reserved L2-18"
+          ]
+        }
+      ],
+      "missing_information": [
+        "تعریف دقیق ثابت یا مجموعه ACTIVE در کد.",
+        "بخش طراحی مستند درباره interruption و هزینه.",
+        "شواهدی که اجرای واقعی تست restart را تأیید کند؛ وجود تست در source به‌تنهایی اجرای آن را ثابت نمی‌کند."
+      ]
+    }
+  },
+  {
+    "task": "H05",
+    "algorithm": "rewrite",
+    "model": "gpt-5.6-luna",
+    "returned_model": "openai/gpt-5.6-luna",
+    "elapsed_seconds": 8.26690739998594,
+    "usage": {
+      "completion_tokens": 972,
+      "prompt_tokens": 3360,
+      "total_tokens": 4332,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 69,
+        "rejected_prediction_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "cache_write_tokens": 3357,
+        "video_tokens": 0
+      },
+      "cost": 0.00200625,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.00200625,
+        "upstream_inference_prompt_cost": 0.00083985,
+        "upstream_inference_completions_cost": 0.0011664
+      }
+    },
+    "finish_reason": "stop",
+    "raw": "{\n  \"summary\": \"در startup، ابتدا `local_runtime.recover()` وضعیت turnهای `queued` و `running` را به `interrupted` تغییر می‌دهد. سپس، در صورت `owned` بودن پردازش، همهٔ runها بررسی می‌شوند و runهایی که وضعیتشان در `ACTIVE` باشد به `FAILED` تغییر می‌کنند؛ علت اعلام‌شده جلوگیری از replay درخواست provider و مصرف تکراری است. تعریف خود `ACTIVE` و ادامهٔ کامل تست restart در شواهد موجود نیست.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"Show the startup recovery loop\",\n      \"status\": \"supported\",\n      \"answer\": \"در `create_app.lifespan`، startup با `local_runtime.recover()` آغاز می‌شود و سپس روی `engine.repo.list_runs(limit=10000)` حلقه می‌زند. برای هر رکورد فعال، `engine.repo.update_run_status(...)` با وضعیت `FAILED` فراخوانی می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan chunk-lines:1-13\",\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover chunk-lines:1-4\"\n      ]\n    },\n    {\n      \"criterion\": \"Show the set of statuses considered active\",\n      \"status\": \"missing\",\n      \"answer\": \"کد فقط شرط `record[\\\"status\\\"] in ACTIVE` را نشان می‌دهد، اما تعریف یا اعضای مجموعهٔ `ACTIVE` در شواهد ارائه نشده‌اند.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan chunk-lines:1-13\"\n      ]\n    },\n    {\n      \"criterion\": \"Show why interrupted runs are not resumed\",\n      \"status\": \"supported\",\n      \"answer\": \"کامنت startup می‌گوید درخواست in-flight ارائه‌دهنده پس از interruption هرگز replay نمی‌شود. دلیل ثبت‌شده برای `FAILED` نیز جلوگیری از ادامهٔ خودکار و مصرف تکراری است: «اجرای قبلی قطع شده است؛ برای جلوگیری از مصرف تکراری خودکار ادامه داده نشد.» همچنین `recover()` می‌گوید ادامه فقط با پیام تازه انجام می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan chunk-lines:1-13\",\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover chunk-lines:1-4\"\n      ]\n    },\n    {\n      \"criterion\": \"Reference the restart test\",\n      \"status\": \"partial\",\n      \"answer\": \"تست `test_restart_preserves_runs_counters_and_reservations` وجود دارد و restart را با بستن و بازکردن اتصال SQLite شبیه‌سازی می‌کند؛ اما بخش ارائه‌شده فقط تا بازکردن دوبارهٔ database است و assertion مربوط به recovery یا fail شدن runهای interrupted را نشان نمی‌دهد. وجود تست به‌تنهایی اجرای آن را ثابت نمی‌کند.\",\n      \"evidence_ids\": [\n        \"tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations chunk-lines:1-29\"\n      ]\n    },\n    {\n      \"criterion\": \"Cross-check the design section on interruption and cost\",\n      \"status\": \"supported\",\n      \"answer\": \"سند طراحی می‌گوید پس از crash، lease منقضی بازیابی می‌شود و اقدام دارای اثر بیرونی پیش از اجرای دوباره به reconciliation نیاز دارد. همچنین هزینهٔ فراخوانی‌ای که پیش از توقف ارسال شده ممکن است برقرار بماند؛ بنابراین retry رایگان فرض نمی‌شود و درخواست ناشناخته می‌تواند با هزینهٔ رزروشده حفظ و کار متوقف شود. این با خودداری از resume خودکار سازگار است.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_architecture#۱۲. قطع ارتباط، تکرار و هزینه rev1\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"تعریف دقیق مجموعهٔ `ACTIVE` و اعضای آن.\",\n    \"بخش باقی‌ماندهٔ `tests/test_restart_recovery.py` برای اثبات assertionهای مربوط به وضعیت run پس از restart.\",\n    \"جزئیات مقدار `owned` و اینکه در چه شرایطی حلقهٔ fail کردن اجرا نمی‌شود.\"\n  ]\n}",
+    "success": true,
+    "answer": {
+      "summary": "در startup، ابتدا `local_runtime.recover()` وضعیت turnهای `queued` و `running` را به `interrupted` تغییر می‌دهد. سپس، در صورت `owned` بودن پردازش، همهٔ runها بررسی می‌شوند و runهایی که وضعیتشان در `ACTIVE` باشد به `FAILED` تغییر می‌کنند؛ علت اعلام‌شده جلوگیری از replay درخواست provider و مصرف تکراری است. تعریف خود `ACTIVE` و ادامهٔ کامل تست restart در شواهد موجود نیست.",
+      "criteria": [
+        {
+          "criterion": "Show the startup recovery loop",
+          "status": "supported",
+          "answer": "در `create_app.lifespan`، startup با `local_runtime.recover()` آغاز می‌شود و سپس روی `engine.repo.list_runs(limit=10000)` حلقه می‌زند. برای هر رکورد فعال، `engine.repo.update_run_status(...)` با وضعیت `FAILED` فراخوانی می‌شود.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.lifespan chunk-lines:1-13",
+            "src/flux/local_agents/runtime.py::LocalRuntime.recover chunk-lines:1-4"
+          ]
+        },
+        {
+          "criterion": "Show the set of statuses considered active",
+          "status": "missing",
+          "answer": "کد فقط شرط `record[\"status\"] in ACTIVE` را نشان می‌دهد، اما تعریف یا اعضای مجموعهٔ `ACTIVE` در شواهد ارائه نشده‌اند.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.lifespan chunk-lines:1-13"
+          ]
+        },
+        {
+          "criterion": "Show why interrupted runs are not resumed",
+          "status": "supported",
+          "answer": "کامنت startup می‌گوید درخواست in-flight ارائه‌دهنده پس از interruption هرگز replay نمی‌شود. دلیل ثبت‌شده برای `FAILED` نیز جلوگیری از ادامهٔ خودکار و مصرف تکراری است: «اجرای قبلی قطع شده است؛ برای جلوگیری از مصرف تکراری خودکار ادامه داده نشد.» همچنین `recover()` می‌گوید ادامه فقط با پیام تازه انجام می‌شود.",
+          "evidence_ids": [
+            "src/flux/api/app.py::create_app.lifespan chunk-lines:1-13",
+            "src/flux/local_agents/runtime.py::LocalRuntime.recover chunk-lines:1-4"
+          ]
+        },
+        {
+          "criterion": "Reference the restart test",
+          "status": "partial",
+          "answer": "تست `test_restart_preserves_runs_counters_and_reservations` وجود دارد و restart را با بستن و بازکردن اتصال SQLite شبیه‌سازی می‌کند؛ اما بخش ارائه‌شده فقط تا بازکردن دوبارهٔ database است و assertion مربوط به recovery یا fail شدن runهای interrupted را نشان نمی‌دهد. وجود تست به‌تنهایی اجرای آن را ثابت نمی‌کند.",
+          "evidence_ids": [
+            "tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations chunk-lines:1-29"
+          ]
+        },
+        {
+          "criterion": "Cross-check the design section on interruption and cost",
+          "status": "supported",
+          "answer": "سند طراحی می‌گوید پس از crash، lease منقضی بازیابی می‌شود و اقدام دارای اثر بیرونی پیش از اجرای دوباره به reconciliation نیاز دارد. همچنین هزینهٔ فراخوانی‌ای که پیش از توقف ارسال شده ممکن است برقرار بماند؛ بنابراین retry رایگان فرض نمی‌شود و درخواست ناشناخته می‌تواند با هزینهٔ رزروشده حفظ و کار متوقف شود. این با خودداری از resume خودکار سازگار است.",
+          "evidence_ids": [
+            "mem:mem_fx_architecture#۱۲. قطع ارتباط، تکرار و هزینه rev1"
+          ]
+        }
+      ],
+      "missing_information": [
+        "تعریف دقیق مجموعهٔ `ACTIVE` و اعضای آن.",
+        "بخش باقی‌ماندهٔ `tests/test_restart_recovery.py` برای اثبات assertionهای مربوط به وضعیت run پس از restart.",
+        "جزئیات مقدار `owned` و اینکه در چه شرایطی حلقهٔ fail کردن اجرا نمی‌شود."
+      ]
+    }
+  }
+]

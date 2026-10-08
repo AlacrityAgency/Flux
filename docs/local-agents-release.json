@@ -1,0 +1,57 @@
+{
+  "version": "0.4.0",
+  "verified_at_utc": "2026-10-01T01:56:42.219668+00:00",
+  "executable": "D:\\project\\Alacrity\\Flux\\dist\\local-agents\\Flux.exe",
+  "installed_executable": "C:\\Users\\xio\\AppData\\Local\\Programs\\Flux\\Flux.exe",
+  "sha256": "ec1d205e9e244b5e8de52f66455dcf8cd514f65402c30bde9f7d01eff505b6d0",
+  "offline_tests_passed": 70,
+  "live_turns_passed": 8,
+  "providers": [
+    "codex",
+    "claude",
+    "antigravity",
+    "notebooklm"
+  ],
+  "packaged_status_verified": true,
+  "browser_errors": 0,
+  "browser_widths": [
+    375,
+    768,
+    1024,
+    1440
+  ],
+  "ui_brand": "Flux / Alacrity palette",
+  "ui_layout": "Claude-inspired",
+  "ui_packaged_verified": true,
+  "live_turns_evidence": [
+    "docs/local-agents-live-check.json",
+    "docs/google-integrations-live-check.json",
+    "docs/google-integrations-packaged-check.json"
+  ],
+  "sidebar_position": "right",
+  "quota_evidence": "docs/local-agents-quota-check.json",
+  "quota_providers_verified": [
+    "codex",
+    "claude",
+    "notebooklm"
+  ],
+  "ready_providers": [
+    "codex",
+    "claude",
+    "notebooklm"
+  ],
+  "blocked_providers": {
+    "antigravity": "Google region eligibility rejection"
+  },
+  "asset_sha256": {
+    "local.js": "803767a99b8401c4af3e8101c0f2cb92f23a5480d9ac4cb542f31ae54d70ac45",
+    "local.css": "30d4d925ab27ca1b2188d9144115e0cfca173e9df0cee76276fded7c32b02831",
+    "local.html": "f2ae58ab63d7a9a480d18e8e117d7524cb0755127a2f0a7497f96dbbdcab12da",
+    "flux-mark.png": "7339a46ee718ed5e4fde1fa3b0d590804eb34ed87c370b3bf7f2f917c51879ee"
+  },
+  "google_cli_paths_verified": {
+    "antigravity": "C:\\Users\\xio\\.flux\\integrations\\antigravity\\agy.exe",
+    "notebooklm": "C:\\Users\\xio\\.flux\\integrations\\notebooklm\\Scripts\\notebooklm.exe"
+  },
+  "notebook_listing_verified": true
+}

@@ -1,0 +1,36 @@
+{
+  "task_id": "task_doc_001",
+  "root_id": "task_doc_001",
+  "project_id": "flux_documentation",
+  "human_owner": "Danial",
+  "objective": "Prepare internal engineering documentation for the Flux deterministic agentic orchestrator.",
+  "scope": [
+    "Architecture overview",
+    "Pydantic schemas and contracts",
+    "State machine transition rules",
+    "Budget reservation formulas"
+  ],
+  "out_of_scope": [
+    "Frontend GUI components",
+    "User authentication system"
+  ],
+  "acceptance_criteria": [
+    "Documentation draft matches requirements",
+    "State machine table is accurately documented",
+    "Pricing model and budget reservation formula are defined"
+  ],
+  "dependencies": [],
+  "allowed_tools": [
+    "file_read",
+    "file_write"
+  ],
+  "allowed_paths": [
+    "docs/",
+    "src/"
+  ],
+  "artifact_refs": [],
+  "budget_cap_usd": 0.50,
+  "max_attempts": 3,
+  "priority": "P1",
+  "data_class": "internal"
+}

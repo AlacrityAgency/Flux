@@ -1,0 +1,10 @@
+{
+  "checked_date": "2026-10-01",
+  "surface": "user-selected Codex in-app-browser tabs",
+  "gemini": {"account_login_observed": true, "send_attempts": 1, "completed_reply": "FLUX_GEMINI_SESSION_OK", "proof": "docs/screenshots/gemini-account-proof.png"},
+  "deepseek": {"account_login_observed": true, "send_attempts": 1, "completed_reply": "FLUX_DEEPSEEK_SESSION_OK", "proof": "docs/screenshots/deepseek-account-proof.png"},
+  "session_export_supplied": false,
+  "cookies_extracted_from_selected_tabs": false,
+  "persistent_flux_web_transport_live_verified": false,
+  "pending": "User chose local cookie/session JSON import, but has not supplied file paths."
+}

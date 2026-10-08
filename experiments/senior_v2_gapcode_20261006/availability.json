@@ -1,0 +1,154 @@
+[
+  {
+    "model": "gpt-6-astra",
+    "transport_ok": true,
+    "json_contract_ok": true,
+    "latency_s": 5.2149155999995855,
+    "usage": {
+      "input_tokens": 8058,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 13,
+      "reasoning_output_tokens": 0
+    },
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_gpt-6-astra.json",
+    "error": ""
+  },
+  {
+    "model": "gpt-6.1-sol",
+    "transport_ok": true,
+    "json_contract_ok": true,
+    "latency_s": 5.052038900001207,
+    "usage": {
+      "input_tokens": 7773,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 13,
+      "reasoning_output_tokens": 0
+    },
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_gpt-6.1-sol.json",
+    "error": ""
+  },
+  {
+    "model": "gpt-6-luna",
+    "transport_ok": true,
+    "json_contract_ok": true,
+    "latency_s": 5.762034699999276,
+    "usage": {
+      "input_tokens": 7988,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 13,
+      "reasoning_output_tokens": 0
+    },
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_gpt-6-luna.json",
+    "error": ""
+  },
+  {
+    "model": "kimi-3",
+    "transport_ok": false,
+    "json_contract_ok": false,
+    "latency_s": 0.49135759999990114,
+    "usage": null,
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_kimi-3.json",
+    "error": "2026-10-06T12:54:16.821184Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n"
+  },
+  {
+    "model": "glm-5.3",
+    "transport_ok": false,
+    "json_contract_ok": false,
+    "latency_s": 0.5829250999995566,
+    "usage": null,
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_glm-5.3.json",
+    "error": "2026-10-06T12:54:17.022737Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n"
+  },
+  {
+    "model": "deepseek-v4.1-flash",
+    "transport_ok": false,
+    "json_contract_ok": false,
+    "latency_s": 26.495542399999977,
+    "usage": null,
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_deepseek-v4.1-flash.json",
+    "error": "... turn_id=01a11147-71e2-73f1-8c6e-2c9d8cced94f retries=4 max_retries=5 sampling_error=unexpected status 402 Payment Required: Insufficient credits. Add more using https://***.ai/***/*** (request id: 202610061254345313346398268d9d6DCCXn7DB), url: https://api.gapgpt.app/v1/responses, request id: 202610061254345313346398268d9d6DCCXn7DB\n2026-10-06T12:54:39.041972Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (5/5 in 3.026s)... turn_id=01a11147-71e2-73f1-8c6e-2c9d8cced94f retries=5 max_retries=5 sampling_error=unexpected status 402 Payment Required: Insufficient credits. Add more using https://***.ai/***/*** (request id: 202610061254383362701168268d9d6xu3lQcQR), url: https://api.gapgpt.app/v1/responses, request id: 202610061254383362701168268d9d6xu3lQcQR\n"
+  },
+  {
+    "model": "grok-4.6",
+    "transport_ok": false,
+    "json_contract_ok": false,
+    "latency_s": 90.20806989999983,
+    "usage": null,
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_grok-4.6.json",
+    "error": "x_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n2026-10-06T12:54:48.451581Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 215ms)... turn_id=01a11147-72ab-7271-8fd4-c3ddf7202bcc retries=1 max_retries=5 sampling_error=stream disconnected before completion: upstream error: do request failed (request id: 202610061254183294076758268d9d6NResgoss)\n2026-10-06T12:55:19.315157Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (2/5 in 414ms)... turn_id=01a11147-72ab-7271-8fd4-c3ddf7202bcc retries=2 max_retries=5 sampling_error=stream disconnected before completion: upstream error: do request failed (request id: 202610061254493035206928268d9d6eyt8Ex7Z)\n"
+  },
+  {
+    "model": "claude-fable-5",
+    "transport_ok": true,
+    "json_contract_ok": false,
+    "latency_s": 3.7872262000000774,
+    "usage": {
+      "input_tokens": 7386,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 19,
+      "reasoning_output_tokens": 0
+    },
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_claude-fable-5.json",
+    "error": ""
+  },
+  {
+    "model": "claude-opus-5-5",
+    "transport_ok": true,
+    "json_contract_ok": true,
+    "latency_s": 5.675950099999682,
+    "usage": {
+      "input_tokens": 7293,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 16,
+      "reasoning_output_tokens": 0
+    },
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_claude-opus-5-5.json",
+    "error": ""
+  },
+  {
+    "model": "gapgpt-qwen-3.6",
+    "transport_ok": true,
+    "json_contract_ok": true,
+    "latency_s": 1.8326661999999487,
+    "usage": {
+      "input_tokens": 4740,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 46,
+      "reasoning_output_tokens": 33
+    },
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_gapgpt-qwen-3.6.json",
+    "error": ""
+  },
+  {
+    "model": "claude-sonnet-5-5",
+    "transport_ok": true,
+    "json_contract_ok": true,
+    "latency_s": 6.207155500000226,
+    "usage": {
+      "input_tokens": 5934,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 16,
+      "reasoning_output_tokens": 0
+    },
+    "actual_billing_usd": null,
+    "receipt": "receipts/availability_claude-sonnet-5-5.json",
+    "error": ""
+  }
+]

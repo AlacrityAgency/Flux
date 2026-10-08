@@ -1,0 +1,205 @@
+{
+  "project_id": "alacrity-flux",
+  "notebook_id": "cbd54447-058f-445c-a1e3-850f15cc5eb9",
+  "url": "https://notebooklm.google.com/notebook/cbd54447-058f-445c-a1e3-850f15cc5eb9",
+  "sources": [
+    {
+      "local_path": "Flux_—_وایت_پیپر_سازمان_هیبرید_Alacrity.pdf",
+      "result": {
+        "source": {
+          "id": "67c6ffe7-d314-451d-9ba3-ac8247274025",
+          "title": "Flux_—_وایت_پیپر_سازمان_هیبرید_Alacrity.pdf",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "local_sha256": "0e1b0430a7e63286ae33e294bcf38db376bdb7e845ed3e36f748934fbbbc06b6",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "remote_type": "pdf",
+      "remote_title": "Flux_—_وایت_پیپر_سازمان_هیبرید_Alacrity.pdf",
+      "current_local_sha256": "0e1b0430a7e63286ae33e294bcf38db376bdb7e845ed3e36f748934fbbbc06b6",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-current-local-runtime-and-memory.md",
+      "result": {
+        "source": {
+          "id": "1dd15290-f41f-4e4d-8072-cc16bb63dc33",
+          "title": "docs/knowledge/source-current-local-runtime-and-memory.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "local_sha256": "7e15b83b3fe12e5d69571fcfb474a410004b1ec0fbd9d973a7ffedac4bb7f5b8",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "source-current-local-runtime-and-memory.md",
+      "current_local_sha256": "7e15b83b3fe12e5d69571fcfb474a410004b1ec0fbd9d973a7ffedac4bb7f5b8",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-jev-experiments.md",
+      "result": {
+        "source": {
+          "id": "6fcb7dfe-879e-4d2d-b9fb-43972a02ce0f",
+          "title": "docs/knowledge/source-jev-experiments.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "local_sha256": "c7a6046c8f5b54db3d96a23194ca4a651e142b09bee596c030b9a064c0447407",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "source-jev-experiments.md",
+      "current_local_sha256": "c7a6046c8f5b54db3d96a23194ca4a651e142b09bee596c030b9a064c0447407",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-legacy-engine-and-contracts.md",
+      "result": {
+        "source": {
+          "id": "e172c299-c14f-4b65-8ae4-34e190cda331",
+          "title": "docs/knowledge/source-legacy-engine-and-contracts.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "local_sha256": "a11689931ed4dfad04295d0126450d181603f362733ee8e334f9eb6debd91f8c",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "docs/knowledge/source-legacy-engine-and-contracts.md",
+      "current_local_sha256": "a11689931ed4dfad04295d0126450d181603f362733ee8e334f9eb6debd91f8c",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-organizational-design-history.md",
+      "result": {
+        "source": {
+          "id": "6c2b9836-ba73-4d8c-adb2-8368723a1c1a",
+          "title": "docs/knowledge/source-organizational-design-history.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "local_sha256": "7b5ebd0665debb80b44d7f2d5e3388be4566a863362e851097a738c5d5ec72a7",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "source-organizational-design-history.md",
+      "current_local_sha256": "7b5ebd0665debb80b44d7f2d5e3388be4566a863362e851097a738c5d5ec72a7",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-runtime-and-product.md",
+      "result": {
+        "source": {
+          "id": "eb9edb97-08ec-455d-8f2c-d9f2951d1622",
+          "title": "docs/knowledge/source-runtime-and-product.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "local_sha256": "ae4336ef34c9b6da6ea0c66ea39c3ed2e0c379f33de3696c1f60e7ddc71213da",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "source-runtime-and-product.md",
+      "current_local_sha256": "805d6f0e5a7c4331a6b1cba6d734f2da258602f5a391a232bb259f990ee2a866",
+      "local_matches_uploaded_snapshot": false,
+      "historical_uploaded_snapshot": true,
+      "current_product_update_source_id": "9357f06f-061c-4aed-9812-c2547c4b10fc"
+    },
+    {
+      "local_path": "docs/knowledge/source-selected-chat-history.md",
+      "result": {
+        "source": {
+          "id": "87c6ab11-4cea-47c1-87b3-0414dbaabb2b",
+          "title": "docs/knowledge/source-selected-chat-history.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "local_sha256": "c3d96bc4fa988d207479ce6048341fe91d4d7d81f7269928d5c439cb6c670f75",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "source-selected-chat-history.md",
+      "current_local_sha256": "c3d96bc4fa988d207479ce6048341fe91d4d7d81f7269928d5c439cb6c670f75",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-head-algorithms.md",
+      "local_sha256": "66a15a75a28fd36b95ac6ef78ad42822ccb06bf9da2e3981f27bf5d81847b5f8",
+      "uploaded_snapshot": true,
+      "result": {
+        "source": {
+          "id": "ba8f93a6-eb21-4ea3-9bda-14f44ee3dc7d",
+          "title": "Final 2026-10-01 | docs/knowledge/source-head-algorithms.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "source-head-algorithms.md",
+      "current_local_sha256": "66a15a75a28fd36b95ac6ef78ad42822ccb06bf9da2e3981f27bf5d81847b5f8",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-delivery-ui-and-memory.md",
+      "local_sha256": "20f7f946a0310800909f961336e2bef8ac8daeba5ff3fa84b28ae162aa7e3609",
+      "uploaded_snapshot": true,
+      "result": {
+        "source": {
+          "id": "9357f06f-061c-4aed-9812-c2547c4b10fc",
+          "title": "Final 2026-10-01 | docs/knowledge/source-delivery-ui-and-memory.md",
+          "type": "unknown",
+          "url": null
+        }
+      },
+      "status": "ready",
+      "remote_type": "markdown",
+      "remote_title": "source-delivery-ui-and-memory.md",
+      "current_local_sha256": "20f7f946a0310800909f961336e2bef8ac8daeba5ff3fa84b28ae162aa7e3609",
+      "local_matches_uploaded_snapshot": true
+    },
+    {
+      "local_path": "docs/knowledge/source-implementation-v0.5.md",
+      "result": {
+        "source": {
+          "index": 6,
+          "id": "66864cc3-7f85-48da-aaf6-5f35c4809b19",
+          "title": "source-implementation-v0.5.md",
+          "type": "markdown",
+          "url": null,
+          "status": "ready",
+          "status_id": 2,
+          "created_at": "2026-10-01T08:24:07+00:00",
+          "drive_document_id": null,
+          "drive_status": null,
+          "is_drive_degraded": false
+        }
+      },
+      "local_sha256": "69e6ec852385294fbfb09bb0def6da0ae38691f86c1c3a25a887959d6dae3f41",
+      "uploaded_snapshot": true,
+      "status": "ready",
+      "version": "0.5.0"
+    }
+  ],
+  "generated_note_ids": [
+    "9203155b-af41-4ff6-81e9-6c5c15e56d89",
+    "cba595c4-7c25-4c0e-ae01-a21f21d71d7e",
+    "dd52cd81-cfe1-40ed-9e53-4fefd49172bb"
+  ],
+  "grounding_check": "docs/knowledge/notebooklm-grounding-check.json",
+  "memory_native_reference_count": 16,
+  "memory_conversation_id": "4fbd3be8-0092-468e-9a09-0336bf53eb1b",
+  "ready_source_count": 9,
+  "source_count": 9,
+  "processing_remaining": [],
+  "current_implementation_source_id": "66864cc3-7f85-48da-aaf6-5f35c4809b19"
+}

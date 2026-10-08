@@ -1,0 +1,81 @@
+{
+  "providers": [
+    {
+      "id": "codex",
+      "windows": [
+        {
+          "id": "codex:primary",
+          "label": "۵ ساعته",
+          "remaining_percent": 7,
+          "resets_at": 1790831189,
+          "window_minutes": 300
+        },
+        {
+          "id": "codex:secondary",
+          "label": "هفتگی",
+          "remaining_percent": 76,
+          "resets_at": 1791135493,
+          "window_minutes": 10080
+        }
+      ],
+      "available": true,
+      "stale": false,
+      "checked_at": "2026-10-01T01:56:32.346591+00:00",
+      "detail": ""
+    },
+    {
+      "id": "claude",
+      "windows": [
+        {
+          "id": "five_hour",
+          "label": "۵ ساعته",
+          "remaining_percent": 81.0,
+          "resets_at": 1790836199.897395,
+          "window_minutes": 300
+        },
+        {
+          "id": "seven_day",
+          "label": "هفتگی",
+          "remaining_percent": 78.0,
+          "resets_at": 1791352799.897423,
+          "window_minutes": 10080
+        }
+      ],
+      "available": true,
+      "stale": false,
+      "checked_at": "2026-10-01T01:56:32.359608+00:00",
+      "detail": ""
+    },
+    {
+      "id": "antigravity",
+      "windows": [],
+      "available": false,
+      "stale": false,
+      "checked_at": "2026-10-01T01:56:32.359608+00:00",
+      "detail": "Google حساب فعلی را به‌دلیل محدودیت منطقه برای Antigravity واجد شرایط نمی‌داند."
+    },
+    {
+      "id": "notebooklm",
+      "windows": [
+        {
+          "id": "five_hour",
+          "label": "۵ ساعته",
+          "remaining_percent": 99.4,
+          "resets_at": 1790826473.616678,
+          "window_minutes": 300
+        },
+        {
+          "id": "weekly",
+          "label": "هفتگی",
+          "remaining_percent": 100.0,
+          "resets_at": 1791298073.616774,
+          "window_minutes": 10080
+        }
+      ],
+      "available": true,
+      "stale": false,
+      "checked_at": "2026-10-01T01:56:32.359608+00:00",
+      "detail": ""
+    }
+  ]
+}

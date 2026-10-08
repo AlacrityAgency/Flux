@@ -1,0 +1,17 @@
+{
+  "version": "0.5.1",
+  "installed_executable": "C:\\Users\\xio\\AppData\\Local\\Programs\\Flux\\Flux.exe",
+  "source_executable": "D:\\project\\Alacrity\\Flux\\dist\\local-agents\\Flux.exe",
+  "sha256_both": "7864c66d774ecf53f3a1f9fd8f08c42736b37dbdd4d42c7b2dbbfc045edfbb54",
+  "full_pytest_passed": 120,
+  "packaged_offline_checks": "docs/knowledge/web-session-packaged-check.json",
+  "existing_logged_in_tabs": "both replied to one short probe each through CUA",
+  "persistent_flux_web_connections": "pending local session/cookie JSON file paths",
+  "live_provider_claim": false,
+  "browser_tool_repair": {
+    "file": "C:\\Users\\xio\\package.json",
+    "before": "empty file; invalid package configuration prevented CUA initialization",
+    "after": "minimal valid empty JSON object",
+    "original_backup": "C:\\Users\\xio\\package.json.flux-empty-backup-20261001"
+  }
+}

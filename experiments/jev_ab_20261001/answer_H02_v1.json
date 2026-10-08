@@ -1,0 +1,81 @@
+{
+  "task": "H02",
+  "algorithm": "v1",
+  "model": "gpt-5.6-luna",
+  "returned_model": "openai/gpt-5.6-luna",
+  "elapsed_seconds": 7.3449814999476075,
+  "usage": {
+    "completion_tokens": 771,
+    "prompt_tokens": 3246,
+    "total_tokens": 4017,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 87,
+      "rejected_prediction_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+      "cache_write_tokens": 3243,
+      "video_tokens": 0
+    },
+    "cost": 0.00173655,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00173655,
+      "upstream_inference_prompt_cost": 0.00081135,
+      "upstream_inference_completions_cost": 0.0009252
+    }
+  },
+  "finish_reason": "stop",
+  "raw": "{\n  \"summary\": \"شواهد نشان می‌دهند کلید باید فقط از متغیر محیطی `GAPGPT_API_KEY` خوانده شود و در حافظهٔ پروژه، فایل تنظیمات یا log ذخیره نشود. بااین‌حال، ساخت متن پوشیده، ذخیره در فایل `.env` و مدل مشخص درخواست ذخیرهٔ کلید مستند نشده‌اند.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"ساخت متن پوشیدهٔ کلید نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"فقط ذکر شده است که «ورود masked برای نشست می‌تواند محیط پردازش را تنظیم کند»؛ الگوریتم یا کد ساخت متن پوشیده و نمایش آن در UI ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#کنترل مصرفی که حفظ می‌کنیم\"\n      ]\n    },\n    {\n      \"criterion\": \"ذخیرهٔ کلید در محیط و فایل env نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"استفاده از محیط پردازش و متغیر `GAPGPT_API_KEY` تصریح شده، اما ذخیره یا بارگذاری از فایل `.env` نشان داده نشده است. همچنین شواهد می‌گویند کلید در حافظهٔ پروژه، فایل تنظیمات یا log ذخیره نمی‌شود.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1\",\n        \"mem:mem_fx_mvp-design#کنترل مصرفی که حفظ می‌کنیم\"\n      ]\n    },\n    {\n      \"criterion\": \"خواندن کلید فقط از متغیر محیطی نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"صراحتاً آمده است که کلید فقط از `GAPGPT_API_KEY` در محیط پردازش خوانده می‌شود و نه از CLI argument، config، prompt یا log.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1\"\n      ]\n    },\n    {\n      \"criterion\": \"مدل درخواست ذخیرهٔ کلید نشان داده شود\",\n      \"status\": \"missing\",\n      \"answer\": \"هیچ مدل داده، schema، endpoint یا قرارداد درخواستی برای ذخیرهٔ کلید ارائه نشده است. شواهد موجود بر ذخیره‌نکردن کلید در DB/config/log تأکید دارند.\",\n      \"evidence_ids\": [\n        \"demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT\",\n        \"mem:mem_fx_architecture#۹. اختیار و محیط اجرا rev1\",\n        \"mem:mem_fx_mvp-design#کنترل مصرفی که حفظ می‌کنیم\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"کد یا مشخصات ساخت masked text و نحوهٔ نمایش آن در رابط کاربری\",\n    \"روش دقیق تنظیم `GAPGPT_API_KEY` در محیط پردازش\",\n    \"پشتیبانی یا عدم پشتیبانی از فایل `.env` و مدل بارگذاری آن\",\n    \"مدل درخواست یا قرارداد UI برای ورود/تنظیم کلید\"\n  ]\n}",
+  "success": true,
+  "answer": {
+    "summary": "شواهد نشان می‌دهند کلید باید فقط از متغیر محیطی `GAPGPT_API_KEY` خوانده شود و در حافظهٔ پروژه، فایل تنظیمات یا log ذخیره نشود. بااین‌حال، ساخت متن پوشیده، ذخیره در فایل `.env` و مدل مشخص درخواست ذخیرهٔ کلید مستند نشده‌اند.",
+    "criteria": [
+      {
+        "criterion": "ساخت متن پوشیدهٔ کلید نشان داده شود",
+        "status": "partial",
+        "answer": "فقط ذکر شده است که «ورود masked برای نشست می‌تواند محیط پردازش را تنظیم کند»؛ الگوریتم یا کد ساخت متن پوشیده و نمایش آن در UI ارائه نشده است.",
+        "evidence_ids": [
+          "mem:mem_fx_mvp-design#کنترل مصرفی که حفظ می‌کنیم"
+        ]
+      },
+      {
+        "criterion": "ذخیرهٔ کلید در محیط و فایل env نشان داده شود",
+        "status": "partial",
+        "answer": "استفاده از محیط پردازش و متغیر `GAPGPT_API_KEY` تصریح شده، اما ذخیره یا بارگذاری از فایل `.env` نشان داده نشده است. همچنین شواهد می‌گویند کلید در حافظهٔ پروژه، فایل تنظیمات یا log ذخیره نمی‌شود.",
+        "evidence_ids": [
+          "mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1",
+          "mem:mem_fx_mvp-design#کنترل مصرفی که حفظ می‌کنیم"
+        ]
+      },
+      {
+        "criterion": "خواندن کلید فقط از متغیر محیطی نشان داده شود",
+        "status": "supported",
+        "answer": "صراحتاً آمده است که کلید فقط از `GAPGPT_API_KEY` در محیط پردازش خوانده می‌شود و نه از CLI argument، config، prompt یا log.",
+        "evidence_ids": [
+          "mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1"
+        ]
+      },
+      {
+        "criterion": "مدل درخواست ذخیرهٔ کلید نشان داده شود",
+        "status": "missing",
+        "answer": "هیچ مدل داده، schema، endpoint یا قرارداد درخواستی برای ذخیرهٔ کلید ارائه نشده است. شواهد موجود بر ذخیره‌نکردن کلید در DB/config/log تأکید دارند.",
+        "evidence_ids": [
+          "demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT",
+          "mem:mem_fx_architecture#۹. اختیار و محیط اجرا rev1",
+          "mem:mem_fx_mvp-design#کنترل مصرفی که حفظ می‌کنیم"
+        ]
+      }
+    ],
+    "missing_information": [
+      "کد یا مشخصات ساخت masked text و نحوهٔ نمایش آن در رابط کاربری",
+      "روش دقیق تنظیم `GAPGPT_API_KEY` در محیط پردازش",
+      "پشتیبانی یا عدم پشتیبانی از فایل `.env` و مدل بارگذاری آن",
+      "مدل درخواست یا قرارداد UI برای ورود/تنظیم کلید"
+    ]
+  }
+}

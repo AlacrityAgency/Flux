@@ -1,0 +1,16 @@
+{
+  "site": "gemini",
+  "session": "dedicated-browser",
+  "cookies_imported": 0,
+  "guest_mode": true,
+  "send_attempts": 1,
+  "messages_sent": 1,
+  "expected_reply_received": true,
+  "transport_verified": true,
+  "response_excerpt": "Gemini\nAbout Gemini\nGet Gemini App\nSubscriptions\nFor Business\nSign in\nNew chat\nImages\nSign in to save activity\nSign in\nUnited Kingdom\nFrom your IP address\nUpdate location\nConversation with Gemini\nYou said Reply exactly FLUX_WEB_CONNECTION_OK. No tools.\n\nReply exactly FLUX_WEB_CONNECTION_OK. No tools.\n\nGemini said\n\nFLUX_WEB_CONNECTION_OK\n\nSign in to connect to Google apps, create images, and more\nSign in\n\n\n\n\nFlash-Lite\n\nGemini isn’t human. It can make mistakes, including about people, so double-check it. Your privacy & Gemini\nOpens in a new window\n\nGemini replied",
+  "total_send_attempts": 2,
+  "prior_attempt": {
+    "response_verified": false,
+    "outcome": "unknown, browser closed before response confirmation"
+  }
+}

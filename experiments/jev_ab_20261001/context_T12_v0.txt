@@ -1,0 +1,291 @@
+[src/flux/agents/head.py::<module>]
+"""Head Agent profile (Claude Fable 5)."""
+
+import json
+from typing import Dict, List
+from flux.contracts.head import HeadOutput
+from flux.contracts.task import TaskInput
+
+
+HEAD_MODEL_ID = "claude-fable-5"
+
+HEAD_SYSTEM_PROMPT = """You are Head Agent (Claude Fable 5) for the user's personal Flux workspace.
+Use the task's stated scope to determine relevance; this is a one-user local demo.
+For workflow='high' or 'team', use planning (opus), technical (sol), then execution (luna) as three dependent subtasks.
+For workflow='auto' or 'medium', select only the roles actually needed.
+For workflow='low', create one focused subtask using the most suitable role; avoid unnecessary decomposition.
+Qwen verification is always invoked separately by the engine. Do not assign qwen as a subtask.
+Set final_review_agent to qwen for this demo.
+Your responsibilities:
+1. Validate task objective and assess if it belongs to legitimate company scope (company_relevance: valid, unclear, invalid).
+2. Determine task_type: planning, operations, documentation, technical, review, or mixed.
+3. Formulate up to 5 subtasks. Each subtask MUST have a unique subtask_id, objective, assigned_agent (opus, sol, luna, or qwen), acceptance_criteria, dependencies (must be a DAG without cycles), and max_output_tokens.
+4. Select final_review_agent: qwen, sol, or fable.
+5. Identify ambiguities, assess risk_level (low, medium, high), and state whether human input is required.
+
+CRITICAL CONSTRAINTS:
+- When reference context includes a local project snapshot, it is evidence you can analyze. Do not
+  request human input merely because tools or shell access are unavailable; produce the best bounded
+  analysis from the snapshot and state any coverage limits in the worker output.
+- Output ONLY valid JSON matching this schema:
+{
+  "task_type": "planning|operations|documentation|technical|review|mixed",
+  "company_relevance": "valid|unclear|invalid",
+  "summary": "string",
+  "ambiguities": ["string"],
+  "risk_level": "low|medium|high",
+  "requires_human_input": false,
+  "subtasks": [
+    {
+      "subtask_id": "string",
+      "objective": "string",
+      "assigned_agent": "opus|sol|luna|qwen",
+      "acceptance_criteria": ["string"],
+      "dependencies": ["subtask_id"],
+      "max_output_tokens": 2000
+    }
+  ],
+  "final_review_agent": "qwen|sol|fable",
+  "reason": "string"
+}
+- DO NOT return any commentary or markdown outside the JSON object.
+"""
+
+[src/flux/contracts/head.py::HeadOutput]
+class HeadOutput(BaseModel):
+    task_type: TaskType = Field(..., description="Categorized task type")
+    company_relevance: CompanyRelevance = Field(..., description="Relevance to company operations")
+    summary: str = Field(..., description="Analysis summary")
+    ambiguities: List[str] = Field(default_factory=list, description="Identified ambiguities")
+    risk_level: RiskLevel = Field(default="low", description="Assessed risk level")
+    requires_human_input: bool = Field(default=False, description="Whether human clarification is needed")
+    subtasks: List[SubtaskSpec] = Field(default_factory=list, description="Up to 5 decomposed subtasks")
+    final_review_agent: FinalReviewAgent = Field(default="qwen", description="Agent designated for final review")
+    reason: str = Field(default="", description="Reasoning behind routing and planning")
+
+[src/flux/static/fonts/OFL.txt@L1]
+Copyright 2015 The Vazirmatn Project Authors (https://github.com/rastikerdar/vazirmatn)
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded, 
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+
+[tests/test_retry_limits.py::test_transient_error_fails_if_exceeding_two_retries]
+@pytest.mark.asyncio
+async def test_transient_error_fails_if_exceeding_two_retries(engine, fake_provider, sample_task_data):
+    """If transient error occurs 3 times (more than 2 retries allowed),
+    it fails without doing infinite or excess retries.
+    """
+    fake_provider.transient_error_countdown = 3  # Needs 3 retries, but max is 2
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "FAILED"
+    # Head is capped at two sends, even though ordinary agents allow three.
+    assert fake_provider.call_count == 2
+
+[tests/test_verification.py::test_not_run_check_blocks_accept_candidate]
+@pytest.mark.asyncio
+async def test_not_run_check_blocks_accept_candidate(engine, fake_provider, sample_task_data):
+    """Rule 9: If a check has status 'not_run', orchestrator gate strictly forbids
+    ACCEPT_CANDIDATE and converts decision to REVISE.
+    """
+    fake_provider.scenario = "not_run_check"
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "REVISE"
+    assert result.decision is not None
+    assert result.decision.decision == "REVISE"
+
+[src/flux/budget/estimator.py::estimate_call_cost]
+def estimate_call_cost(
+    model_id: str,
+    prompt_text: str,
+    max_output_tokens: int
+) -> tuple[int, float]:
+    """Returns (estimated_input_tokens, estimated_total_cost_usd)."""
+    in_tokens = estimate_tokens_from_text(prompt_text)
+    pricing = get_model_price(model_id)
+    cost = pricing.calculate_cost(in_tokens, max_output_tokens)
+    return in_tokens, cost
+
+[tests/test_workspace.py::test_cancel_during_provider_call_keeps_cost_and_stops_next_agent]
+@pytest.mark.asyncio
+async def test_cancel_during_provider_call_keeps_cost_and_stops_next_agent(engine, fake_provider, sample_task_data):
+    fake_provider.delay_seconds = .04
+    run_id, _ = engine.submit_run(sample_task_data)
+    job = asyncio.create_task(engine.execute_run(run_id))
+    await asyncio.sleep(.01)
+    assert engine.cancel_run(run_id)
+    result = await job
+    assert result.status == 'CANCELLED'
+    assert fake_provider.call_count == 1
+    assert result.spent_cost_usd > 0
+    assert engine.repo.get_subtasks(run_id) == []
+
+[config/pilot.json@L361]
+        "name": "علی"
+      },
+      {
+        "id": "developer",
+        "reports_to": "technical_human",
+        "model": "gpt-5.6-luna"
+      },
+      {
+        "id": "tester",
+        "reports_to": "technical_human",
+        "model": "gapgpt-qwen-3.8"
+      },
+      {
+        "id": "technical_reviewer",
+        "reports_to": "technical_human",
+        "model": "gapgpt-qwen-3.6-thinking"
+      }
+    ],
+    "human_coo": "مبینا",
+    "human_cto": "سعید"
+  },
+  "routing": {
+    "cross_branch_handoff": "coo_to_cto_via_structured_dependency",
+    "ceo_calls": "strategic_planning_or_exception_only",
+    "routine_work_skips_ceo_llm": true,
+    "escalation_preserves_root_budget": true,
+    "department_workers_shared_across_branches": false,
+    "technical_review_separate_context": true,
+    "escalation_routes": {
+      "developer": "cto",
+      "tester": "cto",
+      "technical_reviewer": "cto",
+      "ops_planner": "coo",
+      "ops_writer": "coo",
+      "ops_metrics": "coo",
+      "coo": "ceo",
+      "cto": "ceo"
+    },
+    "human_acceptance": {
+      "operations": "human_coo",
+      "technical": "human_cto",
+      "routine_technical_delegate": "technical_human",
+      "strategic": "human_ceo"
+    }
+  }
+}
+
+[src/flux/contracts/head.py::<module>]
+"""Head Agent output schema contract."""
+
+from typing import List, Literal
+from pydantic import BaseModel, Field, field_validator
+
+
+TaskType = Literal["planning", "operations", "documentation", "technical", "review", "mixed"]
+CompanyRelevance = Literal["valid", "unclear", "invalid"]
+RiskLevel = Literal["low", "medium", "high"]
+AssignedAgent = Literal["opus", "sol", "luna", "qwen"]
+FinalReviewAgent = Literal["qwen", "sol", "fable"]
+
+[src/flux/api/app.py::build_project_context]
+def build_project_context(project: dict) -> dict | None:
+    """Create a small, safe, read-only source snapshot for project analysis."""
+    root = Path(project["path"]).expanduser().resolve()
+    folder_info = inspect_folder(str(root))
+    if not folder_info.get("exists") or not folder_info.get("is_dir"):
+        return None
+
+    entries, excerpts = [], []
+    remaining = 5_000
+
+
+    try:
+        candidates = sorted(
+            (path for path in root.rglob("*")
+             if path.is_file()
+             and not any(part.startswith(".") or part.lower() in IGNORED_CONTEXT_DIRS for part in path.relative_to(root).parts[:-1])
+             and path.name.lower() not in SENSITIVE_CONTEXT_NAMES
+             and path.suffix.lower() in TEXT_CONTEXT_EXTENSIONS),
+            key=context_priority,
+        )
+        for path in candidates[:80]:
+            relative = path.relative_to(root).as_posix()
+            entries.append(relative)
+            if len(excerpts) >= 6 or remaining <= 0 or path.stat().st_size > 128_000:
+                continue
+            try:
+                content = path.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            if "\x00" in content:
+                continue
+            excerpt = content[:min(1_000, remaining)]
+            if excerpt.strip():
+                excerpts.append(f"\n--- {relative} ---\n{excerpt}")
+                remaining -= len(excerpt)
+    except (OSError, PermissionError):
+        entries, excerpts = [], []
+
+    manifest = "\n".join(entries[:80]) or "(No supported text files were readable.)"
+    content = (
+        f"Project: {project['name']}\nFolder: {root}\n"
+        "This is a read-only local snapshot. Analyze only the supplied files; identify gaps rather than requesting tools.\n"
+        f"Source tree (up to {len(entries)} files):\n{manifest}\n"
+        f"Source excerpts (up to {len(excerpts)} files):\n{''.join(excerpts) or '(No source excerpts available.)'}"
+    )
+    return {"ref": f"folder:{root}", "title": f"پوشهٔ کاری {project['name']}", "content": content[:10_000]}

@@ -1,0 +1,227 @@
+[src/flux/providers/gapgpt.py::GapGPTAdapter.generate]
+    async def generate(
+        self,
+        model_id: str,
+        messages: list[Dict[str, str]],
+        max_output_tokens: int = 2000,
+        response_schema: Optional[Dict[str, Any]] = None
+    ) -> LLMResponse:
+        client = self._get_client()
+        start_time = time.perf_counter()
+
+        kwargs: Dict[str, Any] = {
+            "model": model_id,
+            "messages": messages,
+            "max_tokens": max_output_tokens,
+            "temperature": 0.2,
+        }
+
+        # Request JSON mode where applicable
+        kwargs["response_format"] = {"type": "json_object"}
+        if any(rm in model_id.lower() for rm in ("luna", "sol", "o1", "o3", "thinking")):
+            kwargs["reasoning_effort"] = "low"
+
+        try:
+            try:
+                response = await client.chat.completions.create(**kwargs)
+            except APIStatusError as err:
+                err_msg = str(err).lower()
+                modified = False
+                if err.status_code == 400 and "response_format" in err_msg:
+                    kwargs.pop("response_format", None)
+                    modified = True
+                if err.status_code == 400 and "reasoning_effort" in err_msg:
+                    kwargs.pop("reasoning_effort", None)
+                    modified = True
+                if modified:
+                    response = await client.chat.completions.create(**kwargs)
+                else:
+                    raise
+            latency_ms = int((time.perf_counter() - start_time) * 1000)
+
+            choice = response.choices[0]
+            refusal = getattr(choice.message, "refusal", None)
+            content = choice.message.content or ""
+
+            # One provider request per ledger reservation. Never silently increase
+            # the budget or switch models; retries belong to the engine.
+            if choice.finish_reason == "content_filter" or refusal:
+                raise ProviderError("مدل درخواست را نپذیرفت.", is_transient=False, status_code=400)
+            if not content:
+                raise ProviderError("پاسخ مدل خالی است؛ سطح مصرف بالاتر را انتخاب کنید.", is_transient=False)
+
+            usage = response.usage
+            input_tokens = usage.prompt_tokens if usage else 0
+            output_tokens = usage.completion_tokens if usage else 0
+            cached_input_tokens = 0
+            if usage and hasattr(usage, "prompt_tokens_details") and usage.prompt_tokens_details:
+                cached_input_tokens = getattr(usage.prompt_tokens_details, "cached_tokens", 0) or 0
+
+            return LLMResponse(
+                content=content,
+                input_tokens=input_tokens,
+                cached_input_tokens=cached_input_tokens,
+                output_tokens=output_tokens,
+                latency_ms=latency_ms,
+                usage_available=usage is not None,
+                model_id=model_id
+            )
+        except ProviderError:
+            raise
+        except (RateLimitError, APIConnectionError) as e:
+            latency_ms = int((time.perf_counter() - start_time) * 1000)
+            raise ProviderError(f"Transient provider error: {e}", is_transient=True, status_code=429)
+        except APIStatusError as e:
+            latency_ms = int((time.perf_counter() - start_time) * 1000)
+            is_transient = e.status_code in (429, 500, 502, 503, 504)
+            raise ProviderError(f"Provider status error: {e}", is_transient=is_transient, status_code=e.status_code)
+        except Exception as e:
+            latency_ms = int((time.perf_counter() - start_time) * 1000)
+            raise ProviderError(f"Unexpected provider error: {e}", is_transient=False)
+        finally:
+            await client.close()
+
+[var/test_luna_plan.py::test]
+async def test():
+    print("Testing plan execution with reasoning_effort='low'...")
+    resp = await client.chat.completions.create(
+        model='gpt-5.6-luna',
+        messages=messages,
+        max_tokens=2000,
+        temperature=0.2,
+        response_format={'type': 'json_object'},
+        reasoning_effort='low'
+    )
+    choice = resp.choices[0]
+    print("Finish reason:", choice.finish_reason)
+    print("Content len:", len(choice.message.content or ''))
+    print("Content sample:", repr(choice.message.content)[:300])
+    print("Usage:", resp.usage)
+
+[var/debug_ageis_review.py::test]
+async def test():
+    print("Testing call with gpt-5.6-luna, max_tokens=4500, reasoning_effort='low'...")
+    try:
+        resp = await client.chat.completions.create(
+            model='gpt-5.6-luna',
+            messages=messages,
+            max_tokens=4500,
+            temperature=0.2,
+            response_format={'type': 'json_object'},
+            reasoning_effort='low'
+        )
+        choice = resp.choices[0]
+        print("Finish reason:", choice.finish_reason)
+        print("Content len:", len(choice.message.content or ''))
+        print("Content sample:", repr(choice.message.content)[:400])
+        print("Usage:", resp.usage)
+    except Exception as e:
+        print("EXCEPTION:", type(e), e)
+
+[demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT]
+## DEMO-07 — اتصال واقعی GapGPT
+
+خروجی: همان گردش کار، این بار با provider واقعی و فعال‌سازی صریح.
+
+- [ ] ساخت adapter سازگار با interface جعلی؛ خواندن کلید فقط از GAPGPT_API_KEY و خاموش‌کردن retry داخلی SDK.
+- [ ] اتصال تنظیمات UI برای وضعیت کلید و فعال‌سازی زنده با سقف مشخص؛ عدم ذخیرهٔ کلید در DB/config/log.
+- [ ] بررسی ID، دسترسی، JSON، سقف context/output/reasoning، usage و قیمت پنج مدل؛ ثبت تاریخ و شاهد بررسی.
+- [ ] نمایش نقش‌های unavailable با علت؛ بدون تغییر پنهانی مدل.
+- [ ] آزمون adapter با پاسخ شبکهٔ mock، قبل از هر مصرف واقعی.
+- [ ] smoke test واقعی با دادهٔ نمونهٔ غیرحساس و سقف مستقل؛ ثبت نتیجه و مصرف.
+
+فایل‌های پیشنهادی: `providers/gapgpt.py`، `providers/capabilities.py`، `config/demo-models.json`، `ui/settings_view.*`.
+
+معیار پایان: در حالت fake هیچ مصرفی نباشد؛ پنج نقش روی مدل تأییدشده قابل فراخوانی باشند؛ خطا واضح و هزینه قابل ردیابی باشد. نبود مدل یا تعرفهٔ معتبر مانع اعلام تکمیل بخش زنده است؛ مانع نمایش fake نیست.
+
+
+[mem:mem_fx_mvp-design#۹. معیار تحویل rev1]
+۹. معیار تحویل
+## ۹. معیار تحویل
+
+سه مثال قابل تکرار: سند ساده، برنامه‌ریزی و تغییر کوچک کد در runner. جریان موفق و شکست با Fake Provider اجرا شود؛ ۱۲ تست الزامی پیوست و تست‌های رقابت بودجه، cancel/restart، مسیر نامجاز و retry هزینهٔ نامعلوم پاس شوند. تست عادی هیچ شبکه‌ای باز نکند. نصب پاک، راه‌اندازی مجدد و بازیابی state نشان داده شوند. adapter واقعی فقط پس از ثبت قابلیت‌ها و smoke test محدود فعال شود.
+
+پیش‌نیازهای باقی‌مانده برای اجرای زنده: سیاست واقعی دامنهٔ شرکت و پروژهٔ نمونه، پنج ID و تعرفهٔ قابل اثبات، کلید معتبر در محیط، runtime جداسازی و Taskهای نمونه با معیار روشن. این‌ها مانع ساخت موتور و تست جعلی نیستند.
+
+برنامهٔ اجرایی در [بک‌لاگ MVP](mvp-tasks.fa.md) است.
+
+[mem:dec_retry_current rev2]
+تصمیم فعلی: سقف تلاش مجدد
+FluxEngine._call برای Head حداکثر دو ارسال و برای سایر نقش‌ها حداکثر سه ارسال انجام می‌دهد؛ فقط خطای گذرا (ProviderError.is_transient) دوباره ارسال می‌شود و هر run حداکثر بیست تماس دارد.
+
+[demo-tasks.fa.md#نقاط نمایش]
+## نقاط نمایش
+
+- **نمایش اول، پس از 01 و 02:** پنجره و پنج Agent با دادهٔ جعلی.
+- **دموی آفلاین، پس از 03 تا 06:** گردش کامل fake، حافظه، بودجه و بررسی نتیجه.
+- **دموی متصل، پس از 07:** اجرای GapGPT با هزینهٔ واقعی ثبت‌شده.
+- **تحویل شخصی، پس از 08:** برنامهٔ portable، راهنما و دادهٔ ماندگار.
+
+تسک فقط وقتی بسته شود که معیار پایان و تست مرتبط آن پاس شده و نتیجه ثبت شده باشد. تمام وابستگی‌ها به تسک‌های همین فایل اشاره می‌کنند. قدم اول پیاده‌سازی DEMO-01 است؛ ساخت محصول تیمی، API عمومی، runner و نصاب حرفه‌ای در این بک‌لاگ نیست.
+
+[hierarchy.fa.md#موتور زیر این چارت]
+## موتور زیر این چارت
+
+موتور Flux کد معمولی است: صف پایدار، گراف کارها، کنترل دسترسی، دفتر بودجه، وضعیت‌ها و ثبت شواهد. Agentها برنامه و تصمیم پیشنهادی می‌دهند؛ موتور حدود را اجرا می‌کند. نمودار بالا رابطهٔ گزارش‌دهی را نشان می‌دهد و به معنای عبور اجباری هر توکن از تمام طبقات نیست.
+
+قواعد تغییرکرده نسبت به ۰٫۱:
+
+- تیم‌های اجرایی متعلق به شاخهٔ خود هستند؛ یک استخر مشترک تخت نداریم.
+- مسئول مستقیم هر Agent با `reports_to` ثبت می‌شود.
+- مبینا و سعید مدیران انسانی هم‌سطح‌اند و دستیارهای COO و CTO زیر اختیار آن‌ها هستند. درخواست COO به CTO یک تحویل کار با قرارداد است، نه دستور برای تغییر سیاست فنی.
+- تعارض زمان، دامنه یا بودجه به دفتر CEO و در صورت نیاز به دانیال برمی‌گردد.
+- عمق سازمانی بیشتر شده، اما عمق تقسیم یک task همچنان محدود است. هر root حداکثر پنج زیرکار دارد و زیرکارها به‌طور بازگشتی تیم تازه ایجاد نمی‌کنند.
+- کارهای قالب‌دار مستقیماً وارد شاخهٔ مجاز می‌شوند؛ Fable فقط برای برنامه‌ریزی سطح بالا و استثناها فراخوانی می‌شود.
+- گزارش‌ها با پایان کار یا رخداد واقعی تازه می‌شوند؛ refresh رابط، فراخوانی مدل نیست.
+
+
+[mem:mem_fx_architecture#۲. فرض‌های ثبت‌شده rev1]
+۲. فرض‌های ثبت‌شده
+## ۲. فرض‌های ثبت‌شده
+
+- تعداد افراد: ۴ نفر، تأییدشده توسط کاربر.
+- نوع شرکت: برنامه‌نویسی؛ تخصص، فناوری پروژه‌ها و نقش دقیق افراد هنوز مشخص نیست.
+- بودجه: ۵۰ دلار اعتبار توکن برای یک پایلوت؛ ماهانه بودن آن مشخص نشده است.
+- قیمت و نام مدل‌ها: دادهٔ کاربر، با فرض دلار به‌ازای یک میلیون توکن ورودی/خروجی؛ هنوز با ارائه‌دهنده تطبیق داده نشده‌اند.
+- هر چهار نفر Agent اصلی دارند، حتی اگر چند نفر عنوان شغلی یکسان داشته باشند.
+- ابتدا یک پروژه و وظایف کوچک تا متوسط وارد پایلوت می‌شوند.
+- مخزن در شروع خالی بود؛ فناوری پیشنهادی، استنتاج از کد موجود نیست.
+- محتوای سایت Alacrity با ابزار وب قابل دریافت نبود؛ ادعایی دربارهٔ مشتریان، فناوری‌ها یا خدمات دقیق آن مبنای طراحی قرار نگرفته است.
+
+[mem:dec_ctx_current rev3]
+تصمیم فعلی: Context پروژه در هر تماس
+reference_context در تابع FluxEngine._context به همهٔ تماس‌های Head، کارگرها و بازبین اضافه می‌شود. build_head_prompt نیز فیلد context را در درخواست Head می‌گذارد، پس Head دو نسخه می‌گیرد. اصلاح پیشنهادی: حذف فیلد context از build_head_prompt.
+
+[src/flux/providers/gapgpt.py::<module>]
+"""GapGPT Adapter using OpenAI SDK."""
+
+import os
+import time
+from typing import Any, Dict, Optional
+from openai import AsyncOpenAI, APIConnectionError, RateLimitError, APIStatusError
+from flux.providers.base import LLMProvider, LLMResponse, ProviderError
+
+[var/debug_sol_luna.py::test]
+async def test():
+    print("Testing call exactly as executed...")
+    try:
+        resp = await client.chat.completions.create(
+            model='gpt-5.6-luna',
+            messages=messages,
+            max_tokens=4000,
+            temperature=0.2,
+            response_format={'type': 'json_object'},
+            reasoning_effort='low'
+        )
+        choice = resp.choices[0]
+        print("Finish reason:", choice.finish_reason)
+        print("Content len:", len(choice.message.content or ''))
+        print("Content sample:", repr(choice.message.content)[:400])
+        print("Usage:", resp.usage)
+    except Exception as e:
+        print("EXCEPTION:", type(e), e)
+
+[src/flux/api/app.py::create_app.invalid_value]
+    @app.exception_handler(ValueError)
+    async def invalid_value(request, exc):
+        return JSONResponse({"detail": str(exc)}, status_code=422)

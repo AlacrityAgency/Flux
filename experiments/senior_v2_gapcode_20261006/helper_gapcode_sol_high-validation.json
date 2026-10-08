@@ -1,0 +1,33 @@
+{
+  "receipt": "receipts/helper_gapcode_sol_high.json",
+  "passed": true,
+  "cases": [
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 4567,
+        "tax_cents": 377,
+        "total_cents": 5419
+      },
+      "independent_verifier_pass": null
+    },
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 51,
+        "tax_cents": 4,
+        "total_cents": 55
+      },
+      "independent_verifier_pass": null
+    },
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 45205,
+        "tax_cents": 3277,
+        "total_cents": 49220
+      },
+      "independent_verifier_pass": null
+    }
+  ]
+}

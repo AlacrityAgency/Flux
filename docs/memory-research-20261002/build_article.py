@@ -1,0 +1,61 @@
+"""Recompose the verified research material as a continuous illustrated article."""
+import runpy,re,json,hashlib,asyncio
+from pathlib import Path
+from playwright.async_api import async_playwright
+import pypdfium2 as pdfium
+from pypdf import PdfReader
+from PIL import Image,ImageDraw
+H=Path(__file__).resolve().parent
+m=runpy.run_path(str(H/'build_document.py'))
+pages={p['id']:p for p in m['pages']}
+print(list(pages))
+groups=[
+('question','مسئله: آیا حافظهٔ بهتر می‌تواند فاصلهٔ مدل‌ها را کم کند؟',['hypothesis'], 'این تحقیق از یک فرض مشخص شروع شد: شاید بتوان با ساختن حافظه‌ای بزرگ، فشرده‌کردن آن به یک گراف و انتخاب اطلاعات مناسب برای هر درخواست، کیفیت پاسخ یک مدل کوچک‌تر را بالا برد. هدف اولیه ساختن مخزن یک‌میلیون‌توکنی و رساندن نمایش گرافی آن به حدود صد هزار توکن بود. مسئلهٔ اصلی اما صرفاً اندازهٔ حافظه نبود؛ باید می‌فهمیدیم چه اطلاعاتی در فشرده‌سازی از بین می‌روند و کدام شواهد برای پاسخ‌دادن ضروری‌اند.'),
+('history','از گراف فشرده تا بازیابی یک‌گذره',['versions','v3','v4'],'نسخه‌ها را نباید پنج پلهٔ قطعیِ بهبود دانست. هر نسخه یک فرض را آزمود و گاهی نشان داد که پیچیده‌ترکردن الگوریتم به نتیجهٔ بهتر نمی‌رسد. در نسخه‌های نخست، وزن‌دهی و انتشار روی گراف بررسی شد؛ سپس تمرکز به انتخاب شواهد، هزینهٔ هر درخواست و در نهایت اعتبارسنجی دقیق پاسخ منتقل شد. نمودارهای این بخش نتیجه‌های همان آزمایش‌ها را نشان می‌دهند و چون مجموعه‌های آزمون یکسان نیستند، یک رتبه‌بندی مستقیم میان تمام نسخه‌ها ارائه نمی‌کنند.'),
+('system','معماری v5: سه مسئولیت، یک قرارداد مشترک',['architecture','memory','tokens','decision'],'نتیجهٔ بررسی معماری این بود که حافظه، مدیریت توکن و تصمیم‌گیری باید مسئولیت‌های مستقل داشته باشند، اما از یک قرارداد مشترک استفاده کنند. اگر هر سه در یک الگوریتم بزرگ ادغام شوند، تشخیص علت خطا دشوار می‌شود. اگر کاملاً مستقل و بدون قرارداد مشترک باشند، ممکن است انتخاب حافظه با بودجهٔ توکن یا معیار پذیرش پاسخ ناسازگار شود. در v5، Controller این هماهنگی را انجام می‌دهد: ابتدا نوع درخواست و شواهد لازم مشخص می‌شوند، سپس بسته زیر بودجه ساخته می‌شود و در پایان پاسخ با معیار متناسب با همان درخواست بررسی می‌شود.'),
+('method','چگونه آزمایش کردیم؟',['offline','protocol'],'برای سنجیدن الگوریتم، دو سطح آزمون لازم بود. آزمون offline نشان می‌دهد چه شواهدی بازیابی شده‌اند، چه مقدار توکن مصرف شده و مسیر آماده‌سازی چقدر طول کشیده است. این آزمون به‌تنهایی دربارهٔ درستی پاسخ مدل چیزی ثابت نمی‌کند. به همین دلیل، پس از انجماد نسخهٔ نهایی، یک مقایسهٔ واقعی میان Luna + v5 و Luna + v4 اجرا شد. در این مقایسه، سؤال‌ها مشترک بودند و پاسخ نهایی با مرجع یا آزمون اجرایی مستقل ارزیابی شد.'),
+('findings','نتیجه‌ها: بهبود حافظه، محدودیت استدلال',['quality','efficiency'],'در اجرای واقعیِ بیست‌سؤالی، v5 شانزده پاسخ درست و v4 ده پاسخ درست داشت. این اختلاف شش پاسخ، عمدتاً به بازیابی و قرارداد دقیق‌تر شواهد مربوط بود. نتیجهٔ مهم‌تر برای فرض اولیه آن است که بهبود حافظه، مشکل استدلال مستقل را حل نکرد: هر دو مسیر هنوز روی چند سؤال ریاضی اشتباه کردند. بنابراین داده‌ها از برتری این نسخه در این پایلوت پشتیبانی می‌کنند، اما هم‌سطح‌شدن توان عمومی Luna با Sol را ثابت نمی‌کنند.'),
+('responses','پاسخ‌های واقعی؛ پشت هر عدد چه اتفاقی افتاد؟',['answers-memory','answers-reason'],'میانگین‌ها بخشی از داستان را پنهان می‌کنند. برای نمونه، v4 در بعضی سؤال‌ها ابتدا مقدار درست را تولید کرد، اما verifier آن را رد کرد و repair پاسخ را به null تغییر داد. از سوی دیگر، چند پاسخ ریاضی در هر دو نسخه غلط ماندند. جدول‌های زیر خودِ خروجی نهایی را کنار مرجع قرار می‌دهند تا روشن باشد کدام بهبود از حافظه آمده، کدام از کنترل پاسخ و کجا محدودیت مدل همچنان باقی است.'),
+('discussion','این کار چه چیزی برای Flux به ارمغان می‌آورد؟',['implementation'],'مزیت قابل دفاع این مسیر، حافظه‌ای است که برای پاسخ‌های وابسته به پروژه شواهد مشخص، بودجهٔ کنترل‌شده و مسیر بررسی‌پذیر فراهم می‌کند. در پایلوت فعلی، تعداد فراخوانی‌ها و زمان متوسط نیز کمتر شد. این مزیت زمانی به مزیت رقابتی محصول تبدیل می‌شود که روی پروژه‌های بیشتر، سؤال‌های تازه و دادهٔ در حال تغییر تکرار شود. نسخهٔ فعلی یک candidate آزمایشی است و هنوز به Flux اصلی متصل نشده است.'),
+('references','منابع، قابلیت بازتولید و حدود ادعا',['evidence'],'برای این مقاله، آزمایش تازه‌ای روی مدل انجام نشده است؛ اعداد و خروجی‌ها از رسیدهای ذخیره‌شده و فایل‌های نتیجه استخراج شده‌اند. باید میان طرح پیشنهادی، کد پیاده‌شده، آزمون offline و پاسخ واقعی مدل فرق گذاشت. مرجع‌های زیر این مرز را قابل بررسی می‌کنند و hash کامل آن‌ها در فایل همراه سند ثبت شده است.')]
+parts=[]
+for gid,title,ids,intro in groups:
+    subs=[]
+    for key in ids:
+        p=pages[key]
+        subs.append('<section class="subsection" id="'+key+'"><h3>'+p['title']+'</h3>'+p['body']+'</section>')
+    parts.append('<section class="chapter" id="'+gid+'"><h2>'+title+'</h2><p>'+intro+'</p>'+''.join(subs)+'</section>')
+css=m['css']+'''
+body{background:#fbfaf6;font-size:17px;line-height:2.05}.toolbar{position:static}.article{max-width:900px;margin:auto;padding:60px 70px;background:#fff}.article-head{border-bottom:1px solid #b6c5b8;padding-bottom:32px;margin-bottom:34px}.article-head h1{font-size:39px;line-height:1.55;max-width:740px}.article-head .subtitle{font-size:20px;color:#59655b}.byline{font-size:12px;color:#687369;margin:18px 0}.abstract{font-size:17px;border-right:3px solid #17835c;padding-right:18px}.toc{border-top:1px solid #dce2d9;border-bottom:1px solid #dce2d9;padding:18px 0;margin:32px 0}.toc a{display:block;font-size:14px;padding:3px 0}.chapter{margin:52px 0}.chapter h2{font-size:27px;margin:0 0 20px;line-height:1.6}.subsection{margin:30px 0}.subsection h3{font-size:20px;line-height:1.7;margin:28px 0 15px}.article p{margin:15px 0}.article .lead{font-size:17px;line-height:2}.article figure{margin:28px 0;padding:20px 14px;background:#f7f8f4;border:1px solid #e3e7de;break-inside:avoid}.article figcaption{font-size:14px;margin-bottom:16px}.article .stats{margin:22px 0}.article .note{font-size:14px;line-height:1.9;margin:24px 0}.article .note.strong{font-size:15px}.article table{font-size:13px;line-height:1.8}.article .source{font-size:11px;line-height:1.8}.article .table-wrap{overflow-x:auto}.article .flow,.article .timeline,.article .branches,.article .evidence-levels{break-inside:avoid}.article .answer-table{min-width:620px}.article .split li{font-size:14px}.article .source{overflow-wrap:anywhere}.article-head .eyebrow{font-size:13px;letter-spacing:1px}.article-end{margin-top:40px;padding-top:20px;border-top:1px solid #dce2d9;font-size:12px;color:#687369}
+@media(max-width:820px){.article{padding:30px 24px}.article-head h1{font-size:29px}.article-head .subtitle{font-size:17px}.chapter h2{font-size:24px}}
+@media(max-width:500px){body{font-size:16px}.article{padding:24px 18px}.article-head h1{font-size:26px}.chapter h2{font-size:22px}.article .flow{grid-template-columns:1fr 1fr}}
+@page{size:A4;margin:18mm 17mm 19mm}
+@media print{body{background:#fff;font-size:12px;line-height:1.8}.article{max-width:none;padding:0;margin:0}.article-head{margin:0 0 20px;padding-bottom:18px}.article-head h1{font-size:29px}.article-head .subtitle{font-size:16px}.abstract{font-size:13px}.article .toc{margin:18px 0;padding:12px 0}.toc a{font-size:11px}.chapter{margin:26px 0;break-before:auto;break-inside:auto}.chapter h2{font-size:21px;margin-bottom:12px;break-after:avoid}.subsection{margin:18px 0;break-inside:auto}.subsection h3{font-size:16px;margin:18px 0 10px;break-after:avoid}.article p{margin:10px 0;orphans:3;widows:3}.article .lead{font-size:12px;line-height:1.8}.article figure{margin:17px 0;padding:13px 8px}.article figcaption{font-size:12px;margin-bottom:10px;break-after:avoid}.article .note,.article .note.strong{font-size:11px;line-height:1.8;margin:14px 0;break-inside:avoid}.article table{font-size:10px;line-height:1.7}.article th,.article td{padding:7px 6px}.article .answer-table{min-width:0}.article .answer-table td{padding:8px 6px}.article .table-wrap{overflow:visible}.article .source{font-size:9px}.article .split li{font-size:11px}.article .stat b{font-size:23px}.article .stat span{font-size:10px}.article .stats{margin:14px 0}.article .timeline p{font-size:10px}.article .interactive{display:none}.article .flow .step{padding:10px 8px}.article .flow .step strong{font-size:11px}.article .evidence-paths code{font-size:8px}.article .branches span{font-size:10px}}
+'''
+toc='<nav class="toc" aria-label="فهرست مقاله"><b>در این مقاله</b>'+''.join('<a href="#'+g+'">'+t+'</a>' for g,t,_,_ in groups)+'</nav>'
+head='''<header class="article-head"><div class="eyebrow">ALACRITY / FLUX · مقالهٔ پژوهشی · ۱۰ مهر ۱۴۰۵</div><h1>از حافظهٔ یک‌میلیون‌توکنی تا پاسخِ قابل بررسی</h1><p class="subtitle">روایت طراحی، آزمون و بازنگری حافظه، مدیریت توکن و تصمیم‌گیری در Flux؛ از v1 تا v5</p><div class="byline">گزارش تحقیق و توسعه · ۲ اکتبر ۲۰۲۶ · همراه با نمودارها و خروجی‌های واقعی</div><p class="abstract"><b>چکیده.</b> این تحقیق بررسی می‌کند که انتخاب دقیق شواهد و کنترل پاسخ تا چه اندازه می‌تواند کیفیت یک مدل کوچک‌تر را بهبود دهد. مسیر کار از فشرده‌سازی یک مخزن بزرگ به گراف آغاز شد و به معماری سه‌جزئی v5 رسید. در یک پایلوت واقعی با ۲۰ سؤال مشترک، Luna + v5 به ۱۶ پاسخ درست و Luna + v4 به ۱۰ پاسخ درست رسید؛ زمان متوسط نیز حدود ۳۰٪ کاهش یافت. بهبود عمدتاً در سؤال‌های وابسته به حافظه دیده شد و فاصلهٔ استدلال مستقل با مدل قوی‌تر هنوز بسته نشده است.</p></header>'''
+# Only the optional version picker needs script; the article navigation uses ordinary anchors.
+script=m['script'][m['script'].index('const versionDetails='):]
+html='<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flux — مقالهٔ پژوهشی حافظه و تصمیم‌گیری</title><style>'+css+'</style></head><body><nav class="toolbar"><span class="brand">ALACRITY / FLUX</span><button onclick="window.print()">چاپ مقاله / PDF</button></nav><article class="article">'+head+toc+''.join(parts)+'<footer class="article-end">پایان مقاله · منابع و داده‌ها: آزمایش‌های ذخیره‌شدهٔ Flux · هیچ تغییری در نسخهٔ اصلی اعمال نشده است.</footer></article><script>'+script+'</script></body></html>'
+OUT=H/'Flux_Memory_Research_FA.html';PDF=H/'Flux_Memory_Research_FA.pdf';OUT.write_text(html,encoding='utf-8')
+async def export():
+    async with async_playwright() as p:
+        b=await p.chromium.launch(executable_path='C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless=True)
+        page=await b.new_page();await page.goto(OUT.as_uri());await page.evaluate('document.fonts.ready')
+        for w in (1180,390,320):
+            await page.set_viewport_size({'width':w,'height':1000})
+            assert await page.evaluate('document.documentElement.scrollWidth <= innerWidth'),w
+        await page.emulate_media(media='print');await page.pdf(path=str(PDF),prefer_css_page_size=True,print_background=True,display_header_footer=False,tagged=True,outline=True)
+        await b.close()
+asyncio.run(export())
+reader=PdfReader(PDF);doc=pdfium.PdfDocument(str(PDF));qa=H/'qa-article';qa.mkdir(exist_ok=True);tiles=[]
+for i,p in enumerate(reader.pages):
+    assert len(p.extract_text() or '')>100,(i,len(p.extract_text() or ''))
+    im=doc[i].render(scale=1.25).to_pil().convert('RGB');im.save(qa/f'page-{i+1:02d}.png');im.thumbnail((240,340));tile=Image.new('RGB',(258,370),'#e5e9e2');tile.paste(im,((258-im.width)//2,8));ImageDraw.Draw(tile).text((12,350),f'Page {i+1}',fill='#203126');tiles.append(tile)
+for start in range(0,len(tiles),6):
+    c=Image.new('RGB',(774,740),'#e5e9e2')
+    for j,t in enumerate(tiles[start:start+6]):c.paste(t,((j%3)*258,(j//3)*370))
+    c.save(qa/f'contact-{start//6+1}.png')
+manifest=json.loads((H/'evidence-manifest.json').read_text(encoding='utf-8'));manifest.update({'format':'continuous illustrated article','chapters':8,'pages':len(reader.pages),'html_sha256':hashlib.sha256(OUT.read_bytes()).hexdigest()});(H/'evidence-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
+(H/'verification.json').write_text(json.dumps({'format':'article','pages':len(reader.pages),'svg_figures':html.count('<svg'),'all_pages_rendered':True,'responsive_widths':[1180,390,320],'html_sha256':hashlib.sha256(OUT.read_bytes()).hexdigest(),'pdf_sha256':hashlib.sha256(PDF.read_bytes()).hexdigest(),'actual_new_model_calls':0},indent=2),encoding='utf-8')
+print(json.dumps({'pages':len(reader.pages),'figures':html.count('<svg'),'contacts':(len(tiles)+5)//6}))

@@ -1,0 +1,68 @@
+{
+  "kind": "scenario_not_measured_prediction",
+  "operating_budget_usd": 35,
+  "planned_fixed_management_usd": 1.2,
+  "fixed_management_fundable": true,
+  "task_budget_after_management_usd": 33.8,
+  "scenarios": {
+    "simple": {
+      "base_usd": 0.08171,
+      "attempt_usd": 0.12256500000000001,
+      "acceptance_assumption": 0.85,
+      "usd_per_accepted_including_failures": 0.14419411764705883,
+      "token_only_expected_accepted": 233.75
+    },
+    "small_code": {
+      "base_usd": 0.1316,
+      "attempt_usd": 0.2632,
+      "acceptance_assumption": 0.7,
+      "usd_per_accepted_including_failures": 0.376,
+      "token_only_expected_accepted": 89.6
+    },
+    "complex": {
+      "base_usd": 0.4753,
+      "attempt_usd": 1.18825,
+      "acceptance_assumption": 0.5,
+      "usd_per_accepted_including_failures": 2.3765,
+      "token_only_expected_accepted": 14.0
+    }
+  },
+  "mixed": {
+    "mix_by_attempt": {
+      "simple": 0.25,
+      "small_code": 0.65,
+      "complex": 0.1
+    },
+    "attempt_usd": 0.32054625000000003,
+    "acceptance_assumption": 0.7174999999999999,
+    "usd_per_accepted_including_failures": 0.44675435540069697,
+    "token_limited_attempts": 105,
+    "token_only_expected_accepted": 75.33749999999999,
+    "human_minutes_available": 600,
+    "human_limited_attempts": 40,
+    "technical_reviewer_limited_total_attempts": 40,
+    "joint_limited_attempts": 40,
+    "joint_expected_accepted": 28.699999999999996,
+    "modeled_operating_spend_usd": 12.821850000000001,
+    "modeled_total_operating_spend_usd": 14.02185
+  },
+  "four_person_scenario": {
+    "mix_by_attempt": {
+      "simple": 0.25,
+      "small_code": 0.65,
+      "complex": 0.1
+    },
+    "attempt_usd": 0.32054625000000003,
+    "acceptance_assumption": 0.7174999999999999,
+    "usd_per_accepted_including_failures": 0.44675435540069697,
+    "token_limited_attempts": 105,
+    "token_only_expected_accepted": 75.33749999999999,
+    "human_minutes_available": 1200,
+    "human_limited_attempts": 80,
+    "technical_reviewer_limited_total_attempts": 80,
+    "joint_limited_attempts": 80,
+    "joint_expected_accepted": 57.39999999999999,
+    "modeled_operating_spend_usd": 25.643700000000003,
+    "modeled_total_operating_spend_usd": 26.843700000000002
+  }
+}

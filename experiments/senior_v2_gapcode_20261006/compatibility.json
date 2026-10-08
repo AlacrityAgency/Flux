@@ -1,0 +1,150 @@
+[
+  {
+    "model": "gpt-6-astra",
+    "compact_contract_pass": true,
+    "normalization_used": false,
+    "cases": [
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      },
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      },
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      }
+    ],
+    "failure": "",
+    "usage": {
+      "input_tokens": 8325,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 431,
+      "reasoning_output_tokens": 0
+    },
+    "receipt": "receipts/compact_gpt-6-astra.json",
+    "actual_billing_usd": null
+  },
+  {
+    "model": "gpt-6.1-sol",
+    "compact_contract_pass": true,
+    "normalization_used": false,
+    "cases": [
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      },
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      },
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      }
+    ],
+    "failure": "",
+    "usage": {
+      "input_tokens": 8040,
+      "cached_input_tokens": 6912,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 588,
+      "reasoning_output_tokens": 190
+    },
+    "receipt": "receipts/compact_gpt-6.1-sol.json",
+    "actual_billing_usd": null
+  },
+  {
+    "model": "gpt-6-luna",
+    "compact_contract_pass": false,
+    "normalization_used": false,
+    "cases": [],
+    "failure": "Mandatory facts reference mismatch",
+    "usage": {
+      "input_tokens": 8255,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 362,
+      "reasoning_output_tokens": 0
+    },
+    "receipt": "receipts/compact_gpt-6-luna.json",
+    "actual_billing_usd": null
+  },
+  {
+    "model": "claude-fable-5",
+    "compact_contract_pass": true,
+    "normalization_used": true,
+    "cases": [
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      },
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      },
+      {
+        "worker_pass": true,
+        "oracle_pass": true,
+        "worker_reason": ""
+      }
+    ],
+    "failure": "",
+    "usage": {
+      "input_tokens": 7850,
+      "cached_input_tokens": 6334,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 933,
+      "reasoning_output_tokens": 0
+    },
+    "receipt": "receipts/compact_claude-fable-5.json",
+    "actual_billing_usd": null
+  },
+  {
+    "model": "claude-opus-5-5",
+    "compact_contract_pass": false,
+    "normalization_used": false,
+    "cases": [],
+    "failure": "Provider incomplete or tools used",
+    "usage": null,
+    "receipt": "receipts/compact_claude-opus-5-5.json",
+    "actual_billing_usd": null
+  },
+  {
+    "model": "gapgpt-qwen-3.6",
+    "compact_contract_pass": false,
+    "normalization_used": false,
+    "cases": [],
+    "failure": "Expecting value: line 1 column 1 (char 0)",
+    "usage": {
+      "input_tokens": 5020,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3891,
+      "reasoning_output_tokens": 3239
+    },
+    "receipt": "receipts/compact_gapgpt-qwen-3.6.json",
+    "actual_billing_usd": null
+  },
+  {
+    "model": "claude-sonnet-5-5",
+    "compact_contract_pass": false,
+    "normalization_used": false,
+    "cases": [],
+    "failure": "Provider incomplete or tools used",
+    "usage": null,
+    "receipt": "receipts/compact_claude-sonnet-5-5.json",
+    "actual_billing_usd": null
+  }
+]

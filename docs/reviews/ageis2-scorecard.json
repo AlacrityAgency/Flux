@@ -1,0 +1,415 @@
+{
+  "subject": "Ageis 2 (D:\\project\\Alacrity\\Ageis-2-main)",
+  "reviewed_on": "2026-10-01",
+  "method": "Dimensions and weights follow docs/org-structure.fa.md section 6. Status: 1 met, 0.5 partial, 0 not met. basis=measured means a command or measurement produced it; read means source was read; absence means nothing was found in the repository (the score counts it as 0 and the report shows the upside if evidence exists elsewhere).",
+  "groups": [
+    {
+      "id": "correctness",
+      "title": "درستی کارکرد و آزمون",
+      "weight": 20,
+      "criteria": [
+        {
+          "id": "1.1",
+          "text": "مجموعهٔ Python روی پلتفرم هدف (Windows) کامل پاس می‌شود",
+          "weight": 4,
+          "status": 0.5,
+          "basis": "measured",
+          "evidence": "python -m pytest: 224 passed, 1 failed, 4 skipped. شکست: tests/test_server_auth.py::test_token_file_creation_and_permissions (mode 438 != 384)"
+        },
+        {
+          "id": "1.2",
+          "text": "مجموعهٔ Node کامل پاس می‌شود",
+          "weight": 3,
+          "status": 1,
+          "basis": "measured",
+          "evidence": "npm test: 24 pass, 0 fail"
+        },
+        {
+          "id": "1.3",
+          "text": "گسترهٔ آزمون متناسب با سورس است",
+          "weight": 3,
+          "status": 1,
+          "basis": "measured",
+          "evidence": "41 فایل، 219 تابع آزمون، نسبت خط آزمون به سورس 0.45؛ آزمون همزمانی، کیفیت، حریم، دروازه‌های نتیجه و قرارداد UI"
+        },
+        {
+          "id": "1.4",
+          "text": "آزمون سخت‌افزار واقعی و دقت بومی اجرا می‌شود",
+          "weight": 3,
+          "status": 0,
+          "basis": "absence",
+          "evidence": "tests/test_video_accuracy.py دو آزمون را skip می‌کند (نیاز AGEIS_RUN_NATIVE_TESTS=1 و ویدیوی مرجع)؛ آزمون سخت‌افزاری واقعی در مخزن نیست"
+        },
+        {
+          "id": "1.5",
+          "text": "پوشش آزمون اندازه‌گیری و کنترل می‌شود",
+          "weight": 3,
+          "status": 0,
+          "basis": "absence",
+          "evidence": "نه ابزار coverage در pyproject و نه مرحلهٔ coverage در .github/workflows/tests.yml"
+        },
+        {
+          "id": "1.6",
+          "text": "ورودی تباه (NaN، داده ناموجود) به خروجی ساختگی تبدیل نمی‌شود",
+          "weight": 2,
+          "status": 1,
+          "basis": "read",
+          "evidence": "transport.json_safe و allow_nan=False؛ docs/LESSONS_LEARNED.md: هیچ عدد بیومتریک ساختگی نیست؛ test_smoke_bridge رد ثابت‌های غیر JSON را می‌سنجد"
+        },
+        {
+          "id": "1.7",
+          "text": "تأخیر و کارایی اندازه‌گیری شده است",
+          "weight": 2,
+          "status": 0,
+          "basis": "absence",
+          "evidence": "build_report.py: P50/P95/P99، CPU، RAM و drop اندازه‌گیری نشده‌اند؛ benchmarkی در مخزن نیست"
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "معماری و نگهداری‌پذیری",
+      "weight": 15,
+      "criteria": [
+        {
+          "id": "2.1",
+          "text": "لایه‌بندی روشن و قرارداد مشترک میان UI و بک‌اند",
+          "weight": 3,
+          "status": 1,
+          "basis": "read",
+          "evidence": "agents/bridge/core/ml جدا؛ bridge/ui_actions.json به‌عنوان قرارداد؛ آزمون «UI فقط actionهای فهرست‌شده را می‌فرستد» پاس است"
+        },
+        {
+          "id": "2.2",
+          "text": "تصمیم‌های معماری ثبت و وضعیتشان با واقعیت یکی است",
+          "weight": 1,
+          "status": 0.5,
+          "basis": "read",
+          "evidence": "سه ADR؛ ADR 0001 و 0002 هنوز Proposed ولی در کد اعمال شده‌اند"
+        },
+        {
+          "id": "2.3",
+          "text": "کمتر از 5٪ توابع پیچیدگی بالای 15 دارند",
+          "weight": 3,
+          "status": 0.5,
+          "basis": "measured",
+          "evidence": "33 از 408 تابع (8.1٪) پیچیدگی بالای 15 دارند؛ آستانه: تا 5٪ برقرار، تا 10٪ نیمه"
+        },
+        {
+          "id": "2.4",
+          "text": "هیچ تابعی پیچیدگی بالای 50 ندارد",
+          "weight": 3,
+          "status": 0,
+          "basis": "measured",
+          "evidence": "tick() در session_state.py:1081 با 575 خط و پیچیدگی 206؛ handle() در commands.py:60 با 509 خط و 177؛ analyze_gait_session 351 خط و 83؛ _finalize 205 خط و 77؛ extract 270 خط و 66"
+        },
+        {
+          "id": "2.5",
+          "text": "هیچ فایلی بیش از 800 خط نیست",
+          "weight": 2,
+          "status": 0.5,
+          "basis": "measured",
+          "evidence": "session_state.py 1744، gait_engine.py 1532، database.py 898 خط؛ 3 از 35 فایل (8.6٪)"
+        },
+        {
+          "id": "2.6",
+          "text": "مدیریت خطا مشخص است و خطا بلعیده نمی‌شود",
+          "weight": 1,
+          "status": 0.5,
+          "basis": "measured",
+          "evidence": "79 جا except Exception؛ 10 جای آن فقط pass یا continue است (مثلاً agents/camera.py:167، 274، 517، 539)"
+        },
+        {
+          "id": "2.7",
+          "text": "کد مرده و تکرار نیست",
+          "weight": 2,
+          "status": 0,
+          "basis": "read",
+          "evidence": "electron-app/app.js (85KB) و index.html (94KB) HUD قدیمی‌اند که از ناوبری حذف شده ولی هنوز در مخزن‌اند؛ three.min.js در سه نسخه (حدود 1.8MB)؛ اسکریپت‌های skill در .agents و .claude دوبار"
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "title": "امنیت",
+      "weight": 15,
+      "criteria": [
+        {
+          "id": "3.1",
+          "text": "کانال محلی: bind روی loopback، فهرست Origin، مقایسهٔ زمان‌ثابت توکن",
+          "weight": 3,
+          "status": 1,
+          "basis": "read",
+          "evidence": "server.py:78 websockets.serve روی 127.0.0.1؛ transport.py: is_origin_allowed و secrets.compare_digest"
+        },
+        {
+          "id": "3.2",
+          "text": "سخت‌سازی Electron",
+          "weight": 4,
+          "status": 1,
+          "basis": "read",
+          "evidence": "main.js: nodeIntegration=false، contextIsolation، sandbox، webSecurity؛ will-navigate محدود به شش صفحه؛ setWindowOpenHandler deny؛ هندلر مجوز فقط media؛ CSP با connect-src none؛ توکن به renderer نمی‌رسد"
+        },
+        {
+          "id": "3.3",
+          "text": "فایل توکن روی پلتفرم هدف فقط برای مالک خوانا است",
+          "weight": 2,
+          "status": 0,
+          "basis": "measured",
+          "evidence": "آزمون test_token_file_creation_and_permissions روی Windows شکست می‌خورد: chmod 0o600 روی NTFS اثر ندارد (mode=438). transport.py:113"
+        },
+        {
+          "id": "3.4",
+          "text": "تفکیک اختیار و ثبت ردپا برای کارهای حساس",
+          "weight": 3,
+          "status": 0,
+          "basis": "read",
+          "evidence": "یک توکن مشترک برای همهٔ کلاینت‌ها؛ delete_session در commands.py بی‌قید و بی‌ثبت؛ set_record_label هویت operator را از کلاینت می‌پذیرد؛ export_training_data بدون دروازهٔ جدا"
+        },
+        {
+          "id": "3.5",
+          "text": "ایمنی تزریق: SQL پارامتری، زیرپردازش با آرگومان ثابت، UI بدون innerHTML",
+          "weight": 2,
+          "status": 1,
+          "basis": "read",
+          "evidence": "جاهای SQL پویا فقط ALTER با ثابت‌های درون کد؛ subprocess همه با فهرست آرگومان ثابت؛ صفحه‌های فعال UI صفر innerHTML"
+        },
+        {
+          "id": "3.6",
+          "text": "کنترل زنجیرهٔ تأمین: قفل وابستگی Python و پویش خودکار",
+          "weight": 1,
+          "status": 0,
+          "basis": "measured",
+          "evidence": "pyproject فقط حد پایین دارد؛ فایل lock نیست؛ CI پویش وابستگی یا SAST ندارد (package-lock.json برای npm هست)"
+        }
+      ]
+    },
+    {
+      "id": "privacy",
+      "title": "حریم خصوصی و حفاظت داده",
+      "weight": 15,
+      "criteria": [
+        {
+          "id": "4.1",
+          "text": "کمینه‌سازی: رسانهٔ خام ذخیره نمی‌شود و بافرها صفر می‌شوند",
+          "weight": 3,
+          "status": 1,
+          "basis": "read",
+          "evidence": "config.save_trajectory=False پیش‌فرض و آزمون‌های test_privacy؛ VolatileFrameBuffer و clear_trajectory"
+        },
+        {
+          "id": "4.2",
+          "text": "خروجی پژوهشی بی‌هویت و غیرقابل پیوند",
+          "weight": 2,
+          "status": 0.5,
+          "basis": "read",
+          "evidence": "database._training_row نام، شناسهٔ پرونده و یادداشت را حذف می‌کند؛ ولی فریم‌های landmark چهره و راه رفتن به همراه saved_at ذاتاً شناسه‌پذیرند"
+        },
+        {
+          "id": "4.3",
+          "text": "رمزگذاری در حالت سکون برای نام، شناسه و ویژگی‌های زیستی",
+          "weight": 3,
+          "status": 0,
+          "basis": "measured",
+          "evidence": "جست‌وجوی encrypt/cipher/fernet/sqlcipher در src بی‌نتیجه؛ ageis_sessions.db متن ساده با نام و شناسهٔ پرونده"
+        },
+        {
+          "id": "4.4",
+          "text": "رضایت پیش از ثبت اعمال می‌شود و ثبت دائمی دارد",
+          "weight": 3,
+          "status": 0.5,
+          "basis": "measured",
+          "evidence": "UI اعمال می‌کند: ui/page 2/page2.js دکمهٔ ادامه را بدون تیک رضایت غیرفعال می‌کند. بک‌اند اعمال نمی‌کند: commands.py:106 مقدار consent را بی‌اعتبارسنجی از کلاینت می‌پذیرد و set_subject آن را نمی‌خواهد؛ نسخهٔ متن رضایت و زمان امضا ثبت نمی‌شود"
+        },
+        {
+          "id": "4.5",
+          "text": "سیاست نگهداری و حذف ایمن",
+          "weight": 2,
+          "status": 0,
+          "basis": "read",
+          "evidence": "delete_session فقط ردیف را حذف می‌کند؛ خروجی‌های exports/ و PDF و فایل WAL دست‌نخورده می‌مانند؛ سیاست مدت نگهداری نیست"
+        },
+        {
+          "id": "4.6",
+          "text": "ارزیابی اثر حریم (DPIA) و مبنای حقوقی ثبت شده است",
+          "weight": 2,
+          "status": 0,
+          "basis": "absence",
+          "evidence": "در مخزن سندی دربارهٔ مبنای حقوقی، DPIA یا ارزیابی اثر بر جمعیت حساس نیست"
+        }
+      ]
+    },
+    {
+      "id": "science",
+      "title": "اعتبار علمی و حاکمیت ادعا",
+      "weight": 15,
+      "criteria": [
+        {
+          "id": "5.1",
+          "text": "دامنهٔ ادعا صادقانه و در همهٔ مستندات یکسان است",
+          "weight": 3,
+          "status": 0,
+          "basis": "read",
+          "evidence": "Ageis2/README.md می‌گوید سامانه احتمال حمل ماده را برآورد نمی‌کند؛ Ageis_BodyPacker_Gait_Protocol.md خود را مرجع رسمی بالینی غربالگری حاملان مواد می‌نامد؛ تناقض مستقیم"
+        },
+        {
+          "id": "5.2",
+          "text": "ادعاها با داده و اعتبارسنجی داخل مخزن پشتیبانی می‌شوند",
+          "weight": 4,
+          "status": 0,
+          "basis": "measured",
+          "evidence": "ADR 0002 آستانهٔ 25.0 را «کالیبره با ROC بالینی» و sigma را «برازش روی cohortهای اعتبارسنجی» می‌نامد؛ در مخزن نه داده، نه ROC/AUC، نه حساسیت و ویژگی هست؛ engine.py:24 می‌گوید prior ها کالیبره نیستند و باید روی دادهٔ نماینده برازش شوند"
+        },
+        {
+          "id": "5.3",
+          "text": "خروجی عدم‌قطعیت را منعکس می‌کند (بازه، پوشش، کیفیت)",
+          "weight": 3,
+          "status": 0.5,
+          "basis": "read",
+          "evidence": "engine.py وزن precision با پوشش و کیفیت و پایداری؛ حکم INCONCLUSIVE؛ ولی ADR 0002 هنوز در حال بررسی و ثابت‌ها کالیبره نشده‌اند"
+        },
+        {
+          "id": "5.4",
+          "text": "وقتی اعتبار فیزیکی نیست عدد تولید نمی‌شود",
+          "weight": 2,
+          "status": 1,
+          "basis": "read",
+          "evidence": "بدون AGEIS_STEREO_CALIBRATION گام‌برداری آماده نمی‌شود؛ دروازه‌های کیفیت؛ docs/calibration-requirements.md"
+        },
+        {
+          "id": "5.5",
+          "text": "حاکمیت برچسب و آستانه (بدون حلقهٔ خودتأییدی)",
+          "weight": 2,
+          "status": 0.5,
+          "basis": "read",
+          "evidence": "auto_label از آستانهٔ ثابت 25.0 ساخته می‌شود و export_training_data با include_unverified آن را به مجموعهٔ آموزش می‌برد؛ پیش‌فرض فقط verified است"
+        },
+        {
+          "id": "5.6",
+          "text": "ارزیابی سوگیری بر حسب رنگ پوست، سن، لهجه، پوشش",
+          "weight": 1,
+          "status": 0,
+          "basis": "absence",
+          "evidence": "build_report.py فقط ریسک را فهرست می‌کند؛ آزمون یا داده‌ای برای سنجش نیست"
+        }
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "پایداری و عملیات",
+      "weight": 10,
+      "criteria": [
+        {
+          "id": "6.1",
+          "text": "CI هر دو مجموعه را اجرا می‌کند",
+          "weight": 2,
+          "status": 1,
+          "basis": "read",
+          "evidence": ".github/workflows/tests.yml: backend و frontend جدا"
+        },
+        {
+          "id": "6.2",
+          "text": "CI روی سیستم‌عامل هدف (Windows) هم اجرا می‌شود",
+          "weight": 2,
+          "status": 0,
+          "basis": "read",
+          "evidence": "فقط ubuntu-latest؛ به همین دلیل شکست 3.3 دیده نشده بود"
+        },
+        {
+          "id": "6.3",
+          "text": "نصب تکرارپذیر و بسته‌بندی برای اپراتور",
+          "weight": 2,
+          "status": 0,
+          "basis": "read",
+          "evidence": "main.js به .venv یا python سیستم وابسته است؛ نه نصاب، نه runtime همراه، نه قفل وابستگی Python"
+        },
+        {
+          "id": "6.4",
+          "text": "تاب‌آوری: همزمانی، چرخهٔ عمر سخت‌افزار، timeout و WAL",
+          "weight": 2,
+          "status": 1,
+          "basis": "measured",
+          "evidence": "test_concurrency و test_hardware_lifecycle پاس؛ sqlite timeout=30 و WAL؛ wait_for برای ارسال به کلاینت"
+        },
+        {
+          "id": "6.5",
+          "text": "بازیابی اتصال و مشاهده‌پذیری",
+          "weight": 2,
+          "status": 0.5,
+          "basis": "read",
+          "evidence": "restart-backend دستی هست؛ bridge_client.js بازاتصال خودکار ندارد؛ لاگ ساختارمند و متریک نیست"
+        }
+      ]
+    },
+    {
+      "id": "governance",
+      "title": "مستندات و حاکمیت",
+      "weight": 5,
+      "criteria": [
+        {
+          "id": "7.1",
+          "text": "مستندات مهندسی غنی است",
+          "weight": 2,
+          "status": 1,
+          "basis": "read",
+          "evidence": "README، سه ADR، LESSONS_LEARNED، REMEDIATION_PLAN، UI_HANDOFF، BACKEND_TEST_PLAN، calibration-requirements"
+        },
+        {
+          "id": "7.2",
+          "text": "مستندات با هم و با کد هم‌خوان‌اند",
+          "weight": 2,
+          "status": 0,
+          "basis": "read",
+          "evidence": "تناقض دامنه (5.1)، ادعای ROC بدون داده (5.2)، وضعیت ADR (2.2)، build_report.py با 10 آزمون در برابر 229 آزمون فعلی"
+        },
+        {
+          "id": "7.3",
+          "text": "فرایند حافظه و همکاری ثبت شده است",
+          "weight": 1,
+          "status": 1,
+          "basis": "read",
+          "evidence": "AGENTS.md و docs/project-memory.md با شاهد و تاریخ"
+        }
+      ]
+    },
+    {
+      "id": "ux",
+      "title": "تجربهٔ کاربر و دسترس‌پذیری",
+      "weight": 5,
+      "criteria": [
+        {
+          "id": "8.1",
+          "text": "پیام‌های فارسی و راست‌به‌چپ پوشش کامل دارند",
+          "weight": 2,
+          "status": 1,
+          "basis": "read",
+          "evidence": "error_messages.js با آزمون، URL_PROBLEM_MESSAGES_FA در بک‌اند"
+        },
+        {
+          "id": "8.2",
+          "text": "آزمون قرارداد UI و CSP",
+          "weight": 1,
+          "status": 1,
+          "basis": "measured",
+          "evidence": "آزمون‌های «UI فقط actionهای قرارداد را می‌فرستد» و «صفحه‌ها فقط اسکریپت‌های مجاز CSP را بار می‌کنند» پاس‌اند"
+        },
+        {
+          "id": "8.3",
+          "text": "دسترس‌پذیری بررسی شده است (صفحه‌خوان، کنتراست، کیبورد)",
+          "weight": 1,
+          "status": 0.5,
+          "basis": "read",
+          "evidence": "نشانه‌ها هست: lang=fa و dir=rtl در هر شش صفحه، 66 صفت aria و 22 role؛ ولی هیچ آزمون یا سندی برای صفحه‌خوان، کنتراست یا پیمایش با کیبورد نیست"
+        },
+        {
+          "id": "8.4",
+          "text": "آزمون رفتاری سرتاسری UI",
+          "weight": 1,
+          "status": 0.5,
+          "basis": "read",
+          "evidence": "24 آزمون Node بیشتر قرارداد و واحد هستند؛ آزمون سرتاسری با مرورگر یا Electron نیست؛ build_report.py خود کمبود تست UI را ریسک می‌نامد"
+        }
+      ]
+    }
+  ]
+}

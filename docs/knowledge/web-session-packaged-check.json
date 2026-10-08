@@ -1,0 +1,17 @@
+{
+  "version": "0.5.1",
+  "exe": "C:\\Users\\xio\\AppData\\Local\\Programs\\Flux\\Flux.exe",
+  "sha256": "7864c66d774ecf53f3a1f9fd8f08c42736b37dbdd4d42c7b2dbbfc045edfbb54",
+  "model_calls": 0,
+  "real_session_imports": 0,
+  "user_database_access": false,
+  "checks": [
+    "bundled UI equals current source",
+    "browser driver bundled",
+    "installed version and UI routes",
+    "scoped encrypted import; no premature connected claim",
+    "website read-only boundary and model selection validation",
+    "project memory retrieval still bounded and scoped"
+  ],
+  "temporary_check_directory": "C:\\Users\\xio\\AppData\\Local\\Temp\\flux-web-packaged-kc5lhysf"
+}

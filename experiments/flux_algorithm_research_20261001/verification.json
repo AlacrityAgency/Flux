@@ -1,0 +1,20 @@
+{
+  "reviewed_sources": 25,
+  "changed_since_manifest": [
+    "src/flux/local_agents/runtime.py",
+    "tests/test_design_v2.py"
+  ],
+  "new_runtime_code_created": false,
+  "main_source_edited_by_this_task": false,
+  "user_database_opened_by_this_task": false,
+  "model_calls_for_new_algorithm": false,
+  "historical_benchmark_reexecuted": false,
+  "report_phase": "research-only",
+  "expected_documents": [
+    "RESEARCH.fa.md",
+    "ALGORITHM-DESIGN.fa.md",
+    "EVALUATION-PLAN.fa.md"
+  ],
+  "final_test_result": "124 passed in 24.08s",
+  "changed_after_final_snapshot": []
+}

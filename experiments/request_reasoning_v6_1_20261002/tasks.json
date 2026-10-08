@@ -1,0 +1,146 @@
+[
+  {
+    "id": "bayes_0",
+    "family": "bayes",
+    "lang": "en",
+    "query": "A screening test has sensitivity 0.99 and false-positive rate 0.063. The prevalence of the condition is 0.024. Given a positive result, what is the probability that the person has the condition? Round to six decimals."
+  },
+  {
+    "id": "crt_0",
+    "family": "crt",
+    "lang": "fa",
+    "query": "کوچک‌ترین عدد صحیح نامنفی x را پیدا کن که باقیماندهٔ تقسیم آن بر ۱۶ برابر ۱۳، بر ۹ برابر ۳ و بر ۵ برابر ۲ باشد."
+  },
+  {
+    "id": "pattern_0",
+    "family": "pattern",
+    "lang": "en",
+    "query": "A fair six-sided die is rolled repeatedly. What is the expected number of rolls until the consecutive pattern 2,3,3,2 first appears? Give the exact value."
+  },
+  {
+    "id": "shortest_path_0",
+    "family": "shortest_path",
+    "lang": "fa",
+    "query": "یک گراف جهت‌دار وزن‌دار این یال‌ها را دارد (یال X->Y:w یعنی از X به Y با وزن w): A->D:۹, A->F:۴, B->F:۱۱, D->A:۷, D->F:۱, E->G:۱, F->D:۱۱, F->E:۱۴, G->A:۱۵, G->D:۴, G->F:۷. کوتاه‌ترین فاصله از A تا G چقدر است؟"
+  },
+  {
+    "id": "inclusion_exclusion_0",
+    "family": "inclusion_exclusion",
+    "lang": "en",
+    "query": "Among 221 students, 111 take art, 89 take biology and 83 take chemistry; 50 take both art and biology, 44 take art and chemistry, 17 take biology and chemistry, and 12 take all three. How many students take exactly one of these subjects?"
+  },
+  {
+    "id": "compositions_0",
+    "family": "compositions",
+    "lang": "fa",
+    "query": "تعداد ۴تایی‌های مرتب از اعداد صحیح (x۱,...,x۴) که مجموعشان ۱۰ است و هر xi بین ۰ و ۸ (با خود این دو) است چند است؟"
+  },
+  {
+    "id": "coins_0",
+    "family": "coins",
+    "lang": "en",
+    "query": "Using unlimited coins of values 5, 7, 9, 11, what is the minimum number of coins needed to make exactly 82?"
+  },
+  {
+    "id": "strings_paths_0",
+    "family": "strings_paths",
+    "lang": "fa",
+    "query": "تعداد مسیرهای شبکه‌ای از (۰,۰) تا (۹,۶) با گام‌های واحد به راست یا بالا که از نقطهٔ (۱,۵) عبور نمی‌کنند چند است؟"
+  },
+  {
+    "id": "urn_0",
+    "family": "urn",
+    "lang": "en",
+    "query": "A bag contains 4 red, 6 blue and 6 green balls. 4 balls are drawn uniformly at random without replacement. What is the probability that exactly two colors appear among the drawn balls? Round to six decimals."
+  },
+  {
+    "id": "modular_0",
+    "family": "modular",
+    "lang": "fa",
+    "query": "باقیماندهٔ تقسیم ۶۰۴^۹۲۵۳ بر ۲۹۹ چند است؟"
+  },
+  {
+    "id": "coins_1",
+    "family": "coins",
+    "lang": "en",
+    "query": "Using unlimited coins of values 2, 3, 5, 7, in how many different ways (order does not matter) can you make exactly 44?"
+  },
+  {
+    "id": "pattern_1",
+    "family": "pattern",
+    "lang": "en",
+    "query": "A fair six-sided die is rolled repeatedly. What is the expected number of rolls until the consecutive pattern 1,1,1 first appears? Give the exact value."
+  },
+  {
+    "id": "logic_sat_0",
+    "family": "logic_sat",
+    "lang": "en",
+    "query": "Boolean variables A,B,C,D,E satisfy all these clauses: (NOT E OR NOT B OR NOT C) AND (NOT B OR NOT D OR A) AND (NOT D OR NOT B OR NOT A) AND (E OR NOT C OR B) AND (NOT B OR E OR A) AND (NOT A OR NOT E OR NOT B) AND (B OR D OR C). Exactly 2 variables are true. How many satisfying assignments exist?"
+  },
+  {
+    "id": "logic_sat_1",
+    "family": "logic_sat",
+    "lang": "en",
+    "query": "Boolean variables A,B,C,D,E satisfy all these clauses: (NOT A OR NOT E OR C) AND (B OR C OR E) AND (C OR NOT D OR NOT A) AND (NOT A OR E OR B) AND (NOT E OR NOT A OR NOT C) AND (E OR NOT A OR NOT D) AND (NOT B OR D OR E) AND (D OR C OR NOT B). Exactly 3 variables are true. How many satisfying assignments exist?"
+  },
+  {
+    "id": "logic_sat_2",
+    "family": "logic_sat",
+    "lang": "fa",
+    "query": "متغیرهای بولی A,B,C,D,E باید همهٔ این بندها را ارضا کنند: (NOT C OR B OR NOT D) AND (NOT A OR B OR C) AND (A OR NOT E OR NOT D) AND (NOT B OR C OR NOT A) AND (NOT B OR C OR D) AND (NOT C OR NOT E OR D) AND (NOT C OR D OR B) AND (NOT C OR NOT B OR E) AND (NOT B OR NOT D OR E). دقیقاً 2 متغیر درست باشد. تعداد انتساب‌های مجاز چند است؟ OR یعنی یا و NOT یعنی نقیض."
+  },
+  {
+    "id": "logic_knights_0",
+    "family": "logic_knights",
+    "lang": "en",
+    "query": "Each of A,B,C,D,E is either a knight (every statement true) or a knave (every statement false). A says: B and D have different types; B says: B and C have different types; C says: A and C have the same type; D says: A and D have the same type; E says: A and C have the same type. How many assignments of types satisfy all statements?"
+  },
+  {
+    "id": "logic_knights_1",
+    "family": "logic_knights",
+    "lang": "en",
+    "query": "Each of A,B,C,D,E is either a knight (every statement true) or a knave (every statement false). A says: A and D have the same type; B says: A and D have different types; C says: C and D have different types; D says: C and E are both knights; E says: D and B are both knights. How many assignments of types satisfy all statements?"
+  },
+  {
+    "id": "logic_knights_2",
+    "family": "logic_knights",
+    "lang": "en",
+    "query": "Each of A,B,C,D,E is either a knight (every statement true) or a knave (every statement false). A says: A and C include exactly one knight; B says: E and C have the same type; C says: D and A are both knaves; D says: D and B have the same type; E says: B and D include exactly one knight. How many assignments of types satisfy all statements?"
+  },
+  {
+    "id": "logic_order_0",
+    "family": "logic_order",
+    "lang": "en",
+    "query": "Arrange A,B,C,D,E,F in a single row, each exactly once. Constraints: E before F; D before C; B before F; D before E; E before C; D before A; B and D must NOT be adjacent. How many arrangements are possible?"
+  },
+  {
+    "id": "logic_order_1",
+    "family": "logic_order",
+    "lang": "en",
+    "query": "Arrange A,B,C,D,E,F in a single row, each exactly once. Constraints: D before C; E before D; E before F; C before A; B before D; C before F; D and A must NOT be adjacent. How many arrangements are possible?"
+  },
+  {
+    "id": "logic_order_2",
+    "family": "logic_order",
+    "lang": "en",
+    "query": "Arrange A,B,C,D,E,F in a single row, each exactly once. Constraints: A before F; B before F; B before C; B before A; E before A; E before D; E and C must NOT be adjacent. How many arrangements are possible?"
+  },
+  {
+    "id": "logic_assignment_0",
+    "family": "logic_assignment",
+    "lang": "en",
+    "query": "Assign four pairwise distinct integers A,B,C,D from {1,2,3,4,5}. Their sum is 13. A != 5, B != 1, C != 5, D != 5. Also |A-C| != 2. How many ordered assignments satisfy every condition?"
+  },
+  {
+    "id": "logic_assignment_1",
+    "family": "logic_assignment",
+    "lang": "en",
+    "query": "Assign four pairwise distinct integers A,B,C,D from {1,2,3,4,5}. Their sum is 11. A != 2, B != 5, C != 4, D != 1. Also |A-C| != 1. How many ordered assignments satisfy every condition?"
+  },
+  {
+    "id": "logic_assignment_2",
+    "family": "logic_assignment",
+    "lang": "fa",
+    "query": "چهار عدد صحیح متمایز A,B,C,D را از مجموعه {1,2,3,4,5} انتخاب کن. مجموع آن‌ها 11 باشد. A != 4, B != 5, C != 2, D != 5. همچنین |A-C| != 2. تعداد انتساب‌های مرتب مجاز چند است؟"
+  }
+]

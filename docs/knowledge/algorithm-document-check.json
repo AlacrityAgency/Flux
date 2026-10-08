@@ -1,0 +1,37 @@
+[
+  {
+    "file": "docs/algorithms/00-head-brief.fa.md",
+    "lines": 92,
+    "sha256": "1502b9088d85ce43e9d2c3d0a27f8f8c72e91588deaa4031ae73fca481716cdb",
+    "python_blocks": 0,
+    "json_blocks": 0
+  },
+  {
+    "file": "docs/algorithms/01-flux-core.fa.md",
+    "lines": 263,
+    "sha256": "476c1123d19c30df0d9c1eebf3c365efc13a77942f8a9f7629eb1689f8547015",
+    "python_blocks": 0,
+    "json_blocks": 2
+  },
+  {
+    "file": "docs/algorithms/02-token-management.fa.md",
+    "lines": 463,
+    "sha256": "45fc8792077064e722edccddff2ff799631a7a381efec8027db3c864cba6c41d",
+    "python_blocks": 0,
+    "json_blocks": 2
+  },
+  {
+    "file": "docs/algorithms/03-decision-making.fa.md",
+    "lines": 550,
+    "sha256": "ec0db6519443441e4fb95c355fbb399ceffe7edd11d09f157a57a44457f9ae84",
+    "python_blocks": 0,
+    "json_blocks": 1
+  },
+  {
+    "file": "docs/algorithms/04-memory-and-rag.fa.md",
+    "lines": 661,
+    "sha256": "4fdc0382c6706bcf3a7194d13ca445d058bdcdcf74f71e8ff6fc974aa17338dc",
+    "python_blocks": 10,
+    "json_blocks": 0
+  }
+]

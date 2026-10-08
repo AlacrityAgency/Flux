@@ -1,0 +1,90 @@
+{
+  "timestamp": "2026-10-01T01:42:13.424490+00:00",
+  "notebook_id": "e040a5ab-215d-47a0-8368-be3c9c1ce418",
+  "synthetic_sources_only": true,
+  "turns": [
+    {
+      "state": "completed",
+      "text": "در سند **Flux integration sample**، نشانگر آزمایش و مراحل به شرح زیر آمده است:\n\n* **نشانگر آزمایش (Marker):** `FLUX_GOOGLE_BRIDGE_20261001` [1]\n* **سه مرحله به ترتیب:**\n  1. **Connect** [1]\n  2. **Verify** [1]\n  3. **Deliver** [1]\n\n💡 آیا می‌خواهید خلاصه یا گزارشی از این اتصال آماده کنم یا درباره هر یک از این مراحل بررسی بیشتری انجام دهیم؟",
+      "error": "",
+      "references": [
+        {
+          "source_id": "894e820c-c19c-4227-8b9a-3d9e497e98c9",
+          "citation_number": 1,
+          "cited_text": "Flux integration verification. Marker: FLUX_GOOGLE_BRIDGE_20261001. Flux has exactly three phases, in this order: Connect, Verify, Deliver. The second phase is Verify. This document is synthetic test data and contains no private project information.",
+          "start_char": 0,
+          "end_char": 249,
+          "chunk_id": "d64af6bc-b68b-4035-bab8-6168d5a48210",
+          "passage_id": null,
+          "answer_start_char": 0,
+          "answer_end_char": 249,
+          "score": 1.0,
+          "fragment_start_char": 0,
+          "fragment_end_char": 249,
+          "answer_anchor_start": 125,
+          "answer_anchor_end": 125
+        }
+      ],
+      "session_id": "304a2a19-781a-4cee-85d9-f8c671596883"
+    },
+    {
+      "state": "completed",
+      "text": "نام انگلیسی مرحلهٔ دوم **Verify** است [1].\n\n💡 آیا مایلید درباره جزئیات یا هدف این مرحله در فرایند آزمایش اطلاعات بیشتری را بررسی کنیم؟",
+      "error": "",
+      "references": [
+        {
+          "source_id": "894e820c-c19c-4227-8b9a-3d9e497e98c9",
+          "citation_number": 1,
+          "cited_text": "Flux integration verification. Marker: FLUX_GOOGLE_BRIDGE_20261001. Flux has exactly three phases, in this order: Connect, Verify, Deliver. The second phase is Verify. This document is synthetic test data and contains no private project information.",
+          "start_char": 0,
+          "end_char": 249,
+          "chunk_id": "b3bf39e2-fdfe-44a6-b028-fbb677ba233d",
+          "passage_id": null,
+          "answer_start_char": 0,
+          "answer_end_char": 249,
+          "score": 1.0,
+          "fragment_start_char": 0,
+          "fragment_end_char": 249,
+          "answer_anchor_start": 30,
+          "answer_anchor_end": 33
+        }
+      ],
+      "session_id": "304a2a19-781a-4cee-85d9-f8c671596883"
+    }
+  ],
+  "connections": [
+    {
+      "id": "codex",
+      "version": "codex-cli 0.159.2",
+      "authenticated": true,
+      "integration": null,
+      "error_code": null,
+      "detail": "ورود با حساب اشتراکی آماده است."
+    },
+    {
+      "id": "claude",
+      "version": "2.1.283 (Claude Code)",
+      "authenticated": true,
+      "integration": null,
+      "error_code": null,
+      "detail": "ورود با حساب اشتراکی آماده است."
+    },
+    {
+      "id": "antigravity",
+      "version": "1.2.14",
+      "authenticated": false,
+      "integration": "official",
+      "error_code": "region_restricted",
+      "detail": "Google حساب فعلی را به‌دلیل محدودیت منطقه برای Antigravity واجد شرایط نمی‌داند."
+    },
+    {
+      "id": "notebooklm",
+      "version": "NotebookLM CLI, version 0.8.3 (53fc7c50)",
+      "authenticated": true,
+      "integration": "community",
+      "error_code": null,
+      "detail": "ورود آماده است؛ پاسخ‌ها از منابع دفتر انتخاب‌شده‌اند."
+    }
+  ],
+  "passed": true
+}

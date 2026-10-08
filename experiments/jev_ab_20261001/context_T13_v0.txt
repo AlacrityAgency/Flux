@@ -1,0 +1,197 @@
+[demo-tasks.fa.md#DEMO-04 — مدیریت توکن و هزینه]
+## DEMO-04 — مدیریت توکن و هزینه
+
+خروجی: کنترل بودجه قبل از هر تماس و نمایش روشن مصرف.
+
+- [ ] ساخت reservation و usage ledger با Decimal و snapshot تعرفهٔ هر تماس.
+- [ ] رزرو اتمی سقف Task و روز با حفظ سهم بررسی نهایی؛ تعیین timezone و روز تعلق رزرو.
+- [ ] محاسبهٔ هزینهٔ ورودی و سقف خروجی؛ جلوگیری از دوباره‌شماری cached input.
+- [ ] تسویهٔ usage واقعی؛ هزینهٔ نامعلوم null بماند و رزرو آزاد نشود.
+- [ ] retry مرکزی حداکثر دو بار فقط برای خطای موقت؛ هر ارسال بودجه و سهم call خودش را داشته باشد.
+- [ ] نمایش توکن ورودی/خروجی، خرج قطعی، رزرو و مانده در UI؛ اصلاح سقف فقط با اقدام کاربر.
+
+فایل‌های پیشنهادی: `budget/`، `providers/retry.py`، `ui/usage_view.*` و تست‌های رقابت رزرو.
+
+معیار پایان: دو رزرو هم‌زمان نتوانند سقف را بشکنند؛ retry سقف تازه نسازد؛ timeout/usage مفقود مصرف صفر نشان ندهد؛ تغییر قیمت هزینهٔ قبلی را تغییر ندهد. بدون کران قابل اتکا برای هزینه، اجرای زندهٔ آن مدل فعال نشود.
+
+
+[src/flux/budget/ledger.py::BudgetLedger.settle_call]
+    def settle_call(
+        self,
+        reservation_id: str,
+        usage_id: str,
+        run_id: str,
+        call_id: str,
+        model_id: str,
+        input_tokens: int,
+        cached_input_tokens: int,
+        output_tokens: int,
+        estimated_cost_usd: float,
+        actual_cost_usd: Optional[float] = None,
+        is_unknown: bool = False
+    ):
+        """Settles reservation with actual cost and records usage."""
+        if actual_cost_usd is None and not is_unknown:
+            # Calculate from tokens and pricing snapshot
+            snapshot = self.repo.conn.execute(
+                "SELECT price_snapshot_input,price_snapshot_output FROM budget_reservations WHERE reservation_id=?",
+                (reservation_id,)
+            ).fetchone()
+            if snapshot is None:
+                raise ValueError("Missing price snapshot")
+            actual_cost_usd = (input_tokens * snapshot[0] + output_tokens * snapshot[1]) / 1_000_000
+
+        self.repo.record_usage(
+            usage_id=usage_id,
+            run_id=run_id,
+            call_id=call_id,
+            model_id=model_id,
+            input_tokens=input_tokens,
+            cached_input_tokens=cached_input_tokens,
+            output_tokens=output_tokens,
+            estimated_cost_usd=estimated_cost_usd,
+            actual_cost_usd=actual_cost_usd,
+            is_unknown=is_unknown
+        )
+
+        self.repo.settle_reservation(
+            reservation_id=reservation_id,
+            actual_cost_usd=actual_cost_usd,
+            is_unknown=is_unknown
+        )
+
+[mem:mem_fx_mvp-design#۹. معیار تحویل rev1]
+۹. معیار تحویل
+## ۹. معیار تحویل
+
+سه مثال قابل تکرار: سند ساده، برنامه‌ریزی و تغییر کوچک کد در runner. جریان موفق و شکست با Fake Provider اجرا شود؛ ۱۲ تست الزامی پیوست و تست‌های رقابت بودجه، cancel/restart، مسیر نامجاز و retry هزینهٔ نامعلوم پاس شوند. تست عادی هیچ شبکه‌ای باز نکند. نصب پاک، راه‌اندازی مجدد و بازیابی state نشان داده شوند. adapter واقعی فقط پس از ثبت قابلیت‌ها و smoke test محدود فعال شود.
+
+پیش‌نیازهای باقی‌مانده برای اجرای زنده: سیاست واقعی دامنهٔ شرکت و پروژهٔ نمونه، پنج ID و تعرفهٔ قابل اثبات، کلید معتبر در محیط، runtime جداسازی و Taskهای نمونه با معیار روشن. این‌ها مانع ساخت موتور و تست جعلی نیستند.
+
+برنامهٔ اجرایی در [بک‌لاگ MVP](mvp-tasks.fa.md) است.
+
+[demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT]
+## DEMO-07 — اتصال واقعی GapGPT
+
+خروجی: همان گردش کار، این بار با provider واقعی و فعال‌سازی صریح.
+
+- [ ] ساخت adapter سازگار با interface جعلی؛ خواندن کلید فقط از GAPGPT_API_KEY و خاموش‌کردن retry داخلی SDK.
+- [ ] اتصال تنظیمات UI برای وضعیت کلید و فعال‌سازی زنده با سقف مشخص؛ عدم ذخیرهٔ کلید در DB/config/log.
+- [ ] بررسی ID، دسترسی، JSON، سقف context/output/reasoning، usage و قیمت پنج مدل؛ ثبت تاریخ و شاهد بررسی.
+- [ ] نمایش نقش‌های unavailable با علت؛ بدون تغییر پنهانی مدل.
+- [ ] آزمون adapter با پاسخ شبکهٔ mock، قبل از هر مصرف واقعی.
+- [ ] smoke test واقعی با دادهٔ نمونهٔ غیرحساس و سقف مستقل؛ ثبت نتیجه و مصرف.
+
+فایل‌های پیشنهادی: `providers/gapgpt.py`، `providers/capabilities.py`، `config/demo-models.json`، `ui/settings_view.*`.
+
+معیار پایان: در حالت fake هیچ مصرفی نباشد؛ پنج نقش روی مدل تأییدشده قابل فراخوانی باشند؛ خطا واضح و هزینه قابل ردیابی باشد. نبود مدل یا تعرفهٔ معتبر مانع اعلام تکمیل بخش زنده است؛ مانع نمایش fake نیست.
+
+
+[src/flux/api/app.py::create_app.usage]
+    @app.get("/runs/{run_id}/usage")
+    async def usage(run_id: str):
+        require_run(run_id)
+        return engine.repo.get_usage_summary(run_id)
+
+[mem:mem_fx_architecture#۱۴. معیار آماده‌بودن برای اجرا rev1]
+۱۴. معیار آماده‌بودن برای اجرا
+## ۱۴. معیار آماده‌بودن برای اجرا
+
+- قرارداد کار، وضعیت‌ها، مالکیت و گراف بدون دور در حالت mock قابل نمایش باشند.
+- موتور درخواست ابزار خارج از مجوز را مستقل از متن مدل رد کند.
+- سقف بودجه در دو اجرای هم‌زمان، timeout و restart حفظ شود.
+- شکست تست مانع ACCEPT_CANDIDATE شود و نبود شواهد به‌اشتباه قبولی نگیرد.
+- Agent پس از سه تلاش یا تکرار بدون پیشرفت متوقف شود.
+- یکپارچگی خروجی روی revision مشخص بررسی و پذیرش به همان خروجی متصل شود.
+- هیچ مدل تأییدنشده از نظر قابلیت یا تعرفه به حساب واقعی وصل نشود.
+- سنجه‌ها شکست، هزینهٔ retry و زمان انسان را حذف نکنند.
+
+چک‌های فوق برای پیاده‌سازی آینده‌اند. این تحویل فقط طرح، تنظیمات پیشنهادی و محاسبهٔ آفلاین بودجه را فراهم می‌کند.
+
+[tests/test_budget_ledger.py::test_missing_usage_keeps_reserved_as_unknown]
+@pytest.mark.asyncio
+async def test_missing_usage_keeps_reserved_as_unknown(engine, fake_provider, sample_task_data):
+    """When usage information is missing, reservation is not released,
+    and is held as unknown_cost_usd to prevent budget overrun.
+    """
+    fake_provider.simulate_missing_usage = True
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    usage = engine.repo.get_usage_summary(run_id)
+    assert usage["unknown_cost_usd"] > 0.0
+    total_committed = usage["spent_cost_usd"] + usage["reserved_cost_usd"] + usage["unknown_cost_usd"]
+    assert total_committed <= sample_task_data["budget_cap_usd"]
+
+[tests/test_invalid_json.py::<module>]
+"""Test 12: پاسخ JSON نامعتبر مدیریت و ثبت شود (Invalid JSON handled gracefully)."""
+
+import pytest
+
+[mem:mem_fx_architecture#۸. تخصیص مدل و صف rev1]
+۸. تخصیص مدل و صف
+## ۸. تخصیص مدل و صف
+
+قواعد اولیهٔ مسیریابی: خلاصه/سند کوچک → مدل اقتصادی؛ تغییر محدود با تست موجود → مجری اقتصادی + بازبین قوی؛ تغییر چندفایلی یا وابستگی مبهم → Agent اصلی و مجری قوی‌تر؛ تغییر حساس مثل مجوز کاربران → بازبینی تخصصی انسان، حتی اگر تغییر یک خط باشد.
+
+بعد از دادهٔ پایلوت:
+
+`هزینهٔ مسیر به‌ازای خروجی پذیرفته‌شده = هزینهٔ همهٔ اجراهای آن مسیر، شامل شکست‌ها ÷ تعداد خروجی‌های پذیرفته‌شده`
+
+این نسبت به تفکیک نوع وظیفه مقایسه می‌شود، همراه زمان انسانی و خطای بعد از قبولی. اگر نمونه کم یا قبولی صفر است، نسبت قابل اتکا نیست و مسیر خودکار تازه انتخاب نمی‌شود. خوداظهاری confidence مدل دادهٔ عملکرد نیست.
+
+صف بین چهار صاحب کار گردش منصفانه دارد؛ کار با وابستگی حل‌نشده اجرا نمی‌شود. فوریت ثبت‌شده و موعد می‌توانند ترتیب را تغییر دهند؛ Agentها نمی‌توانند همهٔ کارها را فوری نام‌گذاری کنند. حداکثر دو اجرا در کل پایلوت، نه دو اجرا برای هر انسان. تغییر هم‌زمان روی فایل مشترک سری می‌شود یا در شاخه‌های جدا با یکپارچه‌سازی کنترل‌شده انجام می‌شود.
+
+[mem:mem_fx_mvp-design#۶. بودجه و قابلیت ارائه‌دهنده rev1]
+۶. بودجه و قابلیت ارائه‌دهنده
+## ۶. بودجه و قابلیت ارائه‌دهنده
+
+برای هر root دفتر مشترک داریم؛ مبلغ با Decimal یا واحد صحیح زیر دلار ذخیره شود. invariant رزرو:
+
+```text
+spent_known + held_unknown + reserved_inflight + next_reservation <= budget_cap
+```
+
+رزرو بودجه و سهم فراخوانی در یک تراکنش قبل از ارسال ثبت شوند. سقف خروجی هر نقش مستقل است. سهم بررسی نهایی لازم پیش از تولید کنار گذاشته شود تا تولید همهٔ بودجه را مصرف نکند. پس از پاسخ، usage واقعی با snapshot قیمت همان call تسویه شود. actual_cost در حالت نامعلوم null است، نه صفر؛ cached_input_tokens زیرمجموعهٔ input است و دوباره جمع نمی‌شود. تخفیف cache بدون تعرفهٔ تأییدشده فرض نشود.
+
+تخمین توکن به‌تنهایی تضمین سقف واقعی صورتحساب نیست. برای اجرای زنده باید tokenizer/کران محافظه‌کارانه، سقف همهٔ توکن‌های قابل صورتحساب از جمله reasoning، تعرفه و usage تأیید شوند. در صورت نداشتن کران معتبر، آن مدل برای اجرای با بودجهٔ سخت unavailable است. usage بیشتر از رزرو حذف نمی‌شود؛ هزینه واقعی ثبت، اجرای بعدی متوقف و خطای estimator گزارش می‌شود. برای تضمین در برابر خطای خود ارائه‌دهنده نیز سقف هزینهٔ سمت حساب، در صورت پشتیبانی، لازم است.
+
+در timeout بعد از ارسال، رزرو unknown حفظ می‌شود؛ retry سهم بودجهٔ جدا می‌گیرد. نبود بودجه برای دو هزینهٔ احتمالی، retry را متوقف می‌کند. پس از restart تماس in-flight نامعلوم به ESCALATED برای reconciliation می‌رود. هزینهٔ رزروشدۀ بدون dispatch فقط با اثبات ارسال‌نشدن آزاد می‌شود.
+
+[mem:mem_fx_architecture#۶. مسیر اجرای کار rev1]
+۶. مسیر اجرای کار
+## ۶. مسیر اجرای کار
+
+```mermaid
+flowchart TD
+    I["ثبت درخواست و صاحب کار"] --> C["ساخت قرارداد و بررسی ابهام"]
+    C --> V{"اطلاعات و اختیار کافی است؟"}
+    V -->|خیر| H["سؤال یا ارجاع به انسان"]
+    H -->|رفع مانع| C
+    V -->|بله| P["طرح؛ حداکثر ۵ زیرکار وابسته"]
+    P --> B{"بستهٔ اجرا و بازبینی در بودجه جا می‌شود؟"}
+    B -->|خیر| S["توقف؛ حفظ خروجی و علت"]
+    B -->|بله| E["رزرو هزینه و اجرای کار آماده"]
+    E --> T["کنترل اجرایی و شواهد"]
+    T --> Q["بازبینی با معیار ثابت"]
+    Q --> D{"تصمیم"}
+    D -->|قابل قبول| A["تجمیع و آزمون یکپارچگی"]
+    D -->|اصلاح مشخص| L{"تلاش و بودجه باقی مانده؟"}
+    L -->|بله| E
+    L -->|خیر| H
+    D -->|ابهام یا نبود اختیار| H
+    D -->|خارج از دامنه| S
+    A --> R{"معیارهای کل کار پاس شده؟"}
+    R -->|خیر| L
+    R -->|بله| F["بازبینی صاحب انسانی"]
+    F -->|قبول| DONE["ثبت خروجی پذیرفته‌شده"]
+    F -->|اصلاح در همان دامنه| L
+    F -->|تغییر نیاز| NEW["قرارداد جدید با ارتباط به کار قبلی"]
+```
+
+[src/flux/cli.py::cmd_usage]
+def cmd_usage(args):
+    engine = get_configured_engine()
+    usage = engine.repo.get_usage_summary(args.run_id)
+    print(json.dumps(usage, indent=2, ensure_ascii=False))

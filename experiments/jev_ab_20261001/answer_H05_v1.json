@@ -1,0 +1,91 @@
+{
+  "task": "H05",
+  "algorithm": "v1",
+  "model": "gpt-5.6-luna",
+  "returned_model": "openai/gpt-5.6-luna",
+  "elapsed_seconds": 11.095981599995866,
+  "usage": {
+    "completion_tokens": 1065,
+    "prompt_tokens": 3453,
+    "total_tokens": 4518,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 76,
+      "rejected_prediction_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+      "cache_write_tokens": 3450,
+      "video_tokens": 0
+    },
+    "cost": 0.0021411,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0021411,
+      "upstream_inference_prompt_cost": 0.0008631,
+      "upstream_inference_completions_cost": 0.001278
+    }
+  },
+  "finish_reason": "stop",
+  "raw": "{\n  \"summary\": \"در startup، پس از اجرای `local_runtime.recover()`، اگر فرایند مالک باشد، همهٔ runهای برگشتی از `engine.repo.list_runs(limit=10000)` بررسی می‌شوند و runهایی که وضعیتشان در `ACTIVE` است با وضعیت `FAILED` علامت‌گذاری می‌شوند. دلیل ادامه‌ندادن، جلوگیری از replay درخواست provider و مصرف تکراری است. بااین‌حال، تعریف مجموعهٔ `ACTIVE` و بخش طراحی مشخص دربارهٔ interruption و cost در شواهد موجود ارائه نشده است.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"Show the startup recovery loop\",\n      \"status\": \"supported\",\n      \"answer\": \"در `create_app.lifespan` ابتدا `local_runtime.recover()` اجرا می‌شود؛ سپس، در صورت `owned` بودن، روی `engine.repo.list_runs(limit=10000)` حلقه زده می‌شود و runهای active با `engine.repo.update_run_status(..., \\\"FAILED\\\", ...)` fail می‌شوند.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan\"\n      ]\n    },\n    {\n      \"criterion\": \"Show the set of statuses considered active\",\n      \"status\": \"missing\",\n      \"answer\": \"کد استفاده از `ACTIVE` را نشان می‌دهد، اما مقدار یا تعریف این مجموعه در شواهد ارائه نشده است. تنها مجموعهٔ وضعیت صریح موجود مربوط به local turnهاست: `('queued','running')` در `LocalRuntime.recover`، نه لزوماً runهای مورد استفاده در startup loop.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan\",\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover\"\n      ]\n    },\n    {\n      \"criterion\": \"Show why interrupted runs are not resumed\",\n      \"status\": \"supported\",\n      \"answer\": \"کامنت startup صریحاً می‌گوید درخواست in-flight provider پس از فرایند interrupted دوباره replay نشود. پیام وضعیت نیز علت را «برای جلوگیری از مصرف تکراری» اعلام می‌کند. `LocalRuntime.recover` هم turnهای `queued` و `running` را به `interrupted` تغییر می‌دهد و ادامه را فقط با پیام تازه مجاز می‌داند.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan\",\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover\"\n      ]\n    },\n    {\n      \"criterion\": \"Reference the restart test\",\n      \"status\": \"partial\",\n      \"answer\": \"تست `test_restart_preserves_runs_counters_and_reservations` بستن و بازکردن SQLite را بررسی می‌کند و حفظ run، شمارنده‌ها، eventها، subtaskها و هزینه را assert می‌کند؛ اما این شواهد اجرای تست را ثابت نمی‌کند و تست مستقیماً startup loop برای failکردن runهای active را بررسی نمی‌کند. تست جداگانهٔ `test_timeout_and_recovery_without_replay` تغییر وضعیت به `interrupted` و نبودن `runtime.jobs` را بررسی می‌کند.\",\n      \"evidence_ids\": [\n        \"tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations#s1/3\",\n        \"tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations#s2/3\",\n        \"tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations#s3/3\",\n        \"tests/test_local_agents.py::test_timeout_and_recovery_without_replay\"\n      ]\n    },\n    {\n      \"criterion\": \"Cross-check the design section on interruption and cost\",\n      \"status\": \"missing\",\n      \"answer\": \"شاهد design ارائه‌شده عمدتاً schema ذخیره‌سازی، API و atomic بودن state/event را پوشش می‌دهد و بخشی دربارهٔ budget reservation دارد؛ اما بخش مشخصی دربارهٔ interruption، تصمیم fail-on-startup، عدم resume یا رابطهٔ آن با هزینه ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1\",\n        \"src/flux/storage/repository.py::Repository.reserve_budget#s3/3\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"تعریف دقیق مجموعهٔ `ACTIVE` و وضعیت‌هایی که شامل می‌شود.\",\n    \"شواهد اجرای واقعی تست restart؛ متن تست به‌تنهایی اجرای آن را ثابت نمی‌کند.\",\n    \"بخش طراحی مشخص دربارهٔ interruption، عدم resume و هزینهٔ replay یا مصرف تکراری.\"\n  ]\n}",
+  "success": true,
+  "answer": {
+    "summary": "در startup، پس از اجرای `local_runtime.recover()`، اگر فرایند مالک باشد، همهٔ runهای برگشتی از `engine.repo.list_runs(limit=10000)` بررسی می‌شوند و runهایی که وضعیتشان در `ACTIVE` است با وضعیت `FAILED` علامت‌گذاری می‌شوند. دلیل ادامه‌ندادن، جلوگیری از replay درخواست provider و مصرف تکراری است. بااین‌حال، تعریف مجموعهٔ `ACTIVE` و بخش طراحی مشخص دربارهٔ interruption و cost در شواهد موجود ارائه نشده است.",
+    "criteria": [
+      {
+        "criterion": "Show the startup recovery loop",
+        "status": "supported",
+        "answer": "در `create_app.lifespan` ابتدا `local_runtime.recover()` اجرا می‌شود؛ سپس، در صورت `owned` بودن، روی `engine.repo.list_runs(limit=10000)` حلقه زده می‌شود و runهای active با `engine.repo.update_run_status(..., \"FAILED\", ...)` fail می‌شوند.",
+        "evidence_ids": [
+          "src/flux/api/app.py::create_app.lifespan"
+        ]
+      },
+      {
+        "criterion": "Show the set of statuses considered active",
+        "status": "missing",
+        "answer": "کد استفاده از `ACTIVE` را نشان می‌دهد، اما مقدار یا تعریف این مجموعه در شواهد ارائه نشده است. تنها مجموعهٔ وضعیت صریح موجود مربوط به local turnهاست: `('queued','running')` در `LocalRuntime.recover`، نه لزوماً runهای مورد استفاده در startup loop.",
+        "evidence_ids": [
+          "src/flux/api/app.py::create_app.lifespan",
+          "src/flux/local_agents/runtime.py::LocalRuntime.recover"
+        ]
+      },
+      {
+        "criterion": "Show why interrupted runs are not resumed",
+        "status": "supported",
+        "answer": "کامنت startup صریحاً می‌گوید درخواست in-flight provider پس از فرایند interrupted دوباره replay نشود. پیام وضعیت نیز علت را «برای جلوگیری از مصرف تکراری» اعلام می‌کند. `LocalRuntime.recover` هم turnهای `queued` و `running` را به `interrupted` تغییر می‌دهد و ادامه را فقط با پیام تازه مجاز می‌داند.",
+        "evidence_ids": [
+          "src/flux/api/app.py::create_app.lifespan",
+          "src/flux/local_agents/runtime.py::LocalRuntime.recover"
+        ]
+      },
+      {
+        "criterion": "Reference the restart test",
+        "status": "partial",
+        "answer": "تست `test_restart_preserves_runs_counters_and_reservations` بستن و بازکردن SQLite را بررسی می‌کند و حفظ run، شمارنده‌ها، eventها، subtaskها و هزینه را assert می‌کند؛ اما این شواهد اجرای تست را ثابت نمی‌کند و تست مستقیماً startup loop برای failکردن runهای active را بررسی نمی‌کند. تست جداگانهٔ `test_timeout_and_recovery_without_replay` تغییر وضعیت به `interrupted` و نبودن `runtime.jobs` را بررسی می‌کند.",
+        "evidence_ids": [
+          "tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations#s1/3",
+          "tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations#s2/3",
+          "tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations#s3/3",
+          "tests/test_local_agents.py::test_timeout_and_recovery_without_replay"
+        ]
+      },
+      {
+        "criterion": "Cross-check the design section on interruption and cost",
+        "status": "missing",
+        "answer": "شاهد design ارائه‌شده عمدتاً schema ذخیره‌سازی، API و atomic بودن state/event را پوشش می‌دهد و بخشی دربارهٔ budget reservation دارد؛ اما بخش مشخصی دربارهٔ interruption، تصمیم fail-on-startup، عدم resume یا رابطهٔ آن با هزینه ارائه نشده است.",
+        "evidence_ids": [
+          "mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1",
+          "src/flux/storage/repository.py::Repository.reserve_budget#s3/3"
+        ]
+      }
+    ],
+    "missing_information": [
+      "تعریف دقیق مجموعهٔ `ACTIVE` و وضعیت‌هایی که شامل می‌شود.",
+      "شواهد اجرای واقعی تست restart؛ متن تست به‌تنهایی اجرای آن را ثابت نمی‌کند.",
+      "بخش طراحی مشخص دربارهٔ interruption، عدم resume و هزینهٔ replay یا مصرف تکراری."
+    ]
+  }
+}

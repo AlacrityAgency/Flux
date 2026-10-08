@@ -1,0 +1,1913 @@
+{
+ "config": {
+  "worker_budget": 6000,
+  "naive_window": 100000,
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "main": {
+   "n_other": 3,
+   "per": 60
+  },
+  "n_tasks": 15,
+  "n_chunks": 614,
+  "corpus_tokens": 530091
+ },
+ "main": {
+  "low": {
+   "S0 بدون Context": {
+    "tokens": 3926.733333333333,
+    "usd": 0.0007853466666666667,
+    "recall": 0.0,
+    "crit": 0.0,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 0,
+    "recall_ci": [
+     0.0,
+     0.0
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "A0a ریختن همه‌چیز، سقف ۱۰۰k توکن": {
+    "tokens": 418445.8,
+    "usd": 0.08368916000000001,
+    "recall": 0.14174603174603176,
+    "crit": 0.13666666666666666,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 180,
+    "foreign_tasks": 1.0,
+    "stale_tasks": 0.26666666666666666,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 245501,
+    "recall_ci": [
+     0.06666666666666667,
+     0.22333333333333333
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "A0b ریختن همه‌چیز، بدون سقف (نشدنی)": {
+    "tokens": 3280766.4444444445,
+    "usd": 0.6561532888888889,
+    "recall": 1.0,
+    "crit": 1.0,
+    "complete": 1.0,
+    "safe": 0.0,
+    "foreign": 180,
+    "foreign_tasks": 1.0,
+    "stale_tasks": 0.26666666666666666,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": 3280766.4444444445,
+    "ctx_chars": 1747477.3333333333,
+    "recall_ci": [
+     1.0,
+     1.0
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "A1 الگوریتم فعلی Flux": {
+    "tokens": 27134.755555555555,
+    "usd": 0.005426951111111112,
+    "recall": 0.07666666666666666,
+    "crit": 0.06555555555555556,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0.15555555555555556,
+    "foreign_tasks": 0.06666666666666667,
+    "stale_tasks": 0.06666666666666667,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 12351.311111111112,
+    "recall_ci": [
+     0.024444444444444446,
+     0.13666666666666666
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "B1 Flux + حذف تکرار Head": {
+    "tokens": 21264.666666666668,
+    "usd": 0.0042529333333333336,
+    "recall": 0.07666666666666666,
+    "crit": 0.06555555555555556,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0.15555555555555556,
+    "foreign_tasks": 0.06666666666666667,
+    "stale_tasks": 0.06666666666666667,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 12351.311111111112,
+    "recall_ci": [
+     0.024444444444444446,
+     0.13666666666666666
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS v0": {
+    "tokens": 16701.422222222223,
+    "usd": 0.0033402844444444446,
+    "recall": 0.3873015873015873,
+    "crit": 0.38222222222222224,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13234.777777777777,
+    "recall_ci": [
+     0.2941269841269841,
+     0.47444444444444445
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − فیلتر پروژه": {
+    "tokens": 16716.444444444445,
+    "usd": 0.003343288888888889,
+    "recall": 0.3873015873015873,
+    "crit": 0.38222222222222224,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0.6,
+    "foreign_tasks": 0.4666666666666667,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13237.555555555555,
+    "recall_ci": [
+     0.2941269841269841,
+     0.47444444444444445
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − فیلتر منسوخ": {
+    "tokens": 16716.088888888888,
+    "usd": 0.003343217777777778,
+    "recall": 0.3873015873015873,
+    "crit": 0.38222222222222224,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.13333333333333333,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13221.822222222223,
+    "recall_ci": [
+     0.2941269841269841,
+     0.47444444444444445
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − واژه‌نامه فارسی": {
+    "tokens": 16287.2,
+    "usd": 0.0032574400000000003,
+    "recall": 0.32396825396825396,
+    "crit": 0.3188888888888889,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 12982.577777777778,
+    "recall_ci": [
+     0.20904761904761904,
+     0.4288888888888889
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − پوشش حریصانه (BM25 ساده)": {
+    "tokens": 17195.11111111111,
+    "usd": 0.0034390222222222223,
+    "recall": 0.49793650793650795,
+    "crit": 0.48777777777777775,
+    "complete": 0.06666666666666667,
+    "safe": 0.06666666666666667,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": 257926.6666666667,
+    "tok_per_complete": 257926.6666666667,
+    "ctx_chars": 13709.444444444445,
+    "recall_ci": [
+     0.33111111111111113,
+     0.6601587301587302
+    ],
+    "safe_ci": [
+     0.0,
+     0.2
+    ]
+   },
+   "JEVS − توقف تطبیقی": {
+    "tokens": 17221.31111111111,
+    "usd": 0.0034442622222222224,
+    "recall": 0.3984126984126984,
+    "crit": 0.39555555555555555,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13747.644444444444,
+    "recall_ci": [
+     0.30523809523809525,
+     0.48444444444444446
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "high": {
+   "S0 بدون Context": {
+    "tokens": 9656.466666666667,
+    "usd": 0.028036183333333332,
+    "recall": 0.0,
+    "crit": 0.0,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 0,
+    "recall_ci": [
+     0.0,
+     0.0
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "A0a ریختن همه‌چیز، سقف ۱۰۰k توکن": {
+    "tokens": 631427.6666666666,
+    "usd": 2.9245348833333336,
+    "recall": 0.14174603174603176,
+    "crit": 0.13666666666666666,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 180,
+    "foreign_tasks": 1.0,
+    "stale_tasks": 0.26666666666666666,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 245501,
+    "recall_ci": [
+     0.06666666666666667,
+     0.22333333333333333
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "A0b ریختن همه‌چیز، بدون سقف (نشدنی)": {
+    "tokens": 4924908.266666667,
+    "usd": 22.924998483333333,
+    "recall": 1.0,
+    "crit": 1.0,
+    "complete": 1.0,
+    "safe": 0.0,
+    "foreign": 180,
+    "foreign_tasks": 1.0,
+    "stale_tasks": 0.26666666666666666,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": 4924908.266666667,
+    "ctx_chars": 1747477.3333333333,
+    "recall_ci": [
+     1.0,
+     1.0
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "A1 الگوریتم فعلی Flux": {
+    "tokens": 44422.6,
+    "usd": 0.19047454222222224,
+    "recall": 0.07666666666666666,
+    "crit": 0.06555555555555556,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0.15555555555555556,
+    "foreign_tasks": 0.06666666666666667,
+    "stale_tasks": 0.06666666666666667,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 12351.311111111112,
+    "recall_ci": [
+     0.024444444444444446,
+     0.13666666666666666
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "B1 Flux + حذف تکرار Head": {
+    "tokens": 38552.28888888889,
+    "usd": 0.13177143111111111,
+    "recall": 0.07666666666666666,
+    "crit": 0.06555555555555556,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0.15555555555555556,
+    "foreign_tasks": 0.06666666666666667,
+    "stale_tasks": 0.06666666666666667,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 12351.311111111112,
+    "recall_ci": [
+     0.024444444444444446,
+     0.13666666666666666
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS v0": {
+    "tokens": 34641.88888888889,
+    "usd": 0.08221190111111111,
+    "recall": 0.3873015873015873,
+    "crit": 0.38222222222222224,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13234.777777777777,
+    "recall_ci": [
+     0.2941269841269841,
+     0.47444444444444445
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − فیلتر پروژه": {
+    "tokens": 34676.0,
+    "usd": 0.08224665222222222,
+    "recall": 0.3873015873015873,
+    "crit": 0.38222222222222224,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0.6,
+    "foreign_tasks": 0.4666666666666667,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13237.555555555555,
+    "recall_ci": [
+     0.2941269841269841,
+     0.47444444444444445
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − فیلتر منسوخ": {
+    "tokens": 34665.955555555556,
+    "usd": 0.08230283888888888,
+    "recall": 0.3873015873015873,
+    "crit": 0.38222222222222224,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.13333333333333333,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13221.822222222223,
+    "recall_ci": [
+     0.2941269841269841,
+     0.47444444444444445
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − واژه‌نامه فارسی": {
+    "tokens": 33875.97777777778,
+    "usd": 0.08018453888888889,
+    "recall": 0.32396825396825396,
+    "crit": 0.3188888888888889,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 12982.577777777778,
+    "recall_ci": [
+     0.20904761904761904,
+     0.4288888888888889
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "JEVS − پوشش حریصانه (BM25 ساده)": {
+    "tokens": 35754.044444444444,
+    "usd": 0.08342509111111111,
+    "recall": 0.49793650793650795,
+    "crit": 0.48777777777777775,
+    "complete": 0.06666666666666667,
+    "safe": 0.06666666666666667,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": 536310.6666666666,
+    "tok_per_complete": 536310.6666666666,
+    "ctx_chars": 13709.444444444445,
+    "recall_ci": [
+     0.33111111111111113,
+     0.6601587301587302
+    ],
+    "safe_ci": [
+     0.0,
+     0.2
+    ]
+   },
+   "JEVS − توقف تطبیقی": {
+    "tokens": 35648.73333333333,
+    "usd": 0.08447922111111111,
+    "recall": 0.3984126984126984,
+    "crit": 0.39555555555555555,
+    "complete": 0.0,
+    "safe": 0.0,
+    "foreign": 0,
+    "foreign_tasks": 0.0,
+    "stale_tasks": 0.0,
+    "tok_per_safe": Infinity,
+    "tok_per_complete": Infinity,
+    "ctx_chars": 13747.644444444444,
+    "recall_ci": [
+     0.30523809523809525,
+     0.48444444444444446
+    ],
+    "safe_ci": [
+     0.0,
+     0.0
+    ]
+   }
+  }
+ },
+ "per_task_low": {
+  "S0 بدون Context": [
+   {
+    "task": "T01",
+    "tokens": 3991,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 4204,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 4091,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 4050,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 3799,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 4064,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 3777,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 4140,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 3808,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 4014,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 3834,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 3897,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 3910,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 3773,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 3549,
+    "recall": 0.0,
+    "safe": false
+   }
+  ],
+  "A0a ریختن همه‌چیز، سقف ۱۰۰k توکن": [
+   {
+    "task": "T01",
+    "tokens": 418510,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 418723,
+    "recall": 0.14285714285714285,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 418610,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 418569,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 418319,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 418583,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 418296,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 418659,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 418327,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 418533,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 418353,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 418416,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 418429,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 418292,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 418068,
+    "recall": 0.5,
+    "safe": false
+   }
+  ],
+  "A0b ریختن همه‌چیز، بدون سقف (نشدنی)": [
+   {
+    "task": "T01",
+    "tokens": 3280830.6666666665,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 3281044,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 3280931,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 3280890,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 3280639.6666666665,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 3280904.3333333335,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 3280617,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 3280979,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 3280648.3333333335,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 3280853.6666666665,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 3280673,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 3280735.6666666665,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 3280749.6666666665,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 3280612.3333333335,
+    "recall": 1.0,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 3280388.3333333335,
+    "recall": 1.0,
+    "safe": false
+   }
+  ],
+  "A1 الگوریتم فعلی Flux": [
+   {
+    "task": "T01",
+    "tokens": 28484,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 23625,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 29070,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 28944,
+    "recall": 0.16666666666666666,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 28284,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 26708,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 28364,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 24901.666666666668,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 28708,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 26318.333333333332,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 28781,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 28597,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 28627,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 22225.333333333332,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 25384,
+    "recall": 0.0,
+    "safe": false
+   }
+  ],
+  "B1 Flux + حذف تکرار Head": [
+   {
+    "task": "T01",
+    "tokens": 22302,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 18699,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 22754,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 22650,
+    "recall": 0.16666666666666666,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 22104,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 20975.666666666668,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 22158,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 19639.333333333332,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 22411,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 20671,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 22473,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 22362,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 22376,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 17541,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 19854,
+    "recall": 0.0,
+    "safe": false
+   }
+  ],
+  "JEVS v0": [
+   {
+    "task": "T01",
+    "tokens": 17026,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 17574,
+    "recall": 0.14285714285714285,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 16907,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 15992,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 16528,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 17429.333333333332,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 16881,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 17860,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 16794,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 17074,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 17056.333333333332,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 17912.666666666668,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 16628,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 12849.666666666666,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 16009.333333333334,
+    "recall": 0.5,
+    "safe": false
+   }
+  ],
+  "JEVS − فیلتر پروژه": [
+   {
+    "task": "T01",
+    "tokens": 16973.666666666668,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 17605.666666666668,
+    "recall": 0.14285714285714285,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 16896.333333333332,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 15992,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 16349,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 17423,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 16881,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 17860,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 16794,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 17074,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 17106,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 17912.666666666668,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 16628,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 12855.666666666666,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 16395.666666666668,
+    "recall": 0.5,
+    "safe": false
+   }
+  ],
+  "JEVS − فیلتر منسوخ": [
+   {
+    "task": "T01",
+    "tokens": 17092,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 17574,
+    "recall": 0.14285714285714285,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 16907,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 15992,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 16528,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 17429.333333333332,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 16881,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 17860,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 16794,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 17074,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 17056.333333333332,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 18077,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 16628,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 12849.666666666666,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 15999,
+    "recall": 0.5,
+    "safe": false
+   }
+  ],
+  "JEVS − واژه‌نامه فارسی": [
+   {
+    "task": "T01",
+    "tokens": 16769.666666666668,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 17574,
+    "recall": 0.14285714285714285,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 16947,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 15992,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 15825,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 17429.333333333332,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 16329,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 17860,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 16082,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 17074,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 15602.333333333334,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 17912.666666666668,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 15940,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 12849.666666666666,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 14121.333333333334,
+    "recall": 0.5,
+    "safe": false
+   }
+  ],
+  "JEVS − پوشش حریصانه (BM25 ساده)": [
+   {
+    "task": "T01",
+    "tokens": 17089,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 17497.666666666668,
+    "recall": 0.2857142857142857,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 17040,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 17364,
+    "recall": 0.6666666666666666,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 16729,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 17441,
+    "recall": 0.8,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 17146,
+    "recall": 0.75,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 18182,
+    "recall": 1.0,
+    "safe": true
+   },
+   {
+    "task": "T09",
+    "tokens": 16963,
+    "recall": 0.75,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 17741,
+    "recall": 0.8,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 16422,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 17426,
+    "recall": 0.6666666666666666,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 16903,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 17580,
+    "recall": 0.75,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 16403,
+    "recall": 0.5,
+    "safe": false
+   }
+  ],
+  "JEVS − توقف تطبیقی": [
+   {
+    "task": "T01",
+    "tokens": 17091,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T02",
+    "tokens": 17574,
+    "recall": 0.14285714285714285,
+    "safe": false
+   },
+   {
+    "task": "T03",
+    "tokens": 16907,
+    "recall": 0.2,
+    "safe": false
+   },
+   {
+    "task": "T04",
+    "tokens": 17979,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T05",
+    "tokens": 16528,
+    "recall": 0.0,
+    "safe": false
+   },
+   {
+    "task": "T06",
+    "tokens": 17429.333333333332,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T07",
+    "tokens": 16881,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T08",
+    "tokens": 18094,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T09",
+    "tokens": 16794,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T10",
+    "tokens": 17280,
+    "recall": 0.6,
+    "safe": false
+   },
+   {
+    "task": "T11",
+    "tokens": 17135.333333333332,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T12",
+    "tokens": 17912.666666666668,
+    "recall": 0.3333333333333333,
+    "safe": false
+   },
+   {
+    "task": "T13",
+    "tokens": 16628,
+    "recall": 0.25,
+    "safe": false
+   },
+   {
+    "task": "T14",
+    "tokens": 17521.666666666668,
+    "recall": 0.5,
+    "safe": false
+   },
+   {
+    "task": "T15",
+    "tokens": 16564.666666666668,
+    "recall": 0.5,
+    "safe": false
+   }
+  ]
+ },
+ "scale": [
+  {
+   "tokens": 27425.9,
+   "usd": 0.00548518,
+   "recall": 0.07666666666666666,
+   "crit": 0.06555555555555556,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0.4,
+   "foreign_tasks": 0.23333333333333334,
+   "stale_tasks": 0.06666666666666667,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 12517.966666666667,
+   "n_other": 1,
+   "per": 10,
+   "store": 60,
+   "strategy": "A1 الگوریتم فعلی Flux"
+  },
+  {
+   "tokens": 16576.766666666666,
+   "usd": 0.0033153533333333336,
+   "recall": 0.4049206349206349,
+   "crit": 0.38555555555555554,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 13001.733333333334,
+   "n_other": 1,
+   "per": 10,
+   "store": 60,
+   "strategy": "JEVS v0"
+  },
+  {
+   "tokens": 27158.2,
+   "usd": 0.005431640000000001,
+   "recall": 0.07666666666666666,
+   "crit": 0.06555555555555556,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0.2,
+   "foreign_tasks": 0.06666666666666667,
+   "stale_tasks": 0.06666666666666667,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 12365.966666666667,
+   "n_other": 3,
+   "per": 60,
+   "store": 280,
+   "strategy": "A1 الگوریتم فعلی Flux"
+  },
+  {
+   "tokens": 16705.433333333334,
+   "usd": 0.003341086666666667,
+   "recall": 0.3873015873015873,
+   "crit": 0.38222222222222224,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 13236.3,
+   "n_other": 3,
+   "per": 60,
+   "store": 280,
+   "strategy": "JEVS v0"
+  },
+  {
+   "tokens": 27170.766666666666,
+   "usd": 0.005434153333333334,
+   "recall": 0.07666666666666666,
+   "crit": 0.06555555555555556,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.06666666666666667,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 12373.833333333334,
+   "n_other": 10,
+   "per": 300,
+   "store": 3340,
+   "strategy": "A1 الگوریتم فعلی Flux"
+  },
+  {
+   "tokens": 16180.633333333333,
+   "usd": 0.003236126666666667,
+   "recall": 0.4073015873015873,
+   "crit": 0.4022222222222222,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 12621.833333333334,
+   "n_other": 10,
+   "per": 300,
+   "store": 3340,
+   "strategy": "JEVS v0"
+  },
+  {
+   "tokens": 27170.766666666666,
+   "usd": 0.005434153333333334,
+   "recall": 0.07666666666666666,
+   "crit": 0.06555555555555556,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.06666666666666667,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 12373.833333333334,
+   "n_other": 20,
+   "per": 1000,
+   "store": 21040,
+   "strategy": "A1 الگوریتم فعلی Flux"
+  },
+  {
+   "tokens": 16167.6,
+   "usd": 0.00323352,
+   "recall": 0.4173015873015873,
+   "crit": 0.4122222222222222,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 12540.1,
+   "n_other": 20,
+   "per": 1000,
+   "store": 21040,
+   "strategy": "JEVS v0"
+  }
+ ],
+ "curve": [
+  {
+   "tokens": 5403.266666666666,
+   "usd": 0.0010806533333333334,
+   "recall": 0.15841269841269842,
+   "crit": 0.16666666666666666,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 1296.5333333333333,
+   "budget": 500
+  },
+  {
+   "tokens": 6290.533333333334,
+   "usd": 0.0012581066666666667,
+   "recall": 0.2873015873015873,
+   "crit": 0.2822222222222222,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 2314.0666666666666,
+   "budget": 1000
+  },
+  {
+   "tokens": 8452.133333333333,
+   "usd": 0.0016904266666666668,
+   "recall": 0.3306349206349206,
+   "crit": 0.32555555555555554,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 4553.933333333333,
+   "budget": 2000
+  },
+  {
+   "tokens": 10636.4,
+   "usd": 0.00212728,
+   "recall": 0.3873015873015873,
+   "crit": 0.38222222222222224,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 6860.133333333333,
+   "budget": 3000
+  },
+  {
+   "tokens": 12720.466666666667,
+   "usd": 0.0025440933333333335,
+   "recall": 0.3873015873015873,
+   "crit": 0.38222222222222224,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 9102.2,
+   "budget": 4000
+  },
+  {
+   "tokens": 16750,
+   "usd": 0.00335,
+   "recall": 0.3873015873015873,
+   "crit": 0.38222222222222224,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 13293.666666666666,
+   "budget": 6000
+  },
+  {
+   "tokens": 18891.066666666666,
+   "usd": 0.0037782133333333335,
+   "recall": 0.4095238095238095,
+   "crit": 0.40444444444444444,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 15597.666666666666,
+   "budget": 8000
+  },
+  {
+   "tokens": 19519,
+   "usd": 0.0039038000000000002,
+   "recall": 0.4095238095238095,
+   "crit": 0.40444444444444444,
+   "complete": 0.0,
+   "safe": 0.0,
+   "foreign": 0,
+   "foreign_tasks": 0.0,
+   "stale_tasks": 0.0,
+   "tok_per_safe": Infinity,
+   "tok_per_complete": Infinity,
+   "ctx_chars": 16277.066666666668,
+   "budget": 12000
+  }
+ ],
+ "diag": [
+  {
+   "task": "T01",
+   "lang": "fa",
+   "pack_tokens": 5930,
+   "chosen": 15,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T02",
+   "lang": "en",
+   "pack_tokens": 5873,
+   "chosen": 14,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T03",
+   "lang": "fa",
+   "pack_tokens": 5896,
+   "chosen": 13,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T04",
+   "lang": "en",
+   "pack_tokens": 5075,
+   "chosen": 14,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T05",
+   "lang": "fa",
+   "pack_tokens": 5858,
+   "chosen": 15,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T06",
+   "lang": "en",
+   "pack_tokens": 5989,
+   "chosen": 15,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T07",
+   "lang": "fa",
+   "pack_tokens": 5933,
+   "chosen": 20,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T08",
+   "lang": "en",
+   "pack_tokens": 5911,
+   "chosen": 12,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T09",
+   "lang": "fa",
+   "pack_tokens": 5916,
+   "chosen": 18,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T10",
+   "lang": "en",
+   "pack_tokens": 5858,
+   "chosen": 13,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T11",
+   "lang": "fa",
+   "pack_tokens": 5924,
+   "chosen": 21,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T12",
+   "lang": "en",
+   "pack_tokens": 5900,
+   "chosen": 15,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T13",
+   "lang": "fa",
+   "pack_tokens": 5824,
+   "chosen": 18,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T14",
+   "lang": "en",
+   "pack_tokens": 4437,
+   "chosen": 14,
+   "gaps": 0,
+   "candidates": 80
+  },
+  {
+   "task": "T15",
+   "lang": "fa",
+   "pack_tokens": 5577,
+   "chosen": 18,
+   "gaps": 0,
+   "candidates": 80
+  }
+ ],
+ "elapsed_s": 53.1
+}

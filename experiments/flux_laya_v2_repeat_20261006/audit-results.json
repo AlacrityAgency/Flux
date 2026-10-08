@@ -1,0 +1,375 @@
+{
+  "passed": true,
+  "trials_reaudited": 54,
+  "hashes_verified": 238,
+  "rechecks": [
+    {
+      "trial": "H01__goat_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H01__goat_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H01__senior_compact_default",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H01__senior_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H01__senior_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H02__goat_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H02__goat_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H02__senior_compact_default",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H02__senior_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H02__senior_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H03__goat_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H03__goat_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H03__senior_compact_default",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H03__senior_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H03__senior_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H04__goat_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H04__goat_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H04__senior_compact_default",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H04__senior_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H04__senior_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H05__goat_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H05__goat_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H05__senior_compact_default",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H05__senior_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H05__senior_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H06__goat_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H06__goat_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H06__senior_compact_default",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H06__senior_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H06__senior_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H07__goat_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H07__goat_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H07__senior_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H07__senior_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H08__goat_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H08__goat_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H08__senior_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H08__senior_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H09__goat_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H09__goat_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H09__senior_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H09__senior_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H10__goat_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H10__goat_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H10__senior_v1",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H10__senior_v2",
+      "correct": true,
+      "method": "direct"
+    },
+    {
+      "trial": "H11__goat_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H11__goat_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H11__senior_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H11__senior_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H12__goat_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H12__goat_v2",
+      "correct": true,
+      "method": "compact"
+    },
+    {
+      "trial": "H12__senior_v1",
+      "correct": true,
+      "method": "program"
+    },
+    {
+      "trial": "H12__senior_v2",
+      "correct": true,
+      "method": "compact"
+    }
+  ],
+  "failures": [
+    {
+      "trial": "H02__goat_v2",
+      "attempt": 0,
+      "reason": "AssertionError: "
+    },
+    {
+      "trial": "H05__senior_compact_default",
+      "attempt": 0,
+      "reason": "Program: ValueError: {'status': 'error', 'error': 'ValueError: Disallowed name: __import__'}"
+    },
+    {
+      "trial": "H05__senior_v1",
+      "attempt": 0,
+      "reason": "Program: ValueError: {'status': 'error', 'error': \"NameError: name 'bin' is not defined\"}"
+    },
+    {
+      "trial": "H06__senior_compact_default",
+      "attempt": 0,
+      "reason": "Program: ValueError: {'status': 'error', 'error': 'ValueError: Disallowed name: __import_placeholder'}"
+    },
+    {
+      "trial": "H08__goat_v2",
+      "attempt": 0,
+      "reason": "Program: ValueError: {'status': 'ok', 'result': {'type': 'mapping', 'value': {'subtotal_cents': {'type': 'fraction', 'value': [45205, 1]}, 'tax_cents': {'type': 'fraction', 'value': [3277, 1]}, 'total_cents': {'type': 'fraction', 'value': [4"
+    },
+    {
+      "trial": "H08__senior_v1",
+      "attempt": 0,
+      "reason": "Program: ValueError: {'status': 'ok', 'result': {'type': 'mapping', 'value': {'subtotal_cents': {'type': 'fraction', 'value': [45205, 1]}, 'tax_cents': {'type': 'fraction', 'value': [1639, 1]}, 'total_"
+    },
+    {
+      "trial": "H09__goat_v1",
+      "attempt": 0,
+      "reason": "ValueError: riments\\router_policy_20261006\\worker.py\", line 10, in <module>\n    raise ValueError('Only function definitions are permitted')\nValueError: Only function definitions are permitted\n"
+    },
+    {
+      "trial": "H11__senior_v1",
+      "attempt": 0,
+      "reason": "Program: Extra data: line 1 column 2575 (char 2574)"
+    }
+  ],
+  "cost_router_overrides": [
+    {
+      "trial": "H02__goat_v2",
+      "raw": "astra",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H03__goat_v2",
+      "raw": "astra",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H04__goat_v2",
+      "raw": "sol",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H05__goat_v2",
+      "raw": "sol",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H06__goat_v2",
+      "raw": "sol",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H08__goat_v2",
+      "raw": "astra",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H09__goat_v2",
+      "raw": "sol",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H10__goat_v2",
+      "raw": "sol",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H11__goat_v2",
+      "raw": "sol",
+      "chosen": "gpt-6-luna"
+    },
+    {
+      "trial": "H12__goat_v2",
+      "raw": "sol",
+      "chosen": "gpt-6-luna"
+    }
+  ],
+  "development_probe_calls": 6,
+  "development_probe_api_equivalent_usd": 0.06567216000000001,
+  "total_experiment_api_equivalent_known_lower_bound": 0.78965998,
+  "actual_billing_usd": null
+}

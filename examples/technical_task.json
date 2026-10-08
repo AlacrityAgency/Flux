@@ -1,0 +1,33 @@
+{
+  "task_id": "task_tech_002",
+  "root_id": "task_tech_002",
+  "project_id": "flux_security",
+  "human_owner": "Saeed",
+  "objective": "Design an isolated sandboxed execution environment specification for running untrusted code artifacts.",
+  "scope": [
+    "Process isolation architecture",
+    "Filesystem junction and path traversal prevention",
+    "Resource limits and network isolation"
+  ],
+  "out_of_scope": [
+    "Production kernel module implementation",
+    "Cloud kubernetes cluster setup"
+  ],
+  "acceptance_criteria": [
+    "Technical design document produced",
+    "Security risk analysis completed",
+    "All acceptance criteria verified against threat model"
+  ],
+  "dependencies": [],
+  "allowed_tools": [
+    "file_read"
+  ],
+  "allowed_paths": [
+    "docs/"
+  ],
+  "artifact_refs": [],
+  "budget_cap_usd": 0.80,
+  "max_attempts": 3,
+  "priority": "P0",
+  "data_class": "internal"
+}

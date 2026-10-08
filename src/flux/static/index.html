@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Flux — فضای شخصی پنج Agent</title>
+  <link rel="icon" href="/static/flux.svg" type="image/svg+xml">
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <meta name="theme-color" content="#171717">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+<script src="/static/native.js" defer></script></head>
+<body>
+  <a class="skip-link" href="#prompt">رفتن به نوشتن پیام</a>
+  <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+  <aside class="sidebar" id="sidebar" aria-label="نوار کناری">
+    <div class="brand-row"><a class="brand" href="/" aria-label="صفحهٔ اصلی Flux"><img src="/static/flux.svg" alt=""><span>Flux<span class="brand-dot">.</span></span></a><button class="icon-btn" id="collapse-sidebar" title="بستن نوار کناری" aria-label="بستن نوار کناری" data-icon="panel"></button></div>
+    <button class="new-chat" id="new-chat"><span data-icon="plus"></span><span>گفت‌وگوی جدید</span><kbd>Ctrl K</kbd></button>
+    <nav class="main-nav" aria-label="بخش‌های برنامه">
+      <button class="nav-item" id="search-chat"><span data-icon="search"></span><span>جست‌وجوی گفت‌وگوها</span></button>
+      <button class="nav-item" data-view="projects"><span data-icon="folder"></span><span>پروژه‌ها و پوشه‌ها</span><span class="count" id="projects-count">۰</span></button>
+      <button class="nav-item" data-view="memory"><span data-icon="memory"></span><span>حافظهٔ من</span><span class="count" id="memory-count">۰</span></button>
+      <button class="nav-item" data-view="usage"><span data-icon="chart"></span><span>مصرف و بودجه</span></button>
+      <button class="nav-item" id="open-contract-design"><span data-icon="edit"></span><span>طراحی درخواست و قرارداد</span></button>
+    </nav>
+    <div class="history-heading"><span>گفت‌وگوهای شما</span><span id="history-count"></span></div>
+    <div class="history-search" id="history-search-wrap" hidden><input id="history-search" placeholder="جست‌وجو در عنوان‌ها…" aria-label="جست‌وجوی تاریخچه"></div>
+    <div class="history-list" id="history-list"><p class="sidebar-empty">اولین گفت‌وگو از همین‌جا شروع می‌شود.</p></div>
+    <div class="sidebar-bottom">
+      <button class="install-bar-btn" id="install-app-btn"><span data-icon="download"></span><span>نصب نرم‌افزار روی ویندوز</span></button>
+      <button class="budget-mini" data-view="usage"><span class="budget-mini-top"><span>بودجهٔ امروز <small>UTC</small></span><b id="daily-amount" dir="ltr">$0.00 / $5.00</b></span><span class="meter"><span id="daily-meter"></span></span></button>
+      <button class="profile" id="open-settings"><span class="profile-avatar">م</span><span><strong>فضای شخصی من</strong><small><i class="dot"></i> ذخیره روی این دستگاه</small></span><span data-icon="settings"></span></button>
+    </div>
+  </aside>
+  <main class="workspace">
+    <header class="topbar">
+      <div class="topbar-start"><button class="icon-btn" id="open-sidebar" title="نمایش نوار کناری" aria-label="نمایش نوار کناری" data-icon="panel"></button><button class="workspace-title" id="workspace-home">Flux <span class="version">Demo</span><span data-icon="chevron"></span></button><span class="header-divider"></span><span id="conversation-title" class="conversation-title">فضایی برای فکر کردن و ساختن</span></div>
+      <div class="topbar-actions"><span class="mode-badge" id="mode-badge"><i class="dot"></i>حالت آزمایشی</span><button class="icon-btn" id="theme-toggle" title="تغییر روشنایی" aria-label="تغییر روشنایی" data-icon="sun"></button><button class="agents-toggle" id="agents-toggle"><span class="mini-dots"><i></i><i></i><i></i></span><span id="agent-count">۵ Agent</span><span data-icon="panel"></span></button></div>
+    </header>
+    <div class="content-layout">
+      <section class="chat-area" id="chat-view" aria-label="گفت‌وگو">
+        <div class="chat-scroll" id="chat-scroll">
+          <div class="welcome" id="welcome">
+            <div class="welcome-eyebrow"><span class="sparkle" data-icon="sparkles"></span> یک فضای شخصی، پنج ذهن همراه</div>
+            <h1>امروز روی چه چیزی<br><span>کار کنیم؟</span></h1>
+            <p>ایده‌ات را بنویس. Flux آن را برنامه‌ریزی می‌کند،<br>پیش می‌برد و برای بررسی به تو برمی‌گرداند.</p>
+            <div class="suggestions">
+              <button class="suggestion" data-template="plan"><span class="suggestion-icon violet" data-icon="plan"></span><strong>از ایده به برنامه</strong><span>یک مسیر روشن برای شروع بساز</span><i data-icon="arrow"></i></button>
+              <button class="suggestion" data-template="technical"><span class="suggestion-icon blue" data-icon="code"></span><strong>یک مسئلهٔ فنی</strong><span>با سطح مصرف متعادل بررسی کن</span><i data-icon="arrow"></i></button>
+              <button class="suggestion" data-template="document"><span class="suggestion-icon amber" data-icon="file"></span><strong>نوشتن یک پیش‌نویس</strong><span>از یادداشت‌ها به یک متن منسجم</span><i data-icon="arrow"></i></button>
+            </div>
+            <div class="welcome-foot"><span data-icon="lock"></span> حافظه و گفت‌وگوها روی سیستم خودت ذخیره می‌شوند.</div>
+          </div>
+          <div id="messages" class="messages" aria-live="polite" aria-relevant="additions"></div>
+        </div>
+        <button id="scroll-bottom" class="scroll-bottom icon-btn" aria-label="رفتن به آخر گفت‌وگو" data-icon="down" hidden></button>
+        <div class="composer-area">
+          <div id="attachment-list" class="attachment-list"></div>
+          <form id="composer" class="composer">
+            <label class="sr-only" for="prompt">پیام شما به Flux</label>
+            <textarea id="prompt" placeholder="کاری که در ذهن داری را بنویس…" rows="2" maxlength="12000"></textarea>
+            <div class="composer-toolbar">
+              <div class="composer-tools">
+                <button type="button" class="icon-btn" id="attach-file" aria-label="پیوست فایل متنی" title="پیوست فایل متنی" data-icon="plus"></button>
+                <button type="button" class="composer-chip" id="composer-project-chip" title="پروژهٔ متصل به این گفت‌وگو"><span data-icon="folder"></span><span id="composer-project-name">بدون پروژه</span></button>
+                <button type="button" class="composer-chip active" id="memory-toggle" aria-pressed="true"><span data-icon="memory"></span><span>حافظه روشن</span></button>
+                <span class="tool-divider"></span>
+                <button type="button" class="composer-chip" id="task-options"><span data-icon="sliders"></span><span id="budget-label">سقف $0.50</span></button>
+              </div>
+              <div class="composer-submit"><div class="effort-control"><button type="button" class="workflow-button" id="workflow-toggle" aria-expanded="false" aria-controls="effort-popover">Low <span data-icon="chevron"></span></button><div class="effort-popover" id="effort-popover" hidden><div class="effort-heading"><span data-icon="sparkles"></span><div><strong id="effort-label">Low</strong><small id="effort-model">gpt-5.6-luna</small></div><button type="button" class="icon-btn" id="effort-reset" aria-label="بازنشانی سطح به Low">↺</button></div><input id="effort-range" type="range" min="0" max="2" step="1" value="0" aria-label="سطح مصرف" aria-valuetext="Low"><div class="effort-labels"><span>Low</span><span>Medium</span><span>High</span></div><button type="button" id="effort-agents" class="effort-manage">تنظیم Agentها و مدل‌ها</button></div></div><button type="submit" class="send-button" id="send-button" aria-label="ارسال پیام" disabled><span data-icon="up"></span></button></div>
+            </div>
+          </form>
+          <div class="composer-caption"><span id="composer-note">پاسخ‌های حالت آزمایشی نمونه‌اند؛ API واقعی فراخوانی نمی‌شود.</span><span class="keyboard-hint">Enter ارسال · Shift Enter خط جدید</span></div>
+          <p class="form-error" id="composer-error" role="alert" hidden></p>
+        </div>
+      </section>
+
+      <!-- Projects & Folders View -->
+      <section class="page-view" id="projects-view" hidden>
+        <!-- Project Tabs Bar -->
+        <div class="project-tabs-bar" role="tablist">
+          <div class="project-tabs-scroll" id="project-tabs-list">
+            <button class="project-tab active" data-tab-id="all" role="tab" aria-selected="true"><span data-icon="grid"></span><span>همهٔ پروژه‌ها</span></button>
+          </div>
+          <button class="primary-button mini" id="add-project-tab-btn"><span data-icon="plus"></span>پروژهٔ جدید</button>
+        </div>
+
+        <!-- All Projects Overview -->
+        <div id="projects-overview">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">فضای پروژه‌ها و پوشه‌های محلی</div>
+              <h1>پروژه‌های شما</h1>
+              <p>یک پروژه تعریف کنید، پوشهٔ سیستم را به عنوان Path به آن متصل کنید و تسک‌های خود را ثبت و اجرا نمایید.</p>
+            </div>
+            <button class="primary-button" id="overview-add-project"><span data-icon="plus"></span>پروژهٔ جدید</button>
+          </div>
+          <div class="search-field"><span data-icon="search"></span><input id="projects-search" placeholder="جست‌وجو در نام و مسیر پروژه‌ها…" aria-label="جست‌وجو در پروژه‌ها"></div>
+          <div class="projects-grid" id="projects-grid"></div>
+        </div>
+
+        <!-- Single Project Detail View -->
+        <div id="project-detail-view" hidden>
+          <div class="project-header">
+            <div class="project-header-start">
+              <button class="back-link" id="proj-back-btn"><span data-icon="arrow"></span>همهٔ پروژه‌ها</button>
+              <h1 id="proj-detail-title">عنوان پروژه</h1>
+              <p id="proj-detail-desc" class="muted">توضیحات پروژه</p>
+            </div>
+            <div class="project-header-actions">
+              <button class="secondary-button" id="proj-open-folder"><span data-icon="external"></span>باز کردن در Explorer</button>
+              <button class="secondary-button" id="proj-edit-btn"><span data-icon="edit"></span>ویرایش</button>
+              <button class="danger-button" id="proj-delete-btn"><span data-icon="trash"></span>حذف</button>
+            </div>
+          </div>
+
+          <!-- Folder Inspector Card -->
+          <div class="folder-card">
+            <div class="folder-card-top">
+              <div class="folder-info">
+                <span class="folder-icon" data-icon="folder"></span>
+                <div>
+                  <strong id="proj-folder-name">پوشهٔ متصل</strong>
+                  <code id="proj-folder-path" dir="ltr">C:\path\to\folder</code>
+                </div>
+              </div>
+              <div class="folder-badges">
+                <span class="folder-status-pill" id="proj-folder-badge"><i class="dot"></i>بررسی مسیر</span>
+                <button class="icon-btn" id="proj-copy-path" title="کپی مسیر پوشه" aria-label="کپی مسیر پوشه"><span data-icon="copy"></span></button>
+                <button class="secondary-button mini" id="toggle-folder-files"><span data-icon="chevron"></span>فایل‌ها</button>
+              </div>
+            </div>
+            <div class="folder-files-panel" id="folder-files-panel" hidden>
+              <div class="folder-files-list" id="folder-files-list"></div>
+            </div>
+          </div>
+
+          <!-- Tasks Section -->
+          <div class="project-tasks-header">
+            <div>
+              <h2>تسک‌های این پروژه</h2>
+              <p class="muted">وظایف تعریف‌شده برای اجرا توسط تیم ۵ Agent</p>
+            </div>
+            <button class="primary-button" id="add-project-task-btn"><span data-icon="plus"></span>تسک جدید</button>
+          </div>
+
+          <div class="project-tasks-grid" id="project-tasks-grid"></div>
+        </div>
+      </section>
+
+      <section class="page-view" id="memory-view" hidden>
+        <div class="page-heading"><div><div class="eyebrow">حافظهٔ محلی</div><h1>چیزهایی که به خاطر می‌سپاریم.</h1><p>قواعد، اطلاعات و تصمیم‌هایی که در کار بعدی به کمکمان می‌آیند.</p></div><button class="primary-button" id="add-memory"><span data-icon="plus"></span>یادداشت جدید</button></div>
+        <div class="search-field"><span data-icon="search"></span><input id="memory-search" placeholder="جست‌وجو در حافظه…" aria-label="جست‌وجو در حافظه"></div>
+        <div class="memory-grid" id="memory-grid"></div>
+        <p class="page-footnote"><span data-icon="lock"></span> فقط بخش مرتبط از یادداشت‌های فعال به زمینهٔ درخواست اضافه می‌شود.</p>
+      </section>
+      <section class="page-view" id="usage-view" hidden>
+        <div class="page-heading"><div><div class="eyebrow">شفاف، قبل و بعد از هر اجرا</div><h1>مصرف و بودجه</h1><p id="usage-description">مصرف امروز بر اساس دفتر ثبت‌شدهٔ همین دستگاه.</p></div><button class="secondary-button" id="export-usage"><span data-icon="download"></span>دریافت گزارش</button></div>
+        <div class="usage-stats" id="usage-stats"></div>
+        <div class="section-card"><div class="section-card-heading"><h2>مصرف به تفکیک مدل</h2><span class="muted">امروز · UTC</span></div><div id="model-usage"></div></div>
+        <div class="section-card budget-edit"><div><h2>سقف روزانه</h2><p>پیش از هر تماس، سهم آن از بودجه رزرو می‌شود.</p></div><form id="daily-budget-form"><label class="sr-only" for="daily-budget-input">سقف روزانه به دلار</label><input id="daily-budget-input" type="number" min="0.01" max="1000" step="0.01" required><span>دلار</span><button class="primary-button">ذخیره</button></form></div>
+      </section>
+      <aside class="agent-drawer" id="agent-drawer" hidden aria-label="تیم Agentها">
+        <div class="drawer-heading"><div><span class="eyebrow">تیم شخصی تو</span><h2>تیم Agentهای تو</h2></div><button class="icon-btn" id="close-agents" aria-label="بستن پنل Agentها" data-icon="close"></button></div>
+        <p class="drawer-intro">هر نقش زمانی وارد کار می‌شود که به آن نیاز باشد. برای مشاهدهٔ خروجی، روی هر نقش کلیک کنید.</p>
+        <button type="button" class="secondary-button" id="manage-agents">افزودن Agent و تغییر مدل‌ها</button><div id="agent-roster"></div>
+        <div id="agent-output-viewer" class="agent-output-viewer" hidden>
+          <div class="agent-output-header">
+            <div>
+              <span class="eyebrow" id="agent-output-role-name">خروجی اختصاصی</span>
+              <h4 id="agent-output-title">گزارش عامل</h4>
+            </div>
+            <div class="agent-output-actions">
+              <button type="button" class="icon-btn mini" id="dialog-expand-output" title="نمایش در پنجرهٔ بزرگ" aria-label="نمایش بزرگ"><span data-icon="external"></span></button>
+              <button type="button" class="icon-btn mini" id="copy-agent-output" title="کپی متن" aria-label="کپی"><span data-icon="copy"></span></button>
+              <button type="button" class="icon-btn mini" id="close-agent-output" aria-label="بستن" data-icon="close"></button>
+            </div>
+          </div>
+          <div class="agent-output-meta" id="agent-output-meta"></div>
+          <div class="agent-output-body markdown" id="agent-output-content"></div>
+        </div>
+        <div class="drawer-separator"></div><h3>در این اجرا</h3><div id="run-inspector" class="run-inspector"><p class="muted">با شروع یک کار، مراحل و مصرف آن را اینجا می‌بینی.</p></div>
+      </aside>
+    </div>
+  </main>
+  <input type="file" id="file-input" accept=".txt,.md,.json,.csv,.py,.js,.ts,.html,.css" hidden multiple>
+
+  <!-- Modals and Dialogs -->
+  <dialog id="project-dialog">
+    <form id="project-form" class="dialog-shell">
+      <div class="dialog-heading">
+        <div><span class="eyebrow">فضای پروژه</span><h2 id="project-dialog-title">تعریف پروژهٔ جدید</h2></div>
+        <button type="button" class="icon-btn" data-close="project-dialog" aria-label="بستن" data-icon="close"></button>
+      </div>
+      <label for="proj-name-input">نام پروژه</label>
+      <input id="proj-name-input" maxlength="120" required placeholder="مثلاً: سایت فروشگاه یا ربات تحلیل">
+      
+      <label for="proj-path-input">مسیر پوشه روی سیستم (Path)</label>
+      <input id="proj-path-input" dir="ltr" maxlength="1000" required placeholder="D:\project\my-app یا C:\Users\...">
+      <div class="path-feedback" id="proj-path-feedback"></div>
+
+      <label for="proj-desc-input">توضیحات و اهداف پروژه <span class="muted">اختیاری</span></label>
+      <textarea id="proj-desc-input" rows="3" maxlength="5000" placeholder="هدف و کارکرد کلی این پروژه را بنویسید…"></textarea>
+
+      <label for="proj-criteria-input">معیارهای پیش‌فرض پذیرش <span class="muted">هر معیار در یک خط</span></label>
+      <textarea id="proj-criteria-input" rows="2" maxlength="5000" placeholder="قواعد کلی کدنویسی یا استانداردهای پروژه…"></textarea>
+
+      <label for="proj-budget-input">سقف بودجهٔ پیش‌فرض هر تسک (دلار)</label>
+      <input id="proj-budget-input" type="number" min="0.01" max="100" step="0.01" value="0.50">
+
+      <p class="form-error" id="project-error" hidden></p>
+      <div class="dialog-footer">
+        <button type="button" class="secondary-button" data-close="project-dialog">انصراف</button>
+        <button class="primary-button" id="save-project-btn">ذخیرهٔ پروژه</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="project-task-dialog">
+    <form id="project-task-form" class="dialog-shell">
+      <div class="dialog-heading">
+        <div><span class="eyebrow" id="ptask-proj-name">پروژه</span><h2 id="project-task-dialog-title">افزودن تسک جدید</h2></div>
+        <button type="button" class="icon-btn" data-close="project-task-dialog" aria-label="بستن" data-icon="close"></button>
+      </div>
+      <label for="ptask-title-input">عنوان کوتاه تسک</label>
+      <input id="ptask-title-input" maxlength="160" required placeholder="مثلاً: ساخت صفحه لاگین با اعتبارسنجی">
+
+      <label for="ptask-objective-input">شرح کامل و هدف تسک</label>
+      <textarea id="ptask-objective-input" rows="4" maxlength="12000" required placeholder="دقیقاً چه خروجی‌ای می‌خواهید؟ چه مراحلی باید انجام شود؟"></textarea>
+
+      <label for="ptask-criteria-input">معیارهای پذیرش <span class="muted">هر معیار در یک خط</span></label>
+      <textarea id="ptask-criteria-input" rows="3" required placeholder="مثلاً: فیلدها معتبر باشند؛ کد کامنت داشته باشد."></textarea>
+
+      <div class="grid-2-col">
+        <div>
+          <label for="ptask-budget-input">سقف بودجه (دلار)</label>
+          <input id="ptask-budget-input" type="number" min="0.01" max="100" step="0.01" value="0.50">
+        </div>
+        <div>
+          <label for="ptask-priority-input">اولویت تسک</label>
+          <select id="ptask-priority-input">
+            <option value="P1" selected>P1 - عادی</option>
+            <option value="P0">P0 - فوری و حیاتی</option>
+            <option value="P2">P2 - اولویت پایین</option>
+            <option value="P3">P3 - آزمایشی</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="ptask-workflow-input">نوع اجرای Agentها</label>
+      <select id="ptask-workflow-input">
+        <option value="low" selected>Low · کم‌هزینه</option>
+        <option value="medium">Medium · متعادل</option>
+        <option value="high">High · کامل (مصرف بیشتر)</option>
+        <option value="auto" hidden>خودکار (قدیمی)</option>
+        <option value="team" hidden>تیم پنج Agent (قدیمی)</option>
+      </select>
+
+      <p class="form-error" id="project-task-error" hidden></p>
+      <div class="dialog-footer">
+        <button type="button" class="secondary-button" data-close="project-task-dialog">انصراف</button>
+        <button class="primary-button" id="save-ptask-btn">ثبت تسک</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="project-select-dialog">
+    <div class="dialog-shell">
+      <div class="dialog-heading">
+        <h2>انتخاب پروژهٔ فعال برای گفت‌وگو</h2>
+        <button class="icon-btn" data-close="project-select-dialog" aria-label="بستن" data-icon="close"></button>
+      </div>
+      <p class="muted">با انتخاب پروژه، فایل‌ها و مسیر پوشه به عنوان زمینه در اختیار Agentها قرار می‌گیرد.</p>
+      <div class="project-picker-list" id="project-picker-list"></div>
+    </div>
+  </dialog>
+
+  <dialog id="install-dialog">
+    <div class="dialog-shell">
+      <div class="dialog-heading">
+        <div><span class="eyebrow">Flux Desktop</span><h2>نصب Flux روی ویندوز</h2></div>
+        <button class="icon-btn" data-close="install-dialog" aria-label="بستن" data-icon="close"></button>
+      </div>
+      <div class="install-info-box">
+        <p>برنامهٔ Flux می‌تواند به صورت یک نرم‌افزار رسمی و مستقل روی سیستم شما نصب شود:</p>
+        <ul class="install-features">
+          <li>✔ پنجرهٔ دسکتاپ مجزا بدون نوار آدرس یا فریم مرورگر</li>
+          <li>✔ میانبر اختصاصی روی دسکتاپ و در منوی استارت (Start Menu)</li>
+          <li>✔ ثبت در لیست برنامه‌های ویندوز (Installed Apps) همراه با Uninstaller</li>
+          <li>✔ حفظ کامل طراحی، سرعت بالا، و پایگاه دادهٔ محلی شما</li>
+        </ul>
+      </div>
+      <div class="install-actions">
+        <button class="primary-button full-width" id="btn-pwa-install"><span data-icon="download"></span>نصب مستقیم دسکتاپ (یک‌کلیک)</button>
+        <div class="installer-hint">
+          <span>یا اجرای فایل نصبی رسمی در پوشهٔ برنامه:</span>
+          <code dir="ltr">Install-Flux.bat</code>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="options-dialog"><form method="dialog" class="dialog-shell"><div class="dialog-heading"><div><span class="eyebrow">قرارداد این کار</span><h2>نتیجهٔ خوب یعنی چه؟</h2></div><button class="icon-btn" value="cancel" aria-label="بستن" data-icon="close"></button></div><label for="criteria-input">معیار پذیرش <span class="muted">هر معیار در یک خط</span></label><textarea id="criteria-input" rows="4" placeholder="مثلاً: مراحل اجرا مشخص باشند؛ محدودیت‌ها توضیح داده شوند."></textarea><label for="task-budget-input">سقف هزینهٔ این پیام، به دلار</label><input id="task-budget-input" type="number" min="0.01" max="100" step="0.01" value="0.50"><p class="field-help">هر پیام یک اجرای مستقل با همین سقف است. سقف روزانه مجموع اجراها را محدود می‌کند.</p><div class="dialog-footer"><button class="primary-button" id="save-task-options" value="default">اعمال تنظیمات</button></div></form></dialog>
+  <dialog id="memory-dialog"><form id="memory-form" class="dialog-shell"><div class="dialog-heading"><div><span class="eyebrow">اطلاعات قابل استفاده در کار بعدی</span><h2 id="memory-dialog-title">یادداشت جدید</h2></div><button type="button" class="icon-btn" data-close="memory-dialog" aria-label="بستن" data-icon="close"></button></div><label for="memory-title">عنوان</label><input id="memory-title" maxlength="120" required placeholder="مثلاً: ترجیحات نوشتاری من"><label for="memory-content">چه چیزی را به خاطر بسپاریم؟</label><textarea id="memory-content" rows="6" maxlength="12000" required placeholder="اطلاعاتی بنویس که در کارهای بعدی به درد می‌خورد…"></textarea><label class="checkbox-row"><input type="checkbox" id="memory-enabled" checked>استفاده در درخواست‌های مرتبط</label><p class="form-error" id="memory-error" hidden></p><div class="dialog-footer"><button type="button" class="secondary-button" data-close="memory-dialog">انصراف</button><button class="primary-button">ذخیره در حافظه</button></div></form></dialog>
+  <dialog id="settings-dialog"><div class="dialog-shell"><div class="dialog-heading"><div><span class="eyebrow">Flux · نسخهٔ شخصی</span><h2>تنظیمات</h2></div><button class="icon-btn" data-close="settings-dialog" aria-label="بستن" data-icon="close"></button></div><div id="connection-info" class="connection-info"></div><h3>مدل‌های تیم</h3><div id="settings-models"></div><button type="button" class="secondary-button" id="settings-agents">مدیریت Agentها و مدل‌ها</button><div class="settings-note"><span data-icon="lock"></span><p>کلید API فقط از محیط پردازش خوانده می‌شود و در گفت‌وگو یا حافظه ذخیره نمی‌شود. تعرفه‌های مدل‌ها هنوز تأیید نشده‌اند.</p></div><button class="secondary-button" id="settings-theme"><span data-icon="sun"></span>تغییر حالت روشن / تیره</button></div></dialog>
+  <dialog id="rename-dialog"><form id="rename-form" class="dialog-shell"><div class="dialog-heading"><h2>نام گفت‌وگو</h2><button type="button" class="icon-btn" data-close="rename-dialog" aria-label="بستن" data-icon="close"></button></div><input id="rename-input" maxlength="160" required aria-label="عنوان گفت‌وگو"><div class="dialog-footer"><button class="primary-button">ذخیره</button></div></form></dialog>
+  <dialog id="agent-output-dialog">
+    <div class="dialog-shell wide-dialog" style="max-width:860px;width:95vw">
+      <div class="dialog-heading">
+        <div>
+          <span class="eyebrow" id="dialog-agent-role">نقش عامل</span>
+          <h2 id="dialog-agent-title">خروجی اختصاصی عامل</h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button type="button" class="secondary-button mini" id="dialog-copy-agent-output"><span data-icon="copy"></span>کپی گزارش</button>
+          <button type="button" class="icon-btn" data-close="agent-output-dialog" aria-label="بستن" data-icon="close"></button>
+        </div>
+      </div>
+      <div class="agent-dialog-meta" id="dialog-agent-meta" style="display:flex;gap:10px;align-items:center;padding:8px 12px;background:var(--raised);border-radius:8px;font-size:12px;margin:10px 0"></div>
+      <div class="markdown agent-dialog-content" id="dialog-agent-content" style="max-height:65vh;overflow-y:auto;padding:10px;border:1px solid var(--line);border-radius:8px"></div>
+    </div>
+  </dialog>
+  <dialog id="confirm-dialog"><div class="dialog-shell"><h2 id="confirm-title"></h2><p id="confirm-message"></p><div class="dialog-footer"><button class="secondary-button" data-close="confirm-dialog">انصراف</button><button class="danger-button" id="confirm-action">حذف</button></div></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+<dialog id="agents-dialog"><form id="agents-form" class="dialog-shell"><div class="dialog-heading"><div><span class="eyebrow">تیم دلخواه</span><h2>Agentها و مدل‌ها</h2></div><button type="button" class="icon-btn" id="agents-cancel" aria-label="بستن">×</button></div><p class="field-help">مدل «طبق سطح مصرف» با نوار Low تا High تغییر می‌کند. انتخاب مدل مشخص، آن را در تمام سطح‌ها ثابت نگه می‌دارد.</p><div id="base-agent-editors"></div><div class="custom-agents-heading"><h3>Agentهای اضافه</h3><button type="button" class="secondary-button" id="add-custom-agent">+ افزودن Agent</button></div><p class="field-help">حداکثر ۵ Agent اضافه؛ به ترتیب فهرست، پس از کار اصلی و قبل از بازبینی اجرا می‌شوند و هزینهٔ جدا دارند.</p><div id="custom-agent-editors"></div><p id="agents-error" role="alert" hidden></p><div class="dialog-footer"><button type="submit" class="primary-button" id="save-agents">ذخیرهٔ تغییرات</button></div></form></dialog>
+</body></html>

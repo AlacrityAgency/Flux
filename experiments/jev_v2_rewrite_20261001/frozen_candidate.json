@@ -1,0 +1,12 @@
+{
+  "optimized_v2.py": "1bad973fe8570b4f7416c98cd3f7cc69fdfe418ae29e2ae18a956767745e1a57",
+  "benchmark.py": "145ef5eacd8a1682cb86e35c52982a8fd442616e0a1b2a9f433e6930bccdc049",
+  "test_optimized_v2.py": "dc6d66f0002cfa1bc372e2a1054d7319de432e975e5fffd887935000c97a8887",
+  "chosen_config.json": "5d891d144679a7eefdabfcaf0823dd04a03587b43671e9399092d1a139772431",
+  "tasks_extra.py": "8f5b0481ced11333793e173dab0c950cd72361939754a69300b43d91bb903705",
+  "tasks.py": "2cae50662e0777494fa7ab31302eaae10d20b5eb239dbcbe6db2c290ce5951bd",
+  "tasks_holdout.py": "4716e3afb447523fedb5dee2ab6105ab0c7efbe3eee1f6d70a01d5a8a191d16a",
+  "corpus_snapshot.json": "90af8a3b95fbf845228bd0dd15849fdd9f2b175cc310912dad0f1f34ea4bb847",
+  "jevs.py": "141a13e114f2ee98ac35a8149c80a54844de9bf80c311ad7e74bf5d51d546dd3",
+  "prior_v2.py": "bbf4b0fd1b68ac5813ef9a7ccba16b4b0b4d7a7526effc631e527329239d542c"
+}

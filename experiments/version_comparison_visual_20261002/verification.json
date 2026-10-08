@@ -1,0 +1,56 @@
+{
+  "source_numbers_match": true,
+  "version_selection_passed": true,
+  "checks": [
+    {
+      "theme": "light",
+      "viewport": 736,
+      "contentWidth": 704,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": []
+    },
+    {
+      "theme": "light",
+      "viewport": 390,
+      "contentWidth": 358,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": []
+    },
+    {
+      "theme": "light",
+      "viewport": 320,
+      "contentWidth": 288,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": []
+    },
+    {
+      "theme": "dark",
+      "viewport": 736,
+      "contentWidth": 704,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": []
+    },
+    {
+      "theme": "dark",
+      "viewport": 390,
+      "contentWidth": 358,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": []
+    },
+    {
+      "theme": "dark",
+      "viewport": 320,
+      "contentWidth": 288,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": []
+    }
+  ],
+  "javascript_errors": [],
+  "model_calls": 0
+}

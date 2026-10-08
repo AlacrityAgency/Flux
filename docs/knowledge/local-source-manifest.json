@@ -1,0 +1,490 @@
+{
+  "project_id": "alacrity-flux",
+  "created_at": "2026-10-01T08:24:04.243688+00:00",
+  "selection": "explicit allowlist; excludes .env, databases, auth profiles, backups, private logs and evaluation gold",
+  "sources": [
+    {
+      "path": "docs/algorithms/05-implementation-v0.5.fa.md",
+      "sha256": "bc788a19535f0ff6de94b4f47fb88e15cdb1d821a994dd6cd200a866b9c9c5db",
+      "bytes": 26690,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/head-memory-v0.5.fa.md",
+      "sha256": "422207041167b818f7688da82ac51b7c7c4a790efff46b187f29ac74d99a3206",
+      "bytes": 6139,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/core/contracts.py",
+      "sha256": "ad5dde017fe99e930b552456e769ddf29511f4124e9a66be19ed3cb2fffc9c8c",
+      "bytes": 5120,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/core/budget.py",
+      "sha256": "20f3157270801a5b738d49bf68dd02baa2b9cabf39836d97f4456a58a9ad8f3d",
+      "bytes": 6627,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/core/context.py",
+      "sha256": "12e1ea8f900ab051fa23b1c4128f2988edc7c48f1810e74c35de70b2afa9778a",
+      "bytes": 808,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/core/service.py",
+      "sha256": "2e8e0ee9541484c02e3a0b3192d7dde293221b2a71b530ff927c74ac3d6a7833",
+      "bytes": 37814,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/core/api.py",
+      "sha256": "c0998933d81e50988aa6fee344a237473150f1599765b6f4b595869f25acf877",
+      "bytes": 19074,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/knowledge/retrieval.py",
+      "sha256": "5393a564d4d40230833b174a89a1b60c1639f66d66b8cf32c759cc7e53b84113",
+      "bytes": 4116,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/local_agents/runtime.py",
+      "sha256": "d259845e31103101d79ec5473018e297ec951aa29c876f493b4226e86a193e2c",
+      "bytes": 39752,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/local_agents/api.py",
+      "sha256": "8fcf313eb0c71e1b882a7b1e198c5849727cefe20e654c2587e664045ac2c5d6",
+      "bytes": 2704,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/storage/workspace.py",
+      "sha256": "561a0a43eafc7f7b8e2e6630a85cdbf48cb5404506670142ebeb5836efcbba46",
+      "bytes": 25508,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/knowledge/sources.py",
+      "sha256": "c7de37ac789a845a1c107b0424336ddb596cf8964ecb37996aeee8ed65b6ad63",
+      "bytes": 5953,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/local_agents/gemini_api.py",
+      "sha256": "05136b40aef3b4be278b885083dced502d0e6a2fcb6a9a4c11209775a0e5249b",
+      "bytes": 3592,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/local_agents/account_clis.py",
+      "sha256": "b30c454412e01d6c69f08df2ebfb32db16ee0cfb6c857e9bae1705608f345ef7",
+      "bytes": 2547,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/engine/review_gate.py",
+      "sha256": "74db483a6962f3d617d8564d69c6c7dfe61a7c5ced7c6cf377728931017c5445",
+      "bytes": 2219,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/core-live-pilot.json",
+      "sha256": "a38e5a7abe62f4706aea91a80eb18732346bcc8b4cbea9ea1be73a8f01f80177",
+      "bytes": 21140,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/gapcode-connection-check.json",
+      "sha256": "929d0fe045067aac56078408ff1ab5075bea7b973760d7678070974a29a3ff57",
+      "bytes": 513,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/gemini-api-connection-check.json",
+      "sha256": "adfdff4d49148b099e97a32ff924597b24fcf514768f82c3b842f8a7d17e833e",
+      "bytes": 2337,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/web-gemini-message-check.json",
+      "sha256": "9c12bfc4e7f7c25b326c27e8f6ad6a2760a99470c96226e2a4107b1f27d2bde8",
+      "bytes": 1012,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/head-ui-check.json",
+      "sha256": "e6f6b1fed498a112e1d9d85bc6e860cef12bb0951ce822bfc33130bdaa74a909",
+      "bytes": 221,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/project-memory-packaged-check.json",
+      "sha256": "e1eb0b5f68d031a3dfdf10f18d8a9c39c77d466f59c7ccb124d344b844912ed9",
+      "bytes": 746,
+      "bundle": "implementation-v0.5",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b9e8569e1353d43180c81f008db96de41d68fc3ccf2c7f2e6b37137febf0324c",
+      "bytes": 10201,
+      "bundle": "runtime-and-product",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "9e0a3fbc225808c96e079a9b671ba70ac803fd84b11f6cdc310de779750c51d5",
+      "bytes": 746,
+      "bundle": "runtime-and-product",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/local-agents.fa.md",
+      "sha256": "da816412ecee37a475c56e0985e5a937429898dad4a370773716c2784a62e7f0",
+      "bytes": 7442,
+      "bundle": "runtime-and-product",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/google-integrations.fa.md",
+      "sha256": "61bd1c23f90c4e6b17f9859c68db9cbd133897f7238d45d8e6a98140d2c0ba5c",
+      "bytes": 6210,
+      "bundle": "runtime-and-product",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/flux-identity-and-quota.fa.md",
+      "sha256": "75fd011494e95ffb7078d19ca323a9dbbefdd6b637c7bcdd838c6cc7eb29e482",
+      "bytes": 4116,
+      "bundle": "runtime-and-product",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/desktop-product.fa.md",
+      "sha256": "61ca266262a0cd2cffba4f75b2ab663a56d06025540dc6e7d42fb9fb0f995881",
+      "bytes": 17560,
+      "bundle": "runtime-and-product",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/projects-and-installation.fa.md",
+      "sha256": "a4f54815a9fd2e37564e07a0651b030a27a9175128458e39c5c5bccbf5ccb05e",
+      "bytes": 4963,
+      "bundle": "runtime-and-product",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/contracts/task.py",
+      "sha256": "c10a9c3df0c63364c06124d92d36d61c499be1912d588e0094042aed68cdd923",
+      "bytes": 4590,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/contracts/head.py",
+      "sha256": "5a70ea93c3ed601f88303402a529c5ba66bb4484d3b713da702bf4e64243a8d2",
+      "bytes": 2344,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/contracts/envelope.py",
+      "sha256": "8de2605f3109f4dc8449ae4e663d478b9ebd15da6e2f4a2f5fdea06e78f6c4c5",
+      "bytes": 1753,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/contracts/reviewer.py",
+      "sha256": "fe6ae7a674dea797ca8893191aa2ef36810f77b89973633b71c34dab3c960788",
+      "bytes": 1803,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/contracts/run.py",
+      "sha256": "5a5cb23e3628e64297bc4d44bc052a05683d16470f78f858df83cc23dfe641f1",
+      "bytes": 1621,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/engine/orchestrator.py",
+      "sha256": "531c83c5710cefcbe1cfce52122ed86bdaaa98e08c87e90fbdeb0d53eef28ab0",
+      "bytes": 19820,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/engine/state_machine.py",
+      "sha256": "b6e2807e1f029e90ac43b8f00ec027c6629cbf2bf6302a795ff6576bc579e520",
+      "bytes": 1521,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/engine/dag.py",
+      "sha256": "c6d817dc01233bdefa5b3417c34a41a8786dca699e36c2e2dec131b023cc8769",
+      "bytes": 2615,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/engine/profiles.py",
+      "sha256": "49840447b0b25b89d3e1675b20d2a78937b15ae1b1eec4bf9330dd936ae5e8f1",
+      "bytes": 827,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/budget/ledger.py",
+      "sha256": "22aa64c340377acd53039917f73428c365ec44e0733d4eb379dc1571e3558d04",
+      "bytes": 3174,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/budget/estimator.py",
+      "sha256": "74b3f94c3a09c942ca73b3744af97aba30e9bf6e4ada8b772287004e9f79b9ba",
+      "bytes": 884,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/budget/pricing.py",
+      "sha256": "c70437076bfb466ac4e5e33a9c80483f1162d8b0fbd1db2ee35c0233e5f59748",
+      "bytes": 1231,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/agents/head.py",
+      "sha256": "5baae77f5289a6c74b08695f402a2690cbccf7355109affaf6488c091055b004",
+      "bytes": 3189,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/agents/verification.py",
+      "sha256": "c7bee0948ecdb8af1af1b656eab086642a3cb285788fadd15dc669a9ddbb05aa",
+      "bytes": 2210,
+      "bundle": "legacy-engine-and-contracts",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/local_agents/api.py",
+      "sha256": "8fcf313eb0c71e1b882a7b1e198c5849727cefe20e654c2587e664045ac2c5d6",
+      "bytes": 2704,
+      "bundle": "current-local-runtime-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/local_agents/runtime.py",
+      "sha256": "d259845e31103101d79ec5473018e297ec951aa29c876f493b4226e86a193e2c",
+      "bytes": 39752,
+      "bundle": "current-local-runtime-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/local_agents/google_tools.py",
+      "sha256": "e0965ddfaafdc66250b9368349646edc2a4244be614949e4941c853659b9e466",
+      "bytes": 3513,
+      "bundle": "current-local-runtime-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/storage/workspace.py",
+      "sha256": "561a0a43eafc7f7b8e2e6630a85cdbf48cb5404506670142ebeb5836efcbba46",
+      "bytes": 25508,
+      "bundle": "current-local-runtime-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/storage/database.py",
+      "sha256": "fa04b3d28aa4fa6596feb2dd5aeca35982b910e97c03d4e6e3db8051a8e92a1c",
+      "bytes": 4830,
+      "bundle": "current-local-runtime-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/api/app.py",
+      "sha256": "43b43d18bb096c679b335229cabf5cf3c8c9338c4ecd13273200338a1744c2d2",
+      "bytes": 33770,
+      "bundle": "current-local-runtime-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "experiments/jevs/REPORT.fa.md",
+      "sha256": "f1687255c910ca48810620d0801ffd20e19985fd1b53558210271ac4a4cae8ee",
+      "bytes": 10730,
+      "bundle": "jev-experiments",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "experiments/jev_ab_20261001/REPORT.fa.md",
+      "sha256": "4ba85a42b64a9a4105d9ca46aebc1c656eb0c0b1325e1ecb4481106956390ecb",
+      "bytes": 10274,
+      "bundle": "jev-experiments",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "experiments/jev_v2_rewrite_20261001/REPORT.fa.md",
+      "sha256": "6c76f15dd23d968d91eff5e622b68a09d48d7f882e4239d020a12e5c575b8334",
+      "bytes": 14573,
+      "bundle": "jev-experiments",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "experiments/jev_v2_rewrite_20261001/optimized_v2.py",
+      "sha256": "1bad973fe8570b4f7416c98cd3f7cc69fdfe418ae29e2ae18a956767745e1a57",
+      "bytes": 21475,
+      "bundle": "jev-experiments",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/hierarchy.fa.md",
+      "sha256": "fbead9200573ce59952dd64c96c612f498d6711af77e73c12de5719f6245659a",
+      "bytes": 21235,
+      "bundle": "organizational-design-history",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/architecture.fa.md",
+      "sha256": "a7141fe1dcf5ac10aca3754a157a1e6b51298df658c4edda5303aab5b2eb6b5b",
+      "bytes": 30671,
+      "bundle": "organizational-design-history",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/mvp-design.fa.md",
+      "sha256": "b6a20b28ca32bf47b8125c7f4ff6438143e28c99cedfc9a7d4ede20d717c4ab2",
+      "bytes": 24573,
+      "bundle": "organizational-design-history",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/mvp-requirements.fa.md",
+      "sha256": "a3ab5906e114bbdff9ab60cbf0ad4e83f9a9aa817cf663696d43cca342db7e8b",
+      "bytes": 13879,
+      "bundle": "organizational-design-history",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/algorithms/00-head-brief.fa.md",
+      "sha256": "51bb19e60c4ea11f074622d6b10bf9ec79d6438658bef238fbdbdeb3b23034f1",
+      "bytes": 14476,
+      "bundle": "head-algorithms",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/algorithms/01-flux-core.fa.md",
+      "sha256": "476c1123d19c30df0d9c1eebf3c365efc13a77942f8a9f7629eb1689f8547015",
+      "bytes": 25867,
+      "bundle": "head-algorithms",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/algorithms/02-token-management.fa.md",
+      "sha256": "45fc8792077064e722edccddff2ff799631a7a381efec8027db3c864cba6c41d",
+      "bytes": 43650,
+      "bundle": "head-algorithms",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/algorithms/03-decision-making.fa.md",
+      "sha256": "ec0db6519443441e4fb95c355fbb399ceffe7edd11d09f157a57a44457f9ae84",
+      "bytes": 53184,
+      "bundle": "head-algorithms",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/algorithms/04-memory-and-rag.fa.md",
+      "sha256": "4fdc0382c6706bcf3a7194d13ca445d058bdcdcf74f71e8ff6fc974aa17338dc",
+      "bytes": 58951,
+      "bundle": "head-algorithms",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b9e8569e1353d43180c81f008db96de41d68fc3ccf2c7f2e6b37137febf0324c",
+      "bytes": 10201,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/local-agents.fa.md",
+      "sha256": "da816412ecee37a475c56e0985e5a937429898dad4a370773716c2784a62e7f0",
+      "bytes": 7442,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/project-memory-ui-fix.fa.md",
+      "sha256": "6e1de62f6d2dc3247ab897e212388c6513e0bc9c7fe8408ad4cd03c4e8625dd3",
+      "bytes": 6751,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/static/local.html",
+      "sha256": "6d964f72b7d74d0690687c07793da470355f7ed4b619821af8a6fe2b5dace71f",
+      "bytes": 17515,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/static/local.css",
+      "sha256": "8e671bf2ab8cf17288bdf3556149710c2fb1527a670c660204cf62172ae1f11f",
+      "bytes": 24408,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "src/flux/static/project-memory.js",
+      "sha256": "001cbc33e90d4ac50e6c3c80231ff65caa5bb0f8170a2aef59e003aaeac840cd",
+      "bytes": 11923,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/head-memory.fa.md",
+      "sha256": "9548d5ee23b99349a0f71a774c52897fc3f8ab150e62fe1c09a34eb6b3587827",
+      "bytes": 9990,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    },
+    {
+      "path": "docs/knowledge/VERIFICATION.fa.md",
+      "sha256": "de2d0d415199890c83c14a8bc88e9d5702c4bf6056d523e7a9dc5740b8e7e775",
+      "bytes": 7921,
+      "bundle": "delivery-ui-and-memory",
+      "project_id": "alacrity-flux"
+    }
+  ]
+}

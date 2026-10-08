@@ -1,0 +1,191 @@
+{
+  "passed": true,
+  "trials_reaudited": 24,
+  "hashes_verified": 84,
+  "rechecks": [
+    {
+      "trial": "T1__goat_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T1__goat_flux_laya",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T1__senior_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T1__senior_flux_laya",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T2__goat_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T2__goat_flux_laya",
+      "correct": true,
+      "program_reexecuted": true
+    },
+    {
+      "trial": "T2__senior_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T2__senior_flux_laya",
+      "correct": true,
+      "program_reexecuted": true
+    },
+    {
+      "trial": "T3__goat_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T3__goat_flux_laya",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T3__senior_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T3__senior_flux_laya",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T4__goat_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T4__goat_flux_laya",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T4__senior_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T4__senior_flux_laya",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T5__goat_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T5__goat_flux_laya",
+      "correct": true,
+      "program_reexecuted": true
+    },
+    {
+      "trial": "T5__senior_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T5__senior_flux_laya",
+      "correct": true,
+      "program_reexecuted": true
+    },
+    {
+      "trial": "T6__goat_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T6__goat_flux_laya",
+      "correct": true,
+      "program_reexecuted": true
+    },
+    {
+      "trial": "T6__senior_base",
+      "correct": true,
+      "program_reexecuted": false
+    },
+    {
+      "trial": "T6__senior_flux_laya",
+      "correct": true,
+      "program_reexecuted": true
+    }
+  ],
+  "uncached_api_equivalent": {
+    "senior_base": 0.1635275,
+    "goat_base": 0.1892743,
+    "senior_flux_laya": 0.0115664,
+    "goat_flux_laya": 0.5409147
+  },
+  "model_breakdown": {
+    "senior_base": {
+      "gpt-6-luna": {
+        "calls": 6,
+        "known_api_equivalent_usd": 0.00254798
+      },
+      "gpt-6.1-sol": {
+        "calls": 3,
+        "known_api_equivalent_usd": 0.074152
+      },
+      "gpt-6-astra": {
+        "calls": 0,
+        "known_api_equivalent_usd": 0
+      }
+    },
+    "goat_base": {
+      "gpt-6-luna": {
+        "calls": 10,
+        "known_api_equivalent_usd": 0.005509900000000001
+      },
+      "gpt-6.1-sol": {
+        "calls": 4,
+        "known_api_equivalent_usd": 0.08470520000000001
+      },
+      "gpt-6-astra": {
+        "calls": 0,
+        "known_api_equivalent_usd": 0
+      }
+    },
+    "senior_flux_laya": {
+      "gpt-6-luna": {
+        "calls": 6,
+        "known_api_equivalent_usd": 0.00377888
+      },
+      "gpt-6.1-sol": {
+        "calls": 0,
+        "known_api_equivalent_usd": 0
+      },
+      "gpt-6-astra": {
+        "calls": 0,
+        "known_api_equivalent_usd": 0
+      }
+    },
+    "goat_flux_laya": {
+      "gpt-6-luna": {
+        "calls": 1,
+        "known_api_equivalent_usd": 0.00071798
+      },
+      "gpt-6.1-sol": {
+        "calls": 3,
+        "known_api_equivalent_usd": 0.0636452
+      },
+      "gpt-6-astra": {
+        "calls": 2,
+        "known_api_equivalent_usd": 0.180572
+      }
+    }
+  }
+}

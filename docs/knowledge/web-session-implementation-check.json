@@ -1,0 +1,19 @@
+{
+  "version": "0.5.1",
+  "full_pytest_run": {"passed": 120, "seconds": 14.58},
+  "subsequent_web_tests": {"passed": 14, "seconds": 0.87, "new_cases_since_full_run": 2},
+  "javascript_syntax": "passed",
+  "browser_ui": {
+    "surface": "CUA / isolated temporary Flux server",
+    "real_account_calls": 0,
+    "model_calls": 0,
+    "web_provider_menu": "both present",
+    "session_import_fields": "both present",
+    "verify_without_configured_state": "disabled",
+    "missing_file_error": "visible inside connection card",
+    "gemini_web_selection": "model selector hidden; file tools unavailable",
+    "console_errors": [],
+    "proof": "docs/screenshots/flux-web-providers.png"
+  },
+  "flux_web_provider_live_check": "pending user-provided JSON paths; Codex-tab success is separate"
+}

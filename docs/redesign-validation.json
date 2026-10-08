@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "unit_integration_tests": {
+    "passed": 27,
+    "failed": 0
+  },
+  "browser_smoke": {
+    "javascript_errors": 0,
+    "checks": [
+      "five-agent flow",
+      "memory create",
+      "human acceptance",
+      "followup context",
+      "reload persistence",
+      "usage",
+      "dark/light",
+      "mobile sidebar",
+      "overflow"
+    ]
+  },
+  "launcher_lifecycle": "passed with browser-process test double",
+  "packaged_executable": {
+    "path": "dist/redesign/FluxDemo.exe",
+    "bytes": 47962876,
+    "sha256": "29946c8c8e21e3215901c52ef271088da1d5c6b58687a33770481248076abe2a",
+    "smoke": "real executable served UI/font and completed five-agent fake run"
+  },
+  "live_api_called": false
+}

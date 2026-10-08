@@ -1,0 +1,15 @@
+{
+  "project_id": "alacrity-flux",
+  "objective": "تدوین الگوریتم اولیه Flux با قرارداد ثابت، کنترل توکن، تصمیم‌گیری و حافظه مستقل JEV؛ حفظ تفاوت دمو legacy و LocalRuntime",
+  "criteria": [
+    {
+      "text": "معیارهای پذیرش مادر و artifact version در review حفظ شوند و انجام تست از متن مدل استنباط نشود"
+    },
+    {
+      "text": "بودجه و مصرف نامعلوم در API از quota حساب اشتراکی LocalRuntime جدا باشند"
+    },
+    {
+      "text": "حافظه فعلی Workspace.retrieve فاقد project_id است؛ JEV پروژه را پیش از ranking فیلتر و semantic_sufficiency را unverified گزارش کند"
+    }
+  ]
+}

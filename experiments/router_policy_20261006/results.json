@@ -1,0 +1,137 @@
+{
+  "summary": {
+    "junior": {
+      "tasks": 6,
+      "correct": 4,
+      "false_accepts": 0,
+      "retries": 0,
+      "calls": 6,
+      "input_tokens": 70290,
+      "cached_input_tokens": 37120,
+      "output_tokens": 775,
+      "reasoning_output_tokens": 529,
+      "api_equivalent_usd": null,
+      "api_equivalent_no_cache_usd": null,
+      "model_distribution": {
+        "gpt-6-luna": 0,
+        "gpt-6.1-sol": 0,
+        "gpt-6-astra": 6
+      },
+      "p50_latency_s": 52.22958270000004,
+      "verification_s": 0.09638789999962682,
+      "provider_failures": 2,
+      "tool_calls": 0
+    },
+    "middle": {
+      "tasks": 6,
+      "correct": 6,
+      "false_accepts": 0,
+      "retries": 1,
+      "calls": 7,
+      "input_tokens": 104569,
+      "cached_input_tokens": 71936,
+      "output_tokens": 4350,
+      "reasoning_output_tokens": 4058,
+      "api_equivalent_usd": null,
+      "api_equivalent_no_cache_usd": null,
+      "model_distribution": {
+        "gpt-6-luna": 2,
+        "gpt-6.1-sol": 2,
+        "gpt-6-astra": 3
+      },
+      "p50_latency_s": 33.83913514999995,
+      "verification_s": 0.14474169999903097,
+      "provider_failures": 1,
+      "tool_calls": 0
+    },
+    "senior": {
+      "tasks": 6,
+      "correct": 6,
+      "false_accepts": 0,
+      "retries": 4,
+      "calls": 10,
+      "input_tokens": 138805,
+      "cached_input_tokens": 109568,
+      "output_tokens": 5063,
+      "reasoning_output_tokens": 4738,
+      "api_equivalent_usd": null,
+      "api_equivalent_no_cache_usd": null,
+      "model_distribution": {
+        "gpt-6-luna": 6,
+        "gpt-6.1-sol": 4,
+        "gpt-6-astra": 0
+      },
+      "p50_latency_s": 72.26364274999992,
+      "verification_s": 0.1554337999996278,
+      "provider_failures": 2,
+      "tool_calls": 0
+    },
+    "goat": {
+      "tasks": 6,
+      "correct": 6,
+      "false_accepts": 0,
+      "retries": 4,
+      "calls": 16,
+      "input_tokens": 240431,
+      "cached_input_tokens": 165632,
+      "output_tokens": 3616,
+      "reasoning_output_tokens": 3023,
+      "api_equivalent_usd": null,
+      "api_equivalent_no_cache_usd": null,
+      "model_distribution": {
+        "gpt-6-luna": 11,
+        "gpt-6.1-sol": 3,
+        "gpt-6-astra": 2
+      },
+      "p50_latency_s": 69.04629939999973,
+      "verification_s": 0.1457337000001644,
+      "provider_failures": 2,
+      "tool_calls": 0
+    }
+  },
+  "junior_over_goat_api_equivalent_ratio": null,
+  "equal_quality_complete": false,
+  "15x_supported_on_this_pilot": false,
+  "actual_billing_usd": null,
+  "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "price_basis": "Standard short-context API equivalent of real Codex CLI reported usage; not an actual bill",
+  "probe_overhead": [
+    {
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "usage": {
+        "input_tokens": 17424,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 27,
+        "reasoning_output_tokens": 18
+      },
+      "latency_s": 15.170164900000145
+    },
+    {
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "usage": {
+        "input_tokens": 16796,
+        "cached_input_tokens": 11008,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7,
+        "reasoning_output_tokens": 0
+      },
+      "latency_s": 10.242631699999947
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "usage": {
+        "input_tokens": 17300,
+        "cached_input_tokens": 12288,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7,
+        "reasoning_output_tokens": 0
+      },
+      "latency_s": 16.500101200000245
+    }
+  ],
+  "completed_trial_count": 24
+}

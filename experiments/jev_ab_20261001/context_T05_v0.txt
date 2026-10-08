@@ -1,0 +1,118 @@
+[mem:mem_fx_mvp-design#۴. تصمیم‌های لازم برای رفع ابهام پیوست rev1]
+۴. تصمیم‌های لازم برای رفع ابهام پیوست
+## ۴. تصمیم‌های لازم برای رفع ابهام پیوست
+
+1. **اعتبارسنجی دو مرحله دارد.** فیلد ناقص، secret، پروژه ناشناخته یا دسترسی غیرمجاز قبل از هر LLM متوقف می‌شود. تشخیص معنایی ارتباط با شرکت توسط Head در PLANNING است؛ «قبل از API» برای این تشخیص ممکن نیست. Head با `unclear` به NEEDS_INPUT و با `invalid` به REJECTED می‌رود؛ هیچ متخصصی شروع نمی‌شود.
+2. **دامنهٔ شرکت از config معتبر می‌آید.** برای هر project_id، شرح خدمات مجاز، مالک‌های انسانی، ریشهٔ فایل‌ها، دادهٔ مجاز و ابزارها ثبت شود. Task فقط می‌تواند این حدود را محدودتر کند؛ اجازهٔ جدید ایجاد نمی‌کند. نبود این سیاست مانع اجرای زنده است.
+3. **قرارداد ثابت است.** snapshot اولیه، schema_version، contract_hash، policy_version و context_revision ثبت شوند. زیرکارها به معیارهای root نگاشت شوند. Planning می‌تواند جزئیات یا معیار پیشنهادی بدهد؛ جایگزینی خودکار معیارهای اصلی ممنوع است. تغییر دامنه/معیار نیازمند Task جدید مرتبط است.
+4. **Review در Envelope قرار می‌گیرد.** شیء تصمیم Reviewer دقیقاً در `Envelope.output` و با schema اختصاصی ذخیره می‌شود. agent/model/subtask در metadata سمت موتور از درخواست تعیین و با پاسخ تطبیق داده می‌شوند.
+5. **Qwen همیشه بررسی مستقل خروجی نهایی دارد.** `final_review_agent=sol|fable` بررسی اضافی برای حساسیت/تعارض است؛ Qwen حذف نمی‌شود. Head دوم schema جداگانهٔ جمع‌بندی دارد و اجازهٔ ساخت دوبارهٔ plan را ندارد. Head حداکثر دو ارسال شبکه در root دارد؛ retry نیز از همین دو سهم استفاده می‌کند.
+6. **پنج زیرکار شامل کارهایی است که Head می‌سازد.** بررسی نهایی مرحلهٔ موتور است؛ child ششم یا root جدید نیست. dependency تکراری، ارجاع مجهول، self-reference، دور و ID تکراری رد شوند. وابستگی root به Task خارجی فقط با مدرک تکمیل معتبر در storage/config رفع می‌شود؛ نبود آن NEEDS_INPUT می‌دهد.
+7. **تلاش با retry فرق دارد.** هر زیرکار حداکثر `min(max_attempts,3)` تلاش تولید دارد؛ شامل اجرای اول. هر درخواست شبکه حداکثر د
+
+[personal-demo.fa.md#معماری کوچک‌تر برای یک کاربر]
+## معماری کوچک‌تر برای یک کاربر
+
+Python + PySide6 برای پنجره و موتور، SQLite برای حافظه/وضعیت/دفتر مصرف. رابط با worker داخلی و event queue کار می‌کند تا هنگام تماس مدل مسدود نشود. سرویس HTTP و هفت endpoint پیوست برای این دمو لازم نیستند؛ API داخلی به شکل interface پایتونی جدا می‌ماند تا بعداً wrapper HTTP اضافه شود. موتور یک instance فعال برای پوشهٔ داده دارد.
+
+داده زیر `%LOCALAPPDATA%\FluxDemo\` مستقل از فایل برنامه ذخیره می‌شود. برنامه با shortcut و runtime همراه اجرا شود؛ نسخهٔ portable کافی است و نصاب حرفه‌ای، updater و سرویس پس‌زمینه نیاز نیست. با بستن برنامه، اجرای تازه متوقف و checkpoint ثبت می‌شود؛ بعد از بازکردن، کار نامعلوم بدون بررسی دوباره ارسال نمی‌شود. یک export/backup سادهٔ سازگار SQLite و فایل‌ها برای جلوگیری از وابستگی به یک پوشه کافی است.
+
+
+[demo-tasks.fa.md#DEMO-05 — حافظهٔ محلی و بازیابی]
+## DEMO-05 — حافظهٔ محلی و بازیابی
+
+خروجی: حافظه‌ای که کاربر بتواند ببیند، اصلاح کند و در کار بعدی استفاده کند.
+
+- [ ] ساخت memory_items و نسخه‌ها با نوع، منبع/hash، تاریخ و وضعیت پیشنهادی/تأییدشده/منسوخ.
+- [ ] افزودن یادداشت و واردکردن فایل متنی منتخب؛ کنترل مسیر، اندازه و secret قبل از استفاده در prompt.
+- [ ] نمایهٔ FTS5 با نرمال‌سازی حروف فارسی و حفظ متن اصلی.
+- [ ] انتخاب منابع مرتبط در بودجهٔ context؛ ثبت ref/version منابع استفاده‌شده و نمایش آن‌ها در UI.
+- [ ] افزودن، جست‌وجو، ویرایش، تأیید، منسوخ‌کردن و حذف از صفحهٔ حافظه.
+- [ ] بی‌اعتبارکردن index/cache و خلاصهٔ مشتق هنگام تغییر/حذف منبع؛ جلوگیری از ورود دستور فایل به policy.
+
+فایل‌های پیشنهادی: `memory/`، `context.py`، `ui/memory_view.*` و fixtureهای فارسی.
+
+معیار پایان: یادداشت پس از restart موجود باشد؛ منبع مرتبط در Task بعدی بازیابی شود؛ منبع حذف/منسوخ در context جدید نیاید؛ کل تاریخچه به مدل ارسال نشود. حداقل ده پرسش ثابت برای بررسی بازیابی و موارد منفی ثبت شود.
+
+
+[src/flux/local_agents/runtime.py::ChatSpec]
+class ChatSpec(BaseModel):
+    title: str = Field(default="گفت‌وگوی جدید", min_length=1, max_length=160)
+    provider: Literal["codex", "claude"] = "codex"
+    model: str = Field(default="", max_length=100)
+    cwd: str = Field(min_length=1, max_length=1000)
+    access: Literal["read", "work"] = "work"
+
+[mem:dec_mem_current rev2]
+تصمیم فعلی: بازیابی حافظه
+Workspace.retrieve حافظه‌ها را با شمارش واژه‌های مشترک رتبه‌بندی می‌کند، حداکثر پنج مورد و سقف ۶۰۰۰ نویسه. هنوز فیلتر project_id ندارد و ستون project_id در جدول memories وجود ندارد.
+
+[mem:mem_fx_mvp-design#۹. معیار تحویل rev1]
+۹. معیار تحویل
+## ۹. معیار تحویل
+
+سه مثال قابل تکرار: سند ساده، برنامه‌ریزی و تغییر کوچک کد در runner. جریان موفق و شکست با Fake Provider اجرا شود؛ ۱۲ تست الزامی پیوست و تست‌های رقابت بودجه، cancel/restart، مسیر نامجاز و retry هزینهٔ نامعلوم پاس شوند. تست عادی هیچ شبکه‌ای باز نکند. نصب پاک، راه‌اندازی مجدد و بازیابی state نشان داده شوند. adapter واقعی فقط پس از ثبت قابلیت‌ها و smoke test محدود فعال شود.
+
+پیش‌نیازهای باقی‌مانده برای اجرای زنده: سیاست واقعی دامنهٔ شرکت و پروژهٔ نمونه، پنج ID و تعرفهٔ قابل اثبات، کلید معتبر در محیط، runtime جداسازی و Taskهای نمونه با معیار روشن. این‌ها مانع ساخت موتور و تست جعلی نیستند.
+
+برنامهٔ اجرایی در [بک‌لاگ MVP](mvp-tasks.fa.md) است.
+
+[tests/test_dag_validation.py::test_dag_cycle_detection_direct]
+def test_dag_cycle_detection_direct():
+    """Unit test: Cycle in subtask dependencies raises DAGValidationError."""
+    cyclic_subtasks = [
+        SubtaskSpec(subtask_id="A", objective="A", assigned_agent="luna", dependencies=["B"]),
+        SubtaskSpec(subtask_id="B", objective="B", assigned_agent="luna", dependencies=["A"]),
+    ]
+    with pytest.raises(DAGValidationError, match="Cycle detected"):
+        DAGValidator.validate_and_tier(cyclic_subtasks)
+
+[README.md#استفاده]
+## استفاده
+
+1. در «اتصال حساب‌ها» آماده بودن Claude Code و Codex را ببین.
+2. پوشهٔ پروژه، دستیار و مدل را انتخاب کن. مدل خالی از تنظیم پیش‌فرض همان CLI استفاده می‌کند.
+3. دسترسی «خواندن، ویرایش و اجرا» برای انجام واقعی کار است. «فقط خواندن» برای بررسی فایل‌هاست.
+4. پیام را بفرست؛ پاسخ، فرمان‌ها و تغییر فایل‌ها در گفتگو و «فعالیت ابزارها» دیده می‌شوند.
+5. پیام بعدی همان نشست را ادامه می‌دهد. برای عوض کردن دستیار، مدل یا پوشه، گفتگوی تازه بساز.
+
+دکمهٔ ارسال هنگام اجرا به «توقف اجرا» تبدیل می‌شود. Enter ارسال و Shift+Enter خط جدید است؛ Ctrl+K گفتگوی تازه می‌سازد. پاسخ را می‌توان کپی یا به Markdown صادر کرد. حافظهٔ منتخب از یادداشت‌های محلی قبلی بازیابی می‌شود.
+
+
+[src/flux/static/app.js@L361]
+async function saveAgents(e){
+    ...
+ const custom_agents=[...$('custom-agent-editors').children].map(row=>({id:row.dataset.agentId,...Object.fromEntries([...row.querySelectorAll('[data-field]')].map(e=>[e.dataset.field,e.type==='checkbox'?e.checked:e.value.trim()]))}));
+ state.agentSettings=await api('/settings/agents',{method:'PUT',body:JSON.stringify({model_overrides,custom_agents})});
+ $('agents-dialog').close();setWorkflow(state.workflow);toast('تنظیمات ذخیره شد؛ از اجرای بعدی اعمال می‌شود.');
+ }catch(error){$('agents-error').textContent=error.message;$('agents-error').hidden=false;}finally{button.disabled=false;}
+}
+
+const templates={plan:['برای ساخت یک دموی شخصی Flux، یک برنامهٔ اجرایی مرحله‌به‌مرحله بنویس.','مراحل به ترتیب وابستگی باشند.\nبرای هر مرحله، خروجی و معیار پایان مشخص باشد.','low'],technical:['معماری یک نرم‌افزار شخصی با پنج Agent، حافظهٔ محلی و کنترل هزینه را بررسی کن و یک پیشنهاد فنی بنویس.','نقش پنج Agent و ارتباطشان توضیح داده شود.\nمحدودیت‌ها و ریسک‌های فنی مشخص باشند.','medium'],document:['از ایدهٔ نرم‌افزار شخصی Flux یک معرفی کوتاه و روشن بنویس.','متن فارسی، روشن و دارای بخش‌های مشخص باشد.\nامکانات فعلی و برنامه‌های آینده تفکیک شوند.','low']};
+function useTemplate(type){const [prompt,criteria,workflow]=templates[type];$('prompt').value=prompt;$('criteria-input').value=criteria;setWorkflow(workflow);autoSize();$('prompt').focus();}
+function renderAttachments(){$('attachment-list').innerHTML=state.attachments.map((a,i)=>`<span class="attachment-chip">${icon('file')}<span>${esc(a.title)}</span><button type="button" class="icon-btn" data-remove-file="${i}" aria-label="حذف پیوست">${icon('close')}</button></span>`).join('');}
+
+async function readFiles(files){
+ for(const file of files){if(state.attachments.length>=3){toast('حداکثر سه فایل متنی در هر پیام.');break;}if(file.size>16000){toast('هر فایل باید حداکثر ۱۶ کیلوبایت باشد.');continue;}if(!/\.(txt|md|json|csv|py|js|ts|html|css)$/i.test(file.name)){toast('این نسخه فقط فایل متنی می‌پذیرد.');continue;}const content=await file.text();if(content.includes('\u0000')){toast('فایل باید متنی باشد.');continue;}state.attachments.push({ref:'attachment:'+file.name,title:file.name,content:content.slice(0,10000)});}
+    ...
+
+[demo-tasks.fa.md#DEMO-04 — مدیریت توکن و هزینه]
+## DEMO-04 — مدیریت توکن و هزینه
+
+خروجی: کنترل بودجه قبل از هر تماس و نمایش روشن مصرف.
+
+- [ ] ساخت reservation و usage ledger با Decimal و snapshot تعرفهٔ هر تماس.
+- [ ] رزرو اتمی سقف Task و روز با حفظ سهم بررسی نهایی؛ تعیین timezone و روز تعلق رزرو.
+- [ ] محاسبهٔ هزینهٔ ورودی و سقف خروجی؛ جلوگیری از دوباره‌شماری cached input.
+- [ ] تسویهٔ usage واقعی؛ هزینهٔ نامعلوم null بماند و رزرو آزاد نشود.
+- [ ] retry مرکزی حداکثر دو بار فقط برای خطای موقت؛ هر ارسال بودجه و سهم call خودش را داشته باشد.
+- [ ] نمایش توکن ورودی/خروجی، خرج قطعی، رزرو و مانده در UI؛ اصلاح سقف فقط با اقدام کاربر.
+
+فایل‌های پیشنهادی: `budget/`، `providers/retry.py`، `ui/usage_view.*` و تست‌های رقابت رزرو.
+
+معیار پایان: دو رزرو هم‌زمان نتوانند سقف را بشکنند؛ retry سقف تازه نسازد؛ timeout/usage مفقود مصرف صفر نشان ندهد؛ تغییر قیمت هزینهٔ قبلی را تغییر ندهد. بدون کران قابل اتکا برای هزینه، اجرای زندهٔ آن مدل فعال نشود.
+
+
+[mem:mem_flux_42_69 rev1]
+dashboard note 69
+یادداشت دربارهٔ ماژول dashboard: project هر run جدا ذخیره می‌شود و token پیش از انتشار بررسی می‌شود. یادداشت دربارهٔ ماژول dashboard: memory هر retrieve جدا ذخیره می‌شود و criteria پیش از انتشار بررسی می‌شود.

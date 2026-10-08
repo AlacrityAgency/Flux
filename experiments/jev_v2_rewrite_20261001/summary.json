@@ -1,0 +1,150 @@
+{
+  "aggregate": {
+    "1500": {
+      "v1": {
+        "tasks": 37,
+        "hits": 54,
+        "needs": 152,
+        "complete_tasks": 3,
+        "mean_tokens": 1423,
+        "median_select_ms": 39.10219995304942
+      },
+      "prior_v2": {
+        "tasks": 37,
+        "hits": 64,
+        "needs": 152,
+        "complete_tasks": 5,
+        "mean_tokens": 1430.4324324324325,
+        "median_select_ms": 17.7038999972865
+      },
+      "rewrite": {
+        "tasks": 37,
+        "hits": 84,
+        "needs": 152,
+        "complete_tasks": 7,
+        "mean_tokens": 1406.7567567567567,
+        "median_select_ms": 46.98289994848892
+      }
+    },
+    "3000": {
+      "v1": {
+        "tasks": 37,
+        "hits": 74,
+        "needs": 152,
+        "complete_tasks": 6,
+        "mean_tokens": 2893.5405405405404,
+        "median_select_ms": 40.571500023361295
+      },
+      "prior_v2": {
+        "tasks": 37,
+        "hits": 79,
+        "needs": 152,
+        "complete_tasks": 9,
+        "mean_tokens": 2882.5675675675675,
+        "median_select_ms": 20.232100039720535
+      },
+      "rewrite": {
+        "tasks": 37,
+        "hits": 112,
+        "needs": 152,
+        "complete_tasks": 16,
+        "mean_tokens": 2846.108108108108,
+        "median_select_ms": 54.70049998257309
+      }
+    },
+    "6000": {
+      "v1": {
+        "tasks": 37,
+        "hits": 78,
+        "needs": 152,
+        "complete_tasks": 8,
+        "mean_tokens": 5831.594594594595,
+        "median_select_ms": 41.863499965984374
+      },
+      "prior_v2": {
+        "tasks": 37,
+        "hits": 90,
+        "needs": 152,
+        "complete_tasks": 12,
+        "mean_tokens": 5767.864864864865,
+        "median_select_ms": 18.04009999614209
+      },
+      "rewrite": {
+        "tasks": 37,
+        "hits": 133,
+        "needs": 152,
+        "complete_tasks": 22,
+        "mean_tokens": 5709.675675675676,
+        "median_select_ms": 86.00459998706356
+      }
+    }
+  },
+  "fresh_additional_3000": {
+    "v1": {
+      "tasks": 12,
+      "hits": 14,
+      "needs": 43,
+      "micro_recall": 0.32558139534883723,
+      "macro_recall": 0.35555555555555557,
+      "complete_tasks": 3,
+      "mean_context_tokens": 2897.1666666666665,
+      "median_select_ms": 51.63540001376532,
+      "foreign": 0,
+      "obsolete": 0
+    },
+    "prior_v2": {
+      "tasks": 12,
+      "hits": 19,
+      "needs": 43,
+      "micro_recall": 0.4418604651162791,
+      "macro_recall": 0.47638888888888886,
+      "complete_tasks": 4,
+      "mean_context_tokens": 2870.0833333333335,
+      "median_select_ms": 19.60374999907799,
+      "foreign": 0,
+      "obsolete": 0
+    },
+    "rewrite": {
+      "tasks": 12,
+      "hits": 29,
+      "needs": 43,
+      "micro_recall": 0.6744186046511628,
+      "macro_recall": 0.6861111111111111,
+      "complete_tasks": 4,
+      "mean_context_tokens": 2844.5,
+      "median_select_ms": 48.988399998052046,
+      "foreign": 0,
+      "obsolete": 0
+    }
+  },
+  "live_new_3000": {
+    "prompt_tokens": 10100,
+    "completion_tokens": 2725,
+    "total_tokens": 12825,
+    "cost": 0.00579455
+  },
+  "live_prior_v2_6000": {
+    "prompt_tokens": 19331,
+    "completion_tokens": 2811,
+    "total_tokens": 22142,
+    "cost": 0.008205500000000001
+  },
+  "live_savings_pct": {
+    "prompt_tokens": 47.75231493456107,
+    "total_tokens": 42.07840303495619,
+    "cost": 29.382121747608323
+  },
+  "all_live_requests": 9,
+  "all_live_usage": {
+    "prompt_tokens": 39424,
+    "completion_tokens": 8086,
+    "total_tokens": 47510,
+    "cost": 0.01955785
+  },
+  "behavior_tests_passed": 16,
+  "packaged_cli_tests_passed": 2,
+  "invariant_runs": 333,
+  "native_jev_tested": false,
+  "frozen_candidate_verified": true,
+  "skill_path": "C:\\Users\\xio\\.codex\\skills\\project-evidence-rag-v2"
+}

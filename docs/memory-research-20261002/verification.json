@@ -1,0 +1,14 @@
+{
+  "format": "article",
+  "pages": 16,
+  "svg_figures": 16,
+  "all_pages_rendered": true,
+  "responsive_widths": [
+    1180,
+    390,
+    320
+  ],
+  "html_sha256": "9d983d15be042a5dfbfba851a7c21f520e588fe4fef146a827683d4ec8e08282",
+  "pdf_sha256": "ea983db6c9184be567b0cfcdf45c42f9926fc9ba6423683c02cc06b403c6d1b7",
+  "actual_new_model_calls": 0
+}

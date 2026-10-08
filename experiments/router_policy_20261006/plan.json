@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-06",
+  "task_seed": 610062026,
+  "arm_order_seed": 6106,
+  "samples_per_task_policy": 1,
+  "tasks": 6,
+  "arms": [
+    "junior",
+    "middle",
+    "senior",
+    "goat"
+  ],
+  "models": [
+    "gpt-6-luna",
+    "gpt-6.1-sol",
+    "gpt-6-astra"
+  ],
+  "hashes": {
+    "benchmark.py": "53a50e5b0da3f775af08b1c52f978b877ddbca58b55fd2c397518505f7c67ddd",
+    "probe.py": "43419ac581b3bf68f7536a93b42e8dc7ecb57b3116df3f4a146ae7d71037b951",
+    "worker.py": "a67228c44848f21a8f6e1dd8357cce441b3da1f3f3328dfec3a1d8d6d3f72786",
+    "tasks.json": "2516fba0c433d5b074b3c01ebd67d41ea3a22008a4424424e3a8305521dde9ea"
+  },
+  "rates_usd_per_million_input_cached_write_output": {
+    "gpt-6-luna": [
+      0.1,
+      0.01,
+      0.125,
+      0.5
+    ],
+    "gpt-6.1-sol": [
+      2,
+      0.1,
+      2.5,
+      10
+    ],
+    "gpt-6-astra": [
+      10,
+      1,
+      12.5,
+      50
+    ]
+  },
+  "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "pricing_tier": "Standard short context; CLI usage valued at API prices, not an invoice",
+  "max_model_calls": 72,
+  "call_timeout_s": 240,
+  "concurrency": 2,
+  "retry_limit": 2,
+  "junior": "Astra max; no adaptive retry; audit only",
+  "middle": "T1/T2 Luna high, T3/T4 Sol high, T5/T6 Astra high; up to 2 retries on same model with full verifier feedback",
+  "senior": "Luna low -> Sol high -> Astra high, only after full verifier fails",
+  "goat": "Independent Luna low router per task selects model/effort/check level; risk floors; fail -> higher model high; up to 2 escalations",
+  "verification": "Local deterministic checks. Light=shape/consistency; medium=smoke tests; full=exact/recomputed/property tests. All finals have same full audit.",
+  "false_acceptance": "Policy accepted but independent full audit failed",
+  "leakage": "No verifier code, reference results, or other policies outputs in solver/router prompts. Feedback contains only verifier errors, never reference answer.",
+  "success_criterion": "15x claim passes this pilot only if Junior and GOAT solve all 6, GOAT has no false accepts, cost ratio >=15, and usage known for every call",
+  "limitations": "Fresh synthetic tasks; one run; no original tasks; CLI overhead, cache and network confound; requested model/effort recorded, no server attestation."
+}

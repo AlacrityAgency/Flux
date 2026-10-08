@@ -1,0 +1,163 @@
+[demo-tasks.fa.md#DEMO-02 — قراردادها و پنج Agent آزمایشی]
+## DEMO-02 — قراردادها و پنج Agent آزمایشی
+
+خروجی: پنج نقش با ورودی/خروجی ساخت‌یافته و پاسخ‌های قابل تکرار.
+
+- [ ] تعریف Task، Plan، AgentEnvelope، Review و Result؛ ثابت‌کردن معیارها با hash قرارداد.
+- [ ] تعریف Head، Planning، Technical، Execution و Verification با prompt نسخه‌دار و سقف خروجی جدا.
+- [ ] تعریف Provider interface و Fake Provider با سناریوهای موفق، JSON خراب، timeout و usage ناموجود.
+- [ ] اعتبارسنجی ورودی و سیاست فضای کاری: هدف/معیار/بودجه، دادهٔ secret، فایل و ابزار مجاز.
+- [ ] اعتبارسنجی routing: حداکثر پنج زیرکار، شناسهٔ یکتا، dependency موجود و گراف بدون دور.
+- [ ] آماده‌کردن دو plan جعلی: سند ساده با سه نقش و پیشنهاد فنی با پنج نقش.
+
+فایل‌های پیشنهادی: `contracts.py`، `agents/`، `providers/base.py`، `providers/fake.py`، `policy.py`، `examples/`.
+
+معیار پایان: ورودی نامعتبر با صفر تماس متوقف شود؛ plan نامعتبر اجرا نشود؛ هر نقش schema مشخص داشته باشد؛ مدل نتواند معیارها را تغییر دهد. تست پیش‌فرض اجازهٔ شبکه ندارد.
+
+
+[src/flux/contracts/agents.py::AgentSettings.validate_team]
+    @model_validator(mode='after')
+    def validate_team(self):
+        from flux.budget.pricing import MODEL_PRICES
+        if any(k not in ('head', 'opus', 'sol', 'luna', 'verification') or v not in MODEL_PRICES
+               for k, v in self.model_overrides.items()):
+            raise ValueError('نقش یا مدل انتخاب‌شده معتبر نیست.')
+        ids = [a.id for a in self.custom_agents]
+        if len(ids) != len(set(ids)):
+            raise ValueError('شناسهٔ Agent تکراری است.')
+        return self
+
+[personal-demo.fa.md#حافظه و دقت در حد دمو]
+## حافظه و دقت در حد دمو
+
+SQLite محلی، فایل‌های متنی منتخب و جست‌وجوی متنی فارسی کافی‌اند. هر نکتهٔ حافظه منبع، نسخه و وضعیت پیشنهادی/تأییدشده/منسوخ دارد. فقط بخش مرتبط در سقف context بازیابی می‌شود؛ کل تاریخچه با هر درخواست ارسال نمی‌شود. نتیجهٔ خود Agent بدون تأیید کاربر به حقیقت دائمی حافظه تبدیل نمی‌شود. ویرایش یا حذف، نمایه و cache وابسته را هم تازه می‌کند.
+
+دقت با معیار روشن، ارجاع به منبع، بررسی مستقل و علامت‌زدن موارد نامعلوم کنترل می‌شود. خروجی کد در این دمو «پیشنهاد کد/diff بررسی‌شده» است. اجرای خودکار کد و shell، دستکاری مستقیم مخزن و runner ایزوله از دمو خارج‌اند؛ تست اجرا نشده با برچسب not_run نشان داده می‌شود. اگر معیار Task نیازمند اجرای تست باشد، نتیجه بدون آن ACCEPT_CANDIDATE نمی‌شود. این محدودیت دامنه را کم می‌کند و نباید در UI پنهان شود.
+
+
+[hierarchy.fa.md#موتور زیر این چارت]
+## موتور زیر این چارت
+
+موتور Flux کد معمولی است: صف پایدار، گراف کارها، کنترل دسترسی، دفتر بودجه، وضعیت‌ها و ثبت شواهد. Agentها برنامه و تصمیم پیشنهادی می‌دهند؛ موتور حدود را اجرا می‌کند. نمودار بالا رابطهٔ گزارش‌دهی را نشان می‌دهد و به معنای عبور اجباری هر توکن از تمام طبقات نیست.
+
+قواعد تغییرکرده نسبت به ۰٫۱:
+
+- تیم‌های اجرایی متعلق به شاخهٔ خود هستند؛ یک استخر مشترک تخت نداریم.
+- مسئول مستقیم هر Agent با `reports_to` ثبت می‌شود.
+- مبینا و سعید مدیران انسانی هم‌سطح‌اند و دستیارهای COO و CTO زیر اختیار آن‌ها هستند. درخواست COO به CTO یک تحویل کار با قرارداد است، نه دستور برای تغییر سیاست فنی.
+- تعارض زمان، دامنه یا بودجه به دفتر CEO و در صورت نیاز به دانیال برمی‌گردد.
+- عمق سازمانی بیشتر شده، اما عمق تقسیم یک task همچنان محدود است. هر root حداکثر پنج زیرکار دارد و زیرکارها به‌طور بازگشتی تیم تازه ایجاد نمی‌کنند.
+- کارهای قالب‌دار مستقیماً وارد شاخهٔ مجاز می‌شوند؛ Fable فقط برای برنامه‌ریزی سطح بالا و استثناها فراخوانی می‌شود.
+- گزارش‌ها با پایان کار یا رخداد واقعی تازه می‌شوند؛ refresh رابط، فراخوانی مدل نیست.
+
+
+[hierarchy.fa.md#برنامهٔ اجرای نسخهٔ جدید]
+## برنامهٔ اجرای نسخهٔ جدید
+
+1. پیاده‌سازی ساختار `reports_to`، شاخه‌ها، مالک انسانی و حافظهٔ جدا در حالت mock.
+2. ساخت صف، دفتر بودجه و قرارداد handoff با سقف مشترک root.
+3. اتصال CEO، COO و CTO به سه انتخاب مدل و فعال‌کردن نامزدهای ارزان پس از بررسی قابلیت.
+4. تکمیل یک جریان فنی تا خروجی پذیرفته‌شده و یک جریان عملیات تا گزارش داخلی.
+5. آزمایش محدود با سقف ۵ دلار؛ بررسی کیفیت مدل‌های ارزان، هزینه و زمان انسان.
+6. ده روز پایلوت؛ گسترش فقط پس از مشاهدهٔ کاهش زمان خالص و کیفیت قابل قبول.
+
+برآورد ساخت ۶ تا ۱۰ روز توسعهٔ نسخهٔ قبل برای یک گردش کار بود. برای دو شاخه و handoff در این طرح، برآورد اولیه ۸ تا ۱۲ روز کاری یک توسعه‌دهنده با دسترسی آماده است؛ سپس ده روز پایلوت. این برآورد برنامه‌ریزی است و هزینهٔ نیروی انسانی در اعتبار توکن نیست.
+
+ملاک موفقیت: تعداد rootهای پذیرفته‌شده، هزینهٔ همهٔ تلاش‌ها، زمان واقعی انسان و خطای برگشتی. تعداد روبات‌ها یا تعداد زیرکارها نشانهٔ پیشرفت نیست. برای مقایسهٔ بهره‌وری، نمونه‌های هم‌نوع روش فعلی شرکت را نیز ثبت می‌کنیم.
+
+
+[src/flux/engine/dag.py::DAGValidator.validate_and_tier#s1/3]
+    @staticmethod
+    def validate_and_tier(subtasks: List[SubtaskSpec], max_subtasks: int = 5) -> List[List[SubtaskSpec]]:
+        """Validates that subtasks form a valid DAG with at most 5 items and no cycles.
+        Returns subtasks organized into dependency tiers (levels) for execution.
+        """
+        if len(subtasks) > max_subtasks:
+            raise DAGValidationError(f"Maximum {max_subtasks} subtasks allowed. Found: {len(subtasks)}")
+
+        if not subtasks:
+            return []
+
+        subtask_map: Dict[str, SubtaskSpec] = {}
+        in_degree: Dict[str, int] = {}
+        adj: Dict[str, List[str]] = defaultdict(list)
+
+        for s in subtasks:
+            if s.subtask_id in subtask_map:
+                raise DAGValidationError(f"Duplicate subtask_id '{s.subtask_id}' found.")
+            subtask_map[s.subtask_id] = s
+            in_degree[s.subtask_id] = 0
+
+        # Build graph
+        for s in subtasks:
+            for dep in s.dependencies:
+                if dep == s.subtask_id:
+
+[mem:mem_fx_architecture#۱۱. اجزای فنی MVP rev1]
+۱۱. اجزای فنی MVP
+## ۱۱. اجزای فنی MVP
+
+پیشنهاد برای مخزن خالی: یک برنامهٔ TypeScript با رابط وب ساده، موتور worker و پایگاه SQLite روی یک میزبان موجود، با adapter مستقل ارائه‌دهندگان. این انتخاب پیشنهادی است؛ اگر پروژه‌های شرکت فناوری دیگری دارند، همان فناوری اولویت دارد. نسخه و کتابخانه‌ها هنگام پیاده‌سازی انتخاب و تثبیت می‌شوند.
+
+| جزء | مسئولیت |
+|---|---|
+| رابط اعضا | ثبت کار، دیدن صف/خروجی/هزینه، قبول، اصلاح و توقف |
+| Task service | مالکیت، قرارداد نسخه‌دار و وضعیت‌ها |
+| Orchestrator | اجرای گراف، شمارنده‌ها، توقف و ادامه |
+| Policy engine | کنترل ابزار، مقصد، داده و سطح اختیار |
+| Router و Provider adapters | نگاشت مدل، قابلیت‌ها، نرخ و خطاهای API |
+| Budget ledger | رزرو اتمی، تسویهٔ usage و تفکیک evaluation/operation/reserve |
+| Job queue | اجرای پایدار با lease، مهلت و حذف رخداد تکراری |
+| Tool runner | محیط جدا، ابزارهای محدود، محدودیت زمان و منابع |
+| Review service | اجرای کنترل‌ها، ثبت نقد و اتصال قبولی به artifact |
+| Artifact store | diff، اسناد، logهای پالایش‌شده و نسخه‌ها |
+| گزارش‌گیری | خروجی پذیرفته‌شده، هزینه، زمان انسان، شکست و خطای برگشتی |
+
+جدول‌های اصلی: `users`, `projects`, `memberships`, `agent_profiles`, `tasks`, `task_dependencies`, `runs`, `tool_calls`, `artifacts`, `reviews`, `approvals`, `budget_reservations`, `usage_ledger`, `events`, `knowledge_refs`.
+
+مسیرهای API پیشنهادی: `POST /tasks`، `GET /tasks/:id`، `POST /tasks/:id/accept`، `/revise`، `/cancel`، `GET /events` و `GET /usage`. تمام تغییرات به actor و نسخهٔ رکورد متصل‌اند. نام مسیرها قرارداد طراحی است، endpoint موجود نیست.
+
+درگاه مدل باید سقف context و output را پیش از ارسال بررسی کند، خروجی ساخت‌یافته را اعتبارسنجی کند و usage و request ID را ثبت کند. ناسازگاری JSON فقط با همان سقف فراخوانی‌ها اصلاح می‌شود. اگر مدل جایگزین محدودیت داده یا قابلیت ابزار را ندارد، fallback مجاز نیست.
+
+[mem:mem_fx_architecture#۲. فرض‌های ثبت‌شده rev1]
+۲. فرض‌های ثبت‌شده
+## ۲. فرض‌های ثبت‌شده
+
+- تعداد افراد: ۴ نفر، تأییدشده توسط کاربر.
+- نوع شرکت: برنامه‌نویسی؛ تخصص، فناوری پروژه‌ها و نقش دقیق افراد هنوز مشخص نیست.
+- بودجه: ۵۰ دلار اعتبار توکن برای یک پایلوت؛ ماهانه بودن آن مشخص نشده است.
+- قیمت و نام مدل‌ها: دادهٔ کاربر، با فرض دلار به‌ازای یک میلیون توکن ورودی/خروجی؛ هنوز با ارائه‌دهنده تطبیق داده نشده‌اند.
+- هر چهار نفر Agent اصلی دارند، حتی اگر چند نفر عنوان شغلی یکسان داشته باشند.
+- ابتدا یک پروژه و وظایف کوچک تا متوسط وارد پایلوت می‌شوند.
+- مخزن در شروع خالی بود؛ فناوری پیشنهادی، استنتاج از کد موجود نیست.
+- محتوای سایت Alacrity با ابزار وب قابل دریافت نبود؛ ادعایی دربارهٔ مشتریان، فناوری‌ها یا خدمات دقیق آن مبنای طراحی قرار نگرفته است.
+
+[mem:mem_fx_mvp-design#۹. معیار تحویل rev1]
+۹. معیار تحویل
+## ۹. معیار تحویل
+
+سه مثال قابل تکرار: سند ساده، برنامه‌ریزی و تغییر کوچک کد در runner. جریان موفق و شکست با Fake Provider اجرا شود؛ ۱۲ تست الزامی پیوست و تست‌های رقابت بودجه، cancel/restart، مسیر نامجاز و retry هزینهٔ نامعلوم پاس شوند. تست عادی هیچ شبکه‌ای باز نکند. نصب پاک، راه‌اندازی مجدد و بازیابی state نشان داده شوند. adapter واقعی فقط پس از ثبت قابلیت‌ها و smoke test محدود فعال شود.
+
+پیش‌نیازهای باقی‌مانده برای اجرای زنده: سیاست واقعی دامنهٔ شرکت و پروژهٔ نمونه، پنج ID و تعرفهٔ قابل اثبات، کلید معتبر در محیط، runtime جداسازی و Taskهای نمونه با معیار روشن. این‌ها مانع ساخت موتور و تست جعلی نیستند.
+
+برنامهٔ اجرایی در [بک‌لاگ MVP](mvp-tasks.fa.md) است.
+
+[tests/test_dag_validation.py::test_dag_cycle_detection_direct]
+def test_dag_cycle_detection_direct():
+    """Unit test: Cycle in subtask dependencies raises DAGValidationError."""
+    cyclic_subtasks = [
+        SubtaskSpec(subtask_id="A", objective="A", assigned_agent="luna", dependencies=["B"]),
+        SubtaskSpec(subtask_id="B", objective="B", assigned_agent="luna", dependencies=["A"]),
+    ]
+    with pytest.raises(DAGValidationError, match="Cycle detected"):
+        DAGValidator.validate_and_tier(cyclic_subtasks)
+
+[tests/test_dag_validation.py::test_dag_more_than_five_subtasks_direct]
+def test_dag_more_than_five_subtasks_direct():
+    """Unit test: More than 5 subtasks raises DAGValidationError."""
+    many_subtasks = [
+        SubtaskSpec(subtask_id=f"sub_{i}", objective=f"Task {i}", assigned_agent="luna", dependencies=[])
+        for i in range(1, 7)
+    ]
+    with pytest.raises(DAGValidationError, match="Maximum 5 subtasks allowed"):
+        DAGValidator.validate_and_tier(many_subtasks)

@@ -1,0 +1,73 @@
+/* Motion system: everything lives behind prefers-reduced-motion. Uses the independent `translate`/`scale` properties so it never fights layout transforms. */
+@media(prefers-reduced-motion:no-preference){
+@view-transition{navigation:auto}
+.side{view-transition-name:flux-side}.topbar{view-transition-name:flux-top}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.22s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+::view-transition-group(flux-side),::view-transition-group(flux-top){animation-duration:0s}
+
+/* staggered entrance for anything that appears */
+.m-in{animation:m-in .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--mi,0)*45ms)}
+@keyframes m-in{from{opacity:0;translate:0 14px;scale:.985}to{opacity:1;translate:0 0;scale:1}}
+.node.m-in{animation-name:m-node}
+@keyframes m-node{from{opacity:0;scale:.86}to{opacity:1;scale:1}}
+
+/* hover/press feedback */
+button,.node,.task-card,.usage-card,.metric,.project-row,.mh-row,.model-choice{transition:translate .18s cubic-bezier(.2,.8,.2,1),scale .18s,background-color .2s,border-color .2s,box-shadow .25s,color .2s,opacity .2s}
+.task-card:hover,.usage-card:hover,.metric:hover{translate:0 -2px}
+.node:hover{scale:1.015}
+button:not(:disabled):active,.node:active{scale:.97}
+.nav a{transition:background-color .2s,color .2s,padding .2s}.nav a:hover .ic{animation:m-nudge .5s ease}
+@keyframes m-nudge{40%{translate:-3px 0}}
+
+/* bars grow into place */
+.quota-bar i,.meter i,.quota .bar i,.bar3 i,.progress-track i{transform-origin:left center;animation:m-bar .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes m-bar{from{transform:scaleX(0)}}
+.bar3{direction:ltr}
+
+/* brand mark: bars slide in, the green output block keeps flowing */
+.fx-mark svg g polygon:nth-child(1){animation:m-bar-a 1s cubic-bezier(.2,.8,.2,1) both}
+.fx-mark svg g polygon:nth-child(2){animation:m-bar-a 1s .12s cubic-bezier(.2,.8,.2,1) both}
+.fx-mark .mark-flow{animation:m-flow 3.4s ease-in-out 1s infinite}
+@keyframes m-bar-a{from{opacity:0;translate:-18px 0}}
+@keyframes m-flow{0%,100%{translate:0 0;opacity:1}45%{translate:-9px -3px;opacity:.55}60%{translate:6px 0;opacity:1}}
+.brand-lockup:hover .fx-mark svg g polygon:nth-child(2){animation:m-wiggle .6s ease}
+@keyframes m-wiggle{40%{translate:5px 0}}
+
+/* project glyphs draw themselves on first paint */
+html[data-intro] .proj-tile svg *{stroke-dasharray:70;stroke-dashoffset:70;animation:m-draw 1.1s .15s cubic-bezier(.4,.1,.2,1) forwards}
+@keyframes m-draw{to{stroke-dashoffset:0}}
+.proj-tile{transition:scale .2s,border-color .2s,color .2s}.proj-row:hover .proj-tile{scale:1.12;color:var(--text)}
+
+/* flowing particles on the org graph */
+.particle{fill:var(--text);opacity:.9;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--text) 55%,transparent))}
+.particle.wait{fill:var(--warn);filter:drop-shadow(0 0 4px var(--warn))}
+.graph-wrap::before{animation:m-drift 28s linear infinite}
+@keyframes m-drift{to{background-position:22px 22px}}
+.node .dot.run{animation:pulse 1.9s ease-out infinite}
+.node.fill{animation-name:m-in,m-glow;animation-duration:.5s,5s;animation-iteration-count:1,infinite;animation-delay:calc(var(--mi,0)*45ms),1s;animation-fill-mode:both,none}
+@keyframes m-glow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 28px 0 color-mix(in srgb,var(--ok) 14%,transparent)}}
+
+/* chat: typing dots + empty-state animation */
+.typing{display:inline-flex;gap:5px;align-items:center;height:22px}.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:m-dot 1.2s ease-in-out infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes m-dot{0%,60%,100%{translate:0 0;opacity:.35}30%{translate:0 -5px;opacity:1}}
+.c9-empty{display:grid;justify-items:center;gap:14px;padding:36px 12px;color:var(--muted);text-align:center}
+.c9-empty svg{width:64px;height:64px;color:var(--text)}.c9-empty .flowbar{animation:m-slide 2.4s ease-in-out infinite}.c9-empty .flowbar:nth-of-type(2){animation-delay:.25s}.c9-empty .flowbar:nth-of-type(3){animation-delay:.5s;fill:var(--ok)}
+@keyframes m-slide{0%,100%{translate:-6px 0;opacity:.55}50%{translate:6px 0;opacity:1}}
+
+/* skeleton shimmer while data loads */
+.skeleton{position:relative;overflow:hidden;border-radius:12px;background:var(--panel);border:1px solid var(--line);min-height:120px}
+.skeleton::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,color-mix(in srgb,var(--text) 7%,transparent) 50%,transparent 70%);translate:-100% 0;animation:m-shimmer 1.5s linear infinite}
+@keyframes m-shimmer{to{translate:100% 0}}
+
+/* theme change fades instead of snapping */
+html.theme-fade *{transition:background-color .35s,color .35s,border-color .35s,fill .35s,stroke .35s!important}
+
+/* splash */
+.fx-splash{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:var(--bg,#0a0a0a);pointer-events:none;animation:m-splash-out .5s .95s ease forwards}
+.fx-splash svg{width:84px;height:88px;color:var(--text,#f2f2ee)}
+.fx-splash polygon{opacity:0;animation:m-splash-in .55s cubic-bezier(.2,.8,.2,1) forwards}
+.fx-splash polygon:nth-child(1){animation-delay:.05s}.fx-splash polygon:nth-child(2){animation-delay:.2s}.fx-splash polygon:nth-child(3){animation-delay:.38s;fill:#baed91}
+@keyframes m-splash-in{from{opacity:0;translate:-26px 0}to{opacity:1;translate:0 0}}
+@keyframes m-splash-out{to{opacity:0;visibility:hidden}}
+}

@@ -1,0 +1,15 @@
+{
+  "false_no_gap_at_3000": {
+    "v0": 25,
+    "v1": 22
+  },
+  "live_usage_totals": {
+    "prompt_tokens": 19974,
+    "completion_tokens": 4936,
+    "total_tokens": 24910,
+    "cost": 0.0109158
+  },
+  "successful_live_requests": 6,
+  "budget_and_scope_invariants_passed": true,
+  "native_jev_tested": false
+}

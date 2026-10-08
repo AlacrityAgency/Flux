@@ -1,0 +1,73 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments & secrets
+.env
+.env.*
+*.key
+GAPGPT_API_KEY*
+
+# Local data & caches
+var/
+*.db
+*.sqlite
+*.sqlite3
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+
+backups/
+.venv-ui/
+
+.venv-notebooklm/
+
+# Local workspace, packaging outputs and assistant settings
+.claude/
+.venv*/
+build/
+dist/
+tmp/
+work/
+*.egg-info/
+*.log
+*.pem
+*.p12
+*.pfx
+*.zip
+*.exe
+*.dll
+*.pyd
+
+# Local diagnostic captures
+/*_output.txt
+/*_result.txt
+/*_success.txt
+/sol_debug_*.txt
+
+# Downloaded models and generated experiment caches
+experiments/**/model_cache/
+experiments/**/embedding_cache/
+experiments/**/checkpoint/
+experiments/**/portable-smoke/
+experiments/**/snapshots/
+experiments/**/snapshot/
+*.npy
+*.npz
+*.safetensors
+experiments/**/deps/
+experiments/**/model_runs/
+experiments/**/provider_runs/
+experiments/**/live-outputs/
+experiments/**/outputs/
+experiments/**/receipts/
+experiments/**/laya_receipts/
+experiments/**/trials/
+experiments/**/contexts/
+experiments/**/artifacts/

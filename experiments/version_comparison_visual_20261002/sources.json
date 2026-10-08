@@ -1,0 +1,20 @@
+{
+  "diffusion_memory_20261001/REPORT.fa.md": {
+    "sha256": "3b5fecfcfb3ff7587170c30b8d80905a3d0e7643d7ef37ce30c3367ed381220a"
+  },
+  "diffusion_memory_v2_20261001/REPORT.fa.md": {
+    "sha256": "7c1b20336f6d8af4b0f3b00bd61f2a34b8f536587040af0af1abb2f9f2f6035e"
+  },
+  "request_memory_v3_20261002/results.json": {
+    "sha256": "3e3af369e4c91bea6a8926e4f1ed0b209c58cf62ffbb980067b5f205583501b2"
+  },
+  "request_memory_v4_20261002/holdout-results.json": {
+    "sha256": "72e24ade0d55dfc87d1472d8de74653c2ade687591b93ed89d28175989ff1a75"
+  },
+  "request_memory_v4_review_20261002/review-results.json": {
+    "sha256": "7104c8b50b917d22fc92041b02da3338681b4f95efcdda38de2e62d88b0aefa6"
+  },
+  "request_memory_v5_design_20261002/ALGORITHM.fa.md": {
+    "sha256": "0fac99f3b8a3f2cbbe144eb98fd2f99dcdf1def699c20764dea7ae9dc6e3a8f8"
+  }
+}

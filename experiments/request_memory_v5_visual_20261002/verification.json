@@ -1,0 +1,65 @@
+{
+  "final_frozen_files_match": 32,
+  "r1_archive_matches": true,
+  "holdout_rerun_refused_without_overwrite": true,
+  "source_metrics_match": true,
+  "actual_model_calls": 0,
+  "checks": [
+    {
+      "theme": "light",
+      "viewport": 736,
+      "width": 704,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "charts": 6
+    },
+    {
+      "theme": "light",
+      "viewport": 390,
+      "width": 358,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "charts": 6
+    },
+    {
+      "theme": "light",
+      "viewport": 320,
+      "width": 288,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "charts": 6
+    },
+    {
+      "theme": "dark",
+      "viewport": 736,
+      "width": 704,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "charts": 6
+    },
+    {
+      "theme": "dark",
+      "viewport": 390,
+      "width": 358,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "charts": 6
+    },
+    {
+      "theme": "dark",
+      "viewport": 320,
+      "width": 288,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "charts": 6
+    }
+  ],
+  "javascript_errors": [],
+  "all_nine_cases_update": true
+}

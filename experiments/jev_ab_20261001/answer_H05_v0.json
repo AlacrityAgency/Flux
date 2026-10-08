@@ -1,0 +1,88 @@
+{
+  "task": "H05",
+  "algorithm": "v0",
+  "model": "gpt-5.6-luna",
+  "returned_model": "openai/gpt-5.6-luna",
+  "elapsed_seconds": 8.141256600036286,
+  "usage": {
+    "completion_tokens": 938,
+    "prompt_tokens": 3421,
+    "total_tokens": 4359,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 72,
+      "rejected_prediction_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+      "cache_write_tokens": 3418,
+      "video_tokens": 0
+    },
+    "cost": 0.0019807,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0019807,
+      "upstream_inference_prompt_cost": 0.0008551,
+      "upstream_inference_completions_cost": 0.0011256
+    }
+  },
+  "finish_reason": "stop",
+  "raw": "{\n  \"summary\": \"Flux هنگام startup ابتدا وضعیت اجرای local را با `local_runtime.recover()` بازیابی می‌کند. سپس، در صورت مالک بودن engine، runهایی را که وضعیتشان در `ACTIVE` است به `FAILED` تغییر می‌دهد و آن‌ها را replay نمی‌کند؛ دلیل اعلام‌شده جلوگیری از مصرف تکراری است. با این حال تعریف مجموعهٔ `ACTIVE` و بخش طراحی دربارهٔ interruption و cost در شواهد ارائه‌شده وجود ندارد.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"Show the startup recovery loop\",\n      \"status\": \"supported\",\n      \"answer\": \"در `create_app.lifespan` ابتدا `local_runtime.recover()` اجرا می‌شود. سپس در صورت `owned`، روی `engine.repo.list_runs(limit=10000)` حلقه زده می‌شود و هر رکوردی که `record[\\\"status\\\"] in ACTIVE` باشد با `update_run_status(..., \\\"FAILED\\\", ...)` شکست‌خورده علامت‌گذاری می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan\"\n      ]\n    },\n    {\n      \"criterion\": \"Show the set of statuses considered active\",\n      \"status\": \"missing\",\n      \"answer\": \"در شواهد فقط استفاده از مجموعهٔ `ACTIVE` دیده می‌شود؛ تعریف یا اعضای این مجموعه ارائه نشده است. برای `LocalRuntime`، وضعیت‌های `queued` و `running` صراحتاً در شرط SQL فعال تلقی می‌شوند.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan\",\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover\"\n      ]\n    },\n    {\n      \"criterion\": \"Show why interrupted runs are not resumed\",\n      \"status\": \"supported\",\n      \"answer\": \"کامنت startup می‌گوید: `Never replay an in-flight provider request after an interrupted process.` همچنین run فعال به `FAILED` تغییر می‌کند با پیام «اجرای قبلی قطع شده است؛ برای جلوگیری از مصرف تکراری خودکار ادامه داده نشد.» در local runtime نیز وضعیت‌های `queued` و `running` به `interrupted` تبدیل می‌شوند و ادامه فقط با پیام تازه ممکن است.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.lifespan\",\n        \"src/flux/local_agents/runtime.py::LocalRuntime.recover\"\n      ]\n    },\n    {\n      \"criterion\": \"Reference the restart test\",\n      \"status\": \"partial\",\n      \"answer\": \"`tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations` بسته‌شدن و بازگشایی SQLite را بررسی می‌کند و حفظ run، شمارنده‌ها، رویدادها، subtasks و budget reservations را assert می‌کند. این شواهد مستقیماً اجرای منطق startup برای fail کردن runهای فعال را تست نمی‌کند.\",\n      \"evidence_ids\": [\n        \"tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations\",\n        \"tests/test_restart_recovery.py::<module>\"\n      ]\n    },\n    {\n      \"criterion\": \"Cross-check the design section on interruption and cost\",\n      \"status\": \"missing\",\n      \"answer\": \"بخش طراحی ارائه‌شده دربارهٔ ذخیره‌سازی و API، فیلدهایی مانند `counters`، زمان فعال، `budget_reservations` و `usage_records` را فهرست می‌کند، اما بخش مشخصی دربارهٔ interruption، عدم resume یا هزینهٔ replay ارائه نمی‌دهد؛ بنابراین cross-check کامل ممکن نیست.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"تعریف دقیق مجموعهٔ `ACTIVE` و statusهای عضو آن\",\n    \"تست مستقیمی که startup recovery و تبدیل runهای فعال به `FAILED` را بررسی کند\",\n    \"بخش طراحی صریح دربارهٔ interruption، عدم resume و پیامد هزینه‌ای replay\"\n  ]\n}",
+  "success": true,
+  "answer": {
+    "summary": "Flux هنگام startup ابتدا وضعیت اجرای local را با `local_runtime.recover()` بازیابی می‌کند. سپس، در صورت مالک بودن engine، runهایی را که وضعیتشان در `ACTIVE` است به `FAILED` تغییر می‌دهد و آن‌ها را replay نمی‌کند؛ دلیل اعلام‌شده جلوگیری از مصرف تکراری است. با این حال تعریف مجموعهٔ `ACTIVE` و بخش طراحی دربارهٔ interruption و cost در شواهد ارائه‌شده وجود ندارد.",
+    "criteria": [
+      {
+        "criterion": "Show the startup recovery loop",
+        "status": "supported",
+        "answer": "در `create_app.lifespan` ابتدا `local_runtime.recover()` اجرا می‌شود. سپس در صورت `owned`، روی `engine.repo.list_runs(limit=10000)` حلقه زده می‌شود و هر رکوردی که `record[\"status\"] in ACTIVE` باشد با `update_run_status(..., \"FAILED\", ...)` شکست‌خورده علامت‌گذاری می‌شود.",
+        "evidence_ids": [
+          "src/flux/api/app.py::create_app.lifespan"
+        ]
+      },
+      {
+        "criterion": "Show the set of statuses considered active",
+        "status": "missing",
+        "answer": "در شواهد فقط استفاده از مجموعهٔ `ACTIVE` دیده می‌شود؛ تعریف یا اعضای این مجموعه ارائه نشده است. برای `LocalRuntime`، وضعیت‌های `queued` و `running` صراحتاً در شرط SQL فعال تلقی می‌شوند.",
+        "evidence_ids": [
+          "src/flux/api/app.py::create_app.lifespan",
+          "src/flux/local_agents/runtime.py::LocalRuntime.recover"
+        ]
+      },
+      {
+        "criterion": "Show why interrupted runs are not resumed",
+        "status": "supported",
+        "answer": "کامنت startup می‌گوید: `Never replay an in-flight provider request after an interrupted process.` همچنین run فعال به `FAILED` تغییر می‌کند با پیام «اجرای قبلی قطع شده است؛ برای جلوگیری از مصرف تکراری خودکار ادامه داده نشد.» در local runtime نیز وضعیت‌های `queued` و `running` به `interrupted` تبدیل می‌شوند و ادامه فقط با پیام تازه ممکن است.",
+        "evidence_ids": [
+          "src/flux/api/app.py::create_app.lifespan",
+          "src/flux/local_agents/runtime.py::LocalRuntime.recover"
+        ]
+      },
+      {
+        "criterion": "Reference the restart test",
+        "status": "partial",
+        "answer": "`tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations` بسته‌شدن و بازگشایی SQLite را بررسی می‌کند و حفظ run، شمارنده‌ها، رویدادها، subtasks و budget reservations را assert می‌کند. این شواهد مستقیماً اجرای منطق startup برای fail کردن runهای فعال را تست نمی‌کند.",
+        "evidence_ids": [
+          "tests/test_restart_recovery.py::test_restart_preserves_runs_counters_and_reservations",
+          "tests/test_restart_recovery.py::<module>"
+        ]
+      },
+      {
+        "criterion": "Cross-check the design section on interruption and cost",
+        "status": "missing",
+        "answer": "بخش طراحی ارائه‌شده دربارهٔ ذخیره‌سازی و API، فیلدهایی مانند `counters`، زمان فعال، `budget_reservations` و `usage_records` را فهرست می‌کند، اما بخش مشخصی دربارهٔ interruption، عدم resume یا هزینهٔ replay ارائه نمی‌دهد؛ بنابراین cross-check کامل ممکن نیست.",
+        "evidence_ids": [
+          "mem:mem_fx_mvp-design#۸. ذخیره‌سازی و API rev1"
+        ]
+      }
+    ],
+    "missing_information": [
+      "تعریف دقیق مجموعهٔ `ACTIVE` و statusهای عضو آن",
+      "تست مستقیمی که startup recovery و تبدیل runهای فعال به `FAILED` را بررسی کند",
+      "بخش طراحی صریح دربارهٔ interruption، عدم resume و پیامد هزینه‌ای replay"
+    ]
+  }
+}

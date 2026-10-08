@@ -1,0 +1,98 @@
+[
+  {
+    "model_requested": "gpt-6-luna",
+    "label": "probe_gpt-6-luna",
+    "exit_code": 0,
+    "timed_out": false,
+    "provider_completed": true,
+    "text": "PROBE_OK",
+    "usage": {
+      "input_tokens": 16823,
+      "cached_input_tokens": 11008,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 7,
+      "reasoning_output_tokens": 0
+    },
+    "tool_events": 0,
+    "latency_seconds": 9.861153199977707,
+    "stderr": "2026-10-01T20:34:10.194346Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n",
+    "events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a0f92c-ae6b-7cd1-a08e-30458e23fa70"
+      },
+      {
+        "type": "turn.started"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "agent_message",
+          "text": "PROBE_OK"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 16823,
+          "cached_input_tokens": 11008,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7,
+          "reasoning_output_tokens": 0
+        }
+      }
+    ],
+    "billing_usd": null,
+    "account_route": "ChatGPT login",
+    "reasoning_effort": "low"
+  },
+  {
+    "model_requested": "gpt-6.1-sol",
+    "label": "probe_gpt-6.1-sol",
+    "exit_code": 0,
+    "timed_out": false,
+    "provider_completed": true,
+    "text": "PROBE_OK",
+    "usage": {
+      "input_tokens": 17515,
+      "cached_input_tokens": 12544,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 7,
+      "reasoning_output_tokens": 0
+    },
+    "tool_events": 0,
+    "latency_seconds": 11.34892449999461,
+    "stderr": "2026-10-01T20:34:19.841563Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n2026-10-01T20:34:24.833885Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out\n",
+    "events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a0f92c-d43d-7922-a9d6-4c7306c12f41"
+      },
+      {
+        "type": "turn.started"
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "agent_message",
+          "text": "PROBE_OK"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 17515,
+          "cached_input_tokens": 12544,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7,
+          "reasoning_output_tokens": 0
+        }
+      }
+    ],
+    "billing_usd": null,
+    "account_route": "ChatGPT login",
+    "reasoning_effort": "low"
+  }
+]

@@ -1,0 +1,204 @@
+[src/flux/providers/gapgpt.py::GapGPTAdapter.generate#s2/5]
+    async def generate(
+    ...
+        kwargs["response_format"] = {"type": "json_object"}
+        if any(rm in model_id.lower() for rm in ("luna", "sol", "o1", "o3", "thinking")):
+            kwargs["reasoning_effort"] = "low"
+
+        try:
+            try:
+                response = await client.chat.completions.create(**kwargs)
+            except APIStatusError as err:
+                err_msg = str(err).lower()
+                modified = False
+                if err.status_code == 400 and "response_format" in err_msg:
+                    kwargs.pop("response_format", None)
+                    modified = True
+                if err.status_code == 400 and "reasoning_effort" in err_msg:
+                    kwargs.pop("reasoning_effort", None)
+                    modified = True
+                if modified:
+                    response = await client.chat.completions.create(**kwargs)
+                else:
+                    raise
+            latency_ms = int((time.perf_counter() - start_time) * 1000)
+
+            choice = response.choices[0]
+            refusal = getattr(choice.message, "refusal", None)
+            content = choice.message.content or ""
+
+[src/flux/providers/gapgpt.py::GapGPTAdapter.generate#s1/5]
+    async def generate(
+        self,
+        model_id: str,
+        messages: list[Dict[str, str]],
+        max_output_tokens: int = 2000,
+        response_schema: Optional[Dict[str, Any]] = None
+    ) -> LLMResponse:
+        client = self._get_client()
+        start_time = time.perf_counter()
+
+        kwargs: Dict[str, Any] = {
+            "model": model_id,
+            "messages": messages,
+            "max_tokens": max_output_tokens,
+            "temperature": 0.2,
+        }
+
+        # Request JSON mode where applicable
+        kwargs["response_format"] = {"type": "json_object"}
+        if any(rm in model_id.lower() for rm in ("luna", "sol", "o1", "o3", "thinking")):
+            kwargs["reasoning_effort"] = "low"
+
+        try:
+            try:
+                response = await client.chat.completions.create(**kwargs)
+
+[demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT]
+## DEMO-07 — اتصال واقعی GapGPT
+
+خروجی: همان گردش کار، این بار با provider واقعی و فعال‌سازی صریح.
+
+- [ ] ساخت adapter سازگار با interface جعلی؛ خواندن کلید فقط از GAPGPT_API_KEY و خاموش‌کردن retry داخلی SDK.
+- [ ] اتصال تنظیمات UI برای وضعیت کلید و فعال‌سازی زنده با سقف مشخص؛ عدم ذخیرهٔ کلید در DB/config/log.
+- [ ] بررسی ID، دسترسی، JSON، سقف context/output/reasoning، usage و قیمت پنج مدل؛ ثبت تاریخ و شاهد بررسی.
+- [ ] نمایش نقش‌های unavailable با علت؛ بدون تغییر پنهانی مدل.
+- [ ] آزمون adapter با پاسخ شبکهٔ mock، قبل از هر مصرف واقعی.
+- [ ] smoke test واقعی با دادهٔ نمونهٔ غیرحساس و سقف مستقل؛ ثبت نتیجه و مصرف.
+
+فایل‌های پیشنهادی: `providers/gapgpt.py`، `providers/capabilities.py`، `config/demo-models.json`، `ui/settings_view.*`.
+
+معیار پایان: در حالت fake هیچ مصرفی نباشد؛ پنج نقش روی مدل تأییدشده قابل فراخوانی باشند؛ خطا واضح و هزینه قابل ردیابی باشد. نبود مدل یا تعرفهٔ معتبر مانع اعلام تکمیل بخش زنده است؛ مانع نمایش fake نیست.
+
+
+[var/test_luna_plan.py::test]
+async def test():
+    print("Testing plan execution with reasoning_effort='low'...")
+    resp = await client.chat.completions.create(
+        model='gpt-5.6-luna',
+        messages=messages,
+        max_tokens=2000,
+        temperature=0.2,
+        response_format={'type': 'json_object'},
+        reasoning_effort='low'
+    )
+    choice = resp.choices[0]
+    print("Finish reason:", choice.finish_reason)
+    print("Content len:", len(choice.message.content or ''))
+    print("Content sample:", repr(choice.message.content)[:300])
+    print("Usage:", resp.usage)
+
+[var/debug_ageis_review.py::test]
+async def test():
+    print("Testing call with gpt-5.6-luna, max_tokens=4500, reasoning_effort='low'...")
+    try:
+        resp = await client.chat.completions.create(
+            model='gpt-5.6-luna',
+            messages=messages,
+            max_tokens=4500,
+            temperature=0.2,
+            response_format={'type': 'json_object'},
+            reasoning_effort='low'
+        )
+        choice = resp.choices[0]
+        print("Finish reason:", choice.finish_reason)
+        print("Content len:", len(choice.message.content or ''))
+        print("Content sample:", repr(choice.message.content)[:400])
+        print("Usage:", resp.usage)
+    except Exception as e:
+        print("EXCEPTION:", type(e), e)
+
+[var/debug_sol_luna.py::test]
+async def test():
+    print("Testing call exactly as executed...")
+    try:
+        resp = await client.chat.completions.create(
+            model='gpt-5.6-luna',
+            messages=messages,
+            max_tokens=4000,
+            temperature=0.2,
+            response_format={'type': 'json_object'},
+            reasoning_effort='low'
+        )
+        choice = resp.choices[0]
+        print("Finish reason:", choice.finish_reason)
+        print("Content len:", len(choice.message.content or ''))
+        print("Content sample:", repr(choice.message.content)[:400])
+        print("Usage:", resp.usage)
+    except Exception as e:
+        print("EXCEPTION:", type(e), e)
+
+[mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1]
+نتیجهٔ بررسی GapGPT
+### نتیجهٔ بررسی GapGPT
+
+در بررسی ۶ سپتامبر ۲۰۲۶، ابزار وب محتوای صفحهٔ [مدیریت توکن](https://gapgpt.app/platform-v2/tokens) را دریافت نکرد. درخواست مستقیم بدون کلید به `https://api.gapgpt.app/v1/models` پاسخ HTTP 401 داد؛ این فقط نیاز به احراز هویت endpoint را نشان می‌دهد. سازگاری SDK، اعتبار کلید، دسترسی پنج مدل، JSON Schema و قیمت‌ها با این بررسی تأیید نشده‌اند. هیچ درخواست تولیدی با کلید ارسال نشده است.
+
+Base URL و پنج شناسه و نرخ‌های پیوست، ورودی درخواستی کاربر هستند؛ در manifest با `verified=false` ثبت شوند. نام مشابه در ابزار توسعه اثبات دسترسی GapGPT نیست. جایگزینی پنهانی مدل ممنوع است.
+
+برای هر مدل این موارد باید ثبت شوند: ID واقعی، تاریخ بررسی، endpoint، JSON/structured output، سقف context و output/reasoning، usage و cache، نرخ و واحد قیمت، timeout و خطا، وضعیت available/unverified/unavailable و علت. `/models/status` فقط آخرین نتیجهٔ ذخیره‌شده را بخواند؛ هر refresh تست پولی اجرا نکند. پاسخ معتبر JSON همیشه در کد هم validate شود.
+
+کلید فقط از `GAPGPT_API_KEY` در محیط پردازش خوانده می‌شود. نه CLI argument، نه config، نه prompt و نه log. اجرای زنده علاوه بر کلید نیازمند `--provider gapgpt --enable-live` و سقف صریح آزمون است؛ fake پیش‌فرض باقی می‌ماند. کلید ارسال‌شده در گفتگو پیش از بهره‌برداری بهتر است تعویض شود.
+
+[hierarchy.fa.md#موتور زیر این چارت]
+## موتور زیر این چارت
+
+موتور Flux کد معمولی است: صف پایدار، گراف کارها، کنترل دسترسی، دفتر بودجه، وضعیت‌ها و ثبت شواهد. Agentها برنامه و تصمیم پیشنهادی می‌دهند؛ موتور حدود را اجرا می‌کند. نمودار بالا رابطهٔ گزارش‌دهی را نشان می‌دهد و به معنای عبور اجباری هر توکن از تمام طبقات نیست.
+
+قواعد تغییرکرده نسبت به ۰٫۱:
+
+- تیم‌های اجرایی متعلق به شاخهٔ خود هستند؛ یک استخر مشترک تخت نداریم.
+- مسئول مستقیم هر Agent با `reports_to` ثبت می‌شود.
+- مبینا و سعید مدیران انسانی هم‌سطح‌اند و دستیارهای COO و CTO زیر اختیار آن‌ها هستند. درخواست COO به CTO یک تحویل کار با قرارداد است، نه دستور برای تغییر سیاست فنی.
+- تعارض زمان، دامنه یا بودجه به دفتر CEO و در صورت نیاز به دانیال برمی‌گردد.
+- عمق سازمانی بیشتر شده، اما عمق تقسیم یک task همچنان محدود است. هر root حداکثر پنج زیرکار دارد و زیرکارها به‌طور بازگشتی تیم تازه ایجاد نمی‌کنند.
+- کارهای قالب‌دار مستقیماً وارد شاخهٔ مجاز می‌شوند؛ Fable فقط برای برنامه‌ریزی سطح بالا و استثناها فراخوانی می‌شود.
+- گزارش‌ها با پایان کار یا رخداد واقعی تازه می‌شوند؛ refresh رابط، فراخوانی مدل نیست.
+
+
+[demo-tasks.fa.md#DEMO-08 — بستهٔ Windows و آزمون تحویل]
+## DEMO-08 — بستهٔ Windows و آزمون تحویل
+
+خروجی: پوشهٔ portable قابل اجرا روی سیستم کاربر و راهنمای کوتاه.
+
+- [ ] بسته‌بندی runtime همراه برنامه و shortcut؛ بدون نیاز کاربر به Python یا ترمینال.
+- [ ] export/backup سازگار DB و artifacts؛ restore در حالت اجرای متوقف و با بررسی سلامت.
+- [ ] تست باز/بسته‌شدن، DPI/RTL، حالت قطع اینترنت، مسیر داده و عدم گم‌شدن حافظه/تاریخچه.
+- [ ] اجرای suite مربوط به ورودی، DAG، بودجه، concurrency، retry، idempotency، JSON، معیار ثابت، not_run، restart و حافظه.
+- [ ] اجرای سه نمونهٔ سند، برنامه‌ریزی و پیشنهاد فنی؛ نمایش هر پنج نقش در نمونهٔ مناسب.
+- [ ] نوشتن راهنمای اجرا، حالت fake/live، تنظیم کلید، محدودیت‌ها و گزارش نتایج تست؛ ثبت قابلیت‌های زندهٔ تأییدنشده.
+
+فایل‌های پیشنهادی: `packaging/`، `backup.py`، `tests/`، `examples/`، `docs/demo-quickstart.fa.md`.
+
+معیار پایان: کاربر برنامه را باز کند، Task بدهد، نتیجه/مصرف را ببیند، حافظه را تغییر دهد و بعد از بازکردن دوباره همان داده را داشته باشد. گزارش کیفیت مبتنی بر نمونه و شواهد باشد؛ درصد دقت عمومی ادعا نشود.
+
+
+[src/flux/api/app.py::create_app.local_origin]
+    @app.middleware("http")
+    async def local_origin(request: Request, call_next):
+        if request.method not in ("GET", "HEAD", "OPTIONS"):
+            origin = request.headers.get("origin")
+            if origin and urlsplit(origin).netloc != request.headers.get("host"):
+                return JSONResponse({"detail": "درخواست باید از خود برنامه ارسال شود."}, status_code=403)
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "same-origin"
+        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+        return response
+
+[hierarchy.fa.md#قرارداد میان شاخه‌ها]
+## قرارداد میان شاخه‌ها
+
+پیام کار باید این فیلدها را داشته باشد: `task_id`, `root_id`, `parent_id`, `sender_role`, `recipient_role`, `human_owner`, `project_id`, `base_revision`, `objective`, `acceptance_criteria`, `dependencies`, `allowed_tools`, `allowed_paths`, `budget_remaining`, `attempts_used`, `artifact_refs` و `policy_version`.
+
+نمونه: COO می‌گوید «برای گزارش مشتری، خروجی CSV سفارش‌ها لازم است؛ داده‌های مجاز و ستون‌ها این‌ها هستند». CTO قرارداد endpoint یا پردازش لازم را مشخص می‌کند، علی ابهام فنی را رفع می‌کند، توسعه‌دهنده پیاده‌سازی می‌کند، تست‌کننده دادهٔ نمونه و خطاها را بررسی می‌کند، ارزیاب diff را نقد می‌کند. سعید، دستیار CTO و علی نتیجه را بررسی می‌کنند و COO فقط خروجی پذیرفته‌شده را وارد گزارش می‌کند. ارسال گزارش به مشتری اقدام جدا با مجوز مربوط است.
+
+
+[src/flux/providers/gapgpt.py::<module>]
+"""GapGPT Adapter using OpenAI SDK."""
+
+import os
+import time
+from typing import Any, Dict, Optional
+from openai import AsyncOpenAI, APIConnectionError, RateLimitError, APIStatusError
+from flux.providers.base import LLMProvider, LLMResponse, ProviderError

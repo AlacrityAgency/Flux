@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "responsive_widths": [
+    375,
+    768,
+    1024,
+    1440
+  ],
+  "page_errors": [],
+  "model_calls": 0,
+  "data": "isolated fixture",
+  "acceptance_bound_to_artifact_and_review": true
+}

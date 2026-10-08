@@ -1,0 +1,29 @@
+/* Windows-native behaviour; loaded as a file because the main pages forbid inline styles. */
+html{overscroll-behavior:none}
+button,[role=button],[role=tab],[role=menuitem],[role=option],summary,select,label,nav,aside,header,kbd,.badge,.chip,.pill,.nav,.nav a,.side,.sidebar,.topbar{-webkit-user-select:none;user-select:none}
+button,[role=button],[role=tab],summary,select,label,.nav a,.navigation-item{cursor:default!important}
+input,textarea,[contenteditable],pre,code,.message-content,.artifact,td,th,p,li,h1,h2,h3,h4,dd{-webkit-user-select:text;user-select:text}
+img,svg,a{-webkit-user-drag:none}
+/* menus and dropdowns: one crisp style for context menus and every <select> */
+.fx-menu{position:fixed;margin:0;inset:auto;z-index:2147483647;min-width:210px;max-width:360px;max-height:min(420px,calc(100vh - 16px));overflow:auto;padding:5px;border-radius:10px;
+  background:var(--fx-bg,var(--surface,#161616));color:var(--text,#f2f2ee);border:1px solid var(--border-strong,var(--border,#3a3a3a));
+  box-shadow:0 18px 44px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.3);font:13px/1.45 var(--font,Peyda,Vazirmatn,'Segoe UI',system-ui,sans-serif);
+  direction:rtl;outline:none;animation:fxin .11s cubic-bezier(.2,.8,.2,1);-webkit-user-select:none;user-select:none;scrollbar-width:thin}
+:root[data-theme=light] .fx-menu{background:var(--fx-bg,#fffefb);box-shadow:0 16px 40px rgba(20,30,25,.16),0 2px 6px rgba(20,30,25,.08)}
+.fx-menu .fx-item{display:flex;align-items:center;gap:10px;width:100%;min-height:34px;padding:6px 10px;margin:0;border:0;border-radius:7px;background:transparent;color:inherit;text-align:start;font:inherit;cursor:default!important;position:relative}
+.fx-menu .fx-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fx-menu .fx-item:hover:not(:disabled),.fx-menu .fx-item[data-active=true]:not(:disabled){background:var(--raised,color-mix(in srgb,currentColor 9%,transparent))}
+.fx-menu .fx-item[data-active=true]:not(:disabled)::before{content:"";position:absolute;inset-inline-start:0;top:8px;bottom:8px;width:2px;border-radius:2px;background:var(--text,#f2f2ee);opacity:.7}
+.fx-menu .fx-item:disabled{opacity:.4}
+.fx-menu .fx-lead{width:16px;flex:none;display:grid;place-items:center;color:var(--text,#f2f2ee);font-size:12px;font-weight:700}
+.fx-menu .fx-ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;color:var(--muted,#a1a1aa)}
+.fx-menu .fx-checked{font-weight:600}
+.fx-menu .fx-danger{color:var(--bad,#ff8a7a)}.fx-menu .fx-danger .fx-ic{color:currentColor}
+.fx-menu .fx-key,.fx-menu .fx-hint{direction:ltr;font:11.5px var(--latin,Geist,'Segoe UI',system-ui,sans-serif);color:var(--faint,#888);white-space:nowrap}
+.fx-menu .fx-head{padding:8px 10px 4px;font-size:11px;color:var(--faint,#888);font-weight:600}
+.fx-menu .fx-sep{height:1px;margin:5px 4px;background:var(--line,var(--border,#333))}
+.fx-menu.fx-list .fx-item{min-height:32px}
+@keyframes fxin{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.fx-menu{animation:none}}
+.fx-menu:focus,.fx-menu:focus-visible{outline:none}
+select[aria-expanded=true]{border-color:var(--muted,#a1a1aa)!important}.fx-menu .fx-danger .fx-lead{color:inherit}

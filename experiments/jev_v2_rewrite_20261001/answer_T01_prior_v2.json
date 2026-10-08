@@ -1,0 +1,77 @@
+{
+  "task": "T01",
+  "algorithm": "prior_v2",
+  "model": "gpt-5.6-luna",
+  "returned_model": "openai/gpt-5.6-luna",
+  "elapsed_seconds": 8.474884500028566,
+  "usage": {
+    "completion_tokens": 739,
+    "prompt_tokens": 3344,
+    "total_tokens": 4083,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 114,
+      "rejected_prediction_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+      "cache_write_tokens": 3341,
+      "video_tokens": 0
+    },
+    "cost": 0.00172265,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00172265,
+      "upstream_inference_prompt_cost": 0.00083585,
+      "upstream_inference_completions_cost": 0.0008868
+    }
+  },
+  "finish_reason": "stop",
+  "raw": "{\n  \"summary\": \"علت ثبت‌شده این است که `reference_context` در `FluxEngine._context` به همهٔ تماس‌های `Head` اضافه می‌شود و `build_head_prompt` نیز همان Context را در فیلد `context` درخواست Head قرار می‌دهد؛ بنابراین Head دو نسخه دریافت می‌کند. کمترین تغییر پیشنهادی، حذف فیلد `context` از `build_head_prompt` است.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"محل ساخت درخواست Head و فیلد context داخل آن مشخص شود\",\n      \"status\": \"partial\",\n      \"answer\": \"`build_head_prompt` به‌عنوان محل قرار دادن فیلد `context` در درخواست Head مشخص شده است، اما مسیر فایل یا کد کامل محل ساخت درخواست ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `FluxEngine._context`، مقدار `reference_context` به همهٔ تماس‌های `Head`، کارگرها و بازبین اضافه می‌شود.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"هم‌زمانی دو مسیر به‌صورت توضیحی ثبت شده است: `FluxEngine._context` Context را به تماس اضافه می‌کند و `build_head_prompt` فیلد `context` را در درخواست می‌گذارد؛ اما فراخوانی یا کد مشخصی که هر دو را کنار هم نشان دهد ارائه نشده است.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود\",\n      \"status\": \"supported\",\n      \"answer\": \"تصمیم فعلی این است که Context پروژه در هر تماس وجود داشته باشد؛ با توجه به ثبت ارسال دو نسخه برای Head، اصلاح مصوب/پیشنهادی حذف فیلد `context` از `build_head_prompt` است تا Context فقط از مسیر `FluxEngine._context` اضافه شود.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"کد یا مسیر فایل واقعی `build_head_prompt` و محل دقیق ساخت درخواست Head ارائه نشده است.\",\n    \"کد فراخوانی `Head` که هم `FluxEngine._context` و هم `build_head_prompt` را به‌کار می‌گیرد ارائه نشده است.\",\n    \"شواهد اجرای تست یا بررسی پس از حذف فیلد `context` ارائه نشده است.\"\n  ]\n}",
+  "success": true,
+  "answer": {
+    "summary": "علت ثبت‌شده این است که `reference_context` در `FluxEngine._context` به همهٔ تماس‌های `Head` اضافه می‌شود و `build_head_prompt` نیز همان Context را در فیلد `context` درخواست Head قرار می‌دهد؛ بنابراین Head دو نسخه دریافت می‌کند. کمترین تغییر پیشنهادی، حذف فیلد `context` از `build_head_prompt` است.",
+    "criteria": [
+      {
+        "criterion": "محل ساخت درخواست Head و فیلد context داخل آن مشخص شود",
+        "status": "partial",
+        "answer": "`build_head_prompt` به‌عنوان محل قرار دادن فیلد `context` در درخواست Head مشخص شده است، اما مسیر فایل یا کد کامل محل ساخت درخواست ارائه نشده است.",
+        "evidence_ids": [
+          "mem:dec_ctx_current rev3"
+        ]
+      },
+      {
+        "criterion": "محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود",
+        "status": "supported",
+        "answer": "در `FluxEngine._context`، مقدار `reference_context` به همهٔ تماس‌های `Head`، کارگرها و بازبین اضافه می‌شود.",
+        "evidence_ids": [
+          "mem:dec_ctx_current rev3"
+        ]
+      },
+      {
+        "criterion": "فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود",
+        "status": "partial",
+        "answer": "هم‌زمانی دو مسیر به‌صورت توضیحی ثبت شده است: `FluxEngine._context` Context را به تماس اضافه می‌کند و `build_head_prompt` فیلد `context` را در درخواست می‌گذارد؛ اما فراخوانی یا کد مشخصی که هر دو را کنار هم نشان دهد ارائه نشده است.",
+        "evidence_ids": [
+          "mem:dec_ctx_current rev3"
+        ]
+      },
+      {
+        "criterion": "تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود",
+        "status": "supported",
+        "answer": "تصمیم فعلی این است که Context پروژه در هر تماس وجود داشته باشد؛ با توجه به ثبت ارسال دو نسخه برای Head، اصلاح مصوب/پیشنهادی حذف فیلد `context` از `build_head_prompt` است تا Context فقط از مسیر `FluxEngine._context` اضافه شود.",
+        "evidence_ids": [
+          "mem:dec_ctx_current rev3"
+        ]
+      }
+    ],
+    "missing_information": [
+      "کد یا مسیر فایل واقعی `build_head_prompt` و محل دقیق ساخت درخواست Head ارائه نشده است.",
+      "کد فراخوانی `Head` که هم `FluxEngine._context` و هم `build_head_prompt` را به‌کار می‌گیرد ارائه نشده است.",
+      "شواهد اجرای تست یا بررسی پس از حذف فیلد `context` ارائه نشده است."
+    ]
+  }
+}

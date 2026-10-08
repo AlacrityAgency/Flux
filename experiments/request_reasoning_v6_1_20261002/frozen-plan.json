@@ -1,0 +1,45 @@
+{
+  "hashes": {
+    "engine.py": "86941acddc82f333e36e8abe1ce9dab02f2c088d160562c563fc46e00735f9bc",
+    "worker.py": "03276385ee805f05821edfa51ec64dd843237e53f66db5282b81881a467f643d",
+    "make_tasks.py": "4229fe5b1423de99cf110cee81f5d6be6a7b6f55adcaf60209455f5f1e94e8e9",
+    "benchmark.py": "59f5c1f20885eafa3aeec2b836302c71db0daaf46c0660ee24acb724a184ad51",
+    "test_engine.py": "d598108cacdc69c528c580d2fb29570f8cc542a1f1432363d177de31333d824c",
+    "tasks.json": "332f335d6dd1be210c81ba37cd003f9d51629810ffb832da627cb8098b2e39f2",
+    "evaluation_only/gold.json": "a6f322f8221c5831c35e64429b76c039522b12c0a1edc783459e82a328c16775",
+    "ALGORITHM.fa.md": "0043e72204ff7513a5fdddaa9212be05e689987f3b9406d24735668bbe5c2a55",
+    "v6/reasoning_v6.py": "210e903a4f6b49be80afe201b53107008ca5e6a365fe4a31a5c6a19623540628",
+    "v6/worker_v6.py": "ae1139ef8184eb82605778b6a0f67a4deef67afbaa8fd5d82297bc16b5d4aa11",
+    "v6/tasks_v6.py": "d4057f4c06f2e97c42d987f592d156dcc07b7e4c7580c1a833a79358b73dd500"
+  },
+  "tasks": 24,
+  "samples": 1,
+  "effort": "low",
+  "max_calls": 144,
+  "provider_concurrency": 4,
+  "arms": [
+    "v6",
+    "v6.1",
+    "sol_direct",
+    "luna_B_shared"
+  ],
+  "seeds": {
+    "tasks": 610120261002,
+    "arm_order": 6101
+  },
+  "primary": [
+    "answer_accuracy",
+    "reported_input_tokens_per_task",
+    "reported_output_tokens_per_task"
+  ],
+  "secondary": [
+    "visible_prompt_tokens",
+    "latency_p50_p95",
+    "sol_share",
+    "false_acceptance"
+  ],
+  "timing": "actual conditional pipelines; initial A/B concurrent; no replay timing",
+  "inference_gold_access": false,
+  "limits": "144 model calls, timeout180s/call, code timeout2.5s, no retries",
+  "notes": "Luna B is a shared ablation, not an additional physical call; no claim of equivalence."
+}

@@ -1,0 +1,16 @@
+{
+  "complete": true,
+  "trials": 54,
+  "provider_calls": 62,
+  "laya_calls": 116,
+  "frozen_sources_verified": true,
+  "hashes": {
+    "plan.json": "084001b4d983db6a59b47553f59397c6e15af7e07cbc7dc98fd9e1a9bbf76d58",
+    "tasks.json": "167403ecc6bf5201560d6f4e07214aaacfccab40b94d9994cc015236c1d3cb29",
+    "results.json": "e7c6464fd1e1d801f8f75e4f1eaa9e118c1a2bbb50eea99e8e921a0f3df2fb16",
+    "audit-results.json": "08b157e22b0f0d034e923f46b84e27c628045a1c12ed7bc0e94ce2a12aff3f9c",
+    "failure-diagnostics.json": "3cbf9712c5da8a8c6dfb95c3a0270f9fd996b95e056d997d112244d6bf4f139a",
+    "repeat-provenance.json": "297cc105cf07169c7c76a3ec455d87bffefa67b97829687246670f4b682fdc75",
+    "ALGORITHM.fa.md": "d0488c7a99c2aac4df9209648042a943171013d6737a21c5fecfcaa57b5505c0"
+  }
+}

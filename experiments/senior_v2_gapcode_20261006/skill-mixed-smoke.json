@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "real_laya": true,
+  "laya_load_s": 5.986205000001064,
+  "attempts": [
+    {
+      "provider": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "worker_pass": false,
+      "independent_pass": false,
+      "proposed_action": "accept",
+      "applied_action": "escalate",
+      "answer": null,
+      "receipt": "receipts/skill_mixed_e2e_0.json"
+    },
+    {
+      "provider": "gapcode",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "worker_pass": true,
+      "independent_pass": true,
+      "proposed_action": "accept",
+      "applied_action": "accept",
+      "answer": {
+        "subtotal_cents": 4567,
+        "tax_cents": 377,
+        "total_cents": 5419
+      },
+      "receipt": "receipts/skill_mixed_e2e_1.json"
+    }
+  ],
+  "profile": "mixed",
+  "scope": "one arithmetic request with real front/end, installed provider helper and independent Decimal oracle; not a cost benchmark",
+  "actual_billing_usd": null
+}

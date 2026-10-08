@@ -1,0 +1,383 @@
+{
+  "origin_root": "D:\\project\\Alacrity\\Flux",
+  "snapshot_root": "D:\\project\\Alacrity\\Flux\\docs\\knowledge\\retrieval-corpus",
+  "excluded": "query/task files, RAG packs, generated bundles, raw model outputs, credentials, databases, experiment gold",
+  "files": [
+    {
+      "path": "src/flux/cli.py",
+      "sha256": "c1bd43eb23d669bbd28ea4e11519fa098b59c12ae127d323ca5b35d593f83ffb"
+    },
+    {
+      "path": "src/flux/desktop.py",
+      "sha256": "f4ef9e554c57dc1913a433273f17ff05cd52754306b6bd203312f2e4559ce4e4"
+    },
+    {
+      "path": "src/flux/settings.py",
+      "sha256": "cb115764d4cbe44b75b929eba67adf130da9c43780630ca9530eb6f0ced38582"
+    },
+    {
+      "path": "src/flux/__init__.py",
+      "sha256": "73b302f42243207b3546f26fd8686ce759bc3f1a9c6f67cf03553a1737ff043a"
+    },
+    {
+      "path": "src/flux/agents/execution.py",
+      "sha256": "d83186b9ce62fb1e0057e390b5bfc8458636fbb45bfe2413d4618e0152ab575d"
+    },
+    {
+      "path": "src/flux/agents/head.py",
+      "sha256": "18f1ad6a7698ef2c338ffabed74f2fc88b8e6c94dffd9fea0d45dde7d95c7376"
+    },
+    {
+      "path": "src/flux/agents/planning.py",
+      "sha256": "af370d5bfe7e1bd238dee357e433cbc3692a1303c554e070a6365deae8b5cc8c"
+    },
+    {
+      "path": "src/flux/agents/technical.py",
+      "sha256": "11fe16782c1d02a104d79624d4bd172f612b5a37aee8f382848ae4620a0f6f03"
+    },
+    {
+      "path": "src/flux/agents/verification.py",
+      "sha256": "c7bee0948ecdb8af1af1b656eab086642a3cb285788fadd15dc669a9ddbb05aa"
+    },
+    {
+      "path": "src/flux/agents/__init__.py",
+      "sha256": "e157fa637db13d1d900380edb1c2ec4a2ac766928b12d26e9db8277e21914033"
+    },
+    {
+      "path": "src/flux/api/app.py",
+      "sha256": "506f563f95fd9d6d1ac970c096ba009b13fbc6c8daccf3916f1476a11f7e12af"
+    },
+    {
+      "path": "src/flux/api/__init__.py",
+      "sha256": "8853dbc8ecec576b8813ab2a7f8d5a77d459974046ac60db909913c06ded2954"
+    },
+    {
+      "path": "src/flux/budget/estimator.py",
+      "sha256": "74b3f94c3a09c942ca73b3744af97aba30e9bf6e4ada8b772287004e9f79b9ba"
+    },
+    {
+      "path": "src/flux/budget/ledger.py",
+      "sha256": "22aa64c340377acd53039917f73428c365ec44e0733d4eb379dc1571e3558d04"
+    },
+    {
+      "path": "src/flux/budget/pricing.py",
+      "sha256": "c70437076bfb466ac4e5e33a9c80483f1162d8b0fbd1db2ee35c0233e5f59748"
+    },
+    {
+      "path": "src/flux/budget/__init__.py",
+      "sha256": "dce5153c3ac2cf40be6e57c9c92b62439642c568a0203d6a70c27a5a591b7d04"
+    },
+    {
+      "path": "src/flux/contracts/agents.py",
+      "sha256": "86617c5c11580c82558308d20db36e006f728ec9021b0c6d72672b089e40317b"
+    },
+    {
+      "path": "src/flux/contracts/envelope.py",
+      "sha256": "8de2605f3109f4dc8449ae4e663d478b9ebd15da6e2f4a2f5fdea06e78f6c4c5"
+    },
+    {
+      "path": "src/flux/contracts/head.py",
+      "sha256": "5a70ea93c3ed601f88303402a529c5ba66bb4484d3b713da702bf4e64243a8d2"
+    },
+    {
+      "path": "src/flux/contracts/reviewer.py",
+      "sha256": "fe6ae7a674dea797ca8893191aa2ef36810f77b89973633b71c34dab3c960788"
+    },
+    {
+      "path": "src/flux/contracts/run.py",
+      "sha256": "5a5cb23e3628e64297bc4d44bc052a05683d16470f78f858df83cc23dfe641f1"
+    },
+    {
+      "path": "src/flux/contracts/task.py",
+      "sha256": "c90d5c35ab3133c7f0ae51c1b1ee39d5d13ca09347d658e5c9b8190f29e984dc"
+    },
+    {
+      "path": "src/flux/contracts/__init__.py",
+      "sha256": "6f215675388e2a2e1e81543be853fa0e965070be9a0ec673e016c0dbf20d7e7d"
+    },
+    {
+      "path": "src/flux/engine/dag.py",
+      "sha256": "c6d817dc01233bdefa5b3417c34a41a8786dca699e36c2e2dec131b023cc8769"
+    },
+    {
+      "path": "src/flux/engine/json_parser.py",
+      "sha256": "33584fd4179935cc44f02ec6ba2629ed5740f4a527f50bb5915c636c6ae99a77"
+    },
+    {
+      "path": "src/flux/engine/orchestrator.py",
+      "sha256": "40d40ca8fc26b6c6d95efb0d9c8a67e158a46613bf4c8471f4b2115652c50f90"
+    },
+    {
+      "path": "src/flux/engine/profiles.py",
+      "sha256": "49840447b0b25b89d3e1675b20d2a78937b15ae1b1eec4bf9330dd936ae5e8f1"
+    },
+    {
+      "path": "src/flux/engine/scheduler.py",
+      "sha256": "126c4d4e6950528f370b01aa75928643ad512866176f63320c26f47d77cbd69a"
+    },
+    {
+      "path": "src/flux/engine/state_machine.py",
+      "sha256": "b6e2807e1f029e90ac43b8f00ec027c6629cbf2bf6302a795ff6576bc579e520"
+    },
+    {
+      "path": "src/flux/engine/__init__.py",
+      "sha256": "624274828c9ffe555724529d65e234bbf6dd7794589a08ba26e08adbae985ebc"
+    },
+    {
+      "path": "src/flux/local_agents/api.py",
+      "sha256": "a3edb341e6485868f654754c25f90d8caef8a238dfa761aef476bedf11c13068"
+    },
+    {
+      "path": "src/flux/local_agents/google_tools.py",
+      "sha256": "e0965ddfaafdc66250b9368349646edc2a4244be614949e4941c853659b9e466"
+    },
+    {
+      "path": "src/flux/local_agents/quota.py",
+      "sha256": "b75eb9683538749c22dca66be6006949d21a22607b851dcbf428ccddab2f644e"
+    },
+    {
+      "path": "src/flux/local_agents/runtime.py",
+      "sha256": "b8c008fb58b994ba66221addd7321aad4dd5eed3b50f5519c885718d06656c7f"
+    },
+    {
+      "path": "src/flux/local_agents/__init__.py",
+      "sha256": "5d298b34f5685b9d841fbd4cf80873c887d9208520221972473932e04aca90d2"
+    },
+    {
+      "path": "src/flux/providers/base.py",
+      "sha256": "95140313e46ed65d31fc5d1578d679bfbedb97b0c17118211b816e784d152ef7"
+    },
+    {
+      "path": "src/flux/providers/fake.py",
+      "sha256": "a0e4fa0f79796db64a885bde1b8b085a649162b8bed61f2c9983dd0cef357f13"
+    },
+    {
+      "path": "src/flux/providers/gapgpt.py",
+      "sha256": "5e98aac92e37bbb977c2b1aa90328d9efd5df5877e5fdd92f54c6ccf1b3485aa"
+    },
+    {
+      "path": "src/flux/providers/__init__.py",
+      "sha256": "c60361a3dd48a188f86b3c22c48a8f2caa94ff8ccca2a2fa48c14289a78004cb"
+    },
+    {
+      "path": "src/flux/static/app.css",
+      "sha256": "f86f64124da0228256576e3a19f9eaed166bd74b7572ded9082961e24b1ae412"
+    },
+    {
+      "path": "src/flux/static/app.js",
+      "sha256": "cfc594e2c66729c0ac22bee61110c3ee23c35bc0c2ca693240c52b18efeac625"
+    },
+    {
+      "path": "src/flux/static/index.html",
+      "sha256": "ab0d4eaf1a9eb2c19cb142c5247e5bccc429e68d735ad63c05c1e77f7150068c"
+    },
+    {
+      "path": "src/flux/static/local.css",
+      "sha256": "8e671bf2ab8cf17288bdf3556149710c2fb1527a670c660204cf62172ae1f11f"
+    },
+    {
+      "path": "src/flux/static/local.html",
+      "sha256": "e25d7642f5a02eedc9896ea3a55f636409a71f2946840e41561e21140c9f5750"
+    },
+    {
+      "path": "src/flux/static/local.js",
+      "sha256": "803767a99b8401c4af3e8101c0f2cb92f23a5480d9ac4cb542f31ae54d70ac45"
+    },
+    {
+      "path": "src/flux/static/project-memory.js",
+      "sha256": "5dfb95498b321887531325249b2c8a495caabe85256341a876825690594a0f51"
+    },
+    {
+      "path": "src/flux/storage/database.py",
+      "sha256": "fa04b3d28aa4fa6596feb2dd5aeca35982b910e97c03d4e6e3db8051a8e92a1c"
+    },
+    {
+      "path": "src/flux/storage/repository.py",
+      "sha256": "9e9661606d715cad257f40b44bee7d4406b7675e63ca15ebb6e7a52d849dc300"
+    },
+    {
+      "path": "src/flux/storage/workspace.py",
+      "sha256": "68b9afc8151bfd59934bcdcdfbc146773921910b32a192144a8e7644e942435c"
+    },
+    {
+      "path": "src/flux/storage/__init__.py",
+      "sha256": "fcad8957266d4646ef7c54beac5f9bd450004501c6a12008a2c999eb42feb938"
+    },
+    {
+      "path": "tests/conftest.py",
+      "sha256": "21a2b88336ba9338cd538f63c764e67aaa94e66e1f1b4b3b8fe8cf7f6636ad2f"
+    },
+    {
+      "path": "tests/test_agent_settings.py",
+      "sha256": "90d5e93ac7c559bb5663275556de4db1f454cada3e82a494655d43bb85e8dc36"
+    },
+    {
+      "path": "tests/test_api_endpoints.py",
+      "sha256": "784fd49cfc97f939ac54284a357f2b49d443aa693fd138f4d5f3b5f891f8c122"
+    },
+    {
+      "path": "tests/test_budget_ledger.py",
+      "sha256": "260a59f66668396ee5c0e2b771129cd190e3b9ea4871bd5cb5aab5a57c6bdd04"
+    },
+    {
+      "path": "tests/test_concurrency.py",
+      "sha256": "8412fb5451d8b0fb790c8bbfb5b489006e53ee0373329e71ed0259c7071712f3"
+    },
+    {
+      "path": "tests/test_dag_validation.py",
+      "sha256": "b712c68843f60054262a479b96c1e77500a06168ddf5fe16737d18bec074d758"
+    },
+    {
+      "path": "tests/test_execution_profiles.py",
+      "sha256": "9bfba047488e3741f658e44bed8c1d9bf887640b82b21b752afb2ab87bbda0b3"
+    },
+    {
+      "path": "tests/test_google_integrations.py",
+      "sha256": "1a297b5dac234509db81f7a2755d068f3323354304615c75f22843d6d5d4aeda"
+    },
+    {
+      "path": "tests/test_head_rejection.py",
+      "sha256": "4dbc38a51b2defabeb9a520d73498c3ef26d61722937c01a0048c3cc0f72c7b2"
+    },
+    {
+      "path": "tests/test_idempotency.py",
+      "sha256": "d05baa6bf0108f010cc640a41d988ba190affa1845e5123f89aab36727a2e7aa"
+    },
+    {
+      "path": "tests/test_invalid_json.py",
+      "sha256": "57354e7239e0e255cbcb4f666c803ad7f5d271c0d2e3d967f47ed398a943dbd2"
+    },
+    {
+      "path": "tests/test_local_agents.py",
+      "sha256": "1010c9fe74b4a3845dbd698a372659f6fbdf991549ffc95f8277385229a2ee70"
+    },
+    {
+      "path": "tests/test_local_quota.py",
+      "sha256": "b6fa67b6769e6e96d88740f181dbcf65b1139359f84be5ed371a24cc7fa85537"
+    },
+    {
+      "path": "tests/test_projects.py",
+      "sha256": "b463a86fb05a735d71ead1bd30ba4be5b98905101f066e9e4a27c90c44b19692"
+    },
+    {
+      "path": "tests/test_project_memory_ui.py",
+      "sha256": "ae11adf17a2a749c9aed98e34d1a8df55c4f4c340c20b39119f752a5443cecab"
+    },
+    {
+      "path": "tests/test_restart_recovery.py",
+      "sha256": "b81372eabe506d82141db245c788d71c9ebe314c5592ffd78ced9c226ac0af5e"
+    },
+    {
+      "path": "tests/test_retry_limits.py",
+      "sha256": "8e773e6506e1dd6479ea1e32a21dc2961a78eb21e4b841ac93ff53077284065d"
+    },
+    {
+      "path": "tests/test_validation.py",
+      "sha256": "c9c36afc4033977891d7bf26502b9ce6602ef3648dd7bfcb45c9723b73dc752e"
+    },
+    {
+      "path": "tests/test_verification.py",
+      "sha256": "4cfb42debf5ef10922811dd09cac10289f349d57e6dd1f79b59e8a2fadda865e"
+    },
+    {
+      "path": "tests/test_workspace.py",
+      "sha256": "cae844ffd89f2cf0ace9a15afa4d63a1ad9b673a6609415ad195b0472a5c4e9f"
+    },
+    {
+      "path": "README.md",
+      "sha256": "230a8412334bd8f8ce5c5ac27e044f13b43bb30bed105851b3b4d9ac1da4deb2"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "5f7a1d85219a6b4d28c5174da3ba87a59ae15a0ff1c3a606ecf1c94997f2afc7"
+    },
+    {
+      "path": "docs/alacrity-ui-redesign.fa.md",
+      "sha256": "0a186495505c0a3eb04013530b7042ef6c5358bca65b4adc59106178c8896b48"
+    },
+    {
+      "path": "docs/architecture.fa.md",
+      "sha256": "a7141fe1dcf5ac10aca3754a157a1e6b51298df658c4edda5303aab5b2eb6b5b"
+    },
+    {
+      "path": "docs/demo-tasks.fa.md",
+      "sha256": "05c2e35c000e9feb447d7800b91a62052eceee49ea4e0341c34e3c0684c2cc54"
+    },
+    {
+      "path": "docs/desktop-product.fa.md",
+      "sha256": "61ca266262a0cd2cffba4f75b2ab663a56d06025540dc6e7d42fb9fb0f995881"
+    },
+    {
+      "path": "docs/flux-identity-and-quota.fa.md",
+      "sha256": "75fd011494e95ffb7078d19ca323a9dbbefdd6b637c7bcdd838c6cc7eb29e482"
+    },
+    {
+      "path": "docs/google-integrations.fa.md",
+      "sha256": "61bd1c23f90c4e6b17f9859c68db9cbd133897f7238d45d8e6a98140d2c0ba5c"
+    },
+    {
+      "path": "docs/hierarchy.fa.md",
+      "sha256": "fbead9200573ce59952dd64c96c612f498d6711af77e73c12de5719f6245659a"
+    },
+    {
+      "path": "docs/legacy-readme.fa.md",
+      "sha256": "a4cb476988eeac811d9fdbdfcc33893470f12a2ea44bfca99940f15bc2d78eee"
+    },
+    {
+      "path": "docs/local-agents.fa.md",
+      "sha256": "4c05b725a81ba813fb7d7e28497b27aaf37c1c0de1909e84249d9c2eb9e516af"
+    },
+    {
+      "path": "docs/mvp-design.fa.md",
+      "sha256": "b6a20b28ca32bf47b8125c7f4ff6438143e28c99cedfc9a7d4ede20d717c4ab2"
+    },
+    {
+      "path": "docs/mvp-requirements.fa.md",
+      "sha256": "a3ab5906e114bbdff9ab60cbf0ad4e83f9a9aa817cf663696d43cca342db7e8b"
+    },
+    {
+      "path": "docs/mvp-tasks.fa.md",
+      "sha256": "9274f7c279d042ed89907b357843df61a3d700cd9abf82c22181285ae31d8120"
+    },
+    {
+      "path": "docs/personal-demo.fa.md",
+      "sha256": "7dfdeddc8afb9963da54d597f4d3b3cbc73cdbba6f2e06a74a2444c73a995440"
+    },
+    {
+      "path": "docs/pilot.fa.md",
+      "sha256": "f7b813b33a2fab9ed3cedfb1647ba14838ac8c4a8c41e1d97369542c25abbf2f"
+    },
+    {
+      "path": "docs/project-memory-ui-fix.fa.md",
+      "sha256": "6e1de62f6d2dc3247ab897e212388c6513e0bc9c7fe8408ad4cd03c4e8625dd3"
+    },
+    {
+      "path": "docs/projects-and-installation.fa.md",
+      "sha256": "a4f54815a9fd2e37564e07a0651b030a27a9175128458e39c5c5bccbf5ccb05e"
+    },
+    {
+      "path": "docs/ui-redesign.fa.md",
+      "sha256": "94365f9215d6d0b832cf056fa0c95f15be9881d4d1c0eebb8b3804bc12eb5b23"
+    },
+    {
+      "path": "docs/algorithms/00-head-brief.fa.md",
+      "sha256": "1502b9088d85ce43e9d2c3d0a27f8f8c72e91588deaa4031ae73fca481716cdb"
+    },
+    {
+      "path": "docs/algorithms/01-flux-core.fa.md",
+      "sha256": "476c1123d19c30df0d9c1eebf3c365efc13a77942f8a9f7629eb1689f8547015"
+    },
+    {
+      "path": "docs/algorithms/02-token-management.fa.md",
+      "sha256": "45fc8792077064e722edccddff2ff799631a7a381efec8027db3c864cba6c41d"
+    },
+    {
+      "path": "docs/algorithms/03-decision-making.fa.md",
+      "sha256": "ec0db6519443441e4fb95c355fbb399ceffe7edd11d09f157a57a44457f9ae84"
+    },
+    {
+      "path": "docs/algorithms/04-memory-and-rag.fa.md",
+      "sha256": "4fdc0382c6706bcf3a7194d13ca445d058bdcdcf74f71e8ff6fc974aa17338dc"
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+[src/flux/settings.py::Settings]
+class Settings(BaseModel):
+    gapgpt_base_url: str = Field(default="https://api.gapgpt.app/v1")
+    enable_live: bool = Field(default=False)
+    default_provider: str = Field(default="fake")  # "fake" or "gapgpt"
+    db_path: str = Field(default="var/flux.db")
+
+    # Hard execution constraints
+    max_subtasks: int = 5
+    max_subtask_attempts: int = 3
+    max_concurrent_agents: int = 2
+    max_root_calls: int = 20
+    max_fable_calls: int = 2
+    max_active_runtime_seconds: int = 20 * 60  # 20 minutes
+    max_network_retries: int = 2
+
+[tests/test_retry_limits.py::test_transient_error_retries_at_most_twice]
+@pytest.mark.asyncio
+async def test_transient_error_retries_at_most_twice(engine, fake_provider, sample_task_data):
+    """When a transient error (429) occurs, engine retries at most 2 times.
+    Head has its stricter two-send cap; one retry may succeed.
+    """
+    fake_provider.transient_error_countdown = 1
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "ACCEPT_CANDIDATE"
+    # The Head call had one failure and one success, both accounted for.
+    assert fake_provider.call_count == 4
+    assert result.total_calls == 4
+    assert result.unknown_cost_usd > 0
+
+[tests/test_local_agents.py::test_timeout_and_recovery_without_replay]
+@pytest.mark.asyncio
+async def test_timeout_and_recovery_without_replay(local_app):
+    _, runtime, root = local_app
+    runtime.timeout = .15
+    chat = runtime.create_chat(ChatSpec(cwd=str(root)))
+    turn = runtime.submit(chat["id"], TurnSpec(prompt="WAIT_FOREVER", request_key="timeout"))
+    result = await finish(runtime, turn["id"])
+    assert result["state"] == "failed" and "مهلت" in result["error"]
+    runtime.update(turn["id"], state="running")
+    runtime.recover()
+    assert runtime.turn(turn["id"])["state"] == "interrupted"
+    assert not runtime.jobs
+
+[src/flux/engine/dag.py::DAGValidator.validate_and_tier]
+    @staticmethod
+    def validate_and_tier(subtasks: List[SubtaskSpec], max_subtasks: int = 5) -> List[List[SubtaskSpec]]:
+        """Validates that subtasks form a valid DAG with at most 5 items and no cycles.
+        Returns subtasks organized into dependency tiers (levels) for execution.
+        """
+        if len(subtasks) > max_subtasks:
+            raise DAGValidationError(f"Maximum {max_subtasks} subtasks allowed. Found: {len(subtasks)}")
+
+        if not subtasks:
+            return []
+
+        subtask_map: Dict[str, SubtaskSpec] = {}
+        in_degree: Dict[str, int] = {}
+        adj: Dict[str, List[str]] = defaultdict(list)
+
+        for s in subtasks:
+            if s.subtask_id in subtask_map:
+                raise DAGValidationError(f"Duplicate subtask_id '{s.subtask_id}' found.")
+            subtask_map[s.subtask_id] = s
+            in_degree[s.subtask_id] = 0
+
+        # Build graph
+        for s in subtasks:
+            for dep in s.dependencies:
+                if dep == s.subtask_id:
+                    raise DAGValidationError(f"Subtask '{s.subtask_id}' cannot depend on itself.")
+                if dep not in subtask_map:
+                    raise DAGValidationError(f"Subtask '{s.subtask_id}' references unknown dependency '{dep}'.")
+                adj[dep].append(s.subtask_id)
+                in_degree[s.subtask_id] += 1
+
+        # Kahn's algorithm with tiering
+        queue = deque([sid for sid, deg in in_degree.items() if deg == 0])
+        tiers: List[List[SubtaskSpec]] = []
+        visited_count = 0
+
+        while queue:
+            current_tier = []
+            tier_size = len(queue)
+            for _ in range(tier_size):
+                curr_id = queue.popleft()
+                current_tier.append(subtask_map[curr_id])
+                visited_count += 1
+                for neighbor in adj[curr_id]:
+                    in_degree[neighbor] -= 1
+                    if in_degree[neighbor] == 0:
+                        queue.append(neighbor)
+            tiers.append(current_tier)
+
+        if visited_count != len(subtasks):
+            raise DAGValidationError("Cycle detected in subtask dependency graph! Graph must be an acyclic DAG.")
+
+        return tiers
+
+[tests/test_retry_limits.py::<module>]
+"""Test 7: retry بیشتر از حد تعریف‌شده انجام نشود (Retry limit enforced)."""
+
+import pytest
+from flux.providers.base import ProviderError
+
+[src/flux/engine/scheduler.py::<module>]
+"""Execution Scheduler with strict concurrency limits."""
+
+import asyncio
+from typing import Optional
+
+[tests/test_verification.py::test_agent_cannot_alter_root_acceptance_criteria]
+@pytest.mark.asyncio
+async def test_agent_cannot_alter_root_acceptance_criteria(engine, fake_provider, sample_task_data):
+    """Rule 11: Neither execution agent nor verification agent can alter the root acceptance criteria.
+    Root criteria remain immutable and are enforced against the original task specification.
+    """
+    original_criteria = list(sample_task_data["acceptance_criteria"])
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    run_rec = engine.repo.get_run(run_id)
+    saved_payload = json.loads(run_rec["task_payload"])
+
+    # Root criteria in storage and execution remain strictly equal to original
+    assert saved_payload["acceptance_criteria"] == original_criteria
+
+[src/flux/providers/fake.py::FakeProvider.__init__]
+    def __init__(self):
+        self.call_count = 0
+        self.delay_seconds = 0
+        self.recorded_calls = []
+        # Hooks to customize responses or inject errors
+        self.custom_responses: Dict[str, str] = {}
+        self.transient_error_countdown: int = 0
+        self.permanent_error: bool = False
+        self.simulate_missing_usage: bool = False
+        self.simulate_invalid_json: bool = False
+        self.scenario: str = "default"  # "default", "out_of_company", "cycle", "too_many_subtasks", "not_run_check"
+
+[src/flux/local_agents/runtime.py::<module>]
+"""Drive the official CLIs without copying credentials or running a shell wrapper."""
+import asyncio
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import time
+import threading
+from concurrent.futures import TimeoutError as FutureTimeout
+import uuid
+
+import psutil
+from pydantic import BaseModel, Field, field_validator
+from typing import Literal
+
+from flux.storage.workspace import now
+
+ACTIVE = {"queued", "running"}
+
+[tests/test_agent_settings.py::test_disabled_agent_not_called]
+async def test_disabled_agent_not_called(engine, sample_task_data):
+    task = {**sample_task_data, 'workflow': 'low', 'agent_settings': {'custom_agents': [custom(False)]}}
+    run_id, _ = engine.submit_run(task)
+    assert (await engine.execute_run(run_id)).total_calls == 3
+
+[tests/test_retry_limits.py::test_permanent_error_not_retried]
+@pytest.mark.asyncio
+async def test_permanent_error_not_retried(engine, fake_provider, sample_task_data):
+    """Permanent error (401 auth error) is never retried (0 retries)."""
+    fake_provider.permanent_error = True
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "FAILED"
+    # Exactly 1 call was attempted (0 retries)
+    assert fake_provider.call_count == 1
+
+[var/test_sol_pipeline.py::test]
+async def test():
+    print(f"Executing architecture run {run_id}...")
+    res = await engine.execute_run(run_id)
+    print("Result status:", res.status)
+    print("Result summary:", res.summary)
+    subtasks = repo.get_subtasks(run_id)
+    for s in subtasks:
+        print(f"  Subtask {s['subtask_id']}: status={s['status']}, summary={s['summary'][:80]}")
+
+[test_ageis_e2e.py::<module>]
+import sys
+    ...
+provider = GapGPTAdapter(api_key=settings.gapgpt_api_key)
+engine = FluxEngine(repo, provider)
+
+# Let's create a run with explicit 3 subtasks: opus, sol, luna, then verification
+run_id = "run_full_e2e_" + os.urandom(4).hex()
+task_id = "task_e2e_" + os.urandom(4).hex()
+
+task_payload = {
+    'task_id': task_id,
+    'root_id': task_id,
+    'project_id': 'proj_acd3bf5499f5',
+    'human_owner': 'Me',
+    'objective': 'بررسی کن این پروژه رو و مشکلاتش رو بگو',
+    'scope': ['بررسی ساختار، معماری، وابستگی‌ها و مشکلات پروژه Ageis در پوشه D:\\project\\Ageis-2-main'],
+    'out_of_scope': ['تغییرات خارج از محدودهٔ تعریف‌شده'],
+    'acceptance_criteria': ['تحلیل ساختاری و فنی پروژه و ارائهٔ گزارش جامع اشکالات'],
+    'dependencies': [],
+    'allowed_tools': [],
+    'allowed_paths': [r'D:\project\Ageis-2-main'],
+    'artifact_refs': [],
+    'budget_cap_usd': 0.5,
+    'context': [{
+        'ref': r'folder:D:\project\Ageis-2-main',
+        'title': 'پوشهٔ کاری Ageis',
+        'content': 'Project: Ageis\nFolder: D:\\project\\Ageis-2-main\nFiles: Ageis2, audit, electron-app, Ageis_BodyPacker_Gait_Protocol.md, QA_Testing_Tasks.md, run_electron.bat, run_electron.sh'
+    }],
+    'workflow': 'team',
+    'priority': 'P2',
+    'data_class': 'internal'
+}
+
+repo.create_run(
+    run_id=run_id, task_id=task_id, root_id=task_id,
+    project_id='proj_acd3bf5499f5', human_owner='Me',
+    task_payload=task_payload, budget_cap_usd=0.5
+)
+
+# Define the subtasks
+subtasks = [
+    SubtaskSpec(
+        subtask_id='st1_planning',
+        objective='تدوین برنامهٔ بررسی پروژهٔ Ageis: تعیین ۶ بعد ارزیابی، معیارهای تشخیص اشکالات و چارچوب گزارش نهایی',
+        assigned_agent='opus',
+        acceptance_criteria=['تعریف ابعاد ارزیابی و ساختار گزارش نهایی به زبان فارسی'],
+        dependencies=[],
+        max_output_tokens=2500
+    ),
+    SubtaskSpec(
+        subtask_id='st2_technical',
+        objective='تحلیل فنی و معماری بر اساس برنامه st1: بررسی اشکالات محتمل ساختاری، تفکیک ریسک‌ها بر اساس شواهد موجود',
+        assigned_agent='sol',
+        acceptance_criteria=['ارائه تحلیل فنی و دسته‌بندی اشکالات با سطح شدت'],
+        dependencies=['st1_planning'],
+        max_output_tokens=3500
+    ),
+    SubtaskSpec(
+        subtask_id='st3_execution',
+    ...
+
+[tests/test_retry_limits.py::test_transient_error_fails_if_exceeding_two_retries]
+@pytest.mark.asyncio
+async def test_transient_error_fails_if_exceeding_two_retries(engine, fake_provider, sample_task_data):
+    """If transient error occurs 3 times (more than 2 retries allowed),
+    it fails without doing infinite or excess retries.
+    """
+    fake_provider.transient_error_countdown = 3  # Needs 3 retries, but max is 2
+
+    run_id, _ = engine.submit_run(sample_task_data)
+    result = await engine.execute_run(run_id)
+
+    assert result.status == "FAILED"
+    # Head is capped at two sends, even though ordinary agents allow three.
+    assert fake_provider.call_count == 2

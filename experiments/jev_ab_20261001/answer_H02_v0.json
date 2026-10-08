@@ -1,0 +1,80 @@
+{
+  "task": "H02",
+  "algorithm": "v0",
+  "model": "gpt-5.6-luna",
+  "returned_model": "openai/gpt-5.6-luna",
+  "elapsed_seconds": 6.920330399996601,
+  "usage": {
+    "completion_tokens": 787,
+    "prompt_tokens": 3270,
+    "total_tokens": 4057,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 105,
+      "rejected_prediction_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+      "cache_write_tokens": 3267,
+      "video_tokens": 0
+    },
+    "cost": 0.00176175,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00176175,
+      "upstream_inference_prompt_cost": 0.00081735,
+      "upstream_inference_completions_cost": 0.0009444
+    }
+  },
+  "finish_reason": "stop",
+  "raw": "{\n  \"summary\": \"شواهد نشان می‌دهند کلید باید فقط از متغیر محیطی `GAPGPT_API_KEY` خوانده شود و در DB، config، prompt یا log ذخیره نشود؛ اما ساخت متن پوشیدهٔ کلید، فایل `.env` و مدل درخواست اختصاصی برای ذخیرهٔ کلید ارائه نشده است.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"ساخت متن پوشیدهٔ کلید نشان داده شود\",\n      \"status\": \"missing\",\n      \"answer\": \"هیچ کد، تابع یا نمونه‌ای برای ساخت نمایش پوشیده/ماسک‌شدهٔ کلید ارائه نشده است. `clean_text` فقط از ورود الگوهای کلید یا اطلاعات محرمانه جلوگیری می‌کند و متن پوشیده تولید نمی‌کند.\",\n      \"evidence_ids\": [\n        \"src/flux/storage/workspace.py::clean_text\"\n      ]\n    },\n    {\n      \"criterion\": \"ذخیرهٔ کلید در محیط و فایل env نشان داده شود\",\n      \"status\": \"partial\",\n      \"answer\": \"ذخیره یا نگهداری کلید در محیط پردازش با اشاره به `GAPGPT_API_KEY` پشتیبانی می‌شود، اما شواهدی دربارهٔ فایل `.env`، قالب آن، یا بارگذاری کلید از چنین فایلی وجود ندارد. همچنین شواهد تصریح می‌کنند کلید نباید در DB یا config ذخیره شود.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1\",\n        \"demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT\"\n      ]\n    },\n    {\n      \"criterion\": \"خواندن کلید فقط از متغیر محیطی نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"صراحتاً آمده است که کلید فقط از `GAPGPT_API_KEY` در محیط پردازش خوانده شود و از CLI argument، config، prompt و log خوانده نشود.\",\n      \"evidence_ids\": [\n        \"mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1\",\n        \"demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT\"\n      ]\n    },\n    {\n      \"criterion\": \"مدل درخواست ذخیرهٔ کلید نشان داده شود\",\n      \"status\": \"missing\",\n      \"answer\": \"مدل یا schema اختصاصی برای درخواست ذخیرهٔ کلید ارائه نشده است. `PreferencesRequest` و endpoint `PUT /preferences` فقط ذخیرهٔ عمومی تنظیمات را نشان می‌دهند و مشخص نمی‌کنند که کلید API در payload وجود دارد یا چگونه مدیریت می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/api/app.py::create_app.save_preferences\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"تابع یا منطق ساخت مقدار پوشیدهٔ کلید برای نمایش در UI\",\n    \"نمونه و قرارداد فایل `.env` یا روش بارگذاری آن\",\n    \"مدل درخواست اختصاصی برای تنظیم/ذخیرهٔ کلید، در صورت وجود\",\n    \"جزئیات UI برای نمایش وضعیت کلید بدون افشای مقدار آن\"\n  ]\n}",
+  "success": true,
+  "answer": {
+    "summary": "شواهد نشان می‌دهند کلید باید فقط از متغیر محیطی `GAPGPT_API_KEY` خوانده شود و در DB، config، prompt یا log ذخیره نشود؛ اما ساخت متن پوشیدهٔ کلید، فایل `.env` و مدل درخواست اختصاصی برای ذخیرهٔ کلید ارائه نشده است.",
+    "criteria": [
+      {
+        "criterion": "ساخت متن پوشیدهٔ کلید نشان داده شود",
+        "status": "missing",
+        "answer": "هیچ کد، تابع یا نمونه‌ای برای ساخت نمایش پوشیده/ماسک‌شدهٔ کلید ارائه نشده است. `clean_text` فقط از ورود الگوهای کلید یا اطلاعات محرمانه جلوگیری می‌کند و متن پوشیده تولید نمی‌کند.",
+        "evidence_ids": [
+          "src/flux/storage/workspace.py::clean_text"
+        ]
+      },
+      {
+        "criterion": "ذخیرهٔ کلید در محیط و فایل env نشان داده شود",
+        "status": "partial",
+        "answer": "ذخیره یا نگهداری کلید در محیط پردازش با اشاره به `GAPGPT_API_KEY` پشتیبانی می‌شود، اما شواهدی دربارهٔ فایل `.env`، قالب آن، یا بارگذاری کلید از چنین فایلی وجود ندارد. همچنین شواهد تصریح می‌کنند کلید نباید در DB یا config ذخیره شود.",
+        "evidence_ids": [
+          "mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1",
+          "demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT"
+        ]
+      },
+      {
+        "criterion": "خواندن کلید فقط از متغیر محیطی نشان داده شود",
+        "status": "supported",
+        "answer": "صراحتاً آمده است که کلید فقط از `GAPGPT_API_KEY` در محیط پردازش خوانده شود و از CLI argument، config، prompt و log خوانده نشود.",
+        "evidence_ids": [
+          "mem:mem_fx_mvp-design#نتیجهٔ بررسی GapGPT rev1",
+          "demo-tasks.fa.md#DEMO-07 — اتصال واقعی GapGPT"
+        ]
+      },
+      {
+        "criterion": "مدل درخواست ذخیرهٔ کلید نشان داده شود",
+        "status": "missing",
+        "answer": "مدل یا schema اختصاصی برای درخواست ذخیرهٔ کلید ارائه نشده است. `PreferencesRequest` و endpoint `PUT /preferences` فقط ذخیرهٔ عمومی تنظیمات را نشان می‌دهند و مشخص نمی‌کنند که کلید API در payload وجود دارد یا چگونه مدیریت می‌شود.",
+        "evidence_ids": [
+          "src/flux/api/app.py::create_app.save_preferences"
+        ]
+      }
+    ],
+    "missing_information": [
+      "تابع یا منطق ساخت مقدار پوشیدهٔ کلید برای نمایش در UI",
+      "نمونه و قرارداد فایل `.env` یا روش بارگذاری آن",
+      "مدل درخواست اختصاصی برای تنظیم/ذخیرهٔ کلید، در صورت وجود",
+      "جزئیات UI برای نمایش وضعیت کلید بدون افشای مقدار آن"
+    ]
+  }
+}

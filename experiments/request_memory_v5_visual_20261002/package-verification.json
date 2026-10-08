@@ -1,0 +1,11 @@
+{
+  "zip": "D:\\project\\Alacrity\\Flux\\experiments\\request_memory_v5_20261002\\flux-memory-v5-runtime.zip",
+  "zip_sha256": "999364919393dfbd09396ab4b2ea4b64417f8d7b8fdf7a2a936ad65b94d5933c",
+  "bytes": 49556,
+  "runtime_files": 15,
+  "portable_tests": "..................................................                       [100%]\n50 passed in 1.93s",
+  "portable_demo": "ready, zero model calls",
+  "frozen_code_unchanged": true,
+  "source_hashes_match": true,
+  "actual_model_calls": 0
+}

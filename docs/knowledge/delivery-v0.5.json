@@ -1,0 +1,15 @@
+{
+  "version": "0.5.0",
+  "offline_tests_passed": 106,
+  "installed_exe_sha256": "4d2423b204d87315ab71d8faea11352cc16c46e5cea0dbb87bcbd9e49d574e4a",
+  "gemini_api_installed_runtime_live_check": "packaged-gemini-live-check.json",
+  "gapcode_live_check": "gapcode-connection-check.json",
+  "gemini_web_guest_check": "web-gemini-message-check.json",
+  "deepseek": "missing authenticated session and cookie values",
+  "notebooklm_implementation_source_id": "66864cc3-7f85-48da-aaf6-5f35c4809b19",
+  "scope": "initial local single-owner implementation",
+  "notebooklm_native_citations": 51,
+  "notebooklm_native_memory_note_id": "f2d69424-87cd-4e79-81ae-a5c32ff069eb",
+  "memory_audit": "head-memory-v0.5-audit.fa.md",
+  "reviewed_memory": "head-memory-v0.5.fa.md"
+}

@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-06",
+  "primary_arms": [
+    "senior_v1",
+    "goat_v1",
+    "senior_v2",
+    "goat_v2"
+  ],
+  "holdout_tasks": 12,
+  "samples_per_arm_task": 1,
+  "secondary_ablation": {
+    "arm": "senior_compact_default",
+    "task_ids": [
+      "H01",
+      "H02",
+      "H03",
+      "H04",
+      "H05",
+      "H06"
+    ],
+    "purpose": "Compact program versus full graph with identical default transport; no post-hoc subset selection"
+  },
+  "seed": 61126,
+  "concurrency": 2,
+  "max_provider_calls_including_development": 102,
+  "timeout_s": 240,
+  "source_hashes": {
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\adapter.py": "518810ba1f2444c7075c774a94657802d61c485084955ad1cdb0b9c552bc16fa",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\benchmark.py": "30b67925c9e7908df6ecc3cc39213ec5e6303d7f2b7b1b87f9023efe44bc85a5",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\checkpoint\\multilingual\\encoder\\config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\checkpoint\\multilingual\\model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\checkpoint\\multilingual\\rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\checkpoint\\multilingual\\tokenizer\\tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\checkpoint\\multilingual\\tokenizer\\tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\checkpoint-provenance.json": "d98a379401d400b29e8cc9658780600a52801b99ab4c8a664f34640eb7a3bb2a",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\decision.py": "5803b56adee83f44b6f251ab32d58cdb715f071df58eaa3be67b93e04c45166f",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\program_worker.py": "9e62e0ba4cfe86caddb2feecd9e1c75cc24695c1790cbd430ce3efec6ec94f3e",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\provider.py": "43419ac581b3bf68f7536a93b42e8dc7ecb57b3116df3f4a146ae7d71037b951",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\benchmark_v2.py": "4065779c2ef9ff510a0cad2e39297db7cdd257032ab16e93a9cbd103ee049a5a",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\compact_worker.py": "45e0e9629dcd70d64ae256326c5638d11266a51503f8eddb44007bf05f9d9255",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\cost_router.py": "ad15a8b40ae793271d984b4aeb881f9d995d18efb5ec457c8c0def43caaf0a4f",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\instructions.txt": "c2ae27a27a138d8a1e5f37510a279f5467baf0410749f38fc3e491fe3804f347",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\local_decisions.py": "fe8c153b0493d06082423ed342bbc11fd56db46d7df2e79b6cf603b332c56a44",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\optimizer.py": "4c1d54db75a544eca00b4f35c16b36ce3d3a1233dc210ec5eb32cfabb777f3e6",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\provider_v2.py": "76d4a9661457630242817e2919b113dcc2a150e7389ab30695e6cd2637d8d576",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\receipts\\dev_default_luna_1.json": "7b44852ff2876aae0e3c8289f86128313fc94ea7ff7a60da4de54d81d352a810",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\receipts\\dev_default_luna_2.json": "ba5a9522facffe0a262024fea9b6723877956440dcd21649c29fce4b24c98c67",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\receipts\\dev_minimal_astra.json": "5aa526553f8edd633084744ee0ad6d9ed2206e4c0f873c6dd73ee2c135205baf",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\receipts\\dev_minimal_luna_1.json": "b2a590b3a962b5d29743976cb53f9c12423ce649ac166135fdf53a0931c84e5f",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\receipts\\dev_minimal_luna_2.json": "35d44f2873fd9ea94a5bdd137a2f6385370a5bbcf116e1d66eda574d57377702",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\receipts\\dev_minimal_sol.json": "569fad62c375b97acda25d67a58e8677fc4bebcdbb9aeb621b0b47d20cfdcaa7",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\routing-statistics.json": "c4481d26ea9af35cd12beb3a3ecb6ab3240464bf40bc70c9d286e1cb09d6591a",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\suite.py": "1a805fc40732b49a657596eb04cea4d36bf285fd693a5c2f7be4bbe409275942",
+    "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_v2_20261006\\tasks.json": "167403ecc6bf5201560d6f4e07214aaacfccab40b94d9994cc015236c1d3cb29",
+    "D:\\project\\Alacrity\\Flux\\experiments\\request_memory_v5_20261002\\contracts.py": "cc25d9c3623bcba0bba67e1b0887899344ed1e0cb77da3e4bc5a2e85cc788a28",
+    "D:\\project\\Alacrity\\Flux\\experiments\\request_memory_v5_20261002\\engine_v5.py": "1f16f086840203df5b37df2f1a1b4bdd6082ffeb29c357126e20f56631935634",
+    "D:\\project\\Alacrity\\Flux\\experiments\\request_memory_v5_20261002\\memory_v5.py": "b453d4f0576ef3a8da85b22307777ef6b80801ece9939343c9a87e7d08b9d7b4",
+    "D:\\project\\Alacrity\\Flux\\experiments\\request_memory_v6_20261002\\reasoning_v6.py": "210e903a4f6b49be80afe201b53107008ca5e6a365fe4a31a5c6a19623540628",
+    "D:\\project\\Alacrity\\Flux\\experiments\\request_reasoning_v6_1_20261002\\engine.py": "86941acddc82f333e36e8abe1ce9dab02f2c088d160562c563fc46e00735f9bc",
+    "D:\\project\\Alacrity\\Flux\\experiments\\request_reasoning_v6_1_20261002\\worker.py": "12af5c0a84eae21d08f2ca1f1ffa28ca37a2b88e939889d05120c0118c645501",
+    "D:\\project\\Alacrity\\Flux\\experiments\\router_policy_20261006\\benchmark.py": "53a50e5b0da3f775af08b1c52f978b877ddbca58b55fd2c397518505f7c67ddd",
+    "D:\\project\\Alacrity\\Flux\\experiments\\router_policy_20261006\\tasks.json": "2516fba0c433d5b074b3c01ebd67d41ea3a22008a4424424e3a8305521dde9ea",
+    "D:\\project\\Alacrity\\Flux\\experiments\\router_policy_20261006\\worker.py": "a67228c44848f21a8f6e1dd8357cce441b3da1f3f3328dfec3a1d8d6d3f72786",
+    "D:\\project\\Alacrity\\Flux\\src\\flux\\core\\context.py": "12e1ea8f900ab051fa23b1c4128f2988edc7c48f1810e74c35de70b2afa9778a",
+    "D:\\project\\Alacrity\\Flux\\src\\flux\\knowledge\\retrieval.py": "5393a564d4d40230833b174a89a1b60c1639f66d66b8cf32c759cc7e53b84113"
+  },
+  "rates": {
+    "gpt-6-luna": [
+      0.1,
+      0.01,
+      0.125,
+      0.5
+    ],
+    "gpt-6.1-sol": [
+      2,
+      0.1,
+      2.5,
+      10
+    ],
+    "gpt-6-astra": [
+      10,
+      1,
+      12.5,
+      50
+    ]
+  },
+  "prices_source": "https://developers.openai.com/api/docs/pricing",
+  "baseline": "Current v1 Flux+Laya, run afresh: Senior Luna low; GOAT raw Laya model/effort; full graph+solve/check for program families; default CLI transport.",
+  "optimized": "Parameterized solve(facts), check(answer,facts), field refs and local typed constraint graph; thin CLI per-invocation configuration; bounded errors; no graph generated by model.",
+  "routing": "Senior remains Luna low. GOAT minimizes smoothed expected remaining cascade API-equivalent cost using development-only priors and probe input offsets; scheduling may use medium effort. Laya continues to choose verification and supplies raw model/effort signals, with cost-layer override logged.",
+  "laya": "Same actual multilingual checkpoint, local CUDA, both front and each attempt end; no fine-tuning or weight training. Failure acceptance prohibited.",
+  "graph_boundary": "Local graph is schema-specific and depends on trusted typed task family; refs and AST are syntactic checks, not semantic completeness proof. Unknown natural-language tasks need separate handling.",
+  "verification": "Same risk floors and independent full final audit in all arms. Fresh seeded code tests. Maximum two escalations; next model high/full. No gold, oracle code or other-arm answer in prompt.",
+  "feedback": "Only bounded error, no entire previous program. Self-contained scoped memory path emits zero archive units.",
+  "quality_criterion": "Primary comparison valid only when both paired arms pass all 12 full audits with zero false accepts and complete usage. Otherwise report observed accuracy/cost without claiming maintained quality.",
+  "limitations": "Same six task families, fresh data and wording, one sample each; no novel-domain or production proof. Cache/network uncontrolled; actual account invoice unknown. Cost predictors use 11 small correlated development observations and a heuristic output reduction prior, not a calibrated model.",
+  "configuration_source": "https://learn.chatgpt.com/docs/config-file/config-reference"
+}

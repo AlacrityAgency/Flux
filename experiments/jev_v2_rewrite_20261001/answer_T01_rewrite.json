@@ -1,0 +1,79 @@
+{
+  "task": "T01",
+  "algorithm": "rewrite",
+  "model": "gpt-5.6-luna",
+  "returned_model": "openai/gpt-5.6-luna",
+  "elapsed_seconds": 7.8653363000485115,
+  "usage": {
+    "completion_tokens": 796,
+    "prompt_tokens": 3367,
+    "total_tokens": 4163,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 34,
+      "rejected_prediction_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+      "cache_write_tokens": 3364,
+      "video_tokens": 0
+    },
+    "cost": 0.0017968,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0017968,
+      "upstream_inference_prompt_cost": 0.0008416,
+      "upstream_inference_completions_cost": 0.0009552
+    }
+  },
+  "finish_reason": "stop",
+  "raw": "{\n  \"summary\": \"تکرار Context در درخواست Head به این دلیل است که `build_head_prompt` آن را در فیلد `context` داخل `user_content` قرار می‌دهد و سپس `FluxEngine._context` همان مقدار را دوباره با کلید `reference_context` به پیام کاربر اضافه می‌کند. کمترین تغییر ثبت‌شده، حذف فیلد `context` از `build_head_prompt` است.\",\n  \"criteria\": [\n    {\n      \"criterion\": \"محل ساخت درخواست Head و فیلد context داخل آن مشخص شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `src/flux/agents/head.py::build_head_prompt` درخواست Head ساخته می‌شود. در `user_content`، فیلد `\\\"context\\\": task.context` قرار دارد و سپس کل ساختار در پیام `user` ارسال می‌شود.\",\n      \"evidence_ids\": [\n        \"src/flux/agents/head.py::build_head_prompt chunk-lines:1-19\"\n      ]\n    },\n    {\n      \"criterion\": \"محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `src/flux/engine/orchestrator.py::FluxEngine._context`، یک پیام `user` جدید با `reference_context: task.context` به `messages` append می‌شود. همین تابع همچنین متن سیاستی مربوط به غیرقابل‌اعتماد بودن Context و خروجی وابستگی‌ها را به پیام `system` اضافه می‌کند.\",\n      \"evidence_ids\": [\n        \"src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5\",\n        \"mem:dec_ctx_current rev3\"\n      ]\n    },\n    {\n      \"criterion\": \"فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود\",\n      \"status\": \"supported\",\n      \"answer\": \"در `FluxEngine._workflow`، فراخوانی Head با `self._context(build_head_prompt(task), task)` انجام می‌شود؛ بنابراین ابتدا `build_head_prompt` شامل `context` ساخته می‌شود و سپس `_context` همان Task را با `reference_context` دوباره اضافه می‌کند.\",\n      \"evidence_ids\": [\n        \"src/flux/engine/orchestrator.py::FluxEngine._workflow chunk-lines:1,4-17\",\n        \"src/flux/agents/head.py::build_head_prompt chunk-lines:1-19\",\n        \"src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5\"\n      ]\n    },\n    {\n      \"criterion\": \"تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود\",\n      \"status\": \"supported\",\n      \"answer\": \"تصمیم فعلی این است که Context پروژه در هر تماس به‌صورت `reference_context` توسط `_context` به Head، کارگرها و بازبین اضافه شود. چون `build_head_prompt` نیز `context` را مستقیماً در درخواست Head می‌گذارد، Head دو نسخه دریافت می‌کند. اصلاح پیشنهادی ثبت‌شده: حذف فیلد `context` از `build_head_prompt`.\",\n      \"evidence_ids\": [\n        \"mem:dec_ctx_current rev3\"\n      ]\n    }\n  ],\n  \"missing_information\": [\n    \"شواهدی دربارهٔ اجرای تست یا تأیید عملی اصلاح ارائه نشده است.\",\n    \"شواهدی دربارهٔ مسیر دقیق اعمال `_context` برای کارگرها و بازبین‌ها، به‌جز تصمیم ثبت‌شده، ارائه نشده است.\"\n  ]\n}",
+  "success": true,
+  "answer": {
+    "summary": "تکرار Context در درخواست Head به این دلیل است که `build_head_prompt` آن را در فیلد `context` داخل `user_content` قرار می‌دهد و سپس `FluxEngine._context` همان مقدار را دوباره با کلید `reference_context` به پیام کاربر اضافه می‌کند. کمترین تغییر ثبت‌شده، حذف فیلد `context` از `build_head_prompt` است.",
+    "criteria": [
+      {
+        "criterion": "محل ساخت درخواست Head و فیلد context داخل آن مشخص شود",
+        "status": "supported",
+        "answer": "در `src/flux/agents/head.py::build_head_prompt` درخواست Head ساخته می‌شود. در `user_content`، فیلد `\"context\": task.context` قرار دارد و سپس کل ساختار در پیام `user` ارسال می‌شود.",
+        "evidence_ids": [
+          "src/flux/agents/head.py::build_head_prompt chunk-lines:1-19"
+        ]
+      },
+      {
+        "criterion": "محل افزودن دوبارهٔ Context مرجع به هر درخواست مشخص شود",
+        "status": "supported",
+        "answer": "در `src/flux/engine/orchestrator.py::FluxEngine._context`، یک پیام `user` جدید با `reference_context: task.context` به `messages` append می‌شود. همین تابع همچنین متن سیاستی مربوط به غیرقابل‌اعتماد بودن Context و خروجی وابستگی‌ها را به پیام `system` اضافه می‌کند.",
+        "evidence_ids": [
+          "src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5",
+          "mem:dec_ctx_current rev3"
+        ]
+      },
+      {
+        "criterion": "فراخوانی Head که هر دو مسیر را با هم به‌کار می‌برد نشان داده شود",
+        "status": "supported",
+        "answer": "در `FluxEngine._workflow`، فراخوانی Head با `self._context(build_head_prompt(task), task)` انجام می‌شود؛ بنابراین ابتدا `build_head_prompt` شامل `context` ساخته می‌شود و سپس `_context` همان Task را با `reference_context` دوباره اضافه می‌کند.",
+        "evidence_ids": [
+          "src/flux/engine/orchestrator.py::FluxEngine._workflow chunk-lines:1,4-17",
+          "src/flux/agents/head.py::build_head_prompt chunk-lines:1-19",
+          "src/flux/engine/orchestrator.py::FluxEngine._context chunk-lines:1-5"
+        ]
+      },
+      {
+        "criterion": "تصمیم ثبت‌شدهٔ فعلی دربارهٔ Context در پاسخ لحاظ شود",
+        "status": "supported",
+        "answer": "تصمیم فعلی این است که Context پروژه در هر تماس به‌صورت `reference_context` توسط `_context` به Head، کارگرها و بازبین اضافه شود. چون `build_head_prompt` نیز `context` را مستقیماً در درخواست Head می‌گذارد، Head دو نسخه دریافت می‌کند. اصلاح پیشنهادی ثبت‌شده: حذف فیلد `context` از `build_head_prompt`.",
+        "evidence_ids": [
+          "mem:dec_ctx_current rev3"
+        ]
+      }
+    ],
+    "missing_information": [
+      "شواهدی دربارهٔ اجرای تست یا تأیید عملی اصلاح ارائه نشده است.",
+      "شواهدی دربارهٔ مسیر دقیق اعمال `_context` برای کارگرها و بازبین‌ها، به‌جز تصمیم ثبت‌شده، ارائه نشده است."
+    ]
+  }
+}

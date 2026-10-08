@@ -1,0 +1,21 @@
+{
+  "provider": "gapcode",
+  "model_calls_requested": 1,
+  "database": "none",
+  "files_modified_by_request": false,
+  "actual_cost_usd": null,
+  "exit_code": 0,
+  "completed": true,
+  "response": "FLUX_CONNECTION_OK",
+  "successful": true,
+  "tool_events": 0,
+  "usage": {
+    "input_tokens": 15468,
+    "cached_input_tokens": 3712,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 8,
+    "reasoning_output_tokens": 0,
+    "billing": "gapcode-wallet",
+    "actual_cost_usd": null
+  }
+}

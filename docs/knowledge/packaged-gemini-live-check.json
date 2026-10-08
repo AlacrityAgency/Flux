@@ -1,0 +1,33 @@
+{
+  "exe_sha256": "4d2423b204d87315ab71d8faea11352cc16c46e5cea0dbb87bcbd9e49d574e4a",
+  "provider": "gemini-api",
+  "user_database_access": false,
+  "model_calls_requested": 1,
+  "state": "completed",
+  "successful": true,
+  "response": "FLUX_PACKAGED_GEMINI_OK",
+  "error": "",
+  "usage": {
+    "billing": "gemini-api",
+    "input_tokens": 104,
+    "output_tokens": 11,
+    "thought_tokens": null,
+    "cached_input_tokens": null,
+    "provider_usage": {
+      "promptTokenCount": 104,
+      "candidatesTokenCount": 11,
+      "totalTokenCount": 115,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 104
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "actual_cost_usd": null,
+    "usage_available": true,
+    "physical_requests": 1
+  },
+  "keys_returned": false
+}
