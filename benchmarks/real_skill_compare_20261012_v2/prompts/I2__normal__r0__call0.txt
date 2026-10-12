@@ -1,0 +1,5 @@
+Return only the requested answer JSON.
+TASK:
+Calculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.
+FACTS:
+{"lines":[{"qty":8,"unit_cents":690,"discount_percent":"50"},{"qty":9,"unit_cents":946,"discount_percent":"50"},{"qty":6,"unit_cents":2540,"discount_percent":"12.5"},{"qty":6,"unit_cents":3150,"discount_percent":"17.75"},{"qty":5,"unit_cents":4974,"discount_percent":"50"}],"shipping":630,"tax_percent":"8.875"}

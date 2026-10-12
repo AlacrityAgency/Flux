@@ -1,0 +1,73 @@
+{
+  "task_id": "C3",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_matched",
+  "rep": 1,
+  "label": "C3__flux_matched__r1",
+  "calls": [
+    "C3__flux_matched__r1__call0",
+    "C3__flux_matched__r1__call1",
+    "C3__flux_matched__r1__call2"
+  ],
+  "laya_receipts": [
+    "C3__flux_matched__r1__front",
+    "C3__flux_matched__r1__end0",
+    "C3__flux_matched__r1__end1",
+    "C3__flux_matched__r1__end2"
+  ],
+  "actions": [
+    {
+      "raw": "escalate",
+      "applied": "escalate",
+      "guard_override": false
+    },
+    {
+      "raw": "stop",
+      "applied": "escalate",
+      "guard_override": true
+    },
+    {
+      "raw": "escalate",
+      "applied": "stop",
+      "guard_override": true
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": false,
+  "correct": false,
+  "candidate_correct": false,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": false,
+    "executed": 1,
+    "failures": [
+      {
+        "reason": "answer differs from exact reference"
+      }
+    ]
+  },
+  "answer": null,
+  "code": null,
+  "failure": "Provider incomplete or tool use",
+  "latency_s": 24.250877300000866,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C3__flux_matched__r1",
+  "test_integrity": true
+}

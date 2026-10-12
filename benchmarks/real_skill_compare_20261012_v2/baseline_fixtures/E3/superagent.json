@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "profile": "service",
+  "features": [],
+  "environment": "test",
+  "testing": {
+    "repeat": 1,
+    "static_workers": 1,
+    "suites": [
+      {
+        "name": "unittest",
+        "cwd": "."
+      }
+    ]
+  },
+  "acceptance": [
+    {
+      "id": "A1",
+      "criterion": "Fix solve(facts): ledger events credit/debit positive integer amount with event id. First occurrence of an id takes effect; exact duplicates ignored; same id with different kind/amount rejects entire batch with {\"error\":\"conflict\"}. Balance starts at initial. Debit may overdraw (negative balance allowed). Return {\"balance\": int,\"applied\": int} counting unique events. No input mutation.",
+      "gate": "backend.behavior",
+      "scenario": "task-contract"
+    }
+  ],
+  "checks": {
+    "backend.behavior": {
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\public_gate.py",
+        "--task-id",
+        "E3",
+        "--project",
+        "."
+      ],
+      "expected": [
+        "task-contract"
+      ]
+    }
+  }
+}

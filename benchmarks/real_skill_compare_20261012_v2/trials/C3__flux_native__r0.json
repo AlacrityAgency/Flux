@@ -1,0 +1,54 @@
+{
+  "task_id": "C3",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "C3__flux_native__r0",
+  "calls": [
+    "C3__flux_native__r0__call0"
+  ],
+  "laya_receipts": [
+    "C3__flux_native__r0__front",
+    "C3__flux_native__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "count": 79,
+        "digit_sum_total": 1191
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "count": 79,
+    "digit_sum_total": 1191
+  },
+  "code": "def solve(facts):\n    alphabet = facts['alphabet']\n    length = facts['length']\n    modulus = facts['modulus']\n    residue = facts['residue']\n    sum_min = facts['sum_min']\n    sum_max = facts['sum_max']\n    target_digit = facts['target_digit']\n    target_count = facts['target_count']\n    dp = {(0, 0, 0, -1): (1, 0)}\n    for _ in range(length):\n        nxt = {}\n        for (r, s, c, last), (n, total) in dp.items():\n            for d in alphabet:\n                if d == last:\n                    continue\n                nc = c + (d == target_digit)\n                ns = s + d\n                if nc > target_count or ns > sum_max:\n                    continue\n                key = ((r * 10 + d) % modulus, ns, nc, d)\n                old_n, old_total = nxt.get(key, (0, 0))\n                nxt[key] = (old_n + n, old_total + total + n * d)\n        dp = nxt\n    count = 0\n    digit_sum_total = 0\n    for (r, s, c, last), (n, total) in dp.items():\n        if r == residue and sum_min <= s <= sum_max and c == target_count:\n            count += n\n            digit_sum_total += total\n    return {'count': count, 'digit_sum_total': digit_sum_total}\n\ndef check(answer, facts):\n    alphabet = facts['alphabet']\n    length = facts['length']\n    modulus = facts['modulus']\n    residue = facts['residue']\n    sum_min = facts['sum_min']\n    sum_max = facts['sum_max']\n    target_digit = facts['target_digit']\n    target_count = facts['target_count']\n    counts = {}\n    totals = {}\n    for d in alphabet:\n        c = (d == target_digit)\n        s = d\n        if c <= target_count and s <= sum_max:\n            key = (d % modulus, s, c, d)\n            counts[key] = counts.get(key, 0) + 1\n            totals[key] = totals.get(key, 0) + d\n    for _ in range(1, length):\n        new_counts = {}\n        new_totals = {}\n        for (r, s, c, last), n in counts.items():\n            for d in alphabet:\n                if d != last:\n                    ns = s + d\n                    nc = c + (d == target_digit)\n                    if ns <= sum_max and nc <= target_count:\n                        key = ((r * 10 + d) % modulus, ns, nc, d)\n                        new_counts[key] = new_counts.get(key, 0) + n\n                        new_totals[key] = new_totals.get(key, 0) + totals[(r, s, c, last)] + n * d\n        counts, totals = new_counts, new_totals\n    expected_count = 0\n    expected_total = 0\n    for key, n in counts.items():\n        r, s, c, last = key\n        if r == residue and sum_min <= s <= sum_max and c == target_count:\n            expected_count += n\n            expected_total += totals[key]\n    return isinstance(answer, dict) and answer.get('count') == expected_count and answer.get('digit_sum_total') == expected_total",
+  "failure": "",
+  "latency_s": 9.349985199998628,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C3__flux_native__r0",
+  "test_integrity": true
+}

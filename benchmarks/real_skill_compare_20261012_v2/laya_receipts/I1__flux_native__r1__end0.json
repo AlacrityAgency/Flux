@@ -1,0 +1,45 @@
+{
+  "state": {
+    "request": "TASK:\nCalculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.\nFACTS:\n{\"lines\":[{\"qty\":1,\"unit_cents\":115,\"discount_percent\":\"50\"},{\"qty\":3,\"unit_cents\":17,\"discount_percent\":\"50\"}],\"shipping\":3,\"tax_percent\":\"50\"}",
+    "candidate": "{\"refs\":[\"lines\",\"shipping\",\"tax_percent\"],\"code\":\"from fractions import Fraction\\n\\ndef _round_half_up(x):\\n    return (2 * x.numerator + x.denominator) // (2 * x.denominator)\\n\\ndef solve(facts):\\n    subtotal = 0\\n    for line in facts['lines']:\\n        discount = Fraction(line['discount_percent'])\\n        amount = Fraction(line['qty'] * line['unit_cents']) * (1 - discount / 100)\\n        subtotal += _round_half_up(amount)\\n    tax = _round_half_up(Fraction(subtotal) * Fraction(facts['tax_percent']) / 100)\\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n\\ndef check(answer, facts):\\n    subtotal = 0\\n    for line in facts['lines']:\\n        q = Fraction(line['discount_percent'])\\n        numerator = line['qty'] * line['unit_cents'] * (100 * q.denominator - q.numerator)\\n        denominator = 100 * q.denominator\\n        subtotal += (2 * numerator + denominator) // (2 * denominator)\\n    t = Fraction(facts['tax_percent'])\\n    numerator = subtotal * t.numerator\\n    denominator = 100 * t.denominator\\n    tax = (2 * numerator + denominator) // (2 * denominator)\\n    expected = {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n    return isinstance(answer, dict) and answer == expected\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.7687,
+          "escalate": 0.089,
+          "stop": 0.1423
+        },
+        "confidence": 0.3673,
+        "answer_confidence": 0.7687,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 708,
+      "output_tokens": 0,
+      "state_tokens": 645,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.07616039999993518,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

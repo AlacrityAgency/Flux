@@ -1,0 +1,90 @@
+{
+  "task_id": "S4",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "flux_matched",
+  "rep": 0,
+  "label": "S4__flux_matched__r0",
+  "calls": [
+    "S4__flux_matched__r0__call0"
+  ],
+  "laya_receipts": [
+    "S4__flux_matched__r0__front",
+    "S4__flux_matched__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "order": [
+          "K0",
+          "K4",
+          "K1",
+          "K2",
+          "K3",
+          "K6",
+          "K5"
+        ],
+        "starts": [
+          0,
+          5,
+          10,
+          12,
+          14,
+          18,
+          22
+        ],
+        "finish": 26,
+        "weighted_tardiness": 9
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K0",
+      "K4",
+      "K1",
+      "K2",
+      "K3",
+      "K6",
+      "K5"
+    ],
+    "starts": [
+      0,
+      5,
+      10,
+      12,
+      14,
+      18,
+      22
+    ],
+    "finish": 26,
+    "weighted_tardiness": 9
+  },
+  "code": "from itertools import permutations\n\ndef solve(facts):\n    jobs = facts['jobs']\n    n = len(jobs)\n    best = None\n    result = None\n\n    def visit(used, time, cost, order, starts):\n        nonlocal best, result\n        if len(order) == n:\n            key = (cost, time, tuple(order))\n            if best is None or key < best:\n                best = key\n                result = {'order': list(order), 'starts': list(starts), 'finish': time, 'weighted_tardiness': cost}\n            return\n        for job in jobs:\n            jid = job['id']\n            if jid in used or not all(p in used for p in job['predecessors']):\n                continue\n            start = max(time, job['release'])\n            finish = start + job['duration']\n            visit(used | {jid}, finish,\n                  cost + job['weight'] * max(0, finish - job['due']),\n                  order + [jid], starts + [start])\n\n    visit(set(), 0, 0, [], [])\n    if result is None:\n        raise ValueError('No feasible order')\n    return result\n\ndef check(answer, facts):\n    try:\n        if not isinstance(answer, dict) or set(answer) != {'order', 'starts', 'finish', 'weighted_tardiness'}:\n            return False\n        jobs = facts['jobs']\n        best_key = None\n        best_answer = None\n        for sequence in permutations(jobs):\n            positions = {job['id']: i for i, job in enumerate(sequence)}\n            if any(p not in positions or positions[p] >= i\n                   for i, job in enumerate(sequence)\n                   for p in job['predecessors']):\n                continue\n            elapsed_work = 0\n            idle = 0\n            starts = []\n            tardiness = 0\n            for job in sequence:\n                idle = max(idle, job['release'] - elapsed_work)\n                starts.append(elapsed_work + idle)\n                elapsed_work += job['duration']\n                completion = elapsed_work + idle\n                tardiness += job['weight'] * max(0, completion - job['due'])\n            finish = elapsed_work + idle\n            order = [job['id'] for job in sequence]\n            key = (tardiness, finish, tuple(order))\n            if best_key is None or key < best_key:\n                best_key = key\n                best_answer = {'order': order, 'starts': starts, 'finish': finish, 'weighted_tardiness': tardiness}\n        return best_answer is not None and answer == best_answer\n    except Exception:\n        return False\n",
+  "failure": "",
+  "latency_s": 37.4426091000023,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S4__flux_matched__r0",
+  "test_integrity": true
+}

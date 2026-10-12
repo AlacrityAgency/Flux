@@ -1,0 +1,344 @@
+{
+  "command": [
+    "C:\\Program Files\\Python312\\python.exe",
+    "D:\\project\\Alacrity\\Flux\\super-main\\core\\bin\\sa.py",
+    "--project",
+    "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E6__super__r0",
+    "review",
+    "--mode",
+    "change",
+    "--profile",
+    "service",
+    "--depth",
+    "quick",
+    "--json"
+  ],
+  "exit_code": 2,
+  "stdout": "{\n  \"plan\": {\n    \"depth\": \"quick\",\n    \"mode\": \"change\",\n    \"profile\": \"service\",\n    \"features\": [\n      \"api\"\n    ],\n    \"layers\": [\n      \"core-logic\"\n    ],\n    \"shape\": \"pyramid\",\n    \"steps\": [\n      {\n        \"gate\": \"testing.run\",\n        \"args\": [\n          \"--repeat\",\n          \"1\",\n          \"--suite\",\n          \".\",\n          \"--runner\",\n          \"unittest\"\n        ],\n        \"scope\": null,\n        \"why\": \"named suite assertions in .\",\n        \"kind\": \"gate\"\n      },\n      {\n        \"gate\": \"testing.smells\",\n        \"args\": [],\n        \"scope\": null,\n        \"why\": \"focused/empty tests and other smells\",\n        \"kind\": \"gate\"\n      },\n      {\n        \"gate\": \"backend.behavior\",\n        \"args\": [],\n        \"scope\": null,\n        \"why\": \"required by project features, acceptance criteria or execution mode\",\n        \"kind\": \"gate\"\n      },\n      {\n        \"gate\": \"delivery.build\",\n        \"args\": [],\n        \"scope\": null,\n        \"why\": \"required by project features, acceptance criteria or execution mode\",\n        \"kind\": \"gate\"\n      },\n      {\n        \"gate\": \"testing.api\",\n        \"args\": [],\n        \"scope\": null,\n        \"why\": \"required by project features, acceptance criteria or execution mode\",\n        \"kind\": \"gate\"\n      }\n    ],\n    \"required\": [\n      \"backend.behavior\",\n      \"delivery.build\",\n      \"testing.api\",\n      \"testing.run\",\n      \"testing.smells\"\n    ],\n    \"hints\": [],\n    \"product_areas\": {},\n    \"detected\": {\n      \"ui\": false,\n      \"api_spec\": false,\n      \"tokens\": false,\n      \"e2e\": null,\n      \"runners\": [\n        \"unittest\"\n      ],\n      \"suites\": [\n        {\n          \"name\": \"unittest\",\n          \"cwd\": \".\"\n        }\n      ]\n    },\n    \"review_id\": \"19fd691a16ed4d04b23f67cd55666c91\"\n  },\n  \"results\": [\n    {\n      \"step\": \"testing.run\",\n      \"status\": \"FAIL\",\n      \"run\": \"r-20261013-000851-027651\",\n      \"verified\": 3,\n      \"duration_s\": 2.2715,\n      \"timing\": {\n        \"execution_s\": 2.2715,\n        \"fingerprint_before_s\": 0.0305,\n        \"fingerprint_after_s\": 0.0397\n      }\n    },\n    {\n      \"step\": \"testing.smells\",\n      \"status\": \"PASS\",\n      \"run\": \"r-20261013-000849-cd4a36\",\n      \"verified\": 0,\n      \"duration_s\": 0.7014,\n      \"timing\": {\n        \"execution_s\": 0.7014,\n        \"fingerprint_before_s\": 0.0388,\n        \"fingerprint_after_s\": 0.0251\n      }\n    },\n    {\n      \"step\": \"backend.behavior\",\n      \"status\": \"FAIL\",\n      \"run\": \"r-20261013-000853-8732ba\",\n      \"verified\": 1,\n      \"duration_s\": 1.4767,\n      \"timing\": {\n        \"execution_s\": 1.4767,\n        \"fingerprint_before_s\": 0.0312,\n        \"fingerprint_after_s\": 0.0251\n      }\n    },\n    {\n      \"step\": \"delivery.build\",\n      \"status\": \"NOT-TESTED\",\n      \"run\": \"r-20261013-000853-d001c5\",\n      \"verified\": 0,\n      \"duration_s\": 0.6926,\n      \"timing\": {\n        \"execution_s\": 0.6926,\n        \"fingerprint_before_s\": 0.0337,\n        \"fingerprint_after_s\": 0.0248\n      }\n    },\n    {\n      \"step\": \"testing.api\",\n      \"status\": \"NOT-TESTED\",\n      \"run\": \"r-20261013-000854-6a6d1c\",\n      \"verified\": 0,\n      \"duration_s\": 0.6748,\n      \"timing\": {\n        \"execution_s\": 0.6748,\n        \"fingerprint_before_s\": 0.0328,\n        \"fingerprint_after_s\": 0.0265\n      }\n    }\n  ],\n  \"verdict\": {\n    \"overall\": \"STALE\",\n    \"label\": \"[QA-STALE: re-run after code changes -> backend.behavior, delivery.build, testing.api, testing.run, testing.smells]\",\n    \"exit_code\": 2,\n    \"fingerprint\": \"3bc944d3c2a674e6\",\n    \"review_id\": \"19fd691a16ed4d04b23f67cd55666c91\",\n    \"modules\": {\n      \"testing\": {\n        \"gates\": [\n          \"testing.smells\",\n          \"testing.run\",\n          \"testing.api\"\n        ],\n        \"status\": \"STALE\"\n      },\n      \"backend\": {\n        \"gates\": [\n          \"backend.behavior\"\n        ],\n        \"status\": \"STALE\"\n      },\n      \"delivery\": {\n        \"gates\": [\n          \"delivery.build\"\n        ],\n        \"status\": \"STALE\"\n      }\n    },\n    \"gates\": {\n      \"testing.smells\": {\n        \"status\": \"STALE\",\n        \"last_status\": \"PASS\",\n        \"run\": \"r-20261013-000849-cd4a36\",\n        \"fresh\": false,\n        \"kind\": \"verdict\",\n        \"rules\": [],\n        \"report\": \".superagent/runs/r-20261013-000849-cd4a36.json\"\n      },\n      \"testing.run\": {\n        \"status\": \"STALE\",\n        \"last_status\": \"FAIL\",\n        \"run\": \"r-20261013-000851-027651\",\n        \"fresh\": false,\n        \"kind\": \"verdict\",\n        \"rules\": [\n          \"test-failure\"\n        ],\n        \"report\": \".superagent/runs/r-20261013-000851-027651.json\",\n        \"attempts\": 1,\n        \"budget\": \"ok\"\n      },\n      \"backend.behavior\": {\n        \"status\": \"STALE\",\n        \"last_status\": \"FAIL\",\n        \"run\": \"r-20261013-000853-8732ba\",\n        \"fresh\": false,\n        \"kind\": \"verdict\",\n        \"rules\": [\n          \"scenario-failed\"\n        ],\n        \"report\": \".superagent/runs/r-20261013-000853-8732ba.json\",\n        \"attempts\": 1,\n        \"budget\": \"ok\"\n      },\n      \"delivery.build\": {\n        \"status\": \"STALE\",\n        \"last_status\": \"NOT-TESTED\",\n        \"run\": \"r-20261013-000853-d001c5\",\n        \"fresh\": false,\n        \"kind\": \"verdict\",\n        \"rules\": [],\n        \"report\": \".superagent/runs/r-20261013-000853-d001c5.json\"\n      },\n      \"testing.api\": {\n        \"status\": \"STALE\",\n        \"last_status\": \"NOT-TESTED\",\n        \"run\": \"r-20261013-000854-6a6d1c\",\n        \"fresh\": false,\n        \"kind\": \"verdict\",\n        \"rules\": [],\n        \"report\": \".superagent/runs/r-20261013-000854-6a6d1c.json\"\n      }\n    },\n    \"iso25010\": {\n      \"Maintainability\": {\n        \"testing.smells\": \"STALE\",\n        \"delivery.build\": \"STALE\"\n      },\n      \"Reliability\": {\n        \"testing.smells\": \"STALE\",\n        \"testing.run\": \"STALE\",\n        \"testing.api\": \"STALE\"\n      },\n      \"Functional suitability\": {\n        \"testing.run\": \"STALE\",\n        \"backend.behavior\": \"STALE\",\n        \"testing.api\": \"STALE\"\n      },\n      \"Compatibility\": {\n        \"testing.api\": \"STALE\"\n      }\n    }\n  },\n  \"packet\": null,\n  \"worklist\": \"D:\\\\project\\\\Alacrity\\\\Flux\\\\benchmarks\\\\real_skill_compare_20261012_v2\\\\workspaces\\\\E6__super__r0\\\\.superagent\\\\review\\\\worklist.md\",\n  \"worklist_json\": \"D:\\\\project\\\\Alacrity\\\\Flux\\\\benchmarks\\\\real_skill_compare_20261012_v2\\\\workspaces\\\\E6__super__r0\\\\.superagent\\\\review\\\\worklist.json\",\n  \"tasks\": 6,\n  \"timing\": {\n    \"total_s\": 8.8344,\n    \"project_map_s\": 0.7907,\n    \"static_workers\": 1,\n    \"declared_agent\": {},\n    \"steps\": [\n      {\n        \"step\": \"testing.run\",\n        \"status\": \"FAIL\",\n        \"run\": \"r-20261013-000851-027651\",\n        \"verified\": 3,\n        \"duration_s\": 2.2715,\n        \"timing\": {\n          \"execution_s\": 2.2715,\n          \"fingerprint_before_s\": 0.0305,\n          \"fingerprint_after_s\": 0.0397\n        }\n      },\n      {\n        \"step\": \"testing.smells\",\n        \"status\": \"PASS\",\n        \"run\": \"r-20261013-000849-cd4a36\",\n        \"verified\": 0,\n        \"duration_s\": 0.7014,\n        \"timing\": {\n          \"execution_s\": 0.7014,\n          \"fingerprint_before_s\": 0.0388,\n          \"fingerprint_after_s\": 0.0251\n        }\n      },\n      {\n        \"step\": \"backend.behavior\",\n        \"status\": \"FAIL\",\n        \"run\": \"r-20261013-000853-8732ba\",\n        \"verified\": 1,\n        \"duration_s\": 1.4767,\n        \"timing\": {\n          \"execution_s\": 1.4767,\n          \"fingerprint_before_s\": 0.0312,\n          \"fingerprint_after_s\": 0.0251\n        }\n      },\n      {\n        \"step\": \"delivery.build\",\n        \"status\": \"NOT-TESTED\",\n        \"run\": \"r-20261013-000853-d001c5\",\n        \"verified\": 0,\n        \"duration_s\": 0.6926,\n        \"timing\": {\n          \"execution_s\": 0.6926,\n          \"fingerprint_before_s\": 0.0337,\n          \"fingerprint_after_s\": 0.0248\n        }\n      },\n      {\n        \"step\": \"testing.api\",\n        \"status\": \"NOT-TESTED\",\n        \"run\": \"r-20261013-000854-6a6d1c\",\n        \"verified\": 0,\n        \"duration_s\": 0.6748,\n        \"timing\": {\n          \"execution_s\": 0.6748,\n          \"fingerprint_before_s\": 0.0328,\n          \"fingerprint_after_s\": 0.0265\n        }\n      }\n    ],\n    \"notes\": [\n      \"CLI timings exclude agent/model reasoning and research outside this command.\"\n    ]\n  },\n  \"project_map\": \"D:\\\\project\\\\Alacrity\\\\Flux\\\\benchmarks\\\\real_skill_compare_20261012_v2\\\\workspaces\\\\E6__super__r0\\\\.superagent\\\\project-map.json\"\n}\n",
+  "stderr": "Review plan — depth quick, layers: core-logic, shape: pyramid\n   1. testing.run                        named suite assertions in .\n   2. testing.smells                     focused/empty tests and other smells\n   3. backend.behavior                   required by project features, acceptance criteria or execution mode\n   4. delivery.build                     required by project features, acceptance criteria or execution mode\n   5. testing.api                        required by project features, acceptance criteria or execution mode\n  required for the verdict: backend.behavior, delivery.build, testing.api, testing.run, testing.smells\nFAIL       testing.run                           2.3s  findings: 3 verified, 0 suspected\nPASS       testing.smells                        0.7s  findings: 0 verified, 0 suspected\nFAIL       backend.behavior                      1.5s  findings: 1 verified, 0 suspected\nNOT-TESTED delivery.build                        0.7s  findings: 0 verified, 0 suspected\n           note: Configure this gate's command and expected scenarios in superagent.json.\nNOT-TESTED testing.api                           0.7s  findings: 0 verified, 0 suspected\n           note: No OpenAPI/Swagger spec found; pass --spec.\n",
+  "report": {
+    "plan": {
+      "depth": "quick",
+      "mode": "change",
+      "profile": "service",
+      "features": [
+        "api"
+      ],
+      "layers": [
+        "core-logic"
+      ],
+      "shape": "pyramid",
+      "steps": [
+        {
+          "gate": "testing.run",
+          "args": [
+            "--repeat",
+            "1",
+            "--suite",
+            ".",
+            "--runner",
+            "unittest"
+          ],
+          "scope": null,
+          "why": "named suite assertions in .",
+          "kind": "gate"
+        },
+        {
+          "gate": "testing.smells",
+          "args": [],
+          "scope": null,
+          "why": "focused/empty tests and other smells",
+          "kind": "gate"
+        },
+        {
+          "gate": "backend.behavior",
+          "args": [],
+          "scope": null,
+          "why": "required by project features, acceptance criteria or execution mode",
+          "kind": "gate"
+        },
+        {
+          "gate": "delivery.build",
+          "args": [],
+          "scope": null,
+          "why": "required by project features, acceptance criteria or execution mode",
+          "kind": "gate"
+        },
+        {
+          "gate": "testing.api",
+          "args": [],
+          "scope": null,
+          "why": "required by project features, acceptance criteria or execution mode",
+          "kind": "gate"
+        }
+      ],
+      "required": [
+        "backend.behavior",
+        "delivery.build",
+        "testing.api",
+        "testing.run",
+        "testing.smells"
+      ],
+      "hints": [],
+      "product_areas": {},
+      "detected": {
+        "ui": false,
+        "api_spec": false,
+        "tokens": false,
+        "e2e": null,
+        "runners": [
+          "unittest"
+        ],
+        "suites": [
+          {
+            "name": "unittest",
+            "cwd": "."
+          }
+        ]
+      },
+      "review_id": "19fd691a16ed4d04b23f67cd55666c91"
+    },
+    "results": [
+      {
+        "step": "testing.run",
+        "status": "FAIL",
+        "run": "r-20261013-000851-027651",
+        "verified": 3,
+        "duration_s": 2.2715,
+        "timing": {
+          "execution_s": 2.2715,
+          "fingerprint_before_s": 0.0305,
+          "fingerprint_after_s": 0.0397
+        }
+      },
+      {
+        "step": "testing.smells",
+        "status": "PASS",
+        "run": "r-20261013-000849-cd4a36",
+        "verified": 0,
+        "duration_s": 0.7014,
+        "timing": {
+          "execution_s": 0.7014,
+          "fingerprint_before_s": 0.0388,
+          "fingerprint_after_s": 0.0251
+        }
+      },
+      {
+        "step": "backend.behavior",
+        "status": "FAIL",
+        "run": "r-20261013-000853-8732ba",
+        "verified": 1,
+        "duration_s": 1.4767,
+        "timing": {
+          "execution_s": 1.4767,
+          "fingerprint_before_s": 0.0312,
+          "fingerprint_after_s": 0.0251
+        }
+      },
+      {
+        "step": "delivery.build",
+        "status": "NOT-TESTED",
+        "run": "r-20261013-000853-d001c5",
+        "verified": 0,
+        "duration_s": 0.6926,
+        "timing": {
+          "execution_s": 0.6926,
+          "fingerprint_before_s": 0.0337,
+          "fingerprint_after_s": 0.0248
+        }
+      },
+      {
+        "step": "testing.api",
+        "status": "NOT-TESTED",
+        "run": "r-20261013-000854-6a6d1c",
+        "verified": 0,
+        "duration_s": 0.6748,
+        "timing": {
+          "execution_s": 0.6748,
+          "fingerprint_before_s": 0.0328,
+          "fingerprint_after_s": 0.0265
+        }
+      }
+    ],
+    "verdict": {
+      "overall": "STALE",
+      "label": "[QA-STALE: re-run after code changes -> backend.behavior, delivery.build, testing.api, testing.run, testing.smells]",
+      "exit_code": 2,
+      "fingerprint": "3bc944d3c2a674e6",
+      "review_id": "19fd691a16ed4d04b23f67cd55666c91",
+      "modules": {
+        "testing": {
+          "gates": [
+            "testing.smells",
+            "testing.run",
+            "testing.api"
+          ],
+          "status": "STALE"
+        },
+        "backend": {
+          "gates": [
+            "backend.behavior"
+          ],
+          "status": "STALE"
+        },
+        "delivery": {
+          "gates": [
+            "delivery.build"
+          ],
+          "status": "STALE"
+        }
+      },
+      "gates": {
+        "testing.smells": {
+          "status": "STALE",
+          "last_status": "PASS",
+          "run": "r-20261013-000849-cd4a36",
+          "fresh": false,
+          "kind": "verdict",
+          "rules": [],
+          "report": ".superagent/runs/r-20261013-000849-cd4a36.json"
+        },
+        "testing.run": {
+          "status": "STALE",
+          "last_status": "FAIL",
+          "run": "r-20261013-000851-027651",
+          "fresh": false,
+          "kind": "verdict",
+          "rules": [
+            "test-failure"
+          ],
+          "report": ".superagent/runs/r-20261013-000851-027651.json",
+          "attempts": 1,
+          "budget": "ok"
+        },
+        "backend.behavior": {
+          "status": "STALE",
+          "last_status": "FAIL",
+          "run": "r-20261013-000853-8732ba",
+          "fresh": false,
+          "kind": "verdict",
+          "rules": [
+            "scenario-failed"
+          ],
+          "report": ".superagent/runs/r-20261013-000853-8732ba.json",
+          "attempts": 1,
+          "budget": "ok"
+        },
+        "delivery.build": {
+          "status": "STALE",
+          "last_status": "NOT-TESTED",
+          "run": "r-20261013-000853-d001c5",
+          "fresh": false,
+          "kind": "verdict",
+          "rules": [],
+          "report": ".superagent/runs/r-20261013-000853-d001c5.json"
+        },
+        "testing.api": {
+          "status": "STALE",
+          "last_status": "NOT-TESTED",
+          "run": "r-20261013-000854-6a6d1c",
+          "fresh": false,
+          "kind": "verdict",
+          "rules": [],
+          "report": ".superagent/runs/r-20261013-000854-6a6d1c.json"
+        }
+      },
+      "iso25010": {
+        "Maintainability": {
+          "testing.smells": "STALE",
+          "delivery.build": "STALE"
+        },
+        "Reliability": {
+          "testing.smells": "STALE",
+          "testing.run": "STALE",
+          "testing.api": "STALE"
+        },
+        "Functional suitability": {
+          "testing.run": "STALE",
+          "backend.behavior": "STALE",
+          "testing.api": "STALE"
+        },
+        "Compatibility": {
+          "testing.api": "STALE"
+        }
+      }
+    },
+    "packet": null,
+    "worklist": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E6__super__r0\\.superagent\\review\\worklist.md",
+    "worklist_json": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E6__super__r0\\.superagent\\review\\worklist.json",
+    "tasks": 6,
+    "timing": {
+      "total_s": 8.8344,
+      "project_map_s": 0.7907,
+      "static_workers": 1,
+      "declared_agent": {},
+      "steps": [
+        {
+          "step": "testing.run",
+          "status": "FAIL",
+          "run": "r-20261013-000851-027651",
+          "verified": 3,
+          "duration_s": 2.2715,
+          "timing": {
+            "execution_s": 2.2715,
+            "fingerprint_before_s": 0.0305,
+            "fingerprint_after_s": 0.0397
+          }
+        },
+        {
+          "step": "testing.smells",
+          "status": "PASS",
+          "run": "r-20261013-000849-cd4a36",
+          "verified": 0,
+          "duration_s": 0.7014,
+          "timing": {
+            "execution_s": 0.7014,
+            "fingerprint_before_s": 0.0388,
+            "fingerprint_after_s": 0.0251
+          }
+        },
+        {
+          "step": "backend.behavior",
+          "status": "FAIL",
+          "run": "r-20261013-000853-8732ba",
+          "verified": 1,
+          "duration_s": 1.4767,
+          "timing": {
+            "execution_s": 1.4767,
+            "fingerprint_before_s": 0.0312,
+            "fingerprint_after_s": 0.0251
+          }
+        },
+        {
+          "step": "delivery.build",
+          "status": "NOT-TESTED",
+          "run": "r-20261013-000853-d001c5",
+          "verified": 0,
+          "duration_s": 0.6926,
+          "timing": {
+            "execution_s": 0.6926,
+            "fingerprint_before_s": 0.0337,
+            "fingerprint_after_s": 0.0248
+          }
+        },
+        {
+          "step": "testing.api",
+          "status": "NOT-TESTED",
+          "run": "r-20261013-000854-6a6d1c",
+          "verified": 0,
+          "duration_s": 0.6748,
+          "timing": {
+            "execution_s": 0.6748,
+            "fingerprint_before_s": 0.0328,
+            "fingerprint_after_s": 0.0265
+          }
+        }
+      ],
+      "notes": [
+        "CLI timings exclude agent/model reasoning and research outside this command."
+      ]
+    },
+    "project_map": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E6__super__r0\\.superagent\\project-map.json"
+  },
+  "latency_s": 9.586022499999672
+}

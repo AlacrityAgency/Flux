@@ -1,0 +1,52 @@
+{
+  "task_id": "C1",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "super",
+  "rep": 0,
+  "label": "C1__super__r0",
+  "calls": [
+    "C1__super__r0__call0",
+    "C1__super__r0__call1",
+    "C1__super__r0__call2"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": false,
+  "correct": false,
+  "candidate_correct": false,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": false,
+    "executed": 1,
+    "failures": [
+      {
+        "reason": "answer differs from exact reference"
+      }
+    ]
+  },
+  "answer": null,
+  "code": null,
+  "failure": "Provider incomplete or tool event",
+  "latency_s": 26.495032800001354,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C1__super__r0",
+  "test_integrity": true
+}

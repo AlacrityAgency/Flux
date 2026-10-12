@@ -1,0 +1,56 @@
+{
+  "task_id": "I2",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "flux_matched",
+  "rep": 0,
+  "label": "I2__flux_matched__r0",
+  "calls": [
+    "I2__flux_matched__r0__call0"
+  ],
+  "laya_receipts": [
+    "I2__flux_matched__r0__front",
+    "I2__flux_matched__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 48332,
+        "tax_cents": 4289,
+        "total_cents": 53251
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 48332,
+    "tax_cents": 4289,
+    "total_cents": 53251
+  },
+  "code": "from fractions import Fraction\nfrom decimal import Decimal, localcontext, ROUND_HALF_UP\n\ndef solve(facts):\n    def half_up(value):\n        n, d = value.numerator, value.denominator\n        rounded = (2 * abs(n) + d) // (2 * d)\n        return -rounded if n < 0 else rounded\n    subtotal = sum(half_up(Fraction(line['qty']) * Fraction(line['unit_cents']) * (1 - Fraction(line['discount_percent']) / 100)) for line in facts['lines'])\n    tax = half_up(Fraction(subtotal) * Fraction(facts['tax_percent']) / 100)\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\n\ndef check(answer, facts):\n    keys = {'subtotal_cents', 'tax_cents', 'total_cents'}\n    if not isinstance(answer, dict) or set(answer) != keys:\n        return False\n    if not all(isinstance(answer[k], int) and not isinstance(answer[k], bool) for k in keys):\n        return False\n    values = [facts['shipping'], facts['tax_percent']]\n    for line in facts['lines']:\n        values.extend([line['qty'], line['unit_cents'], line['discount_percent']])\n    decimals = [Decimal(str(value)) for value in values]\n    precision = 100 + sum(len(value.as_tuple().digits) + abs(value.as_tuple().exponent) for value in decimals)\n    with localcontext() as context:\n        context.prec = precision\n        subtotal = Decimal(0)\n        for line in facts['lines']:\n            amount = Decimal(str(line['qty'])) * Decimal(str(line['unit_cents']))\n            amount *= (Decimal(100) - Decimal(line['discount_percent'])) / Decimal(100)\n            subtotal += amount.quantize(Decimal(1), rounding=ROUND_HALF_UP)\n        tax = (subtotal * Decimal(facts['tax_percent']) / Decimal(100)).quantize(Decimal(1), rounding=ROUND_HALF_UP)\n        total = subtotal + tax + Decimal(str(facts['shipping']))\n        return answer['subtotal_cents'] == subtotal and answer['tax_cents'] == tax and answer['total_cents'] == total\n",
+  "failure": "",
+  "latency_s": 37.331535299999814,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\I2__flux_matched__r0",
+  "test_integrity": true
+}

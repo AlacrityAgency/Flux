@@ -1,0 +1,41 @@
+{
+  "task_id": "E4",
+  "track": "engineering",
+  "family": "rounding",
+  "arm": "normal",
+  "rep": 0,
+  "label": "E4__normal__r0",
+  "calls": [
+    "E4__normal__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.10643350000100327
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 38,
+    "failures": [],
+    "latency_s": 0.0635340000008
+  },
+  "answer": null,
+  "code": "from decimal import Decimal\n\ndef solve(facts):\n    numerator, denominator = Decimal(facts[\"percent\"]).as_integer_ratio()\n    divisor = 100 * denominator\n    discounted = facts[\"amount_cents\"] * (divisor - numerator)\n    return {\"cents\": (2 * discounted + divisor) // (2 * divisor)}",
+  "failure": "",
+  "latency_s": 10.56806140000117,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E4__normal__r0",
+  "test_integrity": true
+}

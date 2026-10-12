@@ -1,0 +1,54 @@
+{
+  "task_id": "C4",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_matched",
+  "rep": 0,
+  "label": "C4__flux_matched__r0",
+  "calls": [
+    "C4__flux_matched__r0__call0"
+  ],
+  "laya_receipts": [
+    "C4__flux_matched__r0__front",
+    "C4__flux_matched__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "count": 212,
+        "digit_sum_total": 3790
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "count": 212,
+    "digit_sum_total": 3790
+  },
+  "code": "from bisect import bisect_left, bisect_right\n\ndef solve(facts):\n    alphabet = facts['alphabet']\n    n = facts['length']\n    m = facts['modulus']\n    residue = facts['residue']\n    low, high = facts['sum_min'], facts['sum_max']\n    target, required = facts['target_digit'], facts['target_count']\n    states = {(None, 0, 0, 0): 1}\n    for position in range(n):\n        following = {}\n        for (previous, remainder, total, copies), multiplicity in states.items():\n            for digit in alphabet:\n                if digit == previous:\n                    continue\n                new_total = total + digit\n                new_copies = copies + int(digit == target)\n                if new_total > high or new_copies > required:\n                    continue\n                if new_copies + n - position - 1 < required:\n                    continue\n                key = (digit, (remainder * 10 + digit) % m, new_total, new_copies)\n                following[key] = following.get(key, 0) + multiplicity\n        states = following\n    count = 0\n    digit_sum_total = 0\n    for (previous, remainder, total, copies), multiplicity in states.items():\n        if remainder == residue and low <= total <= high and copies == required:\n            count += multiplicity\n            digit_sum_total += multiplicity * total\n    return {'count': count, 'digit_sum_total': digit_sum_total}\n\ndef check(answer, facts):\n    alphabet = facts['alphabet']\n    n, m = facts['length'], facts['modulus']\n    residue = facts['residue']\n    low, high = facts['sum_min'], facts['sum_max']\n    target, required = facts['target_digit'], facts['target_count']\n    if not 0 <= residue < m:\n        return answer == {'count': 0, 'digit_sum_total': 0}\n\n    def enumerate_half(size, use_first):\n        distribution = {}\n        stack = [(0, 0, 0, 0, None, None)]\n        while stack:\n            position, remainder, total, copies, first, last = stack.pop()\n            if position == size:\n                boundary = first if use_first else last\n                key = (remainder, total, copies, boundary)\n                distribution[key] = distribution.get(key, 0) + 1\n                continue\n            for digit in alphabet:\n                if digit != last:\n                    stack.append((position + 1, (remainder * 10 + digit) % m,\n                                  total + digit, copies + int(digit == target),\n                                  digit if position == 0 else first, digit))\n        return distribution\n\n    left_size = n // 2\n    right_size = n - left_size\n    left = enumerate_half(left_size, False)\n    right = enumerate_half(right_size, True)\n    groups = {}\n    for (remainder, total, copies, boundary), multiplicity in right.items():\n        key = (remainder, copies, boundary)\n        if key not in groups:\n            groups[key] = {}\n        groups[key][total] = groups[key].get(total, 0) + multiplicity\n    indexed = {}\n    for key, totals in groups.items():\n        sums = sorted(totals)\n        counts = [0]\n        weighted = [0]\n        for total in sums:\n            counts.append(counts[-1] + totals[total])\n            weighted.append(weighted[-1] + total * totals[total])\n        indexed[key] = (sums, counts, weighted)\n    factor = pow(10, right_size, m)\n    count = 0\n    digit_sum_total = 0\n    boundaries = alphabet if right_size else [None]\n    for (remainder, total, copies, last), multiplicity in left.items():\n        wanted = (residue - remainder * factor) % m\n        for first in boundaries:\n            if left_size and right_size and last == first:\n                continue\n            key = (wanted, required - copies, first)\n            if key not in indexed:\n                continue\n            sums, counts, weighted = indexed[key]\n            start = bisect_left(sums, low - total)\n            end = bisect_right(sums, high - total)\n            if end <= start:\n                continue\n            matches = counts[end] - counts[start]\n            count += multiplicity * matches\n            digit_sum_total += multiplicity * (total * matches + weighted[end] - weighted[start])\n    return answer == {'count': count, 'digit_sum_total': digit_sum_total}\n",
+  "failure": "",
+  "latency_s": 54.25006889999713,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C4__flux_matched__r0",
+  "test_integrity": true
+}

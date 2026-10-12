@@ -1,0 +1,54 @@
+{
+  "task_id": "C4",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_native",
+  "rep": 1,
+  "label": "C4__flux_native__r1",
+  "calls": [
+    "C4__flux_native__r1__call0"
+  ],
+  "laya_receipts": [
+    "C4__flux_native__r1__front",
+    "C4__flux_native__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "count": 212,
+        "digit_sum_total": 3790
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "count": 212,
+    "digit_sum_total": 3790
+  },
+  "code": "def solve(facts):\n    alphabet = facts[\"alphabet\"]\n    length = facts[\"length\"]\n    modulus = facts[\"modulus\"]\n    residue = facts[\"residue\"]\n    sum_min = facts[\"sum_min\"]\n    sum_max = facts[\"sum_max\"]\n    target_digit = facts[\"target_digit\"]\n    target_count = facts[\"target_count\"]\n    # State: last digit, residue, digit sum, target-digit count.\n    dp = {}\n    for digit in alphabet:\n        key = (digit, digit % modulus, digit, int(digit == target_digit))\n        dp[key] = (1, digit)\n    for _ in range(1, length):\n        ndp = {}\n        for (last, rem, total, count), (ways, digit_sums) in dp.items():\n            for digit in alphabet:\n                if digit == last:\n                    continue\n                new_total = total + digit\n                new_count = count + int(digit == target_digit)\n                if new_total > sum_max or new_count > target_count:\n                    continue\n                key = (digit, (rem * 10 + digit) % modulus, new_total, new_count)\n                old_ways, old_sums = ndp.get(key, (0, 0))\n                ndp[key] = (old_ways + ways, old_sums + digit_sums + ways * digit)\n        dp = ndp\n    count_valid = 0\n    digit_sum_total = 0\n    for (last, rem, total, count), (ways, digit_sums) in dp.items():\n        if rem == residue and sum_min <= total <= sum_max and count == target_count:\n            count_valid += ways\n            digit_sum_total += digit_sums\n    return {\"count\": count_valid, \"digit_sum_total\": digit_sum_total}\n\ndef check(answer, facts):\n    alphabet = facts[\"alphabet\"]\n    length = facts[\"length\"]\n    modulus = facts[\"modulus\"]\n    residue = facts[\"residue\"]\n    sum_min = facts[\"sum_min\"]\n    sum_max = facts[\"sum_max\"]\n    target_digit = facts[\"target_digit\"]\n    target_count = facts[\"target_count\"]\n    # Independent formulation: memoized suffix counts, then weighted summation.\n    from functools import lru_cache\n    @lru_cache(None)\n    def suffix(pos, last, rem, total, target_seen):\n        if total > sum_max or target_seen > target_count:\n            return (0, 0)\n        if pos == length:\n            if rem == residue and sum_min <= total <= sum_max and target_seen == target_count:\n                return (1, total)\n            return (0, 0)\n        ways = 0\n        sums = 0\n        for digit in alphabet:\n            if digit != last:\n                w, s = suffix(pos + 1, digit, (rem * 10 + digit) % modulus,\n                              total + digit, target_seen + int(digit == target_digit))\n                ways += w\n                sums += s\n        return (ways, sums)\n    expected = suffix(0, -1, 0, 0, 0)\n    return isinstance(answer, dict) and answer.get(\"count\") == expected[0] and answer.get(\"digit_sum_total\") == expected[1]",
+  "failure": "",
+  "latency_s": 27.768486400000256,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C4__flux_native__r1",
+  "test_integrity": true
+}

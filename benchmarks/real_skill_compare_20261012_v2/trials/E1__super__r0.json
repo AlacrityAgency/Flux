@@ -1,0 +1,259 @@
+{
+  "task_id": "E1",
+  "track": "engineering",
+  "family": "access",
+  "arm": "super",
+  "rep": 0,
+  "label": "E1__super__r0",
+  "calls": [
+    "E1__super__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.04896840000219527,
+      "gate_observed": true,
+      "gate_status": "PASS"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 27,
+    "failures": [],
+    "latency_s": 0.053425900001457194
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    a, r = facts[\"actor\"], facts[\"resource\"]\n    return {\"allowed\": bool(a.get(\"active\") is True and a[\"tenant\"] == r[\"tenant\"] and (a[\"id\"] == r[\"owner\"] or a.get(\"role\") == \"admin\"))}\n",
+  "failure": "",
+  "latency_s": 32.38163069999791,
+  "gate_records": [
+    {
+      "run": "r-20261013-000234-aa34a0",
+      "gate": "testing.smells",
+      "scope": null,
+      "review_id": "0e062504d2104d00b2ea033ce917d75a",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000234-aa34a0.json": "5f511051d852b3a9371a5328c446f90d2ba8758d3d1d15e5395e3c340d21ed92"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "0969abd3b4aa2f5e",
+      "time": "2026-10-13T00:02:34",
+      "duration_s": 0.76,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000234-aa34a0.json"
+    },
+    {
+      "run": "r-20261013-000237-007fb4",
+      "gate": "testing.run",
+      "scope": null,
+      "review_id": "0e062504d2104d00b2ea033ce917d75a",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000237-007fb4\\0\\runs": "b7c96e883b2c9abdac8df092fcbbf4d73dd805038b47acf8ea15ac90a8ccd5f3",
+        ".superagent\\runs\\r-20261013-000237-007fb4.json": "e2f14df9ffabcc457be7d0deccc85c2c024558322dfd87db9a9c61c8e908278e"
+      },
+      "artifact_error": false,
+      "status": "FAIL",
+      "exit_code": 1,
+      "fingerprint": "0969abd3b4aa2f5e",
+      "time": "2026-10-13T00:02:37",
+      "duration_s": 2.41,
+      "args": [
+        "--repeat",
+        "1",
+        "--suite",
+        ".",
+        "--runner",
+        "unittest"
+      ],
+      "rules": [
+        "test-failure"
+      ],
+      "finding_count": 2,
+      "report": ".superagent/runs/r-20261013-000237-007fb4.json"
+    },
+    {
+      "run": "r-20261013-000239-fe784e",
+      "gate": "backend.behavior",
+      "scope": null,
+      "review_id": "0e062504d2104d00b2ea033ce917d75a",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000239-fe784e\\0\\result.json": "9cf22d01677321cadd9d3f36bf9a6a4ed5b246171f44a4868b1f2fe4834fad9c",
+        ".superagent\\runs\\r-20261013-000239-fe784e.json": "6d16b59bcdbe0bb99ed0698da174ed63b9c59be71c98211e72c97ebffc9bf92b"
+      },
+      "artifact_error": false,
+      "status": "FAIL",
+      "exit_code": 1,
+      "fingerprint": "0969abd3b4aa2f5e",
+      "time": "2026-10-13T00:02:39",
+      "duration_s": 1.61,
+      "args": [],
+      "rules": [
+        "scenario-failed"
+      ],
+      "finding_count": 1,
+      "report": ".superagent/runs/r-20261013-000239-fe784e.json"
+    },
+    {
+      "run": "r-20261013-000239-1e10b3",
+      "gate": "delivery.build",
+      "scope": null,
+      "review_id": "0e062504d2104d00b2ea033ce917d75a",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000239-1e10b3.json": "8657c71213cf57f5c932b97d8b445b98bf61a32481c518d017d4b76aea1ac789"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "0969abd3b4aa2f5e",
+      "time": "2026-10-13T00:02:40",
+      "duration_s": 0.76,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000239-1e10b3.json"
+    },
+    {
+      "run": "r-20261013-000240-403476",
+      "gate": "testing.api",
+      "scope": null,
+      "review_id": "0e062504d2104d00b2ea033ce917d75a",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000240-403476.json": "956d0757529df31ece651a7d1c7aeda783a242009002c6b0f7c369815023ea91"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "0969abd3b4aa2f5e",
+      "time": "2026-10-13T00:02:40",
+      "duration_s": 0.74,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000240-403476.json"
+    },
+    {
+      "run": "r-20261013-000256-2ab004",
+      "gate": "testing.smells",
+      "scope": null,
+      "review_id": "00596455e8da4681a38be5ab4f83c75b",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000256-2ab004.json": "46a4548c6277cfcacb7c2f5f6c8ea5f85fed52f355530ee26601430ec398f23a"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "d8b9c90e0192bfa4",
+      "time": "2026-10-13T00:02:56",
+      "duration_s": 0.76,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000256-2ab004.json"
+    },
+    {
+      "run": "r-20261013-000259-719cce",
+      "gate": "testing.run",
+      "scope": null,
+      "review_id": "00596455e8da4681a38be5ab4f83c75b",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000259-719cce\\0\\runs": "cf136ba879d2d933181620338759d3d33d62c45b9e55422f733414f7e84e3bcd",
+        ".superagent\\runs\\r-20261013-000259-719cce.json": "7cd715d9417895be3a13d6fa961c6a6328bb4ffd87a95934f6bd16dd2d9b8874"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "d8b9c90e0192bfa4",
+      "time": "2026-10-13T00:02:59",
+      "duration_s": 2.37,
+      "args": [
+        "--repeat",
+        "1",
+        "--suite",
+        ".",
+        "--runner",
+        "unittest"
+      ],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000259-719cce.json"
+    },
+    {
+      "run": "r-20261013-000300-3f44a1",
+      "gate": "backend.behavior",
+      "scope": null,
+      "review_id": "00596455e8da4681a38be5ab4f83c75b",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000300-3f44a1\\0\\result.json": "c3974d0b3f844acfa7173a6dede9108dd00e4ef68cb489930720f13747b3723f",
+        ".superagent\\runs\\r-20261013-000300-3f44a1.json": "769ed93f4d6c4741250a481c23665f71fbbae5c918123084d56319a7b5c3a6cc"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "d8b9c90e0192bfa4",
+      "time": "2026-10-13T00:03:01",
+      "duration_s": 1.49,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000300-3f44a1.json"
+    },
+    {
+      "run": "r-20261013-000301-0c3b30",
+      "gate": "delivery.build",
+      "scope": null,
+      "review_id": "00596455e8da4681a38be5ab4f83c75b",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000301-0c3b30.json": "3e6d951615db949da590ee56c26270a35c0a38a4317649697c0b32a802eff79f"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "d8b9c90e0192bfa4",
+      "time": "2026-10-13T00:03:01",
+      "duration_s": 0.72,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000301-0c3b30.json"
+    },
+    {
+      "run": "r-20261013-000302-85302f",
+      "gate": "testing.api",
+      "scope": null,
+      "review_id": "00596455e8da4681a38be5ab4f83c75b",
+      "digests": {
+        ".superagent\\runs\\r-20261013-000302-85302f.json": "69ceff4df90f51ab63afe6d327314e01a997535a6767a7f2972542a075b15573"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "d8b9c90e0192bfa4",
+      "time": "2026-10-13T00:03:02",
+      "duration_s": 0.7,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-000302-85302f.json"
+    }
+  ],
+  "review_receipts": [
+    "E1__super__r0__baseline",
+    "E1__super__r0__candidate0"
+  ],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E1__super__r0",
+  "test_integrity": true
+}

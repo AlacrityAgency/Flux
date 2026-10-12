@@ -1,0 +1,1 @@
+Fix solve(facts): select payload according to version. v1 reads title, v2 reads display_name (ignore title even if present); missing required field -> {"error":"missing"}; unknown version -> {"error":"version"}. Return {"label": field value} for valid input, including empty string. Do not guess across versions.

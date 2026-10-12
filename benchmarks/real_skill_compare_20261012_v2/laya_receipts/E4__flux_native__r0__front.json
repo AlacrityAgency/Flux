@@ -1,0 +1,38 @@
+{
+  "state": {
+    "request": "TASK:\nFix solve(facts): amount_cents nonnegative integer and percent exact decimal string [0,100]. Discounted amount = amount_cents*(1-percent/100), rounded HALF UP to integer cents, never binary-float/bankers rounding. Return {\"cents\": int}.\nFACTS:\n{\"amount_cents\":105,\"percent\":\"50\"}\nBUGGY SOURCE:\ndef solve(facts):\n    return {\"cents\":round(facts[\"amount_cents\"]*(1-float(facts[\"percent\"])/100))}\n\nPUBLIC CASES:\n[{\"facts\": {\"amount_cents\": 105, \"percent\": \"50\"}, \"expected\": {\"cents\": 53}}, {\"facts\": {\"amount_cents\": 0, \"percent\": \"12.5\"}, \"expected\": {\"cents\": 0}}, {\"facts\": {\"amount_cents\": 101, \"percent\": \"100\"}, \"expected\": {\"cents\": 0}}]",
+    "risk_floor": "medium"
+  },
+  "phase": "front",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "verify": {
+        "type": "choice",
+        "choice": "medium",
+        "probabilities": {
+          "light": 0.0228,
+          "medium": 0.9512,
+          "full": 0.026
+        },
+        "confidence": 0.7918,
+        "answer_confidence": 0.9512,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 300,
+      "output_tokens": 0,
+      "state_tokens": 250,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.20675260000280105,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

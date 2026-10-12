@@ -1,0 +1,45 @@
+{
+  "state": {
+    "request": "TASK:\nFix solve(facts): return {\"allowed\": bool}. Access requires active actor, resource tenant equal actor tenant, AND actor is owner OR actor role admin. A tenant admin has no cross-tenant exception. Missing/unknown role gives no admin right.\nFACTS:\n{\"actor\":{\"id\":\"a\",\"tenant\":\"T\",\"role\":\"user\",\"active\":true},\"resource\":{\"owner\":\"a\",\"tenant\":\"T\"}}\nBUGGY SOURCE:\ndef solve(facts):\n    a,r=facts[\"actor\"],facts[\"resource\"]\n    return {\"allowed\":a.get(\"role\")==\"admin\" or a[\"id\"]==r[\"owner\"]}\n\nPUBLIC CASES:\n[{\"facts\": {\"actor\": {\"id\": \"a\", \"tenant\": \"T\", \"role\": \"user\", \"active\": true}, \"resource\": {\"owner\": \"a\", \"tenant\": \"T\"}}, \"expected\": {\"allowed\": true}}, {\"facts\": {\"actor\": {\"id\": \"a\", \"tenant\": \"T\", \"role\": \"admin\", \"active\": true}, \"resource\": {\"owner\": \"b\", \"tenant\": \"U\"}}, \"expected\": {\"allowed\": false}}, {\"facts\": {\"actor\": {\"id\": \"a\", \"tenant\": \"T\", \"role\": \"user\", \"active\": false}, \"resource\": {\"owner\": \"a\", \"tenant\": \"T\"}}, \"expected\": {\"allowed\": false}}]",
+    "candidate": "{\"refs\":[\"actor\",\"resource\"],\"code\":\"def solve(facts):\\n    a, r = facts[\\\"actor\\\"], facts[\\\"resource\\\"]\\n    allowed = (a.get(\\\"active\\\") is True and a.get(\\\"tenant\\\") == r.get(\\\"tenant\\\") and (a.get(\\\"id\\\") == r.get(\\\"owner\\\") or a.get(\\\"role\\\") == \\\"admin\\\"))\\n    return {\\\"allowed\\\": bool(allowed)}\\n\\ndef check(answer, facts):\\n    actor = facts[\\\"actor\\\"]\\n    resource = facts[\\\"resource\\\"]\\n    if actor.get(\\\"active\\\") is not True:\\n        expected = False\\n    elif actor.get(\\\"tenant\\\") != resource.get(\\\"tenant\\\"):\\n        expected = False\\n    elif actor.get(\\\"id\\\") == resource.get(\\\"owner\\\"):\\n        expected = True\\n    else:\\n        expected = actor.get(\\\"role\\\") == \\\"admin\\\"\\n    return isinstance(answer, dict) and answer.get(\\\"allowed\\\") is expected\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.9225,
+          "escalate": 0.0214,
+          "stop": 0.0561
+        },
+        "confidence": 0.7104,
+        "answer_confidence": 0.9225,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 776,
+      "output_tokens": 0,
+      "state_tokens": 713,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.29827279999881284,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

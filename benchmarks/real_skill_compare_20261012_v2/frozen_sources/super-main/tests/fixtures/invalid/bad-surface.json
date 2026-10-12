@@ -1,0 +1,11 @@
+{
+  "surface": {
+    "broken": {
+      "$type": "surface-effect",
+      "$value": {
+        "blur": 12,
+        "noise": 3.5
+      }
+    }
+  }
+}

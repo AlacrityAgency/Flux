@@ -1,0 +1,41 @@
+{
+  "task_id": "E1",
+  "track": "engineering",
+  "family": "access",
+  "arm": "normal",
+  "rep": 0,
+  "label": "E1__normal__r0",
+  "calls": [
+    "E1__normal__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.050945300001330907
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 27,
+    "failures": [],
+    "latency_s": 0.05280069999935222
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    a, r = facts[\"actor\"], facts[\"resource\"]\n    return {\"allowed\": bool(a.get(\"active\") is True and a[\"tenant\"] == r[\"tenant\"] and (a[\"id\"] == r[\"owner\"] or a.get(\"role\") == \"admin\"))}\n",
+  "failure": "",
+  "latency_s": 17.765219500000967,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E1__normal__r0",
+  "test_integrity": true
+}

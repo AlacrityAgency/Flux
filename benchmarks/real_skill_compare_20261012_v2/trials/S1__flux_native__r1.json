@@ -1,0 +1,78 @@
+{
+  "task_id": "S1",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "flux_native",
+  "rep": 1,
+  "label": "S1__flux_native__r1",
+  "calls": [
+    "S1__flux_native__r1__call0"
+  ],
+  "laya_receipts": [
+    "S1__flux_native__r1__front",
+    "S1__flux_native__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "order": [
+          "K0",
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "starts": [
+          4,
+          9,
+          16,
+          18
+        ],
+        "finish": 22,
+        "weighted_tardiness": 3
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K0",
+      "K1",
+      "K2",
+      "K3"
+    ],
+    "starts": [
+      4,
+      9,
+      16,
+      18
+    ],
+    "finish": 22,
+    "weighted_tardiness": 3
+  },
+  "code": "def solve(facts):\n    jobs=facts['jobs']; n=len(jobs); ids=[j['id'] for j in jobs]; ix={v:i for i,v in enumerate(ids)}\n    pred=[sum(1<<ix[x] for x in j['predecessors']) for j in jobs]\n    best=None\n    def rec(mask,t,order,starts,cost):\n        nonlocal best\n        if mask==(1<<n)-1:\n            key=(cost,t,tuple(ids[i] for i in order))\n            if best is None or key<best[0]: best=(key,order[:],starts[:])\n            return\n        for i,j in enumerate(jobs):\n            bit=1<<i\n            if mask&bit or pred[i]&mask!=pred[i]: continue\n            s=max(t,j['release']); c=s+j['duration']; nc=cost+j['weight']*max(0,c-j['due'])\n            if best is not None and nc>best[0][0]: continue\n            rec(mask|bit,c,order+[i],starts+[s],nc)\n    rec(0,0,[],[],0)\n    key,order,starts=best\n    return {'order':[ids[i] for i in order],'starts':starts,'finish':key[1],'weighted_tardiness':key[0]}\ndef check(answer,facts):\n    jobs=facts['jobs']; n=len(jobs); ids=[j['id'] for j in jobs]; ix={v:i for i,v in enumerate(ids)}\n    if not isinstance(answer,dict) or set(answer.keys())!={'order','starts','finish','weighted_tardiness'}: return False\n    order=answer['order']; starts=answer['starts']\n    if len(order)!=n or len(starts)!=n or set(order)!=set(ids): return False\n    t=0; mask=set(); cost=0\n    for k,name in enumerate(order):\n        if name not in ix: return False\n        j=jobs[ix[name]]\n        if any(p not in mask for p in j['predecessors']): return False\n        s=max(t,j['release'])\n        if starts[k]!=s: return False\n        t=s+j['duration']; cost+=j['weight']*max(0,t-j['due']); mask.add(name)\n    if answer['finish']!=t or answer['weighted_tardiness']!=cost: return False\n    # Independently enumerate every feasible sequence to certify all tie-breaks.\n    optimum=None\n    def visit(done,tm,seq,cc):\n        nonlocal optimum\n        if len(seq)==n:\n            key=(cc,tm,tuple(seq))\n            if optimum is None or key<optimum: optimum=key\n            return\n        for j in jobs:\n            name=j['id']\n            if name in done or any(p not in done for p in j['predecessors']): continue\n            end=max(tm,j['release'])+j['duration']\n            visit(done|{name},end,seq+[name],cc+j['weight']*max(0,end-j['due']))\n    visit(set(),0,[],0)\n    return (cost,t,tuple(order))==optimum",
+  "failure": "",
+  "latency_s": 58.65623979999873,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S1__flux_native__r1",
+  "test_integrity": true
+}

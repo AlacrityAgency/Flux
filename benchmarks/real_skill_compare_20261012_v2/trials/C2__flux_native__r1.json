@@ -1,0 +1,54 @@
+{
+  "task_id": "C2",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_native",
+  "rep": 1,
+  "label": "C2__flux_native__r1",
+  "calls": [
+    "C2__flux_native__r1__call0"
+  ],
+  "laya_receipts": [
+    "C2__flux_native__r1__front",
+    "C2__flux_native__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "count": 30,
+        "digit_sum_total": 393
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "count": 30,
+    "digit_sum_total": 393
+  },
+  "code": "def solve(facts):\n    from collections import defaultdict\n    states = {(0, -1, 0, 0): (1, 0)}\n    for _ in range(facts['length']):\n        nxt = defaultdict(lambda: (0, 0))\n        for (r, prev, s, c), (ways, total) in states.items():\n            for d in facts['alphabet']:\n                if d == prev:\n                    continue\n                nc = c + (d == facts['target_digit'])\n                if nc > facts['target_count']:\n                    continue\n                ns = s + d\n                if ns > facts['sum_max']:\n                    continue\n                key = ((r * 10 + d) % facts['modulus'], d, ns, nc)\n                w, t = nxt[key]\n                nxt[key] = (w + ways, t + total + ways * d)\n        states = nxt\n    count = digit_sum_total = 0\n    for (r, prev, s, c), (ways, total) in states.items():\n        if r == facts['residue'] and facts['sum_min'] <= s <= facts['sum_max'] and c == facts['target_count']:\n            count += ways\n            digit_sum_total += total\n    return {'count': count, 'digit_sum_total': digit_sum_total}\n\ndef check(answer, facts):\n    from itertools import product\n    count = 0\n    total = 0\n    for digits in product(facts['alphabet'], repeat=facts['length']):\n        if any(digits[i] == digits[i-1] for i in range(1, len(digits))):\n            continue\n        s = sum(digits)\n        if not (facts['sum_min'] <= s <= facts['sum_max']):\n            continue\n        if sum(d == facts['target_digit'] for d in digits) != facts['target_count']:\n            continue\n        r = 0\n        for d in digits:\n            r = (r * 10 + d) % facts['modulus']\n        if r == facts['residue']:\n            count += 1\n            total += s\n    return isinstance(answer, dict) and answer.get('count') == count and answer.get('digit_sum_total') == total",
+  "failure": "",
+  "latency_s": 31.97671309999714,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C2__flux_native__r1",
+  "test_integrity": true
+}

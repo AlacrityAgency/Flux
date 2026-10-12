@@ -1,0 +1,11 @@
+TASK:
+Fix solve(facts): validate entire rows before converting. Duplicate id rejects batch with {"error":"duplicate"}. Missing name rejects with {"error":"missing_name"} (duplicate check has precedence). Otherwise return {"rows": rows sorted by id, each exactly id and display_name preserving name string}. Do not mutate input.
+FACTS:
+{"rows":[{"id":2,"name":"B"},{"id":1,"name":"A"}]}
+BUGGY SOURCE:
+def solve(facts):
+    return {"rows":[{"id":r["id"],"display_name":r.get("name","")} for r in facts["rows"]]}
+
+PUBLIC CASES:
+[{"facts": {"rows": [{"id": 2, "name": "B"}, {"id": 1, "name": "A"}]}, "expected": {"rows": [{"id": 1, "display_name": "A"}, {"id": 2, "display_name": "B"}]}}, {"facts": {"rows": [{"id": 1, "name": "X"}, {"id": 1, "name": "Y"}]}, "expected": {"error": "duplicate"}}, {"facts": {"rows": [{"id": 2}]}, "expected": {"error": "missing_name"}}]
+Return only {"code":"Python source defining solve(facts)"}. Implement the fixed function for arbitrary inputs under this contract. Do not hardcode the fixture; no input mutation. Optional helper functions allowed, no class/IO/private attribute. The coordinator writes solution.py and executes tests outside this model session.

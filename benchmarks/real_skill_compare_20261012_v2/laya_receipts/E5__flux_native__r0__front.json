@@ -1,0 +1,38 @@
+{
+  "state": {
+    "request": "TASK:\nFix solve(facts): validate entire rows before converting. Duplicate id rejects batch with {\"error\":\"duplicate\"}. Missing name rejects with {\"error\":\"missing_name\"} (duplicate check has precedence). Otherwise return {\"rows\": rows sorted by id, each exactly id and display_name preserving name string}. Do not mutate input.\nFACTS:\n{\"rows\":[{\"id\":2,\"name\":\"B\"},{\"id\":1,\"name\":\"A\"}]}\nBUGGY SOURCE:\ndef solve(facts):\n    return {\"rows\":[{\"id\":r[\"id\"],\"display_name\":r.get(\"name\",\"\")} for r in facts[\"rows\"]]}\n\nPUBLIC CASES:\n[{\"facts\": {\"rows\": [{\"id\": 2, \"name\": \"B\"}, {\"id\": 1, \"name\": \"A\"}]}, \"expected\": {\"rows\": [{\"id\": 1, \"display_name\": \"A\"}, {\"id\": 2, \"display_name\": \"B\"}]}}, {\"facts\": {\"rows\": [{\"id\": 1, \"name\": \"X\"}, {\"id\": 1, \"name\": \"Y\"}]}, \"expected\": {\"error\": \"duplicate\"}}, {\"facts\": {\"rows\": [{\"id\": 2}]}, \"expected\": {\"error\": \"missing_name\"}}]",
+    "risk_floor": "medium"
+  },
+  "phase": "front",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "verify": {
+        "type": "choice",
+        "choice": "medium",
+        "probabilities": {
+          "light": 0.029,
+          "medium": 0.6634,
+          "full": 0.3076
+        },
+        "confidence": 0.3286,
+        "answer_confidence": 0.6634,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 380,
+      "output_tokens": 0,
+      "state_tokens": 330,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.028764400001819013,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

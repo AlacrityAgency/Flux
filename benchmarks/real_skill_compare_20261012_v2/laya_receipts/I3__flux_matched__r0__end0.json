@@ -1,0 +1,51 @@
+{
+  "state": {
+    "request": "TASK:\nCalculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.\nFACTS:\n{\"lines\":[{\"qty\":2,\"unit_cents\":3071,\"discount_percent\":\"50\"},{\"qty\":5,\"unit_cents\":5269,\"discount_percent\":\"12.5\"},{\"qty\":6,\"unit_cents\":1905,\"discount_percent\":\"0\"},{\"qty\":3,\"unit_cents\":2004,\"discount_percent\":\"17.75\"},{\"qty\":9,\"unit_cents\":1578,\"discount_percent\":\"17.75\"},{\"qty\":7,\"unit_cents\":6227,\"discount_percent\":\"17.75\"},{\"qty\":3,\"unit_cents\":305,\"discount_percent\":\"17.75\"},{\"qty\":4,\"unit_cents\":5926,\"discount_percent\":\"17.75\"},{\"qty\":2,\"unit_cents\":3909,\"discount_percent\":\"0\"}],\"shipping\":364,\"tax_percent\":\"7.5\"}",
+    "candidate": "{\"refs\":[\"lines\",\"shipping\",\"tax_percent\"],\"code\":\"from fractions import Fraction\\nfrom decimal import Decimal\\n\\ndef solve(facts):\\n    def rounded(value):\\n        n, d = value.numerator, value.denominator\\n        sign = -1 if n < 0 else 1\\n        return sign * ((2 * abs(n) + d) // (2 * d))\\n    subtotal = sum(rounded(Fraction(line['qty'] * line['unit_cents']) * (1 - Fraction(line['discount_percent']) / 100)) for line in facts['lines'])\\n    tax = rounded(Fraction(subtotal) * Fraction(facts['tax_percent']) / 100)\\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n\\ndef check(answer, facts):\\n    def ratio(text):\\n        parts = Decimal(text).as_tuple()\\n        coefficient = 0\\n        for digit in parts.digits:\\n            coefficient = coefficient * 10 + digit\\n        if parts.sign:\\n            coefficient = -coefficient\\n        if parts.exponent >= 0:\\n            return coefficient * 10 ** parts.exponent, 1\\n        return coefficient, 10 ** (-parts.exponent)\\n    def half_up(numerator, denominator):\\n        quotient, remainder = divmod(abs(numerator), denominator)\\n        if remainder * 2 >= denominator:\\n            quotient += 1\\n        return -quotient if numerator < 0 else quotient\\n    if not isinstance(answer, dict) or set(answer) != {'subtotal_cents', 'tax_cents', 'total_cents'}:\\n        return False\\n    if not all(isinstance(value, int) and not isinstance(value, bool) for value in answer.values()):\\n        return False\\n    subtotal = 0\\n    for line in facts['lines']:\\n        discount, scale = ratio(line['discount_percent'])\\n        gross = line['qty'] * line['unit_cents']\\n        subtotal += half_up(gross * (100 * scale - discount), 100 * scale)\\n    rate, scale = ratio(facts['tax_percent'])\\n    tax = half_up(subtotal * rate, 100 * scale)\\n    return answer['subtotal_cents'] == subtotal and answer['tax_cents'] == tax and answer['total_cents'] == subtotal + tax + facts['shipping']\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.5349,
+          "escalate": 0.0358,
+          "stop": 0.4293
+        },
+        "confidence": 0.2564,
+        "answer_confidence": 0.5349,
+        "action": {
+          "act_probability": 1.0
+        },
+        "window": {
+          "index": 1,
+          "token_start": 380,
+          "token_end": 1123,
+          "count": 2
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 1629,
+      "output_tokens": 0,
+      "state_tokens": 1503,
+      "state_tokens_dropped": 0,
+      "truncated": 0,
+      "truncated_questions": [],
+      "windows": 2
+    }
+  },
+  "latency_s": 0.4544226999969396,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

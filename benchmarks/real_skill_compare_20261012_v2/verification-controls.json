@@ -1,0 +1,49 @@
+{
+  "provider_calls": 0,
+  "scope": "deterministic runner/guard controls only, not model security or OS isolation",
+  "controls": [
+    {
+      "control": "correlated_wrong_solver_checker",
+      "internal_checker_pass": true,
+      "independent_full_audit_pass": false
+    },
+    {
+      "control": "forbidden_import",
+      "rejected": true,
+      "reason": "ValueError: {'status': 'error', 'error': 'ValueError: Disallowed import: os'}"
+    },
+    {
+      "control": "forbidden_eval",
+      "rejected": true,
+      "reason": "ValueError: {'status': 'error', 'error': 'ValueError: Disallowed name: eval'}"
+    },
+    {
+      "control": "private_attribute",
+      "rejected": true,
+      "reason": "ValueError: {'status': 'error', 'error': 'ValueError: Private attribute'}"
+    },
+    {
+      "control": "constant_checker",
+      "rejected": true,
+      "reason": "ValueError: check arguments unused"
+    },
+    {
+      "control": "checker_calls_solve",
+      "rejected": true,
+      "reason": "ValueError: Checker directly calls solve"
+    },
+    {
+      "control": "missing_ref",
+      "rejected": true
+    },
+    {
+      "control": "duplicate_ref",
+      "rejected": true
+    },
+    {
+      "control": "guard_exhaustive_failed_verification",
+      "cases": 9,
+      "pass": true
+    }
+  ]
+}

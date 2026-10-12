@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "profile": "service",
+  "features": [],
+  "environment": "test",
+  "testing": {
+    "repeat": 1,
+    "static_workers": 1,
+    "suites": [
+      {
+        "name": "unittest",
+        "cwd": "."
+      }
+    ]
+  },
+  "acceptance": [
+    {
+      "id": "A1",
+      "criterion": "Fix solve(facts): amount_cents nonnegative integer and percent exact decimal string [0,100]. Discounted amount = amount_cents*(1-percent/100), rounded HALF UP to integer cents, never binary-float/bankers rounding. Return {\"cents\": int}.",
+      "gate": "backend.behavior",
+      "scenario": "task-contract"
+    }
+  ],
+  "checks": {
+    "backend.behavior": {
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\public_gate.py",
+        "--task-id",
+        "E4",
+        "--project",
+        "."
+      ],
+      "expected": [
+        "task-contract"
+      ]
+    }
+  }
+}

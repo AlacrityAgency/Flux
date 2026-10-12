@@ -1,0 +1,1 @@
+Fix solve(facts): normalize intervals into sorted nonoverlapping half-open intervals. Ignore empty intervals, reject reversed endpoints with {"error":"reversed"}. Merge overlap but never merge mere adjacency. Return {"intervals": [[start,end],...]}. Input may be unsorted/duplicated and have negative endpoints.

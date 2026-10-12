@@ -1,0 +1,41 @@
+{
+  "task_id": "E3",
+  "track": "engineering",
+  "family": "replay",
+  "arm": "normal",
+  "rep": 0,
+  "label": "E3__normal__r0",
+  "calls": [
+    "E3__normal__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.05366900000080932
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 23,
+    "failures": [],
+    "latency_s": 0.05218059999970137
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    balance = facts[\"initial\"]\n    seen = {}\n    for event in facts[\"events\"]:\n        event_id = event[\"id\"]\n        signature = (event[\"kind\"], event[\"amount\"])\n        if event_id in seen:\n            if seen[event_id] != signature:\n                return {\"error\": \"conflict\"}\n            continue\n        seen[event_id] = signature\n        balance += event[\"amount\"] if event[\"kind\"] == \"credit\" else -event[\"amount\"]\n    return {\"balance\": balance, \"applied\": len(seen)}",
+  "failure": "",
+  "latency_s": 25.450155300000915,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E3__normal__r0",
+  "test_integrity": true
+}

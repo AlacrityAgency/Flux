@@ -1,0 +1,13 @@
+TASK:
+Fix solve(facts): amount_cents nonnegative integer and percent exact decimal string [0,100]. Discounted amount = amount_cents*(1-percent/100), rounded HALF UP to integer cents, never binary-float/bankers rounding. Return {"cents": int}.
+FACTS:
+{"amount_cents":105,"percent":"50"}
+BUGGY SOURCE:
+def solve(facts):
+    return {"cents":round(facts["amount_cents"]*(1-float(facts["percent"])/100))}
+
+PUBLIC CASES:
+[{"facts": {"amount_cents": 105, "percent": "50"}, "expected": {"cents": 53}}, {"facts": {"amount_cents": 0, "percent": "12.5"}, "expected": {"cents": 0}}, {"facts": {"amount_cents": 101, "percent": "100"}, "expected": {"cents": 0}}]
+Return only {"code":"Python source defining solve(facts)"}. Implement the fixed function for arbitrary inputs under this contract. Do not hardcode the fixture; no input mutation. Optional helper functions allowed, no class/IO/private attribute. The coordinator writes solution.py and executes tests outside this model session.
+
+Previous public verification failed: Provider incomplete or tool event. Keep facts and constraints. Pivot to a different approach after two failed attempts.

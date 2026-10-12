@@ -1,0 +1,51 @@
+{
+  "state": {
+    "request": "TASK:\nCalculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.\nFACTS:\n{\"lines\":[{\"qty\":1,\"unit_cents\":115,\"discount_percent\":\"50\"},{\"qty\":3,\"unit_cents\":17,\"discount_percent\":\"50\"}],\"shipping\":3,\"tax_percent\":\"50\"}",
+    "candidate": "{\"refs\":[\"lines\",\"shipping\",\"tax_percent\"],\"code\":\"from fractions import Fraction\\nfrom decimal import Decimal\\n\\ndef solve(facts):\\n    def rounded(x):\\n        sign = -1 if x < 0 else 1\\n        x = abs(x)\\n        return sign * ((2 * x.numerator + x.denominator) // (2 * x.denominator))\\n    subtotal = sum(rounded(Fraction(line['qty']) * Fraction(line['unit_cents']) * (1 - Fraction(line['discount_percent']) / 100)) for line in facts['lines'])\\n    tax = rounded(Fraction(subtotal) * Fraction(facts['tax_percent']) / 100)\\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n\\ndef check(answer, facts):\\n    def ratio(value):\\n        sign, digits, exponent = Decimal(str(value)).as_tuple()\\n        numerator = 0\\n        for digit in digits:\\n            numerator = numerator * 10 + digit\\n        if sign:\\n            numerator = -numerator\\n        if exponent >= 0:\\n            return numerator * 10 ** exponent, 1\\n        return numerator, 10 ** (-exponent)\\n    def rounded(numerator, denominator):\\n        quotient, remainder = divmod(abs(numerator), denominator)\\n        if remainder * 2 >= denominator:\\n            quotient += 1\\n        return -quotient if numerator < 0 else quotient\\n    subtotal = 0\\n    for line in facts['lines']:\\n        qn, qd = ratio(line['qty'])\\n        un, ud = ratio(line['unit_cents'])\\n        dn, dd = ratio(line['discount_percent'])\\n        subtotal += rounded(qn * un * (100 * dd - dn), qd * ud * 100 * dd)\\n    tn, td = ratio(facts['tax_percent'])\\n    tax = rounded(subtotal * tn, 100 * td)\\n    expected = {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n    return isinstance(answer, dict) and set(answer) == set(expected) and all(isinstance(answer[k], int) and not isinstance(answer[k], bool) and answer[k] == expected[k] for k in expected)\\n\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.8027,
+          "escalate": 0.0138,
+          "stop": 0.1834
+        },
+        "confidence": 0.5024,
+        "answer_confidence": 0.8027,
+        "action": {
+          "act_probability": 1.0
+        },
+        "window": {
+          "index": 1,
+          "token_start": 380,
+          "token_end": 918,
+          "count": 2
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 1424,
+      "output_tokens": 0,
+      "state_tokens": 1298,
+      "state_tokens_dropped": 0,
+      "truncated": 0,
+      "truncated_questions": [],
+      "windows": 2
+    }
+  },
+  "latency_s": 0.3697025000001304,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

@@ -1,0 +1,42 @@
+{
+  "task_id": "I3",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "super",
+  "rep": 0,
+  "label": "I3__super__r0",
+  "calls": [
+    "I3__super__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "reason": "Independent contract verification failed"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 118099,
+    "tax_cents": 8857,
+    "total_cents": 127320
+  },
+  "code": null,
+  "failure": "",
+  "latency_s": 12.95616820000214,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\I3__super__r0",
+  "test_integrity": true
+}

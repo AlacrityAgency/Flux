@@ -1,0 +1,45 @@
+{
+  "state": {
+    "request": "TASK:\nFix solve(facts): select payload according to version. v1 reads title, v2 reads display_name (ignore title even if present); missing required field -> {\"error\":\"missing\"}; unknown version -> {\"error\":\"version\"}. Return {\"label\": field value} for valid input, including empty string. Do not guess across versions.\nFACTS:\n{\"version\":2,\"payload\":{\"title\":\"legacy\",\"display_name\":\"new\"}}\nBUGGY SOURCE:\ndef solve(facts):\n    p=facts[\"payload\"]\n    return {\"label\":p.get(\"title\",p.get(\"display_name\",\"\"))}\n\nPUBLIC CASES:\n[{\"facts\": {\"version\": 2, \"payload\": {\"title\": \"legacy\", \"display_name\": \"new\"}}, \"expected\": {\"label\": \"new\"}}, {\"facts\": {\"version\": 3, \"payload\": {\"title\": \"A\"}}, \"expected\": {\"error\": \"version\"}}, {\"facts\": {\"version\": 1, \"payload\": {}}, \"expected\": {\"error\": \"missing\"}}]",
+    "candidate": "",
+    "provider_completed": false,
+    "verification": {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    "attempt": 1,
+    "remaining_attempts": 1
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.7288,
+          "escalate": 0.0491,
+          "stop": 0.2222
+        },
+        "confidence": 0.3512,
+        "answer_confidence": 0.7288,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 367,
+      "output_tokens": 0,
+      "state_tokens": 304,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.047404099997947924,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

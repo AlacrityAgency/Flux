@@ -1,0 +1,13 @@
+TASK:
+Fix solve(facts): ledger events credit/debit positive integer amount with event id. First occurrence of an id takes effect; exact duplicates ignored; same id with different kind/amount rejects entire batch with {"error":"conflict"}. Balance starts at initial. Debit may overdraw (negative balance allowed). Return {"balance": int,"applied": int} counting unique events. No input mutation.
+FACTS:
+{"initial":10,"events":[{"id":"a","kind":"credit","amount":7},{"id":"a","kind":"credit","amount":7}]}
+BUGGY SOURCE:
+def solve(facts):
+    b=facts["initial"]
+    for e in facts["events"]: b+=e["amount"] if e["kind"]=="credit" else -e["amount"]
+    return {"balance":b,"applied":len(facts["events"])}
+
+PUBLIC CASES:
+[{"facts": {"initial": 10, "events": [{"id": "a", "kind": "credit", "amount": 7}, {"id": "a", "kind": "credit", "amount": 7}]}, "expected": {"balance": 17, "applied": 1}}, {"facts": {"initial": 0, "events": [{"id": "a", "kind": "credit", "amount": 7}, {"id": "a", "kind": "credit", "amount": 8}]}, "expected": {"error": "conflict"}}, {"facts": {"initial": 2, "events": []}, "expected": {"balance": 2, "applied": 0}}]
+Return only {"code":"Python source defining solve(facts)"}. Implement the fixed function for arbitrary inputs under this contract. Do not hardcode the fixture; no input mutation. Optional helper functions allowed, no class/IO/private attribute. The coordinator writes solution.py and executes tests outside this model session.

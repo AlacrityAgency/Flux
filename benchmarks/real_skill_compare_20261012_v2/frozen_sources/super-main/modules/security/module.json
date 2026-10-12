@@ -1,0 +1,11 @@
+{
+  "id": "security",
+  "description": "Threat modelling, object/tenant authorization and scoped security scanning.",
+  "workflow": "workflow.md",
+  "gates": [
+    {"id": "security.authorization", "script": "gates/check.py", "args": ["--check", "security.authorization"], "description": "Named negative access-control and tenant-isolation assertions", "iso25010": ["Security"]},
+    {"id": "security.sast", "script": "gates/scan.py", "args": ["--tool", "semgrep"], "description": "Semgrep with project-local rules; findings need triage", "iso25010": ["Security"]},
+    {"id": "security.dependencies", "script": "gates/scan.py", "args": ["--tool", "trivy"], "description": "Trivy filesystem vulnerability, configuration and secret scan", "iso25010": ["Security"]},
+    {"id": "security.dast", "script": "gates/check.py", "args": ["--check", "security.dast"], "description": "Project-configured DAST assertions on a dedicated target", "iso25010": ["Security"]}
+  ]
+}

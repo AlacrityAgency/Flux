@@ -1,0 +1,10 @@
+Return only JSON with refs and code. refs is exactly all top-level FACTS keys, no duplicates or nested keys.
+code defines solve(facts) returning the answer and check(answer,facts) returning bool using an independent derivation.
+Read inputs from facts; do not hardcode the supplied dataset. Do not call solve from check or return constant success.
+Allowed imports: math fractions itertools functools collections heapq bisect decimal operator statistics.
+Allowed builtins: abs all any bool chr dict divmod enumerate filter float frozenset int isinstance iter len list map max min next ord pow range reversed round set slice sorted str sum tuple zip hash Exception ValueError KeyError IndexError ZeroDivisionError StopIteration.
+No IO, class, private attributes, eval, exec, open, bin, type or introspection. Total solve/check must finish within 4 seconds.
+TASK:
+One machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness.
+FACTS:
+{"jobs":[{"id":"K0","duration":4,"release":6,"due":10,"weight":5,"predecessors":[]},{"id":"K1","duration":7,"release":9,"due":23,"weight":2,"predecessors":["K0"]},{"id":"K2","duration":3,"release":3,"due":19,"weight":2,"predecessors":["K1"]},{"id":"K3","duration":6,"release":2,"due":11,"weight":3,"predecessors":["K0"]},{"id":"K4","duration":2,"release":7,"due":9,"weight":4,"predecessors":[]}]}

@@ -1,0 +1,5 @@
+Return only the requested answer JSON.
+TASK:
+Enumerate length-digit strings over alphabet; leading zero is allowed. ALL constraints: adjacent digits differ; numeric value modulo modulus is residue; sum_min <= digit sum <= sum_max; exactly target_count copies of target_digit. Return exactly count and digit_sum_total, the sum of digit sums of valid strings.
+FACTS:
+{"alphabet":[0,1,3,5],"length":8,"modulus":17,"residue":4,"sum_min":9,"sum_max":24,"target_digit":3,"target_count":2}

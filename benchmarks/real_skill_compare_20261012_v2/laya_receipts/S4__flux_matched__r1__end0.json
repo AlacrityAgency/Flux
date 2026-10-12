@@ -1,0 +1,51 @@
+{
+  "state": {
+    "request": "TASK:\nOne machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness.\nFACTS:\n{\"jobs\":[{\"id\":\"K0\",\"duration\":2,\"release\":0,\"due\":13,\"weight\":5,\"predecessors\":[]},{\"id\":\"K1\",\"duration\":2,\"release\":9,\"due\":22,\"weight\":3,\"predecessors\":[]},{\"id\":\"K2\",\"duration\":2,\"release\":8,\"due\":31,\"weight\":4,\"predecessors\":[]},{\"id\":\"K3\",\"duration\":4,\"release\":3,\"due\":29,\"weight\":5,\"predecessors\":[\"K0\"]},{\"id\":\"K4\",\"duration\":5,\"release\":5,\"due\":7,\"weight\":3,\"predecessors\":[]},{\"id\":\"K5\",\"duration\":4,\"release\":1,\"due\":30,\"weight\":6,\"predecessors\":[\"K2\",\"K4\"]},{\"id\":\"K6\",\"duration\":4,\"release\":2,\"due\":24,\"weight\":1,\"predecessors\":[\"K0\"]}]}",
+    "candidate": "{\"refs\":[\"jobs\"],\"code\":\"from itertools import permutations\\n\\ndef solve(facts):\\n    jobs = facts['jobs']\\n    n = len(jobs)\\n    positions = {j['id']: i for i, j in enumerate(jobs)}\\n    required = [sum(1 << positions[p] for p in set(j['predecessors'])) for j in jobs]\\n    states = [{} for _ in range(1 << n)]\\n    states[0][0] = (0, (), ())\\n    for mask in range(1 << n):\\n        for time, (cost, order, starts) in states[mask].items():\\n            for i, job in enumerate(jobs):\\n                bit = 1 << i\\n                if mask & bit or required[i] & mask != required[i]:\\n                    continue\\n                start = max(time, job['release'])\\n                end = start + job['duration']\\n                candidate = (cost + job['weight'] * max(0, end - job['due']), order + (job['id'],), starts + (start,))\\n                target = states[mask | bit]\\n                old = target.get(end)\\n                if old is None or candidate[:2] < old[:2]:\\n                    target[end] = candidate\\n    if not states[-1]:\\n        raise ValueError('No feasible order')\\n    finish, result = min(states[-1].items(), key=lambda item: (item[1][0], item[0], item[1][1]))\\n    return {'order': list(result[1]), 'starts': list(result[2]), 'finish': finish, 'weighted_tardiness': result[0]}\\n\\ndef check(answer, facts):\\n    jobs = facts['jobs']\\n    best_key = None\\n    expected = None\\n    for sequence in permutations(jobs):\\n        completed = {}\\n        time = 0\\n        cost = 0\\n        order = []\\n        starts = []\\n        valid = True\\n        for job in sequence:\\n            if any(p not in completed for p in job['predecessors']):\\n                valid = False\\n                break\\n            start = max([time, job['release']] + [completed[p] for p in job['predecessors']])\\n            time = start + job['duration']\\n            completed[job['id']] = time\\n            cost += job['weight'] * max(0, time - job['due'])\\n            order.append(job['id'])\\n            starts.append(start)\\n        if not valid:\\n            continue\\n        key = (cost, time, tuple(order))\\n        if best_key is None or key < best_key:\\n            best_key = key\\n            expected = {'order': order, 'starts': starts, 'finish': time, 'weighted_tardiness': cost}\\n    return bool(expected is not None and isinstance(answer, dict) and answer == expected)\\n\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.9369,
+          "escalate": 0.0134,
+          "stop": 0.0497
+        },
+        "confidence": 0.7562,
+        "answer_confidence": 0.9369,
+        "action": {
+          "act_probability": 1.0
+        },
+        "window": {
+          "index": 2,
+          "token_start": 760,
+          "token_end": 1477,
+          "count": 3
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 2426,
+      "output_tokens": 0,
+      "state_tokens": 2237,
+      "state_tokens_dropped": 0,
+      "truncated": 0,
+      "truncated_questions": [],
+      "windows": 3
+    }
+  },
+  "latency_s": 0.4173908000011579,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

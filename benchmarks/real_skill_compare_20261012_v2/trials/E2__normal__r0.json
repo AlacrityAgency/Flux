@@ -1,0 +1,41 @@
+{
+  "task_id": "E2",
+  "track": "engineering",
+  "family": "intervals",
+  "arm": "normal",
+  "rep": 0,
+  "label": "E2__normal__r0",
+  "calls": [
+    "E2__normal__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.06346549999943818
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 23,
+    "failures": [],
+    "latency_s": 0.05121710000094026
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    intervals = []\n    for a, b in facts[\"intervals\"]:\n        if a > b:\n            return {\"error\": \"reversed\"}\n        if a < b:\n            intervals.append([a, b])\n    intervals.sort()\n    out = []\n    for a, b in intervals:\n        if out and a < out[-1][1]:\n            out[-1][1] = max(out[-1][1], b)\n        else:\n            out.append([a, b])\n    return {\"intervals\": out}\n",
+  "failure": "",
+  "latency_s": 16.14518080000198,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E2__normal__r0",
+  "test_integrity": true
+}

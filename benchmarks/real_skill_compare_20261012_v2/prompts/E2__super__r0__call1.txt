@@ -1,0 +1,17 @@
+TASK:
+Fix solve(facts): normalize intervals into sorted nonoverlapping half-open intervals. Ignore empty intervals, reject reversed endpoints with {"error":"reversed"}. Merge overlap but never merge mere adjacency. Return {"intervals": [[start,end],...]}. Input may be unsorted/duplicated and have negative endpoints.
+FACTS:
+{"intervals":[[1,3],[3,5],[2,4],[8,8]]}
+BUGGY SOURCE:
+def solve(facts):
+    out=[]
+    for a,b in sorted(facts["intervals"]):
+        if out and a<=out[-1][1]: out[-1][1]=max(b,out[-1][1])
+        else: out.append([a,b])
+    return {"intervals":out}
+
+PUBLIC CASES:
+[{"facts": {"intervals": [[1, 3], [3, 5], [2, 4], [8, 8]]}, "expected": {"intervals": [[1, 5]]}}, {"facts": {"intervals": [[2, 1]]}, "expected": {"error": "reversed"}}, {"facts": {"intervals": []}, "expected": {"intervals": []}}]
+Return only {"code":"Python source defining solve(facts)"}. Implement the fixed function for arbitrary inputs under this contract. Do not hardcode the fixture; no input mutation. Optional helper functions allowed, no class/IO/private attribute. The coordinator writes solution.py and executes tests outside this model session.
+
+Previous public verification failed: Provider incomplete or tool event. Keep facts and constraints. Repair the cause.

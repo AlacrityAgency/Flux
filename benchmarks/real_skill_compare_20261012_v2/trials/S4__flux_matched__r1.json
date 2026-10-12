@@ -1,0 +1,90 @@
+{
+  "task_id": "S4",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "flux_matched",
+  "rep": 1,
+  "label": "S4__flux_matched__r1",
+  "calls": [
+    "S4__flux_matched__r1__call0"
+  ],
+  "laya_receipts": [
+    "S4__flux_matched__r1__front",
+    "S4__flux_matched__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "order": [
+          "K0",
+          "K4",
+          "K1",
+          "K2",
+          "K3",
+          "K6",
+          "K5"
+        ],
+        "starts": [
+          0,
+          5,
+          10,
+          12,
+          14,
+          18,
+          22
+        ],
+        "finish": 26,
+        "weighted_tardiness": 9
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K0",
+      "K4",
+      "K1",
+      "K2",
+      "K3",
+      "K6",
+      "K5"
+    ],
+    "starts": [
+      0,
+      5,
+      10,
+      12,
+      14,
+      18,
+      22
+    ],
+    "finish": 26,
+    "weighted_tardiness": 9
+  },
+  "code": "from itertools import permutations\n\ndef solve(facts):\n    jobs = facts['jobs']\n    n = len(jobs)\n    positions = {j['id']: i for i, j in enumerate(jobs)}\n    required = [sum(1 << positions[p] for p in set(j['predecessors'])) for j in jobs]\n    states = [{} for _ in range(1 << n)]\n    states[0][0] = (0, (), ())\n    for mask in range(1 << n):\n        for time, (cost, order, starts) in states[mask].items():\n            for i, job in enumerate(jobs):\n                bit = 1 << i\n                if mask & bit or required[i] & mask != required[i]:\n                    continue\n                start = max(time, job['release'])\n                end = start + job['duration']\n                candidate = (cost + job['weight'] * max(0, end - job['due']), order + (job['id'],), starts + (start,))\n                target = states[mask | bit]\n                old = target.get(end)\n                if old is None or candidate[:2] < old[:2]:\n                    target[end] = candidate\n    if not states[-1]:\n        raise ValueError('No feasible order')\n    finish, result = min(states[-1].items(), key=lambda item: (item[1][0], item[0], item[1][1]))\n    return {'order': list(result[1]), 'starts': list(result[2]), 'finish': finish, 'weighted_tardiness': result[0]}\n\ndef check(answer, facts):\n    jobs = facts['jobs']\n    best_key = None\n    expected = None\n    for sequence in permutations(jobs):\n        completed = {}\n        time = 0\n        cost = 0\n        order = []\n        starts = []\n        valid = True\n        for job in sequence:\n            if any(p not in completed for p in job['predecessors']):\n                valid = False\n                break\n            start = max([time, job['release']] + [completed[p] for p in job['predecessors']])\n            time = start + job['duration']\n            completed[job['id']] = time\n            cost += job['weight'] * max(0, time - job['due'])\n            order.append(job['id'])\n            starts.append(start)\n        if not valid:\n            continue\n        key = (cost, time, tuple(order))\n        if best_key is None or key < best_key:\n            best_key = key\n            expected = {'order': order, 'starts': starts, 'finish': time, 'weighted_tardiness': cost}\n    return bool(expected is not None and isinstance(answer, dict) and answer == expected)\n",
+  "failure": "",
+  "latency_s": 46.28749079999761,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S4__flux_matched__r1",
+  "test_integrity": true
+}

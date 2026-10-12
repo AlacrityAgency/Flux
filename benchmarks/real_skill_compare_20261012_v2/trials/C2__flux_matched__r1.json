@@ -1,0 +1,54 @@
+{
+  "task_id": "C2",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_matched",
+  "rep": 1,
+  "label": "C2__flux_matched__r1",
+  "calls": [
+    "C2__flux_matched__r1__call0"
+  ],
+  "laya_receipts": [
+    "C2__flux_matched__r1__front",
+    "C2__flux_matched__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "count": 30,
+        "digit_sum_total": 393
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "count": 30,
+    "digit_sum_total": 393
+  },
+  "code": "from itertools import product\n\ndef solve(facts):\n    alphabet = sorted(set(facts['alphabet']))\n    modulus = facts['modulus']\n    target = facts['target_digit']\n    required = facts['target_count']\n    states = {(None, 0, 0, 0): 1}\n    for _ in range(facts['length']):\n        following = {}\n        for (last, remainder, digit_sum, copies), ways in states.items():\n            for digit in alphabet:\n                if digit == last:\n                    continue\n                new_sum = digit_sum + digit\n                new_copies = copies + int(digit == target)\n                if new_sum > facts['sum_max'] or new_copies > required:\n                    continue\n                key = (digit, (10 * remainder + digit) % modulus, new_sum, new_copies)\n                following[key] = following.get(key, 0) + ways\n        states = following\n    count = 0\n    total = 0\n    for (last, remainder, digit_sum, copies), ways in states.items():\n        if remainder == facts['residue'] and facts['sum_min'] <= digit_sum <= facts['sum_max'] and copies == required:\n            count += ways\n            total += digit_sum * ways\n    return {'count': count, 'digit_sum_total': total}\n\ndef check(answer, facts):\n    if not isinstance(answer, dict) or set(answer) != {'count', 'digit_sum_total'}:\n        return False\n    count = 0\n    total = 0\n    length = facts['length']\n    weights = [pow(10, length - 1 - i, facts['modulus']) for i in range(length)]\n    for digits in product(sorted(set(facts['alphabet'])), repeat=length):\n        if any(digits[i] == digits[i + 1] for i in range(length - 1)):\n            continue\n        if sum(d == facts['target_digit'] for d in digits) != facts['target_count']:\n            continue\n        digit_sum = sum(digits)\n        if not facts['sum_min'] <= digit_sum <= facts['sum_max']:\n            continue\n        if sum(d * w for d, w in zip(digits, weights)) % facts['modulus'] != facts['residue']:\n            continue\n        count += 1\n        total += digit_sum\n    return answer == {'count': count, 'digit_sum_total': total}\n",
+  "failure": "",
+  "latency_s": 32.721411099999386,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C2__flux_matched__r1",
+  "test_integrity": true
+}

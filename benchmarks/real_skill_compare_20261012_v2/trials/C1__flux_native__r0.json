@@ -1,0 +1,77 @@
+{
+  "task_id": "C1",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "C1__flux_native__r0",
+  "calls": [
+    "C1__flux_native__r0__call0",
+    "C1__flux_native__r0__call1",
+    "C1__flux_native__r0__call2"
+  ],
+  "laya_receipts": [
+    "C1__flux_native__r0__front",
+    "C1__flux_native__r0__end0",
+    "C1__flux_native__r0__end1",
+    "C1__flux_native__r0__end2"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "escalate",
+      "guard_override": true
+    },
+    {
+      "raw": "stop",
+      "applied": "escalate",
+      "guard_override": true
+    },
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "ValueError: {'status': 'ok', 'result': {'type': 'mapping', 'value': {'count': {'type': 'fraction', 'value': [10, 1]}, 'digit_sum_total': {'type': 'fraction', 'value': [109, 1]}}}, 'verified': False}",
+      "independent_verifier_pass": null
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    {
+      "pass": true,
+      "answer": {
+        "count": 10,
+        "digit_sum_total": 109
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "count": 10,
+    "digit_sum_total": 109
+  },
+  "code": "from itertools import product\n\ndef solve(facts):\n    alphabet = tuple(sorted(set(facts['alphabet'])))\n    length = facts['length']\n    modulus = facts['modulus']\n    residue = facts['residue']\n    low, high = facts['sum_min'], facts['sum_max']\n    target, required = facts['target_digit'], facts['target_count']\n    states = {(-1, 0, 0, 0): 1}\n    for position in range(length):\n        following = {}\n        remaining = length - position - 1\n        for (last, remainder, total, copies), ways in states.items():\n            for digit in alphabet:\n                if digit == last:\n                    continue\n                new_total = total + digit\n                new_copies = copies + int(digit == target)\n                if new_total > high or new_copies > required or new_copies + remaining < required:\n                    continue\n                key = (digit, (remainder * 10 + digit) % modulus, new_total, new_copies)\n                following[key] = following.get(key, 0) + ways\n        states = following\n    count = 0\n    digit_sum_total = 0\n    for (last, remainder, total, copies), ways in states.items():\n        if remainder == residue and low <= total <= high and copies == required:\n            count += ways\n            digit_sum_total += total * ways\n    return {'count': count, 'digit_sum_total': digit_sum_total}\n\ndef check(answer, facts):\n    alphabet = tuple(set(facts['alphabet']))\n    length = facts['length']\n    count = 0\n    digit_sum_total = 0\n    for digits in product(alphabet, repeat=length):\n        if any(digits[i] == digits[i + 1] for i in range(length - 1)):\n            continue\n        if digits.count(facts['target_digit']) != facts['target_count']:\n            continue\n        total = sum(digits)\n        if not facts['sum_min'] <= total <= facts['sum_max']:\n            continue\n        value = sum(digit * pow(10, length - i - 1) for i, digit in enumerate(digits))\n        if value % facts['modulus'] != facts['residue']:\n            continue\n        count += 1\n        digit_sum_total += total\n    return isinstance(answer, dict) and answer == {'count': count, 'digit_sum_total': digit_sum_total}\n",
+  "failure": "Provider incomplete or tool use",
+  "latency_s": 144.46655180000016,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C1__flux_native__r0",
+  "test_integrity": true
+}

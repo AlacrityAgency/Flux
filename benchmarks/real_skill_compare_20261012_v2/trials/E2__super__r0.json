@@ -1,0 +1,163 @@
+{
+  "task_id": "E2",
+  "track": "engineering",
+  "family": "intervals",
+  "arm": "super",
+  "rep": 0,
+  "label": "E2__super__r0",
+  "calls": [
+    "E2__super__r0__call0",
+    "E2__super__r0__call1",
+    "E2__super__r0__call2"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": false,
+  "correct": false,
+  "candidate_correct": false,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": false,
+    "executed": 0,
+    "failures": [
+      {
+        "reason": "missing code"
+      }
+    ]
+  },
+  "answer": null,
+  "code": null,
+  "failure": "Provider incomplete or tool event",
+  "latency_s": 37.407318799996574,
+  "gate_records": [
+    {
+      "run": "r-20261013-002421-c09fbf",
+      "gate": "testing.smells",
+      "scope": null,
+      "review_id": "1388c0eb765a47e1a963027b0b0aa712",
+      "digests": {
+        ".superagent\\runs\\r-20261013-002421-c09fbf.json": "5ad5e19da7845e4b69d86bfeae05badeb6f71ed659e330192e407f3cfa2299e6"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "355e888211e0ef33",
+      "time": "2026-10-13T00:24:21",
+      "duration_s": 0.68,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-002421-c09fbf.json"
+    },
+    {
+      "run": "r-20261013-002423-81f236",
+      "gate": "testing.run",
+      "scope": null,
+      "review_id": "1388c0eb765a47e1a963027b0b0aa712",
+      "digests": {
+        ".superagent\\runs\\r-20261013-002423-81f236\\0\\runs": "3d835dfeb12010c942739f9680bacb94b4cf761bf5a54a9578f4960cc2246fa0",
+        ".superagent\\runs\\r-20261013-002423-81f236.json": "eb7d56cd46d2e5ed5f217e4f508ffcbaef1acb5cb16c57d637a0ba5afeff8a58"
+      },
+      "artifact_error": false,
+      "status": "FAIL",
+      "exit_code": 1,
+      "fingerprint": "355e888211e0ef33",
+      "time": "2026-10-13T00:24:23",
+      "duration_s": 2.36,
+      "args": [
+        "--repeat",
+        "1",
+        "--suite",
+        ".",
+        "--runner",
+        "unittest"
+      ],
+      "rules": [
+        "test-failure"
+      ],
+      "finding_count": 2,
+      "report": ".superagent/runs/r-20261013-002423-81f236.json"
+    },
+    {
+      "run": "r-20261013-002425-523ec6",
+      "gate": "backend.behavior",
+      "scope": null,
+      "review_id": "1388c0eb765a47e1a963027b0b0aa712",
+      "digests": {
+        ".superagent\\runs\\r-20261013-002425-523ec6\\0\\result.json": "52b805e6b2abab919095a47221b574148ba377337c1919378e271edac5be0c6c",
+        ".superagent\\runs\\r-20261013-002425-523ec6.json": "430b664850a212b2a8c68ae28805963f50cf41c7cd69f1dc683f924596eaefd4"
+      },
+      "artifact_error": false,
+      "status": "FAIL",
+      "exit_code": 1,
+      "fingerprint": "355e888211e0ef33",
+      "time": "2026-10-13T00:24:25",
+      "duration_s": 1.51,
+      "args": [],
+      "rules": [
+        "scenario-failed"
+      ],
+      "finding_count": 1,
+      "report": ".superagent/runs/r-20261013-002425-523ec6.json"
+    },
+    {
+      "run": "r-20261013-002426-3b76ec",
+      "gate": "delivery.build",
+      "scope": null,
+      "review_id": "1388c0eb765a47e1a963027b0b0aa712",
+      "digests": {
+        ".superagent\\runs\\r-20261013-002426-3b76ec.json": "b19bc6deb71251c662f007440e6cad387746589162d6af47ef319c1cb7685936"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "355e888211e0ef33",
+      "time": "2026-10-13T00:24:26",
+      "duration_s": 0.67,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-002426-3b76ec.json"
+    },
+    {
+      "run": "r-20261013-002426-8518be",
+      "gate": "testing.api",
+      "scope": null,
+      "review_id": "1388c0eb765a47e1a963027b0b0aa712",
+      "digests": {
+        ".superagent\\runs\\r-20261013-002426-8518be.json": "8ddce96cf917d861d66a0ed48db6d03b45dfed75ca9f81ac58662cb7c8db7048"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "355e888211e0ef33",
+      "time": "2026-10-13T00:24:26",
+      "duration_s": 0.68,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-002426-8518be.json"
+    }
+  ],
+  "review_receipts": [
+    "E2__super__r0__baseline"
+  ],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E2__super__r0",
+  "test_integrity": true
+}

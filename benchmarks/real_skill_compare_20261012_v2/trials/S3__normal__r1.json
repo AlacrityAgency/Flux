@@ -1,0 +1,42 @@
+{
+  "task_id": "S3",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "normal",
+  "rep": 1,
+  "label": "S3__normal__r1",
+  "calls": [
+    "S3__normal__r1__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": false,
+  "correct": false,
+  "candidate_correct": false,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": false,
+    "executed": 1,
+    "failures": [
+      {
+        "reason": "answer differs from exact reference"
+      }
+    ]
+  },
+  "answer": null,
+  "code": null,
+  "failure": "",
+  "latency_s": 7.634712099999888,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S3__normal__r1",
+  "test_integrity": true
+}

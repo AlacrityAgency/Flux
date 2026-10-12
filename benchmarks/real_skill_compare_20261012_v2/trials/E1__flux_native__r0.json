@@ -1,0 +1,50 @@
+{
+  "task_id": "E1",
+  "track": "engineering",
+  "family": "access",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "E1__flux_native__r0",
+  "calls": [
+    "E1__flux_native__r0__call0"
+  ],
+  "laya_receipts": [
+    "E1__flux_native__r0__front",
+    "E1__flux_native__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.057848399999784306
+    }
+  ],
+  "verification_depth": "medium",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 27,
+    "failures": [],
+    "latency_s": 0.055980599998292746
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    a, r = facts[\"actor\"], facts[\"resource\"]\n    allowed = (a.get(\"active\") is True and a.get(\"tenant\") == r.get(\"tenant\") and (a.get(\"id\") == r.get(\"owner\") or a.get(\"role\") == \"admin\"))\n    return {\"allowed\": bool(allowed)}\n\ndef check(answer, facts):\n    actor = facts[\"actor\"]\n    resource = facts[\"resource\"]\n    if actor.get(\"active\") is not True:\n        expected = False\n    elif actor.get(\"tenant\") != resource.get(\"tenant\"):\n        expected = False\n    elif actor.get(\"id\") == resource.get(\"owner\"):\n        expected = True\n    else:\n        expected = actor.get(\"role\") == \"admin\"\n    return isinstance(answer, dict) and answer.get(\"allowed\") is expected",
+  "failure": "",
+  "latency_s": 13.022370499998942,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E1__flux_native__r0",
+  "test_integrity": true
+}

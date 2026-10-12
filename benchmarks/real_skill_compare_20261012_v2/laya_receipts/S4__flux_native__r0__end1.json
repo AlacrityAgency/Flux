@@ -1,0 +1,45 @@
+{
+  "state": {
+    "request": "TASK:\nOne machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness.\nFACTS:\n{\"jobs\":[{\"id\":\"K0\",\"duration\":2,\"release\":0,\"due\":13,\"weight\":5,\"predecessors\":[]},{\"id\":\"K1\",\"duration\":2,\"release\":9,\"due\":22,\"weight\":3,\"predecessors\":[]},{\"id\":\"K2\",\"duration\":2,\"release\":8,\"due\":31,\"weight\":4,\"predecessors\":[]},{\"id\":\"K3\",\"duration\":4,\"release\":3,\"due\":29,\"weight\":5,\"predecessors\":[\"K0\"]},{\"id\":\"K4\",\"duration\":5,\"release\":5,\"due\":7,\"weight\":3,\"predecessors\":[]},{\"id\":\"K5\",\"duration\":4,\"release\":1,\"due\":30,\"weight\":6,\"predecessors\":[\"K2\",\"K4\"]},{\"id\":\"K6\",\"duration\":4,\"release\":2,\"due\":24,\"weight\":1,\"predecessors\":[\"K0\"]}]}",
+    "candidate": "",
+    "provider_completed": false,
+    "verification": {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    "attempt": 1,
+    "remaining_attempts": 1
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "stop",
+        "probabilities": {
+          "accept": 0.1629,
+          "escalate": 0.1178,
+          "stop": 0.7193
+        },
+        "confidence": 0.286,
+        "answer_confidence": 0.7193,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 454,
+      "output_tokens": 0,
+      "state_tokens": 391,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.25741389999893727,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

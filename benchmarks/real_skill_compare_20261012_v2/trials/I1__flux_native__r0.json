@@ -1,0 +1,56 @@
+{
+  "task_id": "I1",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "I1__flux_native__r0",
+  "calls": [
+    "I1__flux_native__r0__call0"
+  ],
+  "laya_receipts": [
+    "I1__flux_native__r0__front",
+    "I1__flux_native__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 84,
+        "tax_cents": 42,
+        "total_cents": 129
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 84,
+    "tax_cents": 42,
+    "total_cents": 129
+  },
+  "code": "from decimal import Decimal, ROUND_HALF_UP\n\ndef solve(facts):\n    subtotal = 0\n    for line in facts[\"lines\"]:\n        amount = Decimal(line[\"qty\"]) * Decimal(line[\"unit_cents\"]) * (Decimal(1) - Decimal(str(line[\"discount_percent\"])) / Decimal(100))\n        subtotal += int(amount.quantize(Decimal(1), rounding=ROUND_HALF_UP))\n    tax = int((Decimal(subtotal) * Decimal(str(facts[\"tax_percent\"])) / Decimal(100)).quantize(Decimal(1), rounding=ROUND_HALF_UP))\n    return {\"subtotal_cents\": subtotal, \"tax_cents\": tax, \"total_cents\": subtotal + tax + int(facts[\"shipping\"])}\n\ndef check(answer, facts):\n    subtotal = 0\n    for line in facts[\"lines\"]:\n        q = line[\"qty\"]\n        u = line[\"unit_cents\"]\n        d = Decimal(str(line[\"discount_percent\"]))\n        amount = Decimal(q * u) * (Decimal(100) - d) / Decimal(100)\n        subtotal += int(amount.quantize(Decimal(1), rounding=ROUND_HALF_UP))\n    tax_amount = Decimal(subtotal) * Decimal(str(facts[\"tax_percent\"])) / Decimal(100)\n    tax = int(tax_amount.quantize(Decimal(1), rounding=ROUND_HALF_UP))\n    expected = {\"subtotal_cents\": subtotal, \"tax_cents\": tax, \"total_cents\": subtotal + tax + int(facts[\"shipping\"])}\n    return isinstance(answer, dict) and answer == expected",
+  "failure": "",
+  "latency_s": 25.201786900001025,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\I1__flux_native__r0",
+  "test_integrity": true
+}

@@ -1,0 +1,12 @@
+TASK:
+Fix solve(facts): return {"allowed": bool}. Access requires active actor, resource tenant equal actor tenant, AND actor is owner OR actor role admin. A tenant admin has no cross-tenant exception. Missing/unknown role gives no admin right.
+FACTS:
+{"actor":{"id":"a","tenant":"T","role":"user","active":true},"resource":{"owner":"a","tenant":"T"}}
+BUGGY SOURCE:
+def solve(facts):
+    a,r=facts["actor"],facts["resource"]
+    return {"allowed":a.get("role")=="admin" or a["id"]==r["owner"]}
+
+PUBLIC CASES:
+[{"facts": {"actor": {"id": "a", "tenant": "T", "role": "user", "active": true}, "resource": {"owner": "a", "tenant": "T"}}, "expected": {"allowed": true}}, {"facts": {"actor": {"id": "a", "tenant": "T", "role": "admin", "active": true}, "resource": {"owner": "b", "tenant": "U"}}, "expected": {"allowed": false}}, {"facts": {"actor": {"id": "a", "tenant": "T", "role": "user", "active": false}, "resource": {"owner": "a", "tenant": "T"}}, "expected": {"allowed": false}}]
+Return only {"code":"Python source defining solve(facts)"}. Implement the fixed function for arbitrary inputs under this contract. Do not hardcode the fixture; no input mutation. Optional helper functions allowed, no class/IO/private attribute. The coordinator writes solution.py and executes tests outside this model session.

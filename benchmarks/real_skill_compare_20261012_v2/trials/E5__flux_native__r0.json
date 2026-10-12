@@ -1,0 +1,61 @@
+{
+  "task_id": "E5",
+  "track": "engineering",
+  "family": "migration",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "E5__flux_native__r0",
+  "calls": [
+    "E5__flux_native__r0__call0",
+    "E5__flux_native__r0__call1"
+  ],
+  "laya_receipts": [
+    "E5__flux_native__r0__front",
+    "E5__flux_native__r0__end0",
+    "E5__flux_native__r0__end1"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "escalate",
+      "guard_override": true
+    },
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "SyntaxError: unmatched '}' (<unknown>, line 26)"
+    },
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.050657500003580935
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 20,
+    "failures": [],
+    "latency_s": 0.06301489999896148
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    rows = list(facts[\"rows\"])\n    seen = []\n    duplicate = False\n    missing = False\n    for row in rows:\n        rid = row[\"id\"]\n        if rid in seen:\n            duplicate = True\n        else:\n            seen.append(rid)\n        if \"name\" not in row:\n            missing = True\n    if duplicate:\n        return {\"error\": \"duplicate\"}\n    if missing:\n        return {\"error\": \"missing_name\"}\n    result = []\n    for row in rows:\n        result.append({\"id\": row[\"id\"], \"display_name\": row[\"name\"]})\n    return {\"rows\": sorted(result, key=lambda row: row[\"id\"])}\n\ndef check(answer, facts):\n    try:\n        rows = list(facts[\"rows\"])\n        seen = []\n        duplicate = False\n        missing = False\n        for row in rows:\n            rid = row[\"id\"]\n            if rid in seen:\n                duplicate = True\n            else:\n                seen.append(rid)\n            if \"name\" not in row:\n                missing = True\n        if duplicate:\n            expected = {\"error\": \"duplicate\"}\n        elif missing:\n            expected = {\"error\": \"missing_name\"}\n        else:\n            converted = []\n            for row in rows:\n                converted.append({\"id\": row[\"id\"], \"display_name\": row[\"name\"]})\n            expected = {\"rows\": sorted(converted, key=lambda row: row[\"id\"])}\n        return answer == expected\n    except Exception:\n        return False",
+  "failure": "SyntaxError: unmatched '}' (<unknown>, line 26)",
+  "latency_s": 54.07537880000018,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E5__flux_native__r0",
+  "test_integrity": true
+}

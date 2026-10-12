@@ -1,0 +1,579 @@
+{
+  "description": "Persian (and common Arabic-script variant) terms mapped to the English keywords used in the skill's references. Longest phrases are matched first. Add terms whenever a Persian query misses.",
+  "terms": {
+    "دسترس‌پذیری": [
+      "accessibility",
+      "wcag"
+    ],
+    "دسترسی پذیری": [
+      "accessibility",
+      "wcag"
+    ],
+    "دسترسپذیری": [
+      "accessibility",
+      "wcag"
+    ],
+    "کنتراست": [
+      "contrast",
+      "ratio"
+    ],
+    "تضاد رنگ": [
+      "contrast"
+    ],
+    "اندازه هدف": [
+      "target size"
+    ],
+    "اندازه دکمه": [
+      "target size",
+      "button"
+    ],
+    "هدف لمسی": [
+      "touch target",
+      "target size"
+    ],
+    "لمسی": [
+      "touch"
+    ],
+    "دکمه": [
+      "button"
+    ],
+    "فرم": [
+      "form",
+      "input",
+      "validation"
+    ],
+    "ورودی": [
+      "input"
+    ],
+    "برچسب": [
+      "label"
+    ],
+    "اعتبارسنجی": [
+      "validation"
+    ],
+    "خطا": [
+      "error"
+    ],
+    "پیام خطا": [
+      "error message"
+    ],
+    "دیالوگ": [
+      "dialog",
+      "modal"
+    ],
+    "مودال": [
+      "modal",
+      "dialog"
+    ],
+    "پنجره": [
+      "dialog"
+    ],
+    "منو": [
+      "menu",
+      "navigation"
+    ],
+    "ناوبری": [
+      "navigation"
+    ],
+    "جدول": [
+      "table",
+      "data grid"
+    ],
+    "کارت": [
+      "card"
+    ],
+    "اعلان": [
+      "toast",
+      "notification",
+      "alert"
+    ],
+    "تب": [
+      "tabs"
+    ],
+    "تولتیپ": [
+      "tooltip"
+    ],
+    "فوکوس": [
+      "focus",
+      "focus-visible"
+    ],
+    "کیبورد": [
+      "keyboard",
+      "focus"
+    ],
+    "صفحه کلید": [
+      "keyboard"
+    ],
+    "صفحه‌خوان": [
+      "screen reader",
+      "aria"
+    ],
+    "صفحه خوان": [
+      "screen reader",
+      "aria"
+    ],
+    "راست به چپ": [
+      "rtl",
+      "bidi",
+      "logical properties"
+    ],
+    "راست‌به‌چپ": [
+      "rtl",
+      "bidi",
+      "logical properties"
+    ],
+    "فارسی": [
+      "persian",
+      "rtl"
+    ],
+    "عربی": [
+      "arabic",
+      "rtl"
+    ],
+    "اعداد فارسی": [
+      "persian digits",
+      "numbers"
+    ],
+    "تاریخ شمسی": [
+      "persian calendar",
+      "dates"
+    ],
+    "فونت": [
+      "font",
+      "typography"
+    ],
+    "تایپوگرافی": [
+      "typography",
+      "type scale"
+    ],
+    "رنگ": [
+      "color",
+      "palette"
+    ],
+    "پالت": [
+      "palette",
+      "color"
+    ],
+    "توکن": [
+      "tokens",
+      "design tokens"
+    ],
+    "توکن طراحی": [
+      "design tokens",
+      "dtcg"
+    ],
+    "سیستم طراحی": [
+      "design system",
+      "tokens"
+    ],
+    "انیمیشن": [
+      "motion",
+      "animation",
+      "reduced motion"
+    ],
+    "حرکت": [
+      "motion"
+    ],
+    "کاهش حرکت": [
+      "reduced motion",
+      "prefers-reduced-motion"
+    ],
+    "شیشه": [
+      "glass",
+      "scrim",
+      "backdrop"
+    ],
+    "حالت خالی": [
+      "empty state"
+    ],
+    "حالت بارگذاری": [
+      "loading state"
+    ],
+    "بارگذاری": [
+      "loading"
+    ],
+    "واکنش‌گرا": [
+      "responsive",
+      "viewport"
+    ],
+    "واکنشگرا": [
+      "responsive",
+      "viewport"
+    ],
+    "موبایل": [
+      "mobile",
+      "viewport",
+      "touch"
+    ],
+    "دسکتاپ": [
+      "desktop",
+      "viewport"
+    ],
+    "طراحی بصری": [
+      "visual direction",
+      "creative posture"
+    ],
+    "سبک بصری": [
+      "visual direction",
+      "creative posture"
+    ],
+    "فیگما": [
+      "figma"
+    ],
+    "قالب": [
+      "templates"
+    ],
+    "کامپوننت": [
+      "component",
+      "contract",
+      "states"
+    ],
+    "قرارداد کامپوننت": [
+      "component contracts"
+    ],
+    "رادیولوژی": [
+      "radiology",
+      "diagnostic asset"
+    ],
+    "دندانپزشکی": [
+      "dental",
+      "opg"
+    ],
+    "دندان‌پزشکی": [
+      "dental",
+      "opg"
+    ],
+    "پزشکی": [
+      "medical",
+      "healthcare",
+      "domain"
+    ],
+    "مالی": [
+      "fintech",
+      "financial ledger"
+    ],
+    "عکس استوک": [
+      "stock photo"
+    ],
+    "تست": [
+      "test",
+      "testing"
+    ],
+    "آزمون": [
+      "test",
+      "testing"
+    ],
+    "آزمایش": [
+      "test",
+      "testing"
+    ],
+    "تست واحد": [
+      "unit test"
+    ],
+    "تست یکپارچگی": [
+      "integration test"
+    ],
+    "تست یکپارچه": [
+      "integration test"
+    ],
+    "تست سرتاسری": [
+      "end-to-end",
+      "e2e"
+    ],
+    "تست انتها به انتها": [
+      "end-to-end",
+      "e2e"
+    ],
+    "تست قرارداد": [
+      "contract test",
+      "api"
+    ],
+    "تست رگرسیون": [
+      "regression"
+    ],
+    "تست ناپایدار": [
+      "flaky test",
+      "flakiness"
+    ],
+    "ناپایدار": [
+      "flaky"
+    ],
+    "پوشش کد": [
+      "coverage",
+      "diff coverage"
+    ],
+    "پوشش": [
+      "coverage"
+    ],
+    "جهش": [
+      "mutation testing",
+      "mutation score"
+    ],
+    "تست جهش": [
+      "mutation testing"
+    ],
+    "ریسک": [
+      "risk",
+      "prioritization"
+    ],
+    "اولویت": [
+      "prioritization",
+      "risk",
+      "severity"
+    ],
+    "بوی تست": [
+      "test smells"
+    ],
+    "بکند": [
+      "backend",
+      "api",
+      "service"
+    ],
+    "بک‌اند": [
+      "backend",
+      "api",
+      "service"
+    ],
+    "فرانت": [
+      "frontend",
+      "ui",
+      "component"
+    ],
+    "فرانت‌اند": [
+      "frontend",
+      "ui",
+      "component"
+    ],
+    "فرانتند": [
+      "frontend",
+      "ui"
+    ],
+    "پایگاه داده": [
+      "database",
+      "integration"
+    ],
+    "دیتابیس": [
+      "database",
+      "integration"
+    ],
+    "کارایی": [
+      "performance",
+      "core web vitals"
+    ],
+    "عملکرد": [
+      "performance"
+    ],
+    "سرعت": [
+      "performance"
+    ],
+    "امنیت": [
+      "security"
+    ],
+    "کیفیت": [
+      "quality",
+      "iso 25010"
+    ],
+    "ارزیابی": [
+      "evaluation",
+      "verdict",
+      "quality"
+    ],
+    "حکم": [
+      "verdict"
+    ],
+    "شاهد": [
+      "evidence",
+      "ledger"
+    ],
+    "شواهد": [
+      "evidence",
+      "ledger"
+    ],
+    "دفتر شواهد": [
+      "evidence ledger"
+    ],
+    "تلاش": [
+      "attempt budget"
+    ],
+    "بودجه تلاش": [
+      "attempt budget",
+      "circuit breaker"
+    ],
+    "گیت": [
+      "gate"
+    ],
+    "گزارش": [
+      "report",
+      "finding"
+    ],
+    "باگ": [
+      "finding",
+      "defect"
+    ],
+    "یافته": [
+      "finding"
+    ],
+    "شدت": [
+      "severity"
+    ],
+    "تحقیق": [
+      "research",
+      "notebooklm"
+    ],
+    "جستجو": [
+      "search",
+      "retrieval"
+    ],
+    "جست‌وجو": [
+      "search",
+      "retrieval"
+    ],
+    "تصمیم": [
+      "decision record"
+    ],
+    "استدلال": [
+      "reasoning",
+      "decision record"
+    ],
+    "ادعا": [
+      "claims",
+      "document"
+    ],
+    "ادعاها": [
+      "claims",
+      "document"
+    ],
+    "سند": [
+      "document",
+      "claims"
+    ],
+    "مستندات": [
+      "document",
+      "claims"
+    ],
+    "شاخص": [
+      "metric",
+      "claim"
+    ],
+    "اعتبار علمی": [
+      "construct validity",
+      "validation"
+    ],
+    "روایی": [
+      "construct validity"
+    ],
+    "پژوهشی": [
+      "research",
+      "status"
+    ],
+    "اندازه‌گیری نشده": [
+      "not measured",
+      "status"
+    ],
+    "اندازه گیری نشده": [
+      "not measured",
+      "status"
+    ],
+    "تطبیق سند با کد": [
+      "claims",
+      "trace",
+      "document"
+    ],
+    "احراز هویت": [
+      "authentication",
+      "session"
+    ],
+    "مجوز دسترسی": [
+      "authorization",
+      "ownership"
+    ],
+    "چندسازمانی": [
+      "tenant",
+      "tenancy",
+      "isolation"
+    ],
+    "بازیابی": [
+      "restore",
+      "backup",
+      "recovery"
+    ],
+    "مهاجرت دیتابیس": [
+      "migration",
+      "schema",
+      "database"
+    ],
+    "تست بار": [
+      "load",
+      "thresholds",
+      "k6"
+    ],
+    "وبهوک": [
+      "webhook",
+      "idempotency"
+    ],
+    "انتشار": [
+      "release",
+      "delivery",
+      "rollback"
+    ],
+    "دیباگ": [
+      "debug",
+      "reproduce",
+      "hypothesis"
+    ],
+    "اشکال زدایی": [
+      "debug",
+      "reproduce"
+    ],
+    "اشکال‌زدایی": [
+      "debug",
+      "reproduce"
+    ],
+    "بازتولید": [
+      "reproduce",
+      "experiment"
+    ],
+    "فرضیه": [
+      "hypothesis",
+      "oracle"
+    ],
+    "تایید اصلاح": [
+      "verify-fix",
+      "controls",
+      "baseline"
+    ],
+    "تأیید اصلاح": [
+      "verify-fix",
+      "controls",
+      "baseline"
+    ],
+    "واحد": [
+      "unit",
+      "name"
+    ],
+    "رزومه": [
+      "resume"
+    ],
+    "سوابق شغلی": [
+      "chronology employment"
+    ],
+    "مخاطب": [
+      "audience"
+    ],
+    "هدف سند": [
+      "artifact outcome medium"
+    ],
+    "اعتبار منبع": [
+      "source entailment applicability"
+    ],
+    "شواهد مخالف": [
+      "counterevidence"
+    ],
+    "استنتاج": [
+      "inference"
+    ],
+    "اطلاعات ناموجود": [
+      "unknowns unanswered"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "task_id": "E6",
+  "track": "engineering",
+  "family": "version",
+  "arm": "normal",
+  "rep": 0,
+  "label": "E6__normal__r0",
+  "calls": [
+    "E6__normal__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.06052619999900344
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 23,
+    "failures": [],
+    "latency_s": 0.057540900001185946
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    version = facts.get(\"version\")\n    if version == 1:\n        field = \"title\"\n    elif version == 2:\n        field = \"display_name\"\n    else:\n        return {\"error\": \"version\"}\n    payload = facts.get(\"payload\", {})\n    if field not in payload:\n        return {\"error\": \"missing\"}\n    return {\"label\": payload[field]}\n",
+  "failure": "",
+  "latency_s": 16.637895099996967,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E6__normal__r0",
+  "test_integrity": true
+}

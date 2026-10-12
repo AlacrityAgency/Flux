@@ -1,0 +1,56 @@
+{
+  "task_id": "I4",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "flux_native",
+  "rep": 1,
+  "label": "I4__flux_native__r1",
+  "calls": [
+    "I4__flux_native__r1__call0"
+  ],
+  "laya_receipts": [
+    "I4__flux_native__r1__front",
+    "I4__flux_native__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 128497,
+        "tax_cents": 9637,
+        "total_cents": 138939
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 128497,
+    "tax_cents": 9637,
+    "total_cents": 138939
+  },
+  "code": "from fractions import Fraction\n\ndef _round_half_up(x):\n    return (2 * x.numerator + x.denominator) // (2 * x.denominator)\n\ndef solve(facts):\n    subtotal = 0\n    for line in facts['lines']:\n        discount = Fraction(line['discount_percent'])\n        amount = Fraction(line['qty'] * line['unit_cents']) * (1 - discount / 100)\n        subtotal += _round_half_up(amount)\n    tax = _round_half_up(Fraction(subtotal) * Fraction(facts['tax_percent']) / 100)\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\n\ndef check(answer, facts):\n    subtotal = 0\n    for line in facts['lines']:\n        # Compute discounted amount as an exact rational, then use quotient/remainder rounding.\n        d = Fraction(line['discount_percent'])\n        n = line['qty'] * line['unit_cents'] * (100 * d.denominator - d.numerator)\n        den = 100 * d.denominator\n        q, r = divmod(n, den)\n        subtotal += q + (2 * r >= den)\n    t = Fraction(facts['tax_percent'])\n    n = subtotal * t.numerator\n    den = 100 * t.denominator\n    q, r = divmod(n, den)\n    tax = q + (2 * r >= den)\n    return isinstance(answer, dict) and answer == {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}",
+  "failure": "",
+  "latency_s": 15.825692599999456,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\I4__flux_native__r1",
+  "test_integrity": true
+}

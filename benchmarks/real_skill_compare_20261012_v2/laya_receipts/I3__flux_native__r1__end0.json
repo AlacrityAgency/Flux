@@ -1,0 +1,51 @@
+{
+  "state": {
+    "request": "TASK:\nCalculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.\nFACTS:\n{\"lines\":[{\"qty\":2,\"unit_cents\":3071,\"discount_percent\":\"50\"},{\"qty\":5,\"unit_cents\":5269,\"discount_percent\":\"12.5\"},{\"qty\":6,\"unit_cents\":1905,\"discount_percent\":\"0\"},{\"qty\":3,\"unit_cents\":2004,\"discount_percent\":\"17.75\"},{\"qty\":9,\"unit_cents\":1578,\"discount_percent\":\"17.75\"},{\"qty\":7,\"unit_cents\":6227,\"discount_percent\":\"17.75\"},{\"qty\":3,\"unit_cents\":305,\"discount_percent\":\"17.75\"},{\"qty\":4,\"unit_cents\":5926,\"discount_percent\":\"17.75\"},{\"qty\":2,\"unit_cents\":3909,\"discount_percent\":\"0\"}],\"shipping\":364,\"tax_percent\":\"7.5\"}",
+    "candidate": "{\"refs\":[\"lines\",\"shipping\",\"tax_percent\"],\"code\":\"from decimal import Decimal, ROUND_HALF_UP\\n\\ndef solve(facts):\\n    subtotal = 0\\n    for line in facts['lines']:\\n        amount = Decimal(line['qty'] * line['unit_cents']) * (Decimal(100) - Decimal(line['discount_percent'])) / Decimal(100)\\n        subtotal += int(amount.quantize(Decimal('1'), rounding=ROUND_HALF_UP))\\n    tax = int((Decimal(subtotal) * Decimal(facts['tax_percent']) / Decimal(100)).quantize(Decimal('1'), rounding=ROUND_HALF_UP))\\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n\\ndef check(answer, facts):\\n    from fractions import Fraction\\n    subtotal = 0\\n    for line in facts['lines']:\\n        discount = Fraction(line['discount_percent'])\\n        exact = Fraction(line['qty'] * line['unit_cents']) * (100 - discount) / 100\\n        subtotal += (2 * exact.numerator + exact.denominator) // (2 * exact.denominator)\\n    tax_exact = Fraction(subtotal) * Fraction(facts['tax_percent']) / 100\\n    tax = (2 * tax_exact.numerator + tax_exact.denominator) // (2 * tax_exact.denominator)\\n    return answer == {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.942,
+          "escalate": 0.0272,
+          "stop": 0.0308
+        },
+        "confidence": 0.7619,
+        "answer_confidence": 0.942,
+        "action": {
+          "act_probability": 1.0
+        },
+        "window": {
+          "index": 1,
+          "token_start": 380,
+          "token_end": 799,
+          "count": 2
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 1305,
+      "output_tokens": 0,
+      "state_tokens": 1179,
+      "state_tokens_dropped": 0,
+      "truncated": 0,
+      "truncated_questions": [],
+      "windows": 2
+    }
+  },
+  "latency_s": 0.19509679999828222,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

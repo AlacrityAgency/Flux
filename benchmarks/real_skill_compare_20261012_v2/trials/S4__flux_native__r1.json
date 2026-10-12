@@ -1,0 +1,90 @@
+{
+  "task_id": "S4",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "flux_native",
+  "rep": 1,
+  "label": "S4__flux_native__r1",
+  "calls": [
+    "S4__flux_native__r1__call0"
+  ],
+  "laya_receipts": [
+    "S4__flux_native__r1__front",
+    "S4__flux_native__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "order": [
+          "K0",
+          "K4",
+          "K1",
+          "K2",
+          "K3",
+          "K6",
+          "K5"
+        ],
+        "starts": [
+          0,
+          5,
+          10,
+          12,
+          14,
+          18,
+          22
+        ],
+        "finish": 26,
+        "weighted_tardiness": 9
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K0",
+      "K4",
+      "K1",
+      "K2",
+      "K3",
+      "K6",
+      "K5"
+    ],
+    "starts": [
+      0,
+      5,
+      10,
+      12,
+      14,
+      18,
+      22
+    ],
+    "finish": 26,
+    "weighted_tardiness": 9
+  },
+  "code": "import itertools\n\ndef solve(facts):\n    jobs = facts['jobs']\n    n = len(jobs)\n    ids = [j['id'] for j in jobs]\n    ix = {x:i for i,x in enumerate(ids)}\n    best = None\n    for p in itertools.permutations(range(n)):\n        pos = [0]*n\n        for k,i in enumerate(p): pos[i]=k\n        if any(pos[ix[a]] > pos[i] for i,j in enumerate(jobs) for a in j['predecessors']):\n            continue\n        t=0; starts=[]; cost=0\n        for i in p:\n            j=jobs[i]\n            t=max(t,j['release'])\n            for a in j['predecessors']:\n                if pos[ix[a]] >= pos[i]: break\n            s=t; starts.append(s); t=s+j['duration']\n            cost += j['weight']*max(0,t-j['due'])\n        seq=tuple(ids[i] for i in p)\n        key=(cost,t,seq)\n        if best is None or key<best[0]: best=(key, {'order':list(seq),'starts':starts,'finish':t,'weighted_tardiness':cost})\n    return best[1]\n\ndef check(answer,facts):\n    jobs=facts['jobs']; n=len(jobs)\n    by={j['id']:j for j in jobs}\n    order=answer['order']; starts=answer['starts']\n    if len(order)!=n or len(set(order))!=n or set(order)!=set(by) or len(starts)!=n: return False\n    t=0; cost=0\n    for k,x in enumerate(order):\n        j=by[x]\n        if any(order.index(p)>=k for p in j['predecessors']): return False\n        s=max(t,j['release'])\n        if starts[k]!=s: return False\n        t=s+j['duration']; cost+=j['weight']*max(0,t-j['due'])\n    if answer['finish']!=t or answer['weighted_tardiness']!=cost: return False\n    best=(cost,t,tuple(order))\n    # Independent exhaustive schedule enumeration with direct feasibility and objective calculation.\n    optimum=None\n    for seq in itertools.permutations(by.keys()):\n        loc={x:i for i,x in enumerate(seq)}\n        if any(loc[p]>=loc[x] for x in seq for p in by[x]['predecessors']): continue\n        tm=0; val=0\n        for x in seq:\n            j=by[x]; tm=max(tm,j['release'])+j['duration']\n            val+=j['weight']*max(0,tm-j['due'])\n        key=(val,tm,seq)\n        if optimum is None or key<optimum: optimum=key\n    return best==optimum",
+  "failure": "",
+  "latency_s": 15.206341700002667,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S4__flux_native__r1",
+  "test_integrity": true
+}

@@ -1,0 +1,82 @@
+{
+  "task_id": "S2",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "flux_matched",
+  "rep": 1,
+  "label": "S2__flux_matched__r1",
+  "calls": [
+    "S2__flux_matched__r1__call0"
+  ],
+  "laya_receipts": [
+    "S2__flux_matched__r1__front",
+    "S2__flux_matched__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "order": [
+          "K0",
+          "K4",
+          "K3",
+          "K1",
+          "K2"
+        ],
+        "starts": [
+          6,
+          10,
+          12,
+          18,
+          25
+        ],
+        "finish": 28,
+        "weighted_tardiness": 55
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K0",
+      "K4",
+      "K3",
+      "K1",
+      "K2"
+    ],
+    "starts": [
+      6,
+      10,
+      12,
+      18,
+      25
+    ],
+    "finish": 28,
+    "weighted_tardiness": 55
+  },
+  "code": "from itertools import permutations\n\ndef solve(facts):\n    jobs = facts['jobs']\n    best = None\n    result = None\n\n    def search(order, starts, completed, time, cost):\n        nonlocal best, result\n        if len(order) == len(jobs):\n            key = (cost, time, tuple(order))\n            if best is None or key < best:\n                best = key\n                result = {'order': list(order), 'starts': list(starts), 'finish': time, 'weighted_tardiness': cost}\n            return\n        for job in jobs:\n            identifier = job['id']\n            if identifier in completed or not all(p in completed for p in job['predecessors']):\n                continue\n            start = max([time, job['release']] + [completed[p] for p in job['predecessors']])\n            finish = start + job['duration']\n            completed[identifier] = finish\n            search(order + [identifier], starts + [start], completed, finish,\n                   cost + job['weight'] * max(0, finish - job['due']))\n            del completed[identifier]\n\n    search([], [], {}, 0, 0)\n    if result is None:\n        raise ValueError('No feasible order')\n    return result\n\ndef check(answer, facts):\n    jobs = facts['jobs']\n    optimum = None\n    expected = None\n    for sequence in permutations(jobs):\n        positions = {job['id']: i for i, job in enumerate(sequence)}\n        if any(p not in positions or positions[p] >= i\n               for i, job in enumerate(sequence) for p in job['predecessors']):\n            continue\n        completions = {}\n        starts = []\n        elapsed = 0\n        penalties = []\n        for job in sequence:\n            constraints = [elapsed, job['release']]\n            constraints.extend(completions[p] for p in job['predecessors'])\n            start = max(constraints)\n            starts.append(start)\n            elapsed = start + job['duration']\n            completions[job['id']] = elapsed\n            penalties.append(job['weight'] * max(elapsed - job['due'], 0))\n        ids = tuple(job['id'] for job in sequence)\n        total = sum(penalties)\n        rank = (total, elapsed, ids)\n        if optimum is None or rank < optimum:\n            optimum = rank\n            expected = {'order': list(ids), 'starts': starts, 'finish': elapsed, 'weighted_tardiness': total}\n    return expected is not None and isinstance(answer, dict) and answer == expected\n",
+  "failure": "",
+  "latency_s": 43.16085870000097,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S2__flux_matched__r1",
+  "test_integrity": true
+}

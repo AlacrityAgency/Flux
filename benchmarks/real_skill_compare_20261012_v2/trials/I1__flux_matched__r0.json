@@ -1,0 +1,56 @@
+{
+  "task_id": "I1",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "flux_matched",
+  "rep": 0,
+  "label": "I1__flux_matched__r0",
+  "calls": [
+    "I1__flux_matched__r0__call0"
+  ],
+  "laya_receipts": [
+    "I1__flux_matched__r0__front",
+    "I1__flux_matched__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 84,
+        "tax_cents": 42,
+        "total_cents": 129
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 84,
+    "tax_cents": 42,
+    "total_cents": 129
+  },
+  "code": "from fractions import Fraction\nfrom decimal import Decimal\n\ndef solve(facts):\n    def rounded(x):\n        sign = -1 if x < 0 else 1\n        n, d = abs(x.numerator), x.denominator\n        return sign * ((2 * n + d) // (2 * d))\n    subtotal = sum(rounded(Fraction(str(line['qty'])) * Fraction(str(line['unit_cents'])) * (1 - Fraction(line['discount_percent']) / 100)) for line in facts['lines'])\n    tax = rounded(subtotal * Fraction(facts['tax_percent']) / 100)\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + int(facts['shipping'])}\n\ndef check(answer, facts):\n    def ratio(value):\n        t = Decimal(str(value)).as_tuple()\n        n = 0\n        for digit in t.digits:\n            n = n * 10 + digit\n        if t.sign:\n            n = -n\n        if t.exponent >= 0:\n            return n * 10 ** t.exponent, 1\n        return n, 10 ** (-t.exponent)\n    def rounded(n, d):\n        q, r = divmod(abs(n), d)\n        if r * 2 >= d:\n            q += 1\n        return -q if n < 0 else q\n    if not isinstance(answer, dict) or set(answer) != {'subtotal_cents', 'tax_cents', 'total_cents'}:\n        return False\n    if not all(isinstance(v, int) and not isinstance(v, bool) for v in answer.values()):\n        return False\n    subtotal = 0\n    for line in facts['lines']:\n        qn, qd = ratio(line['qty'])\n        un, ud = ratio(line['unit_cents'])\n        dn, dd = ratio(line['discount_percent'])\n        subtotal += rounded(qn * un * (100 * dd - dn), qd * ud * 100 * dd)\n    tn, td = ratio(facts['tax_percent'])\n    tax = rounded(subtotal * tn, 100 * td)\n    return answer['subtotal_cents'] == subtotal and answer['tax_cents'] == tax and answer['total_cents'] == subtotal + tax + int(facts['shipping'])",
+  "failure": "",
+  "latency_s": 90.23878250000053,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\I1__flux_matched__r0",
+  "test_integrity": true
+}

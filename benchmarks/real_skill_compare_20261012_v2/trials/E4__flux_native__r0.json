@@ -1,0 +1,50 @@
+{
+  "task_id": "E4",
+  "track": "engineering",
+  "family": "rounding",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "E4__flux_native__r0",
+  "calls": [
+    "E4__flux_native__r0__call0"
+  ],
+  "laya_receipts": [
+    "E4__flux_native__r0__front",
+    "E4__flux_native__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.10889110000061919
+    }
+  ],
+  "verification_depth": "medium",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 38,
+    "failures": [],
+    "latency_s": 0.05324030000338098
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    amount = facts[\"amount_cents\"]\n    percent = facts[\"percent\"]\n    if not isinstance(amount, int) or amount < 0:\n        raise ValueError\n    if not isinstance(percent, str):\n        raise ValueError\n    parts = percent.split(\".\")\n    if len(parts) > 2 or not parts[0].isdigit() or (len(parts) == 2 and not parts[1].isdigit()):\n        raise ValueError\n    scale = 10 ** (len(parts[1]) if len(parts) == 2 else 0)\n    numerator = int(parts[0]) * scale + (int(parts[1]) if len(parts) == 2 else 0)\n    if numerator > 100 * scale:\n        raise ValueError\n    remaining = 100 * scale - numerator\n    product = amount * remaining\n    denominator = 100 * scale\n    cents = product // denominator\n    if 2 * (product % denominator) >= denominator:\n        cents += 1\n    return {\"cents\": cents}\n\ndef check(answer, facts):\n    amount = facts[\"amount_cents\"]\n    percent = facts[\"percent\"]\n    if not isinstance(amount, int) or amount < 0 or not isinstance(percent, str):\n        return False\n    parts = percent.split(\".\")\n    if len(parts) > 2 or not parts[0].isdigit() or (len(parts) == 2 and not parts[1].isdigit()):\n        return False\n    scale = 10 ** (len(parts[1]) if len(parts) == 2 else 0)\n    numerator = int(parts[0]) * scale + (int(parts[1]) if len(parts) == 2 else 0)\n    if numerator > 100 * scale:\n        return False\n    remaining = 100 * scale - numerator\n    denominator = 100 * scale\n    expected = (2 * amount * remaining + denominator) // (2 * denominator)\n    return isinstance(answer, dict) and answer.get(\"cents\") == expected and isinstance(answer.get(\"cents\"), int)",
+  "failure": "",
+  "latency_s": 24.304837399999087,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E4__flux_native__r0",
+  "test_integrity": true
+}

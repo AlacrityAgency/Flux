@@ -1,0 +1,17 @@
+Return only JSON with refs and code. refs is exactly all top-level FACTS keys, no duplicates or nested keys.
+code defines solve(facts) returning the answer and check(answer,facts) returning bool using an independent derivation.
+Read inputs from facts; do not hardcode the supplied dataset. Do not call solve from check or return constant success.
+Allowed imports: math fractions itertools functools collections heapq bisect decimal operator statistics.
+Allowed builtins: abs all any bool chr dict divmod enumerate filter float frozenset int isinstance iter len list map max min next ord pow range reversed round set slice sorted str sum tuple zip hash Exception ValueError KeyError IndexError ZeroDivisionError StopIteration.
+No IO, class, private attributes, eval, exec, open, bin, type or introspection. Total solve/check must finish within 4 seconds.
+TASK:
+Fix solve(facts): return {"allowed": bool}. Access requires active actor, resource tenant equal actor tenant, AND actor is owner OR actor role admin. A tenant admin has no cross-tenant exception. Missing/unknown role gives no admin right.
+FACTS:
+{"actor":{"id":"a","tenant":"T","role":"user","active":true},"resource":{"owner":"a","tenant":"T"}}
+BUGGY SOURCE:
+def solve(facts):
+    a,r=facts["actor"],facts["resource"]
+    return {"allowed":a.get("role")=="admin" or a["id"]==r["owner"]}
+
+PUBLIC CASES:
+[{"facts": {"actor": {"id": "a", "tenant": "T", "role": "user", "active": true}, "resource": {"owner": "a", "tenant": "T"}}, "expected": {"allowed": true}}, {"facts": {"actor": {"id": "a", "tenant": "T", "role": "admin", "active": true}, "resource": {"owner": "b", "tenant": "U"}}, "expected": {"allowed": false}}, {"facts": {"actor": {"id": "a", "tenant": "T", "role": "user", "active": false}, "resource": {"owner": "a", "tenant": "T"}}, "expected": {"allowed": false}}]

@@ -1,0 +1,42 @@
+{
+  "task_id": "C4",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "normal",
+  "rep": 1,
+  "label": "C4__normal__r1",
+  "calls": [
+    "C4__normal__r1__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool event"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": false,
+  "correct": false,
+  "candidate_correct": false,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": false,
+    "executed": 1,
+    "failures": [
+      {
+        "reason": "answer differs from exact reference"
+      }
+    ]
+  },
+  "answer": null,
+  "code": null,
+  "failure": "",
+  "latency_s": 15.317266199999722,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C4__normal__r1",
+  "test_integrity": true
+}

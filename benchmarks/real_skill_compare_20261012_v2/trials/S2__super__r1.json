@@ -1,0 +1,55 @@
+{
+  "task_id": "S2",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "super",
+  "rep": 1,
+  "label": "S2__super__r1",
+  "calls": [
+    "S2__super__r1__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "reason": "Independent contract verification failed"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K0",
+      "K4",
+      "K3",
+      "K1",
+      "K2"
+    ],
+    "starts": [
+      6,
+      10,
+      12,
+      18,
+      25
+    ],
+    "finish": 28,
+    "weighted_tardiness": 55
+  },
+  "code": null,
+  "failure": "",
+  "latency_s": 26.609963700000662,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S2__super__r1",
+  "test_integrity": true
+}

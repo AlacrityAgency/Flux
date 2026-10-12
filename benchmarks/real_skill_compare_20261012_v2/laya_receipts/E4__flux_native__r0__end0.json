@@ -1,0 +1,51 @@
+{
+  "state": {
+    "request": "TASK:\nFix solve(facts): amount_cents nonnegative integer and percent exact decimal string [0,100]. Discounted amount = amount_cents*(1-percent/100), rounded HALF UP to integer cents, never binary-float/bankers rounding. Return {\"cents\": int}.\nFACTS:\n{\"amount_cents\":105,\"percent\":\"50\"}\nBUGGY SOURCE:\ndef solve(facts):\n    return {\"cents\":round(facts[\"amount_cents\"]*(1-float(facts[\"percent\"])/100))}\n\nPUBLIC CASES:\n[{\"facts\": {\"amount_cents\": 105, \"percent\": \"50\"}, \"expected\": {\"cents\": 53}}, {\"facts\": {\"amount_cents\": 0, \"percent\": \"12.5\"}, \"expected\": {\"cents\": 0}}, {\"facts\": {\"amount_cents\": 101, \"percent\": \"100\"}, \"expected\": {\"cents\": 0}}]",
+    "candidate": "{\"refs\":[\"amount_cents\",\"percent\"],\"code\":\"def solve(facts):\\n    amount = facts[\\\"amount_cents\\\"]\\n    percent = facts[\\\"percent\\\"]\\n    if not isinstance(amount, int) or amount < 0:\\n        raise ValueError\\n    if not isinstance(percent, str):\\n        raise ValueError\\n    parts = percent.split(\\\".\\\")\\n    if len(parts) > 2 or not parts[0].isdigit() or (len(parts) == 2 and not parts[1].isdigit()):\\n        raise ValueError\\n    scale = 10 ** (len(parts[1]) if len(parts) == 2 else 0)\\n    numerator = int(parts[0]) * scale + (int(parts[1]) if len(parts) == 2 else 0)\\n    if numerator > 100 * scale:\\n        raise ValueError\\n    remaining = 100 * scale - numerator\\n    product = amount * remaining\\n    denominator = 100 * scale\\n    cents = product // denominator\\n    if 2 * (product % denominator) >= denominator:\\n        cents += 1\\n    return {\\\"cents\\\": cents}\\n\\ndef check(answer, facts):\\n    amount = facts[\\\"amount_cents\\\"]\\n    percent = facts[\\\"percent\\\"]\\n    if not isinstance(amount, int) or amount < 0 or not isinstance(percent, str):\\n        return False\\n    parts = percent.split(\\\".\\\")\\n    if len(parts) > 2 or not parts[0].isdigit() or (len(parts) == 2 and not parts[1].isdigit()):\\n        return False\\n    scale = 10 ** (len(parts[1]) if len(parts) == 2 else 0)\\n    numerator = int(parts[0]) * scale + (int(parts[1]) if len(parts) == 2 else 0)\\n    if numerator > 100 * scale:\\n        return False\\n    remaining = 100 * scale - numerator\\n    denominator = 100 * scale\\n    expected = (2 * amount * remaining + denominator) // (2 * denominator)\\n    return isinstance(answer, dict) and answer.get(\\\"cents\\\") == expected and isinstance(answer.get(\\\"cents\\\"), int)\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.801,
+          "escalate": 0.0276,
+          "stop": 0.1715
+        },
+        "confidence": 0.4729,
+        "answer_confidence": 0.801,
+        "action": {
+          "act_probability": 1.0
+        },
+        "window": {
+          "index": 1,
+          "token_start": 380,
+          "token_end": 942,
+          "count": 2
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 1449,
+      "output_tokens": 0,
+      "state_tokens": 1323,
+      "state_tokens_dropped": 0,
+      "truncated": 0,
+      "truncated_questions": [],
+      "windows": 2
+    }
+  },
+  "latency_s": 0.32180220000009285,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

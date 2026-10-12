@@ -1,0 +1,86 @@
+{
+  "task_id": "S3",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "flux_matched",
+  "rep": 1,
+  "label": "S3__flux_matched__r1",
+  "calls": [
+    "S3__flux_matched__r1__call0"
+  ],
+  "laya_receipts": [
+    "S3__flux_matched__r1__front",
+    "S3__flux_matched__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "order": [
+          "K0",
+          "K1",
+          "K4",
+          "K2",
+          "K3",
+          "K5"
+        ],
+        "starts": [
+          4,
+          5,
+          9,
+          16,
+          23,
+          30
+        ],
+        "finish": 37,
+        "weighted_tardiness": 213
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K0",
+      "K1",
+      "K4",
+      "K2",
+      "K3",
+      "K5"
+    ],
+    "starts": [
+      4,
+      5,
+      9,
+      16,
+      23,
+      30
+    ],
+    "finish": 37,
+    "weighted_tardiness": 213
+  },
+  "code": "from itertools import permutations\n\ndef solve(facts):\n    jobs = sorted(facts['jobs'], key=lambda j: j['id'])\n    n = len(jobs)\n    indexes = {j['id']: i for i, j in enumerate(jobs)}\n    requirements = [sum(1 << k for k in set(indexes[p] for p in j['predecessors'])) for j in jobs]\n    best = None\n    best_starts = None\n\n    def visit(mask, time, cost, order, starts):\n        nonlocal best, best_starts\n        if len(order) == n:\n            candidate = (cost, time, order)\n            if best is None or candidate < best:\n                best = candidate\n                best_starts = starts\n            return\n        for i, job in enumerate(jobs):\n            bit = 1 << i\n            if mask & bit or requirements[i] & mask != requirements[i]:\n                continue\n            start = max(time, job['release'])\n            end = start + job['duration']\n            visit(mask | bit, end,\n                  cost + job['weight'] * max(0, end - job['due']),\n                  order + (job['id'],), starts + (start,))\n\n    visit(0, 0, 0, (), ())\n    if best is None:\n        raise ValueError('No feasible order')\n    return {'order': list(best[2]), 'starts': list(best_starts),\n            'finish': best[1], 'weighted_tardiness': best[0]}\n\ndef check(answer, facts):\n    if not isinstance(answer, dict) or set(answer) != {'order', 'starts', 'finish', 'weighted_tardiness'}:\n        return False\n    jobs = facts['jobs']\n    optimum = None\n    optimum_starts = None\n    for sequence in permutations(jobs):\n        completed = {}\n        time = 0\n        penalty = 0\n        starts = []\n        valid = True\n        for job in sequence:\n            if any(p not in completed for p in job['predecessors']):\n                valid = False\n                break\n            earliest = max([time, job['release']] + [completed[p] for p in job['predecessors']])\n            starts.append(earliest)\n            time = earliest + job['duration']\n            completed[job['id']] = time\n            if time > job['due']:\n                penalty += job['weight'] * (time - job['due'])\n        if valid:\n            objective = (penalty, time, tuple(job['id'] for job in sequence))\n            if optimum is None or objective < optimum:\n                optimum = objective\n                optimum_starts = starts\n    if optimum is None:\n        return False\n    return answer == {'order': list(optimum[2]), 'starts': optimum_starts,\n                      'finish': optimum[1], 'weighted_tardiness': optimum[0]}\n",
+  "failure": "",
+  "latency_s": 36.8387126000016,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\S3__flux_matched__r1",
+  "test_integrity": true
+}

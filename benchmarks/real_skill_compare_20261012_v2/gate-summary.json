@@ -1,0 +1,14 @@
+{
+  "review_verdicts": {
+    "STALE": 2
+  },
+  "raw_gate_statuses": {
+    "testing.smells:PASS": 2,
+    "testing.run:FAIL": 1,
+    "backend.behavior:FAIL": 1,
+    "delivery.build:NOT-TESTED": 2,
+    "testing.api:NOT-TESTED": 2,
+    "testing.run:PASS": 1,
+    "backend.behavior:PASS": 1
+  }
+}

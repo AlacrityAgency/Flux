@@ -1,0 +1,38 @@
+{
+  "state": {
+    "request": "TASK:\nCalculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.\nFACTS:\n{\"lines\":[{\"qty\":1,\"unit_cents\":115,\"discount_percent\":\"50\"},{\"qty\":3,\"unit_cents\":17,\"discount_percent\":\"50\"}],\"shipping\":3,\"tax_percent\":\"50\"}",
+    "risk_floor": "high"
+  },
+  "phase": "front",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "verify": {
+        "type": "choice",
+        "choice": "medium",
+        "probabilities": {
+          "light": 0.1269,
+          "medium": 0.4822,
+          "full": 0.3909
+        },
+        "confidence": 0.1071,
+        "answer_confidence": 0.4822,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 201,
+      "output_tokens": 0,
+      "state_tokens": 151,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.07994929999767919,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

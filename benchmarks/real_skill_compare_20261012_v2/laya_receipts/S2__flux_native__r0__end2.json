@@ -1,0 +1,45 @@
+{
+  "state": {
+    "request": "TASK:\nOne machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness.\nFACTS:\n{\"jobs\":[{\"id\":\"K0\",\"duration\":4,\"release\":6,\"due\":10,\"weight\":5,\"predecessors\":[]},{\"id\":\"K1\",\"duration\":7,\"release\":9,\"due\":23,\"weight\":2,\"predecessors\":[\"K0\"]},{\"id\":\"K2\",\"duration\":3,\"release\":3,\"due\":19,\"weight\":2,\"predecessors\":[\"K1\"]},{\"id\":\"K3\",\"duration\":6,\"release\":2,\"due\":11,\"weight\":3,\"predecessors\":[\"K0\"]},{\"id\":\"K4\",\"duration\":2,\"release\":7,\"due\":9,\"weight\":4,\"predecessors\":[]}]}",
+    "candidate": "",
+    "provider_completed": false,
+    "verification": {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    "attempt": 2,
+    "remaining_attempts": 0
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "stop",
+        "probabilities": {
+          "accept": 0.3462,
+          "escalate": 0.142,
+          "stop": 0.5118
+        },
+        "confidence": 0.1014,
+        "answer_confidence": 0.5118,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 385,
+      "output_tokens": 0,
+      "state_tokens": 322,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.025926700000127312,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

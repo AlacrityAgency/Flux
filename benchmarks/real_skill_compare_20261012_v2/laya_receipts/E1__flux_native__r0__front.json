@@ -1,0 +1,38 @@
+{
+  "state": {
+    "request": "TASK:\nFix solve(facts): return {\"allowed\": bool}. Access requires active actor, resource tenant equal actor tenant, AND actor is owner OR actor role admin. A tenant admin has no cross-tenant exception. Missing/unknown role gives no admin right.\nFACTS:\n{\"actor\":{\"id\":\"a\",\"tenant\":\"T\",\"role\":\"user\",\"active\":true},\"resource\":{\"owner\":\"a\",\"tenant\":\"T\"}}\nBUGGY SOURCE:\ndef solve(facts):\n    a,r=facts[\"actor\"],facts[\"resource\"]\n    return {\"allowed\":a.get(\"role\")==\"admin\" or a[\"id\"]==r[\"owner\"]}\n\nPUBLIC CASES:\n[{\"facts\": {\"actor\": {\"id\": \"a\", \"tenant\": \"T\", \"role\": \"user\", \"active\": true}, \"resource\": {\"owner\": \"a\", \"tenant\": \"T\"}}, \"expected\": {\"allowed\": true}}, {\"facts\": {\"actor\": {\"id\": \"a\", \"tenant\": \"T\", \"role\": \"admin\", \"active\": true}, \"resource\": {\"owner\": \"b\", \"tenant\": \"U\"}}, \"expected\": {\"allowed\": false}}, {\"facts\": {\"actor\": {\"id\": \"a\", \"tenant\": \"T\", \"role\": \"user\", \"active\": false}, \"resource\": {\"owner\": \"a\", \"tenant\": \"T\"}}, \"expected\": {\"allowed\": false}}]",
+    "risk_floor": "medium"
+  },
+  "phase": "front",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "verify": {
+        "type": "choice",
+        "choice": "medium",
+        "probabilities": {
+          "light": 0.0016,
+          "medium": 0.9925,
+          "full": 0.0059
+        },
+        "confidence": 0.9561,
+        "answer_confidence": 0.9925,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 398,
+      "output_tokens": 0,
+      "state_tokens": 348,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.028769399999873713,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

@@ -38,6 +38,13 @@
     }
   ],
   "mutation_rejected": true,
-  "artifact_checks": [],
+  "artifact_checks": [
+    "plan/source hashes",
+    "all receipt hashes",
+    "unique scheduled trials",
+    "success/acceptance consistency",
+    "unaltered task/facts in all model prompts",
+    "no hidden fixture in candidate prompts"
+  ],
   "provider_calls": 0
 }

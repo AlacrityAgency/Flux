@@ -1,0 +1,271 @@
+{
+  "date": "2026-10-06",
+  "availability_is_account_and_configuration_specific": true,
+  "gapcode_catalog_fetched_at": "2026-10-06T12:54:02.421370800Z",
+  "models": {
+    "gapcode/gpt-6-astra": {
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max",
+        "ultra"
+      ],
+      "tested_efforts": [
+        "high",
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_gpt-6-astra.json",
+      "compatibility_receipt": "receipts/compact_gpt-6-astra.json",
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/gpt-6.1-sol": {
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max",
+        "ultra"
+      ],
+      "tested_efforts": [
+        "high",
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_gpt-6.1-sol.json",
+      "compatibility_receipt": "receipts/compact_gpt-6.1-sol.json",
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/gpt-6-luna": {
+      "enabled": true,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_gpt-6-luna.json",
+      "compatibility_receipt": "receipts/compact_gpt-6-luna.json",
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/kimi-3": {
+      "enabled": false,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_kimi-3.json",
+      "compatibility_receipt": null,
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/glm-5.3": {
+      "enabled": false,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "high",
+        "max"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_glm-5.3.json",
+      "compatibility_receipt": null,
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/deepseek-v4.1-flash": {
+      "enabled": false,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_deepseek-v4.1-flash.json",
+      "compatibility_receipt": null,
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/grok-4.6": {
+      "enabled": false,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_grok-4.6.json",
+      "compatibility_receipt": null,
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/claude-fable-5": {
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_claude-fable-5.json",
+      "compatibility_receipt": "receipts/compact_claude-fable-5.json",
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/claude-opus-5-5": {
+      "enabled": true,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_claude-opus-5-5.json",
+      "compatibility_receipt": "receipts/compact_claude-opus-5-5.json",
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/gapgpt-qwen-3.6": {
+      "enabled": true,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_gapgpt-qwen-3.6.json",
+      "compatibility_receipt": "receipts/compact_gapgpt-qwen-3.6.json",
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "gapcode/claude-sonnet-5-5": {
+      "enabled": true,
+      "compact_qualified": false,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "availability_receipt": "receipts/availability_claude-sonnet-5-5.json",
+      "compatibility_receipt": "receipts/compact_claude-sonnet-5-5.json",
+      "health_checked_at": "2026-10-06T12:54:02.421370800Z",
+      "qualification_scope": "one invoice program on three local facts; no broad model benchmark"
+    },
+    "codex/gpt-6-luna": {
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "tested_efforts": [
+        "low"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "qualification_scope": "prior frozen senior-v2 benchmark and provider execution; see algorithm provenance"
+    },
+    "codex/gpt-6.1-sol": {
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "tested_efforts": [
+        "high"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "qualification_scope": "prior frozen senior-v2 benchmark and provider execution; see algorithm provenance"
+    },
+    "codex/gpt-6-astra": {
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "tested_efforts": [
+        "high"
+      ],
+      "price_usd_per_million": null,
+      "actual_billing_usd": null,
+      "qualification_scope": "prior frozen senior-v2 benchmark and provider execution; see algorithm provenance"
+    }
+  }
+}

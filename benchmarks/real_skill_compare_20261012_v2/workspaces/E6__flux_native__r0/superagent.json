@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "profile": "service",
+  "features": [],
+  "environment": "test",
+  "testing": {
+    "repeat": 1,
+    "static_workers": 1,
+    "suites": [
+      {
+        "name": "unittest",
+        "cwd": "."
+      }
+    ]
+  },
+  "acceptance": [
+    {
+      "id": "A1",
+      "criterion": "Fix solve(facts): select payload according to version. v1 reads title, v2 reads display_name (ignore title even if present); missing required field -> {\"error\":\"missing\"}; unknown version -> {\"error\":\"version\"}. Return {\"label\": field value} for valid input, including empty string. Do not guess across versions.",
+      "gate": "backend.behavior",
+      "scenario": "task-contract"
+    }
+  ],
+  "checks": {
+    "backend.behavior": {
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\public_gate.py",
+        "--task-id",
+        "E6",
+        "--project",
+        "."
+      ],
+      "expected": [
+        "task-contract"
+      ]
+    }
+  }
+}

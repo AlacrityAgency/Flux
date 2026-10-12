@@ -1,0 +1,8 @@
+{
+  "typography": {
+    "broken": {
+      "$type": "font-size",
+      "$value": "clamp(banana)"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "task_id": "E2",
+  "track": "engineering",
+  "family": "intervals",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "E2__flux_native__r0",
+  "calls": [
+    "E2__flux_native__r0__call0",
+    "E2__flux_native__r0__call1",
+    "E2__flux_native__r0__call2"
+  ],
+  "laya_receipts": [
+    "E2__flux_native__r0__front",
+    "E2__flux_native__r0__end0",
+    "E2__flux_native__r0__end1",
+    "E2__flux_native__r0__end2"
+  ],
+  "actions": [
+    {
+      "raw": "stop",
+      "applied": "escalate",
+      "guard_override": true
+    },
+    {
+      "raw": "stop",
+      "applied": "escalate",
+      "guard_override": true
+    },
+    {
+      "raw": "stop",
+      "applied": "stop",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": false,
+  "correct": false,
+  "candidate_correct": false,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": false,
+    "executed": 0,
+    "failures": [
+      {
+        "reason": "missing code"
+      }
+    ]
+  },
+  "answer": null,
+  "code": null,
+  "failure": "Provider incomplete or tool use",
+  "latency_s": 24.131628200000705,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E2__flux_native__r0",
+  "test_integrity": true
+}

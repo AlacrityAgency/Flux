@@ -1,0 +1,45 @@
+{
+  "state": {
+    "request": "TASK:\nOne machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness.\nFACTS:\n{\"jobs\":[{\"id\":\"K0\",\"duration\":5,\"release\":4,\"due\":29,\"weight\":2,\"predecessors\":[]},{\"id\":\"K1\",\"duration\":7,\"release\":3,\"due\":22,\"weight\":6,\"predecessors\":[\"K0\"]},{\"id\":\"K2\",\"duration\":2,\"release\":6,\"due\":17,\"weight\":3,\"predecessors\":[\"K1\"]},{\"id\":\"K3\",\"duration\":4,\"release\":2,\"due\":30,\"weight\":2,\"predecessors\":[]}]}",
+    "candidate": "",
+    "provider_completed": false,
+    "verification": {
+      "pass": false,
+      "reason": "Provider incomplete or tool use"
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "stop",
+        "probabilities": {
+          "accept": 0.3501,
+          "escalate": 0.2046,
+          "stop": 0.4452
+        },
+        "confidence": 0.0421,
+        "answer_confidence": 0.4452,
+        "action": {
+          "act_probability": 1.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 349,
+      "output_tokens": 0,
+      "state_tokens": 286,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "windows": 1
+    }
+  },
+  "latency_s": 0.29331579999779933,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

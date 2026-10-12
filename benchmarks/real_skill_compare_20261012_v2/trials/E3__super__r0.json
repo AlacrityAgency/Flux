@@ -1,0 +1,259 @@
+{
+  "task_id": "E3",
+  "track": "engineering",
+  "family": "replay",
+  "arm": "super",
+  "rep": 0,
+  "label": "E3__super__r0",
+  "calls": [
+    "E3__super__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.05880470000192872,
+      "gate_observed": true,
+      "gate_status": "PASS"
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 23,
+    "failures": [],
+    "latency_s": 0.05046959999890532
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    balance = facts[\"initial\"]\n    seen = {}\n    for event in facts[\"events\"]:\n        event_id = event[\"id\"]\n        signature = (event[\"kind\"], event[\"amount\"])\n        if event_id in seen:\n            if seen[event_id] != signature:\n                return {\"error\": \"conflict\"}\n            continue\n        seen[event_id] = signature\n        if event[\"kind\"] == \"credit\":\n            balance += event[\"amount\"]\n        else:\n            balance -= event[\"amount\"]\n    return {\"balance\": balance, \"applied\": len(seen)}",
+  "failure": "",
+  "latency_s": 36.76771039999949,
+  "gate_records": [
+    {
+      "run": "r-20261013-001323-9be80e",
+      "gate": "testing.smells",
+      "scope": null,
+      "review_id": "6be5da96fb9b429e88971ee3f64c659d",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001323-9be80e.json": "ba31a1f603419b1cfc7bf1179c37d9bd81e3ff55ead0fdc761b724e05bba7d74"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "6c2d3f5f5d0af663",
+      "time": "2026-10-13T00:13:23",
+      "duration_s": 0.73,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001323-9be80e.json"
+    },
+    {
+      "run": "r-20261013-001325-252512",
+      "gate": "testing.run",
+      "scope": null,
+      "review_id": "6be5da96fb9b429e88971ee3f64c659d",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001325-252512\\0\\runs": "3d835dfeb12010c942739f9680bacb94b4cf761bf5a54a9578f4960cc2246fa0",
+        ".superagent\\runs\\r-20261013-001325-252512.json": "039c2d9d74a2c9b295bf33d76c5e6a30d12e4e9e36d68610bffb7f9084758c56"
+      },
+      "artifact_error": false,
+      "status": "FAIL",
+      "exit_code": 1,
+      "fingerprint": "6c2d3f5f5d0af663",
+      "time": "2026-10-13T00:13:25",
+      "duration_s": 2.3,
+      "args": [
+        "--repeat",
+        "1",
+        "--suite",
+        ".",
+        "--runner",
+        "unittest"
+      ],
+      "rules": [
+        "test-failure"
+      ],
+      "finding_count": 2,
+      "report": ".superagent/runs/r-20261013-001325-252512.json"
+    },
+    {
+      "run": "r-20261013-001327-b61121",
+      "gate": "backend.behavior",
+      "scope": null,
+      "review_id": "6be5da96fb9b429e88971ee3f64c659d",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001327-b61121\\0\\result.json": "fbb60bb0c53613c7e0c9874e117387b120b680f082cff89fbf2103d7559ae27e",
+        ".superagent\\runs\\r-20261013-001327-b61121.json": "1aff64632dfdead2882ec91d655758af3ed2480be09cc6a5e5b541439d107739"
+      },
+      "artifact_error": false,
+      "status": "FAIL",
+      "exit_code": 1,
+      "fingerprint": "6c2d3f5f5d0af663",
+      "time": "2026-10-13T00:13:27",
+      "duration_s": 1.5,
+      "args": [],
+      "rules": [
+        "scenario-failed"
+      ],
+      "finding_count": 1,
+      "report": ".superagent/runs/r-20261013-001327-b61121.json"
+    },
+    {
+      "run": "r-20261013-001328-4c946b",
+      "gate": "delivery.build",
+      "scope": null,
+      "review_id": "6be5da96fb9b429e88971ee3f64c659d",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001328-4c946b.json": "c8fd3752d07a246c49ddd8adfb5169fd31631990b5adc9338feb15a2f7240234"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "6c2d3f5f5d0af663",
+      "time": "2026-10-13T00:13:28",
+      "duration_s": 0.73,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001328-4c946b.json"
+    },
+    {
+      "run": "r-20261013-001328-a9f48d",
+      "gate": "testing.api",
+      "scope": null,
+      "review_id": "6be5da96fb9b429e88971ee3f64c659d",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001328-a9f48d.json": "cf91fbd15c7c82b100337db207f3ed6a8c3410c7ae6320089e364878fa95ae94"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "6c2d3f5f5d0af663",
+      "time": "2026-10-13T00:13:29",
+      "duration_s": 0.84,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001328-a9f48d.json"
+    },
+    {
+      "run": "r-20261013-001350-301a45",
+      "gate": "testing.smells",
+      "scope": null,
+      "review_id": "69fe65184fc84319b957c17bf5c900d2",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001350-301a45.json": "eb13bd1b34d25a41a85852ea2f01dd5cade95330b78adfd42f4f6b88b6567060"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "73330e1fc348ad8f",
+      "time": "2026-10-13T00:13:50",
+      "duration_s": 0.72,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001350-301a45.json"
+    },
+    {
+      "run": "r-20261013-001352-530cf3",
+      "gate": "testing.run",
+      "scope": null,
+      "review_id": "69fe65184fc84319b957c17bf5c900d2",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001352-530cf3\\0\\runs": "cf136ba879d2d933181620338759d3d33d62c45b9e55422f733414f7e84e3bcd",
+        ".superagent\\runs\\r-20261013-001352-530cf3.json": "b3ffd8a359eec7a871e3416abc053305c8c836d8a0a2591fc5a570dc1e2fa598"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "73330e1fc348ad8f",
+      "time": "2026-10-13T00:13:52",
+      "duration_s": 2.31,
+      "args": [
+        "--repeat",
+        "1",
+        "--suite",
+        ".",
+        "--runner",
+        "unittest"
+      ],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001352-530cf3.json"
+    },
+    {
+      "run": "r-20261013-001354-be34f8",
+      "gate": "backend.behavior",
+      "scope": null,
+      "review_id": "69fe65184fc84319b957c17bf5c900d2",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001354-be34f8\\0\\result.json": "b36816ab5bf3d04088dae34100e0639608562cd2098b45ced2fe92d566c8f829",
+        ".superagent\\runs\\r-20261013-001354-be34f8.json": "1cb51388073ae50646b87f4251ca25969057ab53268132800107b92f750e1a93"
+      },
+      "artifact_error": false,
+      "status": "PASS",
+      "exit_code": 0,
+      "fingerprint": "73330e1fc348ad8f",
+      "time": "2026-10-13T00:13:54",
+      "duration_s": 1.5,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001354-be34f8.json"
+    },
+    {
+      "run": "r-20261013-001354-2d7abe",
+      "gate": "delivery.build",
+      "scope": null,
+      "review_id": "69fe65184fc84319b957c17bf5c900d2",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001354-2d7abe.json": "dc4c8ca6ff9b3d9ccc92c0b46a4fcafff680ab86df19c7d7b2c6fa436fb4c318"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "73330e1fc348ad8f",
+      "time": "2026-10-13T00:13:54",
+      "duration_s": 0.77,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001354-2d7abe.json"
+    },
+    {
+      "run": "r-20261013-001355-1ded31",
+      "gate": "testing.api",
+      "scope": null,
+      "review_id": "69fe65184fc84319b957c17bf5c900d2",
+      "digests": {
+        ".superagent\\runs\\r-20261013-001355-1ded31.json": "23f9e8d9e11093956bf0fc75e46755c7939d32a7a9df2f97666711314456b36a"
+      },
+      "artifact_error": false,
+      "status": "NOT-TESTED",
+      "exit_code": 2,
+      "fingerprint": "73330e1fc348ad8f",
+      "time": "2026-10-13T00:13:55",
+      "duration_s": 0.71,
+      "args": [],
+      "rules": [],
+      "finding_count": 0,
+      "report": ".superagent/runs/r-20261013-001355-1ded31.json"
+    }
+  ],
+  "review_receipts": [
+    "E3__super__r0__baseline",
+    "E3__super__r0__candidate0"
+  ],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E3__super__r0",
+  "test_integrity": true
+}

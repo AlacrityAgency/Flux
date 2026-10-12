@@ -1,0 +1,304 @@
+{
+  "description": "Reference-search evaluation: the expected document must appear in the top 3 results. Run by tests/test_rag.py.",
+  "queries": [
+    {"q": "durable idempotency webhook", "expect": "modules/backend/workflow.md", "lang": "en"},
+    {"q": "backup restore recovered rows", "expect": "modules/data/workflow.md", "lang": "en"},
+    {"q": "tenant ownership authorization", "expect": "modules/security/workflow.md", "lang": "en"},
+    {"q": "load k6 thresholds iterations", "expect": "modules/operations/workflow.md", "lang": "en"},
+    {"q": "immutable artifact rollback smoke", "expect": "modules/delivery/workflow.md", "lang": "en"},
+    {"q": "مجوز دسترسی چندسازمانی", "expect": "modules/security/workflow.md", "lang": "fa"},
+    {"q": "بازیابی پایگاه داده", "expect": "modules/data/workflow.md", "lang": "fa"},
+    {"q": "تست بار k6", "expect": "modules/operations/workflow.md", "lang": "fa"},
+    {"q": "انتشار rollback", "expect": "modules/delivery/workflow.md", "lang": "fa"},
+    {
+      "q": "minimum target size for buttons",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "en"
+    },
+    {
+      "q": "contrast ratio for large text",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "en"
+    },
+    {
+      "q": "RTL logical properties margin",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "en"
+    },
+    {
+      "q": "persian digits date formatting",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "en"
+    },
+    {
+      "q": "form validation error message",
+      "expect": "modules/ui-ux/references/ux-patterns.md",
+      "lang": "en"
+    },
+    {
+      "q": "empty state and loading state",
+      "expect": "modules/ui-ux/references/ux-patterns.md",
+      "lang": "en"
+    },
+    {
+      "q": "DTCG token format alias",
+      "expect": "modules/ui-ux/references/tokens.md",
+      "lang": "en"
+    },
+    {
+      "q": "contrast pairs translucent background over",
+      "expect": "modules/ui-ux/references/tokens.md",
+      "lang": "en"
+    },
+    {
+      "q": "glassmorphism scrim contrast",
+      "expect": "modules/ui-ux/references/visual-direction.md",
+      "lang": "en"
+    },
+    {
+      "q": "creative posture avant garde",
+      "expect": "modules/ui-ux/references/visual-direction.md",
+      "lang": "en"
+    },
+    {
+      "q": "OPG radiograph instead of stock photo",
+      "expect": "modules/ui-ux/domains/specialized-domains.md",
+      "lang": "en"
+    },
+    {
+      "q": "figma variables extraction",
+      "expect": "modules/ui-ux/integrations/figma.md",
+      "lang": "en"
+    },
+    {
+      "q": "flaky test detection rerun",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "en"
+    },
+    {
+      "q": "mutation score surviving mutant",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "en"
+    },
+    {
+      "q": "diff coverage threshold",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "en"
+    },
+    {
+      "q": "test pyramid trophy honeycomb",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "en"
+    },
+    {
+      "q": "risk likelihood impact prioritization",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "en"
+    },
+    {
+      "q": "API contract schemathesis openapi",
+      "expect": "modules/testing/references/backend.md",
+      "lang": "en"
+    },
+    {
+      "q": "database integration test isolation",
+      "expect": "modules/testing/references/backend.md",
+      "lang": "en"
+    },
+    {
+      "q": "testing library getByRole component test",
+      "expect": "modules/testing/references/frontend.md",
+      "lang": "en"
+    },
+    {
+      "q": "core web vitals LCP INP",
+      "expect": "modules/testing/references/frontend.md",
+      "lang": "en"
+    },
+    {
+      "q": "sleepy test empty test smell",
+      "expect": "modules/testing/references/test-smells.md",
+      "lang": "en"
+    },
+    {
+      "q": "assurance filters five runs new tests",
+      "expect": "modules/testing/workflow.md",
+      "lang": "en"
+    },
+    {
+      "q": "verdict label stale evidence",
+      "expect": "core/protocol.md",
+      "lang": "en"
+    },
+    {
+      "q": "attempt budget pivot required",
+      "expect": "core/protocol.md",
+      "lang": "en"
+    },
+    {
+      "q": "decision record hypothesis observation",
+      "expect": "core/reasoning.md",
+      "lang": "en"
+    },
+    {
+      "q": "untrusted external data instructions",
+      "expect": "core/reasoning.md",
+      "lang": "en"
+    },
+    {
+      "q": "notebooklm research google account",
+      "expect": "core/integrations/notebooklm.md",
+      "lang": "en"
+    },
+    {
+      "q": "keyboard trap focus visible checklist",
+      "expect": "modules/ui-ux/references/review-checklist.md",
+      "lang": "en"
+    },
+    {
+      "q": "storybook stories accessibility addon",
+      "expect": "modules/ui-ux/integrations/storybook.md",
+      "lang": "en"
+    },
+    {
+      "q": "حداقل اندازه دکمه",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "fa"
+    },
+    {
+      "q": "کنتراست متن بزرگ",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "fa"
+    },
+    {
+      "q": "راست به چپ و فارسی",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "fa"
+    },
+    {
+      "q": "اعداد فارسی و تاریخ شمسی",
+      "expect": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "lang": "fa"
+    },
+    {
+      "q": "پیام خطا در فرم",
+      "expect": "modules/ui-ux/references/ux-patterns.md",
+      "lang": "fa"
+    },
+    {
+      "q": "حالت خالی و حالت بارگذاری",
+      "expect": "modules/ui-ux/references/ux-patterns.md",
+      "lang": "fa"
+    },
+    {
+      "q": "توکن طراحی و پالت رنگ",
+      "expect": "modules/ui-ux/references/tokens.md",
+      "lang": "fa"
+    },
+    {
+      "q": "شیشه و کنتراست",
+      "expect": "modules/ui-ux/references/visual-direction.md",
+      "lang": "fa"
+    },
+    {
+      "q": "رادیولوژی دندان‌پزشکی",
+      "expect": "modules/ui-ux/domains/specialized-domains.md",
+      "lang": "fa"
+    },
+    {
+      "q": "استخراج متغیرها از فیگما",
+      "expect": "modules/ui-ux/integrations/figma.md",
+      "lang": "fa"
+    },
+    {
+      "q": "تست ناپایدار",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "fa"
+    },
+    {
+      "q": "تست جهش",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "fa"
+    },
+    {
+      "q": "پوشش کد تغییرات",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "fa"
+    },
+    {
+      "q": "ریسک و اولویت تست",
+      "expect": "modules/testing/references/strategy.md",
+      "lang": "fa"
+    },
+    {
+      "q": "تست قرارداد بک‌اند",
+      "expect": "modules/testing/references/backend.md",
+      "lang": "fa"
+    },
+    {
+      "q": "تست یکپارچگی پایگاه داده",
+      "expect": "modules/testing/references/backend.md",
+      "lang": "fa"
+    },
+    {
+      "q": "تست کامپوننت فرانت‌اند",
+      "expect": "modules/testing/references/frontend.md",
+      "lang": "fa"
+    },
+    {
+      "q": "کارایی صفحه وب",
+      "expect": "modules/testing/references/frontend.md",
+      "lang": "fa"
+    },
+    {
+      "q": "بوی تست",
+      "expect": "modules/testing/references/test-smells.md",
+      "lang": "fa"
+    },
+    {
+      "q": "حکم و شواهد",
+      "expect": "core/protocol.md",
+      "lang": "fa"
+    },
+    {
+      "q": "بودجه تلاش",
+      "expect": "core/protocol.md",
+      "lang": "fa"
+    },
+    {
+      "q": "رکورد تصمیم",
+      "expect": "core/reasoning.md",
+      "lang": "fa"
+    },
+    {
+      "q": "تحقیق خارجی با NotebookLM",
+      "expect": "core/integrations/notebooklm.md",
+      "lang": "fa"
+    },
+    {
+      "q": "فوکوس و کیبورد",
+      "expect": "modules/ui-ux/references/review-checklist.md",
+      "lang": "fa"
+    },
+    {
+      "q": "document claims versus code research only not measured",
+      "expect": "modules/claims/workflow.md",
+      "lang": "en"
+    },
+    {
+      "q": "construct validity unit name force acceleration",
+      "expect": "modules/claims/references/claim-review.md",
+      "lang": "en"
+    },
+    {
+      "q": "تطبیق سند با کد و ادعاها",
+      "expect": "modules/claims/workflow.md",
+      "lang": "fa"
+    },
+    {
+      "q": "اعتبار علمی شاخص و واحد",
+      "expect": "modules/claims/references/claim-review.md",
+      "lang": "fa"
+    }
+  ]
+}

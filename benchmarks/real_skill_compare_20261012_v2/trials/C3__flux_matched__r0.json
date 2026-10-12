@@ -1,0 +1,54 @@
+{
+  "task_id": "C3",
+  "track": "reasoning",
+  "family": "count",
+  "arm": "flux_matched",
+  "rep": 0,
+  "label": "C3__flux_matched__r0",
+  "calls": [
+    "C3__flux_matched__r0__call0"
+  ],
+  "laya_receipts": [
+    "C3__flux_matched__r0__front",
+    "C3__flux_matched__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "count": 79,
+        "digit_sum_total": 1191
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "count": 79,
+    "digit_sum_total": 1191
+  },
+  "code": "from itertools import product\n\ndef solve(facts):\n    alphabet = sorted(set(facts['alphabet']))\n    n = facts['length']\n    m = facts['modulus']\n    residue = facts['residue']\n    lo, hi = facts['sum_min'], facts['sum_max']\n    target, required = facts['target_digit'], facts['target_count']\n    states = {(None, 0, 0, 0): 1}\n    for position in range(n):\n        following = {}\n        remaining = n - position - 1\n        for (previous, remainder, total, copies), ways in states.items():\n            for digit in alphabet:\n                if digit == previous:\n                    continue\n                new_total = total + digit\n                new_copies = copies + int(digit == target)\n                if new_total > hi or new_copies > required or new_copies + remaining < required:\n                    continue\n                key = (digit, (10 * remainder + digit) % m, new_total, new_copies)\n                following[key] = following.get(key, 0) + ways\n        states = following\n    count = 0\n    digit_sum_total = 0\n    for (previous, remainder, total, copies), ways in states.items():\n        if remainder == residue and lo <= total <= hi and copies == required:\n            count += ways\n            digit_sum_total += total * ways\n    return {'count': count, 'digit_sum_total': digit_sum_total}\n\ndef check(answer, facts):\n    alphabet = sorted(set(facts['alphabet']))\n    n = facts['length']\n    weights = [10 ** (n - 1 - i) for i in range(n)]\n    count = 0\n    digit_sum_total = 0\n    for digits in product(alphabet, repeat=n):\n        if any(digits[i] == digits[i + 1] for i in range(n - 1)):\n            continue\n        if sum(digit == facts['target_digit'] for digit in digits) != facts['target_count']:\n            continue\n        total = sum(digits)\n        if not facts['sum_min'] <= total <= facts['sum_max']:\n            continue\n        value = sum(digit * weight for digit, weight in zip(digits, weights))\n        if value % facts['modulus'] != facts['residue']:\n            continue\n        count += 1\n        digit_sum_total += total\n    return answer == {'count': count, 'digit_sum_total': digit_sum_total}\n",
+  "failure": "",
+  "latency_s": 28.05447600000116,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\C3__flux_matched__r0",
+  "test_integrity": true
+}
