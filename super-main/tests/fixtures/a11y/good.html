@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Accessible fixture</title>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; background: #ffffff; color: #111827; }
+  main { padding: 16px; }
+  label { display: block; margin-bottom: 4px; }
+  input { min-height: 44px; padding: 0 12px; border: 1px solid #4b5563; }
+  button { min-height: 44px; min-width: 44px; padding: 0 16px; background: #1d4ed8; color: #ffffff; border: 0; }
+  button:focus-visible, input:focus-visible { outline: 2px solid #111827; outline-offset: 2px; }
+</style></head>
+<body><main id="root">
+  <h1>Project settings</h1>
+  <form onsubmit="return false">
+    <label for="name">Project name</label>
+    <input id="name" name="name" type="text">
+    <button type="submit">Save</button>
+  </form>
+</main></body>
+</html>

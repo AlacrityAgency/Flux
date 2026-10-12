@@ -1,0 +1,18 @@
+Return only JSON with refs and code. refs is exactly all top-level FACTS keys, no duplicates or nested keys.
+code defines solve(facts) returning the answer and check(answer,facts) returning bool using an independent derivation.
+Read inputs from facts; do not hardcode the supplied dataset. Do not call solve from check or return constant success.
+Allowed imports: math fractions itertools functools collections heapq bisect decimal operator statistics.
+Allowed builtins: abs all any bool chr dict divmod enumerate filter float frozenset int isinstance iter len list map max min next ord pow range reversed round set slice sorted str sum tuple zip hash Exception ValueError KeyError IndexError ZeroDivisionError StopIteration.
+No IO, class, private attributes, eval, exec, open, bin, type or introspection. Total solve/check must finish within 4 seconds.
+TASK:
+Fix solve(facts): ledger events credit/debit positive integer amount with event id. First occurrence of an id takes effect; exact duplicates ignored; same id with different kind/amount rejects entire batch with {"error":"conflict"}. Balance starts at initial. Debit may overdraw (negative balance allowed). Return {"balance": int,"applied": int} counting unique events. No input mutation.
+FACTS:
+{"initial":10,"events":[{"id":"a","kind":"credit","amount":7},{"id":"a","kind":"credit","amount":7}]}
+BUGGY SOURCE:
+def solve(facts):
+    b=facts["initial"]
+    for e in facts["events"]: b+=e["amount"] if e["kind"]=="credit" else -e["amount"]
+    return {"balance":b,"applied":len(facts["events"])}
+
+PUBLIC CASES:
+[{"facts": {"initial": 10, "events": [{"id": "a", "kind": "credit", "amount": 7}, {"id": "a", "kind": "credit", "amount": 7}]}, "expected": {"balance": 17, "applied": 1}}, {"facts": {"initial": 0, "events": [{"id": "a", "kind": "credit", "amount": 7}, {"id": "a", "kind": "credit", "amount": 8}]}, "expected": {"error": "conflict"}}, {"facts": {"initial": 2, "events": []}, "expected": {"balance": 2, "applied": 0}}]

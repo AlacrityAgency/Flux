@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Keyboard trap</title></head>
+<body><main id="root">
+  <label for="code">Code</label>
+  <input id="code" style="min-height:44px">
+  <button style="min-height:44px">Next</button>
+  <script>
+    document.getElementById('code').addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') e.preventDefault();
+    });
+  </script>
+</main></body>
+</html>

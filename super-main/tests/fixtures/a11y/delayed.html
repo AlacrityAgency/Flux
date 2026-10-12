@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Delayed mount fixture</title></head>
+<body>
+<main id="root"></main>
+<script>
+  // Simulates an in-browser compiler (e.g. Babel standalone) that mounts after a delay.
+  setTimeout(function () {
+    document.getElementById('root').innerHTML =
+      '<h1>Loaded</h1><button type="button" style="min-height:44px;min-width:44px">Continue</button>';
+  }, 1500);
+</script>
+</body>
+</html>

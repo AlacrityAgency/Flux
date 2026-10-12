@@ -1,0 +1,11 @@
+Return only JSON with refs and code. refs is exactly all top-level FACTS keys, no duplicates or nested keys.
+code defines solve(facts) returning the answer and check(answer,facts) returning bool using an independent derivation.
+Read inputs from facts; do not hardcode the supplied dataset. Do not call solve from check or return constant success.
+Allowed imports: math fractions itertools functools collections heapq bisect decimal operator statistics.
+Allowed builtins: abs all any bool chr dict divmod enumerate filter float frozenset int isinstance iter len list map max min next ord pow range reversed round set slice sorted str sum tuple zip hash Exception ValueError KeyError IndexError ZeroDivisionError StopIteration.
+No IO, class, private attributes, eval, exec, open, bin, type or introspection. Total solve/check must finish within 4 seconds.
+TASK:
+Enumerate length-digit strings over alphabet; leading zero is allowed. ALL constraints: adjacent digits differ; numeric value modulo modulus is residue; sum_min <= digit sum <= sum_max; exactly target_count copies of target_digit. Return exactly count and digit_sum_total, the sum of digit sums of valid strings.
+FACTS:
+{"alphabet":[0,1,3,5],"length":6,"modulus":11,"residue":2,"sum_min":7,"sum_max":18,"target_digit":3,"target_count":2}
+Previous attempt failed: ValueError: {'status': 'ok', 'result': {'type': 'mapping', 'value': {'count': {'type': 'fraction', 'value': [30, 1]}, 'digit_sum_total': {'type': 'fraction', 'value': [393, 1]}}}, 'verified': False}. Preserve facts and all constraints.

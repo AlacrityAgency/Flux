@@ -1,0 +1,11 @@
+{
+  "motion": {
+    "broken": {
+      "$type": "motion",
+      "$value": {
+        "duration": "banana",
+        "easing": false
+      }
+    }
+  }
+}

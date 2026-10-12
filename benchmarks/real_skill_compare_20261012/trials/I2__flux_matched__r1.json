@@ -1,0 +1,53 @@
+{
+  "task_id": "I2",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "flux_matched",
+  "rep": 1,
+  "label": "I2__flux_matched__r1",
+  "calls": [
+    "I2__flux_matched__r1__call0"
+  ],
+  "laya_receipts": [
+    "I2__flux_matched__r1__front",
+    "I2__flux_matched__r1__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 67310,
+        "tax_cents": 12957,
+        "total_cents": 81097
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 67310,
+    "tax_cents": 12957,
+    "total_cents": 81097
+  },
+  "code": "from fractions import Fraction\nfrom decimal import Decimal\n\ndef solve(facts):\n    def half_up(value):\n        sign = -1 if value < 0 else 1\n        value = abs(value)\n        return sign * ((2 * value.numerator + value.denominator) // (2 * value.denominator))\n    subtotal = sum(half_up(Fraction(line['qty'] * line['unit_cents']) * (1 - Fraction(line['discount_percent']) / 100)) for line in facts['lines'])\n    tax = half_up(Fraction(subtotal) * Fraction(facts['tax_percent']) / 100)\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\n\ndef check(answer, facts):\n    def ratio(text):\n        sign, digits, exponent = Decimal(text).as_tuple()\n        coefficient = 0\n        for digit in digits:\n            coefficient = coefficient * 10 + digit\n        if sign:\n            coefficient = -coefficient\n        if exponent >= 0:\n            return coefficient * 10 ** exponent, 1\n        return coefficient, 10 ** (-exponent)\n    def rounded(numerator, denominator):\n        quotient, remainder = divmod(abs(numerator), denominator)\n        if remainder * 2 >= denominator:\n            quotient += 1\n        return -quotient if numerator < 0 else quotient\n    subtotal = 0\n    for line in facts['lines']:\n        discount, scale = ratio(line['discount_percent'])\n        denominator = 100 * scale\n        numerator = line['qty'] * line['unit_cents'] * (denominator - discount)\n        subtotal += rounded(numerator, denominator)\n    rate, scale = ratio(facts['tax_percent'])\n    tax = rounded(subtotal * rate, 100 * scale)\n    expected = {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\n    return isinstance(answer, dict) and answer == expected\n",
+  "failure": "",
+  "latency_s": 35.47927320000235,
+  "gate_records": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\workspaces\\I2__flux_matched__r1",
+  "test_integrity": true
+}

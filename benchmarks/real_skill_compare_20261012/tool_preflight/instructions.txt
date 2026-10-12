@@ -1,0 +1,1 @@
+Perform the supplied local fixture operations. No network, user files or global settings. Do not request escalated permissions. Omit sandbox_permissions entirely from tool arguments. Return only JSON.

@@ -1,0 +1,22 @@
+{
+  "python": "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\.venv\\Scripts\\python.exe",
+  "python_version": "3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "packages": {
+    "laya": "0.3.28",
+    "torch": "2.6.0+cu124",
+    "transformers": "4.57.6"
+  },
+  "native_cli": {
+    "codex": {
+      "path": "C:\\Users\\xio\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+      "sha256": "d13914ced6c7af174d8d638db938284231227312104b06a25e9608c632a7daec",
+      "version": "codex-cli 0.162.0-alpha.17.2"
+    },
+    "gapcode": {
+      "path": "C:\\Users\\xio\\.gapcode\\packages\\standalone\\releases\\0.153.4-x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "sha256": "67f849b4bea019dd20b714939af4435301d3334144770b16635012f4df6bb07b",
+      "version": "gapcode 0.153.4"
+    }
+  }
+}

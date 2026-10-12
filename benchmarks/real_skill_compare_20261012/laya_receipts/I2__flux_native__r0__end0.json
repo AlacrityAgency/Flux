@@ -1,0 +1,51 @@
+{
+  "state": {
+    "request": "TASK:\nCalculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.\nFACTS:\n{\"lines\":[{\"qty\":3,\"unit_cents\":3541,\"discount_percent\":\"33.333\"},{\"qty\":2,\"unit_cents\":4887,\"discount_percent\":\"33.333\"},{\"qty\":7,\"unit_cents\":2433,\"discount_percent\":\"0\"},{\"qty\":7,\"unit_cents\":5680,\"discount_percent\":\"17.75\"},{\"qty\":6,\"unit_cents\":663,\"discount_percent\":\"0\"}],\"shipping\":830,\"tax_percent\":\"19.25\"}",
+    "candidate": "{\"refs\":[\"lines\",\"shipping\",\"tax_percent\"],\"code\":\"from fractions import Fraction\\n\\ndef solve(facts):\\n    def exact(s):\\n        return Fraction(str(s))\\n    def half_up(x):\\n        return (2*x.numerator + x.denominator) // (2*x.denominator)\\n    subtotal = sum(half_up(Fraction(line['qty'] * line['unit_cents']) * (1 - exact(line['discount_percent']) / 100)) for line in facts['lines'])\\n    tax = half_up(Fraction(subtotal) * exact(facts['tax_percent']) / 100)\\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n\\ndef check(answer, facts):\\n    def decimal_ratio(s):\\n        s = str(s)\\n        parts = s.split('.')\\n        if len(parts) == 1:\\n            return (int(parts[0]), 1)\\n        scale = 10 ** len(parts[1])\\n        return (int(parts[0]) * scale + int(parts[1]), scale)\\n    def half_up_ratio(n, d):\\n        return (2*n + d) // (2*d)\\n    subtotal = 0\\n    for line in facts['lines']:\\n        dn, dd = decimal_ratio(line['discount_percent'])\\n        n = line['qty'] * line['unit_cents'] * (100*dd-dn)\\n        d = 100*dd\\n        subtotal += half_up_ratio(n, d)\\n    tn, td = decimal_ratio(facts['tax_percent'])\\n    tax = half_up_ratio(subtotal * tn, 100*td)\\n    return isinstance(answer, dict) and answer.get('subtotal_cents') == subtotal and answer.get('tax_cents') == tax and answer.get('total_cents') == subtotal + tax + facts['shipping']\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "accept",
+        "probabilities": {
+          "accept": 0.9021,
+          "escalate": 0.0268,
+          "stop": 0.0711
+        },
+        "confidence": 0.6561,
+        "answer_confidence": 0.9021,
+        "action": {
+          "act_probability": 1.0
+        },
+        "window": {
+          "index": 1,
+          "token_start": 380,
+          "token_end": 862,
+          "count": 2
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 1368,
+      "output_tokens": 0,
+      "state_tokens": 1242,
+      "state_tokens_dropped": 0,
+      "truncated": 0,
+      "truncated_questions": [],
+      "windows": 2
+    }
+  },
+  "latency_s": 0.3510597999993479,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

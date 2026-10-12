@@ -1,0 +1,7 @@
+{
+  "status": "aborted_invalid_environment",
+  "utc": "2026-10-12T20:15:09.150748+00:00",
+  "reason": "Native CLI model tools rejected by policy even when workspace-write requested. Never compare these pilot arms as skill quality. All partial trials, connectivity tests and tools preflight preserved.",
+  "trial_files": 11,
+  "final_run": "../real_skill_compare_20261012_v2"
+}

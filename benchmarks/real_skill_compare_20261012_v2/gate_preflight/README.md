@@ -1,0 +1,1 @@
+Fix solve(facts): return {"allowed": bool}. Access requires active actor, resource tenant equal actor tenant, AND actor is owner OR actor role admin. A tenant admin has no cross-tenant exception. Missing/unknown role gives no admin right.

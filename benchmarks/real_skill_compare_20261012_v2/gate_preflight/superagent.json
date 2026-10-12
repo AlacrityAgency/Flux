@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "profile": "service",
+  "features": [],
+  "environment": "test",
+  "testing": {
+    "repeat": 1,
+    "static_workers": 1,
+    "suites": [
+      {
+        "name": "unittest",
+        "cwd": "."
+      }
+    ]
+  },
+  "acceptance": [
+    {
+      "id": "A1",
+      "criterion": "Fix solve(facts): return {\"allowed\": bool}. Access requires active actor, resource tenant equal actor tenant, AND actor is owner OR actor role admin. A tenant admin has no cross-tenant exception. Missing/unknown role gives no admin right.",
+      "gate": "backend.behavior",
+      "scenario": "task-contract"
+    }
+  ],
+  "checks": {
+    "backend.behavior": {
+      "command": [
+        "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\.venv\\Scripts\\python.exe",
+        "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\public_gate.py",
+        "--task-id",
+        "E1",
+        "--project",
+        "."
+      ],
+      "expected": [
+        "task-contract"
+      ]
+    }
+  }
+}

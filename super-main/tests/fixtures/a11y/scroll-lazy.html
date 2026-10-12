@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scroll coverage fixture</title>
+  <style>
+    body { margin: 0; font: 16px sans-serif; background: #fff; color: #15251c; }
+    main { padding: 24px; }
+    .space { height: 1700px; background: #edf7f0; }
+    #internal { height: 160px; overflow: auto; border: 2px solid #256c43; }
+    #internal div { height: 720px; padding: 8px; }
+    #lazy { min-height: 80px; }
+    footer { padding: 24px; background: #d4e7fd; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Whole-page fixture</h1>
+    <div class="space">Top section</div>
+    <section id="internal" tabindex="0" aria-label="Internal scroll region"><div>Inner content</div><p>Internal end</p></section>
+    <div id="lazy">Lazy boundary</div>
+  </main>
+  <footer>Footer reached</footer>
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        const element = document.createElement('section');
+        element.style.height = '900px';
+        element.style.background = '#fff2cf';
+        element.textContent = 'Late-loaded section';
+        document.querySelector('#lazy').append(element);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.querySelector('#lazy'));
+  </script>
+</body>
+</html>

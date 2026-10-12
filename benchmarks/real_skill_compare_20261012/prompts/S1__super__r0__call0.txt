@@ -1,0 +1,5 @@
+Solve normally using local calculations if useful. Return only the requested answer JSON.
+TASK:
+One machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness.
+FACTS:
+{"jobs":[{"id":"K0","duration":3,"release":7,"due":21,"weight":6,"predecessors":[]},{"id":"K1","duration":4,"release":7,"due":7,"weight":2,"predecessors":[]},{"id":"K2","duration":7,"release":5,"due":19,"weight":3,"predecessors":[]},{"id":"K3","duration":1,"release":9,"due":19,"weight":4,"predecessors":[]}]}

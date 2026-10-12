@@ -1,0 +1,81 @@
+name: CI - Skill gates, ledger and docs
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  python:
+    name: Core, testing module and docs (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.9', '3.12']
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Token validator and regressions
+        run: |
+          python3 -B tests/test_verify_design_system.py
+          python3 -B tests/test_regressions.py
+          python3 -B tests/test_notebooklm_research.py
+      - name: Reference search incl. Persian evaluation set
+        run: python3 -B tests/test_rag.py
+      - name: Documentation consistency
+        run: python3 -B tests/test_docs.py
+      - name: Testing module gates and evidence ledger
+        run: python3 -B tests/test_testing_gates.py
+      - name: Full-stack scenarios, security adapters and fail-closed contracts
+        run: npm run test:application
+      - name: Debug experiments and evidence integrity
+        run: python3 -B tests/test_debug.py
+      - name: Product coverage, source retrieval and false-green regression
+        run: npm run test:product
+      - name: Review command (planning, execution, scopes, packet)
+        run: python3 -B tests/test_review.py
+      - name: Worklist and testing.accept assurance filters
+        run: python3 -B tests/test_accept_worklist.py
+      - name: Claims audit, PDF extraction, inventory and review hints
+        run: python3 -B tests/test_claims.py
+
+  browser:
+    name: Browser gates (axe-core, keyboard, target size)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: axe runner unit tests
+        run: npm run test:unit:a11y
+      - name: a11y, interaction, token-drift and tokens gates
+        run: npm run test:browser
+      - name: Whole-page, lazy-content and internal-scroll coverage
+        run: npm run test:page-coverage
+      - name: Upload artifacts (on failure)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-artifacts
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

@@ -1,0 +1,53 @@
+{
+  "task_id": "I2",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "I2__flux_native__r0",
+  "calls": [
+    "I2__flux_native__r0__call0"
+  ],
+  "laya_receipts": [
+    "I2__flux_native__r0__front",
+    "I2__flux_native__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "answer": {
+        "subtotal_cents": 67310,
+        "tax_cents": 12957,
+        "total_cents": 81097
+      },
+      "independent_verifier_pass": null
+    }
+  ],
+  "verification_depth": "full",
+  "policy_accepted": true,
+  "correct": true,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 67310,
+    "tax_cents": 12957,
+    "total_cents": 81097
+  },
+  "code": "from fractions import Fraction\n\ndef solve(facts):\n    def exact(s):\n        return Fraction(str(s))\n    def half_up(x):\n        return (2*x.numerator + x.denominator) // (2*x.denominator)\n    subtotal = sum(half_up(Fraction(line['qty'] * line['unit_cents']) * (1 - exact(line['discount_percent']) / 100)) for line in facts['lines'])\n    tax = half_up(Fraction(subtotal) * exact(facts['tax_percent']) / 100)\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\n\ndef check(answer, facts):\n    def decimal_ratio(s):\n        s = str(s)\n        parts = s.split('.')\n        if len(parts) == 1:\n            return (int(parts[0]), 1)\n        scale = 10 ** len(parts[1])\n        return (int(parts[0]) * scale + int(parts[1]), scale)\n    def half_up_ratio(n, d):\n        return (2*n + d) // (2*d)\n    subtotal = 0\n    for line in facts['lines']:\n        dn, dd = decimal_ratio(line['discount_percent'])\n        n = line['qty'] * line['unit_cents'] * (100*dd-dn)\n        d = 100*dd\n        subtotal += half_up_ratio(n, d)\n    tn, td = decimal_ratio(facts['tax_percent'])\n    tax = half_up_ratio(subtotal * tn, 100*td)\n    return isinstance(answer, dict) and answer.get('subtotal_cents') == subtotal and answer.get('tax_cents') == tax and answer.get('total_cents') == subtotal + tax + facts['shipping']",
+  "failure": "",
+  "latency_s": 14.165021000000706,
+  "gate_records": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\workspaces\\I2__flux_native__r0",
+  "test_integrity": true
+}

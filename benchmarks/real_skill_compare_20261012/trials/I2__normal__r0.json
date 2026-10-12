@@ -1,0 +1,34 @@
+{
+  "task_id": "I2",
+  "track": "reasoning",
+  "family": "invoice",
+  "arm": "normal",
+  "rep": 0,
+  "label": "I2__normal__r0",
+  "calls": [
+    "I2__normal__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "subtotal_cents": 67310,
+    "tax_cents": 12957,
+    "total_cents": 81097
+  },
+  "code": null,
+  "failure": "",
+  "latency_s": 21.454104899999948,
+  "gate_records": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\workspaces\\I2__normal__r0",
+  "test_integrity": true
+}

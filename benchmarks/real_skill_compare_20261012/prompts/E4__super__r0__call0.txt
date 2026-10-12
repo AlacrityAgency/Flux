@@ -1,0 +1,12 @@
+TASK:
+Fix solve(facts): amount_cents nonnegative integer and percent exact decimal string [0,100]. Discounted amount = amount_cents*(1-percent/100), rounded HALF UP to integer cents, never binary-float/bankers rounding. Return {"cents": int}.
+FACTS:
+{"amount_cents":105,"percent":"50"}
+BUGGY SOURCE:
+def solve(facts):
+    return {"cents":round(facts["amount_cents"]*(1-float(facts["percent"])/100))}
+
+PUBLIC CASES:
+[{"facts": {"amount_cents": 105, "percent": "50"}, "expected": {"cents": 53}}, {"facts": {"amount_cents": 0, "percent": "12.5"}, "expected": {"cents": 0}}, {"facts": {"amount_cents": 101, "percent": "100"}, "expected": {"cents": 0}}]
+Modify only solution.py. Preserve tests and config. Run public tests with D:\project\Alacrity\Flux\experiments\flux_laya_policy_20261006\.venv\Scripts\python.exe -m unittest discover -v. Finish with exactly {"written":true}. Actual artifact is solution.py; no publication.
+Apply SUPER change/debug workflow proportionately and execute a real sa.py review on the final fixture with --mode change --profile service --depth quick --project . --json. Missing gates remain gaps, never claim release readiness. sa.py is at D:\project\Alacrity\Flux\super-main\core\bin\sa.py.

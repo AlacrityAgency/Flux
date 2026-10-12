@@ -1,0 +1,35 @@
+{
+  "updated_utc": "2026-10-12T23:20:00Z",
+  "engine": "Antigravity / Gemini",
+  "models": {
+    "gemini/gemini-3.8-flash": {
+      "provider": "google",
+      "model": "gemini-3.8-flash",
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": ["low", "medium", "high"],
+      "default_effort": "low",
+      "context_window": 1048576,
+      "features": {
+        "thinking_budget": true,
+        "json_schema": true,
+        "fast_first_token": true
+      },
+      "cost_tier": "economic_high_throughput"
+    },
+    "gemini/gemini-3.8-flash-thinking-high": {
+      "provider": "google",
+      "model": "gemini-3.8-flash",
+      "enabled": true,
+      "compact_qualified": true,
+      "supported_efforts": ["high"],
+      "default_effort": "high",
+      "context_window": 1048576,
+      "features": {
+        "deep_reasoning": true,
+        "math_proof": true
+      },
+      "cost_tier": "reasoning_escalation"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "task_id": "E4",
+  "track": "engineering",
+  "family": "rounding",
+  "arm": "super",
+  "rep": 0,
+  "label": "E4__super__r0",
+  "calls": [
+    "E4__super__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [],
+  "verification_depth": null,
+  "policy_accepted": false,
+  "correct": false,
+  "false_accept": false,
+  "audit": {
+    "pass": false,
+    "executed": 0,
+    "failures": [
+      {
+        "reason": "missing code"
+      }
+    ]
+  },
+  "answer": null,
+  "code": null,
+  "failure": "",
+  "latency_s": 50.248237900003005,
+  "gate_records": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\workspaces\\E4__super__r0",
+  "test_integrity": true
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "ui-design-component-templates",
+  "version": "2.0.0",
+  "description": "Static library of starter component templates (shadcn/ui conventions on Radix UI + Tailwind). Not a semantic cache: lookup is by component name. Templates are a starting point, not a certification.",
+  "cache_policy": {
+    "lookup_trigger": "When the request needs a standard button, dialog, input or card and the project has no equivalent component yet.",
+    "cache_hit_action": "Adapt the template to the project's conventions. A template never replaces verification: run the accessibility gate on the assembled screen.",
+    "cache_miss_action": "Build the component from the project's own primitives and the component contracts reference.",
+    "theme_contract": "Templates use semantic Tailwind colors (background, foreground, primary, secondary, destructive, accent, muted, card, border, input, ring) backed by CSS variables, as in shadcn/ui. If the project lacks them, map these names to its tokens and validate the pairs with the ui-ux.tokens gate.",
+    "target_size_policy": "Default controls are 44px (touch). The compact `sm` size is 36px for dense desktop UI; never go below 24px (WCAG 2.2 SC 2.5.8)."
+  },
+  "cached_patterns": {
+    "button": {
+      "name": "Button",
+      "primitive": "Radix UI Slot / native <button>",
+      "styling": "Tailwind CSS + class-variance-authority (cva)",
+      "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "@radix-ui/react-slot": "^1.0.2",
+        "class-variance-authority": "^0.7.0",
+        "clsx": "^2.1.0",
+        "tailwind-merge": "^2.2.0"
+      },
+      "code_template": "import * as React from 'react';\nimport { Slot } from '@radix-ui/react-slot';\nimport { cva, type VariantProps } from 'class-variance-authority';\n\nconst buttonVariants = cva(\n  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',\n  {\n    variants: {\n      variant: {\n        default: 'bg-primary text-primary-foreground hover:bg-primary/90',\n        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',\n        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',\n        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',\n        ghost: 'hover:bg-accent hover:text-accent-foreground',\n        link: 'text-primary underline-offset-4 hover:underline',\n      },\n      size: {\n        default: 'h-11 px-4',      // 44px: touch-friendly default\n        sm: 'h-9 px-3 text-xs',    // 36px: dense desktop UI (>= 24px, WCAG 2.2 SC 2.5.8)\n        lg: 'h-12 px-8 text-base', // 48px\n        icon: 'h-11 w-11',         // 44x44px; pass aria-label for icon-only buttons\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n      size: 'default',\n    },\n  }\n);\n\nexport interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {\n  asChild?: boolean;\n}\n\nexport const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ className, variant, size, asChild = false, type, ...props }, ref) => {\n    const Comp = asChild ? Slot : 'button';\n    return (\n      <Comp\n        className={buttonVariants({ variant, size, className })}\n        ref={ref}\n        {...(asChild ? {} : { type: type ?? 'button' })}\n        {...props}\n      />\n    );\n  }\n);\nButton.displayName = 'Button';\n\nexport { buttonVariants };",
+      "accessibility_contract": "Native <button> with type=button by default; 44px default and icon sizes, 36px compact size (>= 24px, SC 2.5.8); visible :focus-visible ring. Icon-only buttons need aria-label. Contrast depends on the project theme and must be checked."
+    },
+    "dialog": {
+      "name": "Dialog",
+      "primitive": "@radix-ui/react-dialog",
+      "styling": "Tailwind CSS",
+      "dependencies": {
+        "react": "^18.2.0",
+        "@radix-ui/react-dialog": "^1.0.5",
+        "lucide-react": "^0.300.0"
+      },
+      "code_template": "import * as React from 'react';\nimport * as DialogPrimitive from '@radix-ui/react-dialog';\nimport { X } from 'lucide-react';\n\nexport const Dialog = DialogPrimitive.Root;\nexport const DialogTrigger = DialogPrimitive.Trigger;\nexport const DialogPortal = DialogPrimitive.Portal;\nexport const DialogClose = DialogPrimitive.Close;\n\nexport const DialogOverlay = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Overlay>, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>>(\n  ({ className, ...props }, ref) => (\n    <DialogPrimitive.Overlay\n      ref={ref}\n      className={`fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 motion-reduce:animate-none ${className || ''}`}\n      {...props}\n    />\n  )\n);\nDialogOverlay.displayName = 'DialogOverlay';\n\nexport const DialogContent = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Content>, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { closeLabel?: string }>(\n  ({ className, children, closeLabel = 'Close', ...props }, ref) => (\n    <DialogPortal>\n      <DialogOverlay />\n      <DialogPrimitive.Content\n        ref={ref}\n        className={`fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl border bg-background p-6 text-foreground shadow-lg duration-200 motion-reduce:animate-none ${className || ''}`}\n        {...props}\n      >\n        {children}\n        {/* 44x44px close target with a visible focus ring; `end-3` keeps it correct in RTL. */}\n        <DialogPrimitive.Close className=\"absolute end-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-md opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2\">\n          <X className=\"h-4 w-4\" aria-hidden=\"true\" />\n          <span className=\"sr-only\">{closeLabel}</span>\n        </DialogPrimitive.Close>\n      </DialogPrimitive.Content>\n    </DialogPortal>\n  )\n);\nDialogContent.displayName = 'DialogContent';\n\nexport const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n  <div className={`flex flex-col gap-1.5 pe-12 text-center sm:text-start ${className || ''}`} {...props} />\n);\n\nexport const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n  <div className={`flex flex-col-reverse gap-2 sm:flex-row sm:justify-end ${className || ''}`} {...props} />\n);\n\nexport const DialogTitle = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Title>, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>>(\n  ({ className, ...props }, ref) => (\n    <DialogPrimitive.Title ref={ref} className={`text-lg font-semibold leading-none tracking-tight ${className || ''}`} {...props} />\n  )\n);\nDialogTitle.displayName = 'DialogTitle';\n\n// Always render a description (or pass aria-describedby={undefined} to Content deliberately).\nexport const DialogDescription = React.forwardRef<React.ElementRef<typeof DialogPrimitive.Description>, React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>>(\n  ({ className, ...props }, ref) => (\n    <DialogPrimitive.Description ref={ref} className={`text-sm text-muted-foreground ${className || ''}`} {...props} />\n  )\n);\nDialogDescription.displayName = 'DialogDescription';",
+      "accessibility_contract": "Radix Dialog supplies focus trap, Escape to close, focus return and aria-labelledby/aria-describedby wiring. Template adds a 44x44px labelled close button with a visible focus ring, logical (RTL-safe) positioning and reduced-motion handling. Always render DialogTitle and DialogDescription.",
+      "dev_dependencies": {
+        "tailwindcss-animate": "^1.0.7"
+      }
+    },
+    "input": {
+      "name": "Input",
+      "primitive": "native <input>",
+      "styling": "Tailwind CSS",
+      "dependencies": {
+        "react": "^18.2.0"
+      },
+      "code_template": "import * as React from 'react';\n\n// Always pair with a visible <label htmlFor>; placeholders are not labels.\n// For errors set aria-invalid=\"true\" and aria-describedby pointing at the message.\nexport interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}\n\nexport const Input = React.forwardRef<HTMLInputElement, InputProps>(\n  ({ className, type = 'text', ...props }, ref) => (\n    <input\n      type={type}\n      className={`flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 aria-[invalid=true]:border-destructive disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm ${className || ''}`}\n      ref={ref}\n      {...props}\n    />\n  )\n);\nInput.displayName = 'Input';",
+      "accessibility_contract": "44px height, 16px text on mobile (prevents iOS zoom), visible focus ring, aria-invalid styling. Requires a visible associated <label>; errors linked with aria-describedby."
+    },
+    "card": {
+      "name": "Card",
+      "primitive": "semantic <article> / <div>",
+      "styling": "Tailwind CSS",
+      "dependencies": {
+        "react": "^18.2.0"
+      },
+      "code_template": "import * as React from 'react';\n\nexport const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (\n  <div ref={ref} className={`rounded-xl border bg-card text-card-foreground shadow-sm ${className || ''}`} {...props} />\n));\nCard.displayName = 'Card';\n\nexport const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (\n  <div ref={ref} className={`flex flex-col gap-1.5 p-6 ${className || ''}`} {...props} />\n));\nCardHeader.displayName = 'CardHeader';\n\n// Pick the heading level that fits the page outline with `as`; h3 is only a default.\nexport const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement> & { as?: 'h2' | 'h3' | 'h4' }>(\n  ({ className, as: Heading = 'h3', ...props }, ref) => (\n    <Heading ref={ref} className={`text-lg font-semibold leading-none tracking-tight ${className || ''}`} {...props} />\n  )\n);\nCardTitle.displayName = 'CardTitle';\n\nexport const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(({ className, ...props }, ref) => (\n  <p ref={ref} className={`text-sm text-muted-foreground ${className || ''}`} {...props} />\n));\nCardDescription.displayName = 'CardDescription';\n\nexport const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (\n  <div ref={ref} className={`p-6 pt-0 ${className || ''}`} {...props} />\n));\nCardContent.displayName = 'CardContent';\n\nexport const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (\n  <div ref={ref} className={`flex items-center p-6 pt-0 ${className || ''}`} {...props} />\n));\nCardFooter.displayName = 'CardFooter';",
+      "accessibility_contract": "Semantic surface colors; heading level is configurable so the page outline stays valid. A clickable card must not contain nested interactive controls."
+    }
+  }
+}

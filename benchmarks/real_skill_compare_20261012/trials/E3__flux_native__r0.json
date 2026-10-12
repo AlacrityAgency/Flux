@@ -1,0 +1,47 @@
+{
+  "task_id": "E3",
+  "track": "engineering",
+  "family": "replay",
+  "arm": "flux_native",
+  "rep": 0,
+  "label": "E3__flux_native__r0",
+  "calls": [
+    "E3__flux_native__r0__call0"
+  ],
+  "laya_receipts": [
+    "E3__flux_native__r0__front",
+    "E3__flux_native__r0__end0"
+  ],
+  "actions": [
+    {
+      "raw": "accept",
+      "applied": "accept",
+      "guard_override": false
+    }
+  ],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.09496070000022883
+    }
+  ],
+  "verification_depth": "medium",
+  "policy_accepted": true,
+  "correct": true,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 23,
+    "failures": [],
+    "latency_s": 0.07729399999880116
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    balance = facts[\"initial\"]\n    seen = {}\n    applied = 0\n    for event in facts[\"events\"]:\n        event_id = event[\"id\"]\n        signature = (event[\"kind\"], event[\"amount\"])\n        if event_id in seen:\n            if seen[event_id] != signature:\n                return {\"error\": \"conflict\"}\n            continue\n        seen[event_id] = signature\n        applied += 1\n        if event[\"kind\"] == \"credit\":\n            balance += event[\"amount\"]\n        else:\n            balance -= event[\"amount\"]\n    return {\"balance\": balance, \"applied\": applied}\n\ndef check(answer, facts):\n    balance = facts[\"initial\"]\n    records = []\n    applied = 0\n    for event in facts[\"events\"]:\n        match = next((r for r in records if r[0] == event[\"id\"]), None)\n        if match is not None:\n            if match[1] != event[\"kind\"] or match[2] != event[\"amount\"]:\n                return answer == {\"error\": \"conflict\"}\n            continue\n        records.append((event[\"id\"], event[\"kind\"], event[\"amount\"]))\n        applied += 1\n        balance += event[\"amount\"] if event[\"kind\"] == \"credit\" else -event[\"amount\"]\n    return answer == {\"balance\": balance, \"applied\": applied}",
+  "failure": "",
+  "latency_s": 14.685389299997041,
+  "gate_records": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\workspaces\\E3__flux_native__r0",
+  "test_integrity": true
+}

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "profile": "service",
+  "features": [],
+  "environment": "test",
+  "testing": {
+    "repeat": 1,
+    "static_workers": 1,
+    "suites": [
+      {
+        "name": "unittest",
+        "cwd": "."
+      }
+    ]
+  }
+}

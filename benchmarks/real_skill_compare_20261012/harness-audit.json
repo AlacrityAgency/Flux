@@ -1,0 +1,43 @@
+{
+  "controls": [
+    {
+      "task_id": "E1",
+      "healthy_control_pass": true,
+      "seeded_bug_rejected": true,
+      "asserted_cases": 27
+    },
+    {
+      "task_id": "E2",
+      "healthy_control_pass": true,
+      "seeded_bug_rejected": true,
+      "asserted_cases": 23
+    },
+    {
+      "task_id": "E3",
+      "healthy_control_pass": true,
+      "seeded_bug_rejected": true,
+      "asserted_cases": 23
+    },
+    {
+      "task_id": "E4",
+      "healthy_control_pass": true,
+      "seeded_bug_rejected": true,
+      "asserted_cases": 38
+    },
+    {
+      "task_id": "E5",
+      "healthy_control_pass": true,
+      "seeded_bug_rejected": true,
+      "asserted_cases": 20
+    },
+    {
+      "task_id": "E6",
+      "healthy_control_pass": true,
+      "seeded_bug_rejected": true,
+      "asserted_cases": 23
+    }
+  ],
+  "mutation_rejected": true,
+  "artifact_checks": [],
+  "provider_calls": 0
+}

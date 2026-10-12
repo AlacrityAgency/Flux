@@ -1,0 +1,433 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "ui-design-knowledge-map",
+  "version": "1.1.0",
+  "description": "Maps UI components and topics to the reference files (paths relative to the skill root) for targeted reading.",
+  "retrieval_protocol": {
+    "rule": "Use knowledge_tree.json to find the reference file for a specific component, then read only that file.",
+    "execution_pattern": "1. Identify the component or domain -> 2. Look it up here -> 3. Read the mapped reference -> 4. Apply its rules; verify with the gates in SKILL.md."
+  },
+  "components": {
+    "button": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "button",
+        "cta",
+        "icon button",
+        "split button",
+        "action button",
+        "submit"
+      ],
+      "required_states": [
+        "default",
+        "hover",
+        "active",
+        "focus-visible",
+        "disabled",
+        "loading"
+      ],
+      "accessibility_rules": [
+        "Must have accessible text name via content, aria-label, or aria-labelledby (button-name)",
+        "Minimum 4.5:1 text contrast ratio; minimum 3.0:1 boundary/graphic contrast",
+        "Target size: 24x24px minimum (WCAG 2.2 SC 2.5.8); 44x44px for primary touch actions (see modules/ui-ux/references/review-checklist.md §1)",
+        "Visible focus ring with minimum 2px offset (never outline: none without replacement)",
+        "Never use positive tabindex"
+      ]
+    },
+    "input_form_control": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "input",
+        "textfield",
+        "textarea",
+        "form",
+        "searchbox",
+        "password",
+        "number input"
+      ],
+      "required_states": [
+        "default",
+        "hover",
+        "focus-visible",
+        "disabled",
+        "error",
+        "placeholder",
+        "readonly"
+      ],
+      "accessibility_rules": [
+        "Associated <label for=\"id\"> explicitly bound to control",
+        "Error messaging linked via aria-describedby and marked aria-invalid=\"true\"",
+        "Placeholder is not a substitute for visible label",
+        "Contrast >= 4.5:1 for input text, >= 3.0:1 for border boundaries"
+      ]
+    },
+    "modal_dialog": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "modal",
+        "dialog",
+        "drawer",
+        "sheet",
+        "lightbox",
+        "popup",
+        "alertdialog"
+      ],
+      "required_states": [
+        "open",
+        "closed",
+        "scrolling",
+        "focus-trapped"
+      ],
+      "accessibility_rules": [
+        "Use <dialog> or role=\"dialog\" with aria-modal=\"true\"",
+        "Provide title via aria-labelledby targeting dialog heading",
+        "Trap keyboard focus within modal while open",
+        "Dismiss on Escape key and restore focus to trigger element upon closing"
+      ]
+    },
+    "card_surface": {
+      "primary_reference": "modules/ui-ux/references/visual-direction.md",
+      "secondary_reference": "modules/ui-ux/references/component-contracts.md",
+      "keywords": [
+        "card",
+        "surface",
+        "tile",
+        "container",
+        "panel",
+        "box",
+        "canvas"
+      ],
+      "required_states": [
+        "default",
+        "hover (if interactive)",
+        "selected",
+        "loading/skeleton"
+      ],
+      "accessibility_rules": [
+        "Contrast >= 3.0:1 for structural boundary/border against canvas",
+        "If card is clickable link, avoid nested interactive controls",
+        "Use semantic grouping (<article> or <section> with header) where applicable"
+      ]
+    },
+    "navigation_header_sidebar": {
+      "primary_reference": "modules/ui-ux/references/visual-direction.md",
+      "secondary_reference": "modules/ui-ux/references/component-contracts.md",
+      "keywords": [
+        "navigation",
+        "nav",
+        "header",
+        "navbar",
+        "sidebar",
+        "menu",
+        "breadcrumbs",
+        "pagination"
+      ],
+      "required_states": [
+        "collapsed",
+        "expanded",
+        "active link",
+        "mobile drawer"
+      ],
+      "accessibility_rules": [
+        "Wrap in semantic <nav> landmark with unique aria-label",
+        "Active link marked with aria-current=\"page\"",
+        "Mobile hamburger toggle has accessible name and aria-expanded state",
+        "Keyboard navigable with logical tab order"
+      ]
+    },
+    "dropdown_select_combobox": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "dropdown",
+        "select",
+        "combobox",
+        "picker",
+        "autocomplete",
+        "multiselect"
+      ],
+      "required_states": [
+        "closed",
+        "open",
+        "hover item",
+        "active/selected item",
+        "disabled"
+      ],
+      "accessibility_rules": [
+        "Implement role=\"combobox\" or native <select>",
+        "Manage aria-expanded, aria-controls, and aria-haspopup",
+        "Arrow key navigation and Escape key dismissal",
+        "Clear accessible label"
+      ]
+    },
+    "table_datagrid": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/review-checklist.md",
+      "keywords": [
+        "table",
+        "data grid",
+        "list",
+        "spreadsheet",
+        "tabular data",
+        "data table"
+      ],
+      "required_states": [
+        "loading",
+        "empty",
+        "sorted",
+        "selected rows",
+        "paginated"
+      ],
+      "accessibility_rules": [
+        "Semantic <table> with <caption> or aria-label",
+        "Column/row headers use <th scope=\"col\"> or <th scope=\"row\">",
+        "Sortable columns indicate sort state via aria-sort",
+        "Ensure table wrapper permits keyboard scrolling if overflow is scrollable"
+      ]
+    },
+    "toast_notification_alert": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "toast",
+        "notification",
+        "alert",
+        "banner",
+        "snackbar",
+        "callout",
+        "message"
+      ],
+      "required_states": [
+        "info",
+        "success",
+        "warning",
+        "error",
+        "dismissing"
+      ],
+      "accessibility_rules": [
+        "Use role=\"alert\" (assertive) for critical errors; role=\"status\" (polite) for general updates",
+        "Dismiss button must possess accessible aria-label",
+        "Do not rely solely on color to convey message severity (include icons/text)",
+        "Provide sufficient display time or avoid auto-dismiss for action-required alerts"
+      ]
+    },
+    "tabs_accordion": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "tabs",
+        "tablist",
+        "accordion",
+        "collapsible",
+        "disclosure",
+        "toggle panel"
+      ],
+      "required_states": [
+        "selected",
+        "unselected",
+        "expanded",
+        "collapsed",
+        "disabled"
+      ],
+      "accessibility_rules": [
+        "Tabs: role=\"tablist\", role=\"tab\" (aria-selected, aria-controls), role=\"tabpanel\"",
+        "Arrow key navigation between tabs (Home/End support)",
+        "Accordion: <button> triggers with aria-expanded and aria-controls linking panel"
+      ]
+    },
+    "tooltip_popover": {
+      "primary_reference": "modules/ui-ux/references/component-contracts.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "tooltip",
+        "popover",
+        "hint",
+        "infotip",
+        "badge"
+      ],
+      "required_states": [
+        "visible",
+        "hidden"
+      ],
+      "accessibility_rules": [
+        "Tooltip must trigger on both hover and focus",
+        "Trigger has aria-describedby targeting tooltip id",
+        "Role=\"tooltip\" for non-interactive text",
+        "Dismissible on Escape without moving pointer"
+      ]
+    },
+    "diagnostic_radiology_viewer": {
+      "primary_reference": "modules/ui-ux/domains/specialized-domains.md",
+      "secondary_reference": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "keywords": [
+        "opg",
+        "panoramic x-ray",
+        "cbct",
+        "dicom",
+        "radiograph",
+        "radiology",
+        "scan",
+        "x-ray",
+        "ct scan",
+        "mri",
+        "viewer"
+      ],
+      "required_states": [
+        "viewing",
+        "measuring",
+        "window-leveling",
+        "inverted",
+        "zoomed"
+      ],
+      "accessibility_rules": [
+        "Render on a dark viewport surface token (near-black) with HUD text at >= 4.5:1",
+        "Must use deterministic SVG radiograph simulation with anatomical bone/tooth landmarks (NEVER human portraits or stock photos)",
+        "Include DICOM HUD with study metadata, window/level sliders, and calibration scale (mm)",
+        "Accessible labels for all viewer tools (pan, zoom, contrast, invert)"
+      ]
+    },
+    "clinical_telemetry_chart": {
+      "primary_reference": "modules/ui-ux/domains/specialized-domains.md",
+      "secondary_reference": "modules/ui-ux/references/component-contracts.md",
+      "keywords": [
+        "telemetry",
+        "ecg",
+        "waveform",
+        "vitals",
+        "spo2",
+        "pulse",
+        "patient monitor"
+      ],
+      "required_states": [
+        "streaming",
+        "alert",
+        "paused",
+        "historical"
+      ],
+      "accessibility_rules": [
+        "High contrast waveform line against dark grid background (>= 3:1)",
+        "Tabular value readout with explicit clinical units (bpm, mmHg)",
+        "Multi-modal visual alerts (color + icon/sound label, conforming to WCAG non-color dependency)"
+      ]
+    }
+  },
+  "domains": {
+    "visual_direction_and_tokens": {
+      "file": "modules/ui-ux/references/visual-direction.md",
+      "summary": "Creative posture (utilitarian, expressive, avant-garde), dual-direction exploration, and accessibility guardrails for expressive surfaces (scrims, decorator isolation, reduced motion).",
+      "triggers": [
+        "art direction",
+        "color system",
+        "tokens",
+        "typography",
+        "dark mode",
+        "light mode",
+        "redesign",
+        "brand"
+      ]
+    },
+    "component_contracts_and_states": {
+      "file": "modules/ui-ux/references/component-contracts.md",
+      "summary": "Prop contracts, state coverage (default, hover, focus, disabled, loading, error, empty), data extremes, truncation, and layout stability.",
+      "triggers": [
+        "component spec",
+        "interaction state",
+        "component states",
+        "props",
+        "edge case",
+        "empty state",
+        "error state"
+      ]
+    },
+    "accessibility_and_rtl": {
+      "file": "modules/ui-ux/references/accessibility-and-rtl.md",
+      "summary": "WCAG 2.1/2.2 AA & AAA standards, contrast ratios, keyboard navigation, focus indicators, touch targets, ARIA roles, RTL mirroring, Arabic/Persian script.",
+      "triggers": [
+        "accessibility",
+        "wcag",
+        "a11y",
+        "contrast",
+        "aria",
+        "keyboard",
+        "screen reader",
+        "rtl",
+        "bidi",
+        "persian",
+        "arabic"
+      ]
+    },
+    "domain_semantics_and_entities": {
+      "file": "modules/ui-ux/domains/specialized-domains.md",
+      "summary": "Ontological domain grounding, entity classification (diagnostic assets, personnel, metrics, hardware, financial ledgers), and deterministic SVG mock asset standards to prevent semantic hallucinations.",
+      "triggers": [
+        "domain semantics",
+        "medical scan",
+        "radiology",
+        "opg",
+        "cbct",
+        "dicom",
+        "x-ray",
+        "fintech",
+        "telemetry",
+        "diagnostic",
+        "entity classification",
+        "ontology",
+        "ddd"
+      ]
+    },
+    "quality_and_verification_rubric": {
+      "file": "modules/ui-ux/references/review-checklist.md",
+      "summary": "Result statuses, finding format, target-size policy, review checklist and verdicts.",
+      "triggers": [
+        "quality review",
+        "audit",
+        "rubric",
+        "responsive check",
+        "viewport testing",
+        "handoff checklist"
+      ]
+    },
+    "decision_policies": {
+      "file": "core/reasoning.md",
+      "summary": "Decision record format, retrieval order, untrusted data, evidence expiry and attempt budget.",
+      "triggers": [
+        "decision record",
+        "retry",
+        "circuit breaker",
+        "evidence",
+        "research",
+        "untrusted"
+      ]
+    },
+    "ux_patterns": {
+      "file": "modules/ui-ux/references/ux-patterns.md",
+      "summary": "Flows, forms, validation, states, feedback timing, content and data-dense screens.",
+      "triggers": [
+        "form",
+        "validation",
+        "empty state",
+        "error state",
+        "loading",
+        "flow",
+        "navigation",
+        "dashboard",
+        "table"
+      ]
+    },
+    "design_tokens": {
+      "file": "modules/ui-ux/references/tokens.md",
+      "summary": "Token layers, DTCG format accepted by the validator, contrast pairs with 'over', scales and drift prevention.",
+      "triggers": [
+        "tokens",
+        "dtcg",
+        "theme",
+        "dark mode",
+        "contrast pairs",
+        "scale"
+      ]
+    }
+  }
+}

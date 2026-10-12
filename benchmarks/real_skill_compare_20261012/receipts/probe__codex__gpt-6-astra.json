@@ -1,0 +1,98 @@
+{
+  "provider": "codex",
+  "model_requested": "gpt-6-astra",
+  "effort_requested": "high",
+  "prompt": "Return only {\"ok\":true}.",
+  "command": [
+    "C:\\Users\\xio\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ephemeral",
+    "--json",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "-C",
+    "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\receipts\\model_sandbox",
+    "-m",
+    "gpt-6-astra",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "model_reasoning_effort=\"high\"",
+    "-c",
+    "model_instructions_file=\"C:/Users/xio/.codex/skills/flux-v1/scripts/instructions.txt\"",
+    "-c",
+    "personality=\"none\"",
+    "-c",
+    "project_doc_max_bytes=0",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "features.shell_tool=false",
+    "-c",
+    "features.apps=false",
+    "-c",
+    "features.memories=false",
+    "-c",
+    "features.multi_agent=false",
+    "-c",
+    "features.skill_search=false",
+    "-c",
+    "features.skip_host_skill_discovery=true",
+    "-"
+  ],
+  "utc": "2026-10-12T20:04:37.305313+00:00",
+  "completed": true,
+  "usage": {
+    "input_tokens": 9813,
+    "cached_input_tokens": 4864,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 9,
+    "reasoning_output_tokens": 0
+  },
+  "text": "{\"ok\":true}",
+  "exit_code": 0,
+  "timeout": false,
+  "tool_events": 0,
+  "latency_s": 10.323750499999733,
+  "raw_events": [
+    {
+      "type": "thread.started",
+      "thread_id": "01a131b7-6e43-7ae2-877b-0a6c7aa6d5aa"
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_0",
+        "type": "error",
+        "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in C:\\Users\\xio\\.codex\\config.toml."
+      }
+    },
+    {
+      "type": "turn.started"
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_1",
+        "type": "agent_message",
+        "text": "{\"ok\":true}"
+      }
+    },
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 9813,
+        "cached_input_tokens": 4864,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 9,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "stderr": "2026-10-12T20:04:27.336689Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n",
+  "billing_route": "codex-account",
+  "actual_billing_usd": null,
+  "server_model_identity_independently_verified": false
+}

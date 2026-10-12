@@ -1,0 +1,90 @@
+{
+  "provider": "gapcode",
+  "model_requested": "gpt-6-astra",
+  "effort_requested": "high",
+  "prompt": "Return only {\"ok\":true}.",
+  "command": [
+    "C:\\Users\\xio\\.gapcode\\packages\\standalone\\releases\\0.153.4-x86_64-pc-windows-msvc\\bin\\codex.exe",
+    "exec",
+    "--ignore-user-config",
+    "--ephemeral",
+    "--json",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "-C",
+    "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\workspaces\\probe__gapcode__gpt-6-astra",
+    "-m",
+    "gpt-6-astra",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "model_reasoning_effort=\"high\"",
+    "-c",
+    "model_instructions_file=\"D:/project/Alacrity/Flux/benchmarks/real_skill_compare_20261012/flux-instructions.txt\"",
+    "-c",
+    "personality=\"none\"",
+    "-c",
+    "project_doc_max_bytes=0",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "features.shell_tool=false",
+    "-c",
+    "features.apps=false",
+    "-c",
+    "features.memories=false",
+    "-c",
+    "features.multi_agent=false",
+    "-c",
+    "features.skill_search=false",
+    "-c",
+    "features.skip_host_skill_discovery=true",
+    "-c",
+    "model_providers.gapgpt.request_max_retries=0",
+    "-c",
+    "model_providers.gapgpt.stream_max_retries=0",
+    "-"
+  ],
+  "utc": "2026-10-12T20:03:55.325219+00:00",
+  "completed": false,
+  "usage": null,
+  "text": "",
+  "all_agent_messages": [],
+  "exit_code": 1,
+  "timeout": false,
+  "tool_events": 0,
+  "latency_s": 3.3240114000000176,
+  "raw_events": [
+    {
+      "type": "thread.started",
+      "thread_id": "01a131b6-e4bb-74b1-be31-1271ff3f2b32"
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_0",
+        "type": "error",
+        "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in C:\\Users\\xio\\.gapcode\\config.toml."
+      }
+    },
+    {
+      "type": "turn.started"
+    },
+    {
+      "type": "error",
+      "message": "You've hit your usage limit for GapCode. Switch to another model now, or try again later."
+    },
+    {
+      "type": "turn.failed",
+      "error": {
+        "message": "You've hit your usage limit for GapCode. Switch to another model now, or try again later."
+      }
+    }
+  ],
+  "stderr": "2026-10-12T20:03:52.125875Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell\n",
+  "cli_retry_notices": 1,
+  "actual_billing_usd": null,
+  "server_model_identity_independently_verified": false,
+  "tools_enabled": false
+}

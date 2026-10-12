@@ -1,0 +1,13 @@
+{
+  "id": "product",
+  "description": "Research, UX, content, integrations and discoverability with full product coverage mapped to observed scenarios.",
+  "workflow": "workflow.md",
+  "gates": [
+    {"id": "product.coverage", "script": "gates/coverage.py", "description": "Validate product area coverage against intact current named scenario evidence"},
+    {"id": "product.research", "script": "gates/scenarios.py", "args": ["--check", "product.research"], "description": "Project-owned research source and requirement checks"},
+    {"id": "product.content", "script": "gates/scenarios.py", "args": ["--check", "product.content"], "description": "Project-owned copy, localization and content assertions"},
+    {"id": "product.ux", "script": "gates/scenarios.py", "args": ["--check", "product.ux"], "description": "Project-owned user-flow and information architecture assertions"},
+    {"id": "product.integrations", "script": "gates/scenarios.py", "args": ["--check", "product.integrations"], "description": "Integration failure, retry and duplicate-event scenarios"},
+    {"id": "product.seo", "script": "gates/scenarios.py", "args": ["--check", "product.seo"], "description": "Public-page discoverability and analytics contract checks"}
+  ]
+}

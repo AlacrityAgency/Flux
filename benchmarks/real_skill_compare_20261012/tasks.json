@@ -1,0 +1,795 @@
+[
+  {
+    "id": "I1",
+    "family": "invoice",
+    "track": "reasoning",
+    "facts": {
+      "lines": [
+        {
+          "qty": 1,
+          "unit_cents": 105,
+          "discount_percent": "50"
+        },
+        {
+          "qty": 3,
+          "unit_cents": 17,
+          "discount_percent": "50"
+        }
+      ],
+      "shipping": 3,
+      "tax_percent": "50"
+    },
+    "task": "Calculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents."
+  },
+  {
+    "id": "I2",
+    "family": "invoice",
+    "track": "reasoning",
+    "facts": {
+      "lines": [
+        {
+          "qty": 3,
+          "unit_cents": 3541,
+          "discount_percent": "33.333"
+        },
+        {
+          "qty": 2,
+          "unit_cents": 4887,
+          "discount_percent": "33.333"
+        },
+        {
+          "qty": 7,
+          "unit_cents": 2433,
+          "discount_percent": "0"
+        },
+        {
+          "qty": 7,
+          "unit_cents": 5680,
+          "discount_percent": "17.75"
+        },
+        {
+          "qty": 6,
+          "unit_cents": 663,
+          "discount_percent": "0"
+        }
+      ],
+      "shipping": 830,
+      "tax_percent": "19.25"
+    },
+    "task": "Calculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents."
+  },
+  {
+    "id": "I3",
+    "family": "invoice",
+    "track": "reasoning",
+    "facts": {
+      "lines": [
+        {
+          "qty": 2,
+          "unit_cents": 1882,
+          "discount_percent": "50"
+        },
+        {
+          "qty": 1,
+          "unit_cents": 1389,
+          "discount_percent": "50"
+        },
+        {
+          "qty": 8,
+          "unit_cents": 1200,
+          "discount_percent": "12.5"
+        },
+        {
+          "qty": 7,
+          "unit_cents": 1225,
+          "discount_percent": "0"
+        },
+        {
+          "qty": 1,
+          "unit_cents": 110,
+          "discount_percent": "0"
+        },
+        {
+          "qty": 8,
+          "unit_cents": 4282,
+          "discount_percent": "17.75"
+        },
+        {
+          "qty": 1,
+          "unit_cents": 473,
+          "discount_percent": "0"
+        },
+        {
+          "qty": 3,
+          "unit_cents": 2725,
+          "discount_percent": "0"
+        },
+        {
+          "qty": 4,
+          "unit_cents": 739,
+          "discount_percent": "0"
+        }
+      ],
+      "shipping": 47,
+      "tax_percent": "7.5"
+    },
+    "task": "Calculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents."
+  },
+  {
+    "id": "I4",
+    "family": "invoice",
+    "track": "reasoning",
+    "facts": {
+      "lines": [
+        {
+          "qty": 9,
+          "unit_cents": 834,
+          "discount_percent": "50"
+        },
+        {
+          "qty": 2,
+          "unit_cents": 4900,
+          "discount_percent": "12.5"
+        },
+        {
+          "qty": 9,
+          "unit_cents": 5758,
+          "discount_percent": "17.75"
+        },
+        {
+          "qty": 6,
+          "unit_cents": 2751,
+          "discount_percent": "17.75"
+        },
+        {
+          "qty": 5,
+          "unit_cents": 3756,
+          "discount_percent": "50"
+        },
+        {
+          "qty": 4,
+          "unit_cents": 4444,
+          "discount_percent": "50"
+        },
+        {
+          "qty": 3,
+          "unit_cents": 5243,
+          "discount_percent": "17.75"
+        },
+        {
+          "qty": 5,
+          "unit_cents": 1731,
+          "discount_percent": "17.75"
+        },
+        {
+          "qty": 4,
+          "unit_cents": 4946,
+          "discount_percent": "0"
+        },
+        {
+          "qty": 7,
+          "unit_cents": 4797,
+          "discount_percent": "33.333"
+        },
+        {
+          "qty": 6,
+          "unit_cents": 5828,
+          "discount_percent": "33.333"
+        },
+        {
+          "qty": 9,
+          "unit_cents": 5374,
+          "discount_percent": "0"
+        },
+        {
+          "qty": 4,
+          "unit_cents": 1280,
+          "discount_percent": "0"
+        }
+      ],
+      "shipping": 557,
+      "tax_percent": "8.875"
+    },
+    "task": "Calculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents."
+  },
+  {
+    "id": "C1",
+    "family": "count",
+    "track": "reasoning",
+    "facts": {
+      "alphabet": [
+        0,
+        1,
+        3,
+        5
+      ],
+      "length": 5,
+      "modulus": 7,
+      "residue": 1,
+      "sum_min": 6,
+      "sum_max": 15,
+      "target_digit": 3,
+      "target_count": 2
+    },
+    "task": "Enumerate length-digit strings over alphabet; leading zero is allowed. ALL constraints: adjacent digits differ; numeric value modulo modulus is residue; sum_min <= digit sum <= sum_max; exactly target_count copies of target_digit. Return exactly count and digit_sum_total, the sum of digit sums of valid strings."
+  },
+  {
+    "id": "C2",
+    "family": "count",
+    "track": "reasoning",
+    "facts": {
+      "alphabet": [
+        0,
+        1,
+        3,
+        5
+      ],
+      "length": 6,
+      "modulus": 11,
+      "residue": 2,
+      "sum_min": 7,
+      "sum_max": 18,
+      "target_digit": 3,
+      "target_count": 2
+    },
+    "task": "Enumerate length-digit strings over alphabet; leading zero is allowed. ALL constraints: adjacent digits differ; numeric value modulo modulus is residue; sum_min <= digit sum <= sum_max; exactly target_count copies of target_digit. Return exactly count and digit_sum_total, the sum of digit sums of valid strings."
+  },
+  {
+    "id": "C3",
+    "family": "count",
+    "track": "reasoning",
+    "facts": {
+      "alphabet": [
+        0,
+        1,
+        3,
+        5
+      ],
+      "length": 7,
+      "modulus": 13,
+      "residue": 3,
+      "sum_min": 8,
+      "sum_max": 21,
+      "target_digit": 3,
+      "target_count": 2
+    },
+    "task": "Enumerate length-digit strings over alphabet; leading zero is allowed. ALL constraints: adjacent digits differ; numeric value modulo modulus is residue; sum_min <= digit sum <= sum_max; exactly target_count copies of target_digit. Return exactly count and digit_sum_total, the sum of digit sums of valid strings."
+  },
+  {
+    "id": "C4",
+    "family": "count",
+    "track": "reasoning",
+    "facts": {
+      "alphabet": [
+        0,
+        1,
+        3,
+        5
+      ],
+      "length": 8,
+      "modulus": 17,
+      "residue": 4,
+      "sum_min": 9,
+      "sum_max": 24,
+      "target_digit": 3,
+      "target_count": 2
+    },
+    "task": "Enumerate length-digit strings over alphabet; leading zero is allowed. ALL constraints: adjacent digits differ; numeric value modulo modulus is residue; sum_min <= digit sum <= sum_max; exactly target_count copies of target_digit. Return exactly count and digit_sum_total, the sum of digit sums of valid strings."
+  },
+  {
+    "id": "S1",
+    "family": "schedule",
+    "track": "reasoning",
+    "facts": {
+      "jobs": [
+        {
+          "id": "K0",
+          "duration": 3,
+          "release": 7,
+          "due": 21,
+          "weight": 6,
+          "predecessors": []
+        },
+        {
+          "id": "K1",
+          "duration": 4,
+          "release": 7,
+          "due": 7,
+          "weight": 2,
+          "predecessors": []
+        },
+        {
+          "id": "K2",
+          "duration": 7,
+          "release": 5,
+          "due": 19,
+          "weight": 3,
+          "predecessors": []
+        },
+        {
+          "id": "K3",
+          "duration": 1,
+          "release": 9,
+          "due": 19,
+          "weight": 4,
+          "predecessors": []
+        }
+      ]
+    },
+    "task": "One machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness."
+  },
+  {
+    "id": "S2",
+    "family": "schedule",
+    "track": "reasoning",
+    "facts": {
+      "jobs": [
+        {
+          "id": "K0",
+          "duration": 3,
+          "release": 4,
+          "due": 8,
+          "weight": 6,
+          "predecessors": []
+        },
+        {
+          "id": "K1",
+          "duration": 1,
+          "release": 7,
+          "due": 17,
+          "weight": 5,
+          "predecessors": [
+            "K0"
+          ]
+        },
+        {
+          "id": "K2",
+          "duration": 1,
+          "release": 3,
+          "due": 17,
+          "weight": 4,
+          "predecessors": []
+        },
+        {
+          "id": "K3",
+          "duration": 3,
+          "release": 3,
+          "due": 23,
+          "weight": 6,
+          "predecessors": []
+        },
+        {
+          "id": "K4",
+          "duration": 1,
+          "release": 2,
+          "due": 10,
+          "weight": 4,
+          "predecessors": [
+            "K0",
+            "K1"
+          ]
+        }
+      ]
+    },
+    "task": "One machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness."
+  },
+  {
+    "id": "S3",
+    "family": "schedule",
+    "track": "reasoning",
+    "facts": {
+      "jobs": [
+        {
+          "id": "K0",
+          "duration": 6,
+          "release": 5,
+          "due": 20,
+          "weight": 4,
+          "predecessors": []
+        },
+        {
+          "id": "K1",
+          "duration": 7,
+          "release": 9,
+          "due": 12,
+          "weight": 1,
+          "predecessors": [
+            "K0"
+          ]
+        },
+        {
+          "id": "K2",
+          "duration": 5,
+          "release": 8,
+          "due": 7,
+          "weight": 5,
+          "predecessors": [
+            "K1"
+          ]
+        },
+        {
+          "id": "K3",
+          "duration": 2,
+          "release": 3,
+          "due": 20,
+          "weight": 3,
+          "predecessors": []
+        },
+        {
+          "id": "K4",
+          "duration": 4,
+          "release": 6,
+          "due": 30,
+          "weight": 5,
+          "predecessors": [
+            "K2"
+          ]
+        },
+        {
+          "id": "K5",
+          "duration": 5,
+          "release": 9,
+          "due": 11,
+          "weight": 6,
+          "predecessors": [
+            "K4"
+          ]
+        }
+      ]
+    },
+    "task": "One machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness."
+  },
+  {
+    "id": "S4",
+    "family": "schedule",
+    "track": "reasoning",
+    "facts": {
+      "jobs": [
+        {
+          "id": "K0",
+          "duration": 1,
+          "release": 4,
+          "due": 20,
+          "weight": 2,
+          "predecessors": []
+        },
+        {
+          "id": "K1",
+          "duration": 7,
+          "release": 6,
+          "due": 24,
+          "weight": 5,
+          "predecessors": []
+        },
+        {
+          "id": "K2",
+          "duration": 6,
+          "release": 1,
+          "due": 11,
+          "weight": 4,
+          "predecessors": []
+        },
+        {
+          "id": "K3",
+          "duration": 3,
+          "release": 8,
+          "due": 30,
+          "weight": 2,
+          "predecessors": []
+        },
+        {
+          "id": "K4",
+          "duration": 4,
+          "release": 2,
+          "due": 13,
+          "weight": 2,
+          "predecessors": [
+            "K3"
+          ]
+        },
+        {
+          "id": "K5",
+          "duration": 4,
+          "release": 4,
+          "due": 14,
+          "weight": 1,
+          "predecessors": []
+        },
+        {
+          "id": "K6",
+          "duration": 5,
+          "release": 5,
+          "due": 17,
+          "weight": 1,
+          "predecessors": []
+        }
+      ]
+    },
+    "task": "One machine at time 0, all jobs exactly once, nonpreemptive. Each job starts as early as possible after release, previous job completion and all predecessors; no discretionary idle. Reject orders with later predecessors. Minimize weighted tardiness sum(weight*max(0,completion-due)); ties minimize final completion, then lexicographic id sequence. Return exactly order, starts aligned to order, finish, weighted_tardiness."
+  },
+  {
+    "id": "E1",
+    "family": "access",
+    "track": "engineering",
+    "task": "Fix solve(facts): return {\"allowed\": bool}. Access requires active actor, resource tenant equal actor tenant, AND actor is owner OR actor role admin. A tenant admin has no cross-tenant exception. Missing/unknown role gives no admin right.",
+    "facts": {
+      "actor": {
+        "id": "a",
+        "tenant": "T",
+        "role": "user",
+        "active": true
+      },
+      "resource": {
+        "owner": "a",
+        "tenant": "T"
+      }
+    },
+    "public_cases": [
+      {
+        "actor": {
+          "id": "a",
+          "tenant": "T",
+          "role": "user",
+          "active": true
+        },
+        "resource": {
+          "owner": "a",
+          "tenant": "T"
+        }
+      },
+      {
+        "actor": {
+          "id": "a",
+          "tenant": "T",
+          "role": "admin",
+          "active": true
+        },
+        "resource": {
+          "owner": "b",
+          "tenant": "U"
+        }
+      },
+      {
+        "actor": {
+          "id": "a",
+          "tenant": "T",
+          "role": "user",
+          "active": false
+        },
+        "resource": {
+          "owner": "a",
+          "tenant": "T"
+        }
+      }
+    ],
+    "buggy_code": "def solve(facts):\n    a,r=facts[\"actor\"],facts[\"resource\"]\n    return {\"allowed\":a.get(\"role\")==\"admin\" or a[\"id\"]==r[\"owner\"]}\n"
+  },
+  {
+    "id": "E2",
+    "family": "intervals",
+    "track": "engineering",
+    "task": "Fix solve(facts): normalize intervals into sorted nonoverlapping half-open intervals. Ignore empty intervals, reject reversed endpoints with {\"error\":\"reversed\"}. Merge overlap but never merge mere adjacency. Return {\"intervals\": [[start,end],...]}. Input may be unsorted/duplicated and have negative endpoints.",
+    "facts": {
+      "intervals": [
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          8,
+          8
+        ]
+      ]
+    },
+    "public_cases": [
+      {
+        "intervals": [
+          [
+            1,
+            3
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            8,
+            8
+          ]
+        ]
+      },
+      {
+        "intervals": [
+          [
+            2,
+            1
+          ]
+        ]
+      },
+      {
+        "intervals": []
+      }
+    ],
+    "buggy_code": "def solve(facts):\n    out=[]\n    for a,b in sorted(facts[\"intervals\"]):\n        if out and a<=out[-1][1]: out[-1][1]=max(b,out[-1][1])\n        else: out.append([a,b])\n    return {\"intervals\":out}\n"
+  },
+  {
+    "id": "E3",
+    "family": "replay",
+    "track": "engineering",
+    "task": "Fix solve(facts): ledger events credit/debit positive integer amount with event id. First occurrence of an id takes effect; exact duplicates ignored; same id with different kind/amount rejects entire batch with {\"error\":\"conflict\"}. Balance starts at initial. Debit may overdraw (negative balance allowed). Return {\"balance\": int,\"applied\": int} counting unique events. No input mutation.",
+    "facts": {
+      "initial": 10,
+      "events": [
+        {
+          "id": "a",
+          "kind": "credit",
+          "amount": 7
+        },
+        {
+          "id": "a",
+          "kind": "credit",
+          "amount": 7
+        }
+      ]
+    },
+    "public_cases": [
+      {
+        "initial": 10,
+        "events": [
+          {
+            "id": "a",
+            "kind": "credit",
+            "amount": 7
+          },
+          {
+            "id": "a",
+            "kind": "credit",
+            "amount": 7
+          }
+        ]
+      },
+      {
+        "initial": 0,
+        "events": [
+          {
+            "id": "a",
+            "kind": "credit",
+            "amount": 7
+          },
+          {
+            "id": "a",
+            "kind": "credit",
+            "amount": 8
+          }
+        ]
+      },
+      {
+        "initial": 2,
+        "events": []
+      }
+    ],
+    "buggy_code": "def solve(facts):\n    b=facts[\"initial\"]\n    for e in facts[\"events\"]: b+=e[\"amount\"] if e[\"kind\"]==\"credit\" else -e[\"amount\"]\n    return {\"balance\":b,\"applied\":len(facts[\"events\"])}\n"
+  },
+  {
+    "id": "E4",
+    "family": "rounding",
+    "track": "engineering",
+    "task": "Fix solve(facts): amount_cents nonnegative integer and percent exact decimal string [0,100]. Discounted amount = amount_cents*(1-percent/100), rounded HALF UP to integer cents, never binary-float/bankers rounding. Return {\"cents\": int}.",
+    "facts": {
+      "amount_cents": 105,
+      "percent": "50"
+    },
+    "public_cases": [
+      {
+        "amount_cents": 105,
+        "percent": "50"
+      },
+      {
+        "amount_cents": 0,
+        "percent": "12.5"
+      },
+      {
+        "amount_cents": 101,
+        "percent": "100"
+      }
+    ],
+    "buggy_code": "def solve(facts):\n    return {\"cents\":round(facts[\"amount_cents\"]*(1-float(facts[\"percent\"])/100))}\n"
+  },
+  {
+    "id": "E5",
+    "family": "migration",
+    "track": "engineering",
+    "task": "Fix solve(facts): validate entire rows before converting. Duplicate id rejects batch with {\"error\":\"duplicate\"}. Missing name rejects with {\"error\":\"missing_name\"} (duplicate check has precedence). Otherwise return {\"rows\": rows sorted by id, each exactly id and display_name preserving name string}. Do not mutate input.",
+    "facts": {
+      "rows": [
+        {
+          "id": 2,
+          "name": "B"
+        },
+        {
+          "id": 1,
+          "name": "A"
+        }
+      ]
+    },
+    "public_cases": [
+      {
+        "rows": [
+          {
+            "id": 2,
+            "name": "B"
+          },
+          {
+            "id": 1,
+            "name": "A"
+          }
+        ]
+      },
+      {
+        "rows": [
+          {
+            "id": 1,
+            "name": "X"
+          },
+          {
+            "id": 1,
+            "name": "Y"
+          }
+        ]
+      },
+      {
+        "rows": [
+          {
+            "id": 2
+          }
+        ]
+      }
+    ],
+    "buggy_code": "def solve(facts):\n    return {\"rows\":[{\"id\":r[\"id\"],\"display_name\":r.get(\"name\",\"\")} for r in facts[\"rows\"]]}\n"
+  },
+  {
+    "id": "E6",
+    "family": "version",
+    "track": "engineering",
+    "task": "Fix solve(facts): select payload according to version. v1 reads title, v2 reads display_name (ignore title even if present); missing required field -> {\"error\":\"missing\"}; unknown version -> {\"error\":\"version\"}. Return {\"label\": field value} for valid input, including empty string. Do not guess across versions.",
+    "facts": {
+      "version": 2,
+      "payload": {
+        "title": "legacy",
+        "display_name": "new"
+      }
+    },
+    "public_cases": [
+      {
+        "version": 2,
+        "payload": {
+          "title": "legacy",
+          "display_name": "new"
+        }
+      },
+      {
+        "version": 3,
+        "payload": {
+          "title": "A"
+        }
+      },
+      {
+        "version": 1,
+        "payload": {}
+      }
+    ],
+    "buggy_code": "def solve(facts):\n    p=facts[\"payload\"]\n    return {\"label\":p.get(\"title\",p.get(\"display_name\",\"\"))}\n"
+  }
+]

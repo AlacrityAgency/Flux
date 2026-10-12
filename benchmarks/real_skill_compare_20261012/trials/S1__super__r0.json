@@ -1,0 +1,45 @@
+{
+  "task_id": "S1",
+  "track": "reasoning",
+  "family": "schedule",
+  "arm": "super",
+  "rep": 0,
+  "label": "S1__super__r0",
+  "calls": [
+    "S1__super__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 1,
+    "failures": []
+  },
+  "answer": {
+    "order": [
+      "K1",
+      "K2",
+      "K3",
+      "K0"
+    ],
+    "starts": [
+      7,
+      11,
+      18,
+      19
+    ],
+    "finish": 22,
+    "weighted_tardiness": 14
+  },
+  "code": null,
+  "failure": "",
+  "latency_s": 32.83492579999802,
+  "gate_records": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012\\workspaces\\S1__super__r0",
+  "test_integrity": true
+}

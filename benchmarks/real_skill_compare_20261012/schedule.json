@@ -1,0 +1,572 @@
+[
+  {
+    "task_id": "S1",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "I3",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "E3",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C1",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "I2",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "E4",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "I2",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "S4",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "I2",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C1",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "C2",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "I3",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "I3",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "C3",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "C3",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C3",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "E6",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "E3",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "C4",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "S3",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "I3",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "S3",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "S3",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "E6",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C3",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "E5",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "E2",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "C2",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "S2",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "I4",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "E4",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "E3",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "S1",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "I4",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "I3",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "S3",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "I4",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "I3",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "I2",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "I3",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "C1",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "E5",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "S1",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "I1",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "I2",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "S1",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "I4",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "I4",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "S2",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "C1",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "S1",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "E6",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "C3",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "C1",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "S2",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "E2",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "I2",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "S3",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C2",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "I1",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "S4",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "S3",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "E1",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "S2",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "C4",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "I1",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "C4",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C3",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "I4",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "S2",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "C2",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "I4",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "E1",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "C4",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "S1",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "I1",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "I2",
+    "arm": "super",
+    "rep": 1
+  },
+  {
+    "task_id": "C1",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "C2",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "C1",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "E1",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "C3",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "S1",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "S4",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "E5",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "S2",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "I2",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "C2",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "S3",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "S4",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "I1",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "S2",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "S1",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "S4",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "C2",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "C4",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "S3",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "C4",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "I4",
+    "arm": "super",
+    "rep": 0
+  },
+  {
+    "task_id": "E4",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "I1",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "I1",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "C3",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "S2",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "S4",
+    "arm": "flux_matched",
+    "rep": 0
+  },
+  {
+    "task_id": "I3",
+    "arm": "normal",
+    "rep": 1
+  },
+  {
+    "task_id": "S4",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C4",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "C1",
+    "arm": "flux_matched",
+    "rep": 1
+  },
+  {
+    "task_id": "C4",
+    "arm": "flux_native",
+    "rep": 1
+  },
+  {
+    "task_id": "I1",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "C2",
+    "arm": "normal",
+    "rep": 0
+  },
+  {
+    "task_id": "E2",
+    "arm": "flux_native",
+    "rep": 0
+  },
+  {
+    "task_id": "S4",
+    "arm": "flux_matched",
+    "rep": 1
+  }
+]

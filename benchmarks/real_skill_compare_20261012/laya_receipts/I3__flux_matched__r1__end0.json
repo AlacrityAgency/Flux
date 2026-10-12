@@ -1,0 +1,51 @@
+{
+  "state": {
+    "request": "TASK:\nCalculate integer cents. Round each qty*unit_cents*(1-discount_percent/100) HALF UP to cents; sum subtotal. Round tax_percent percent of subtotal HALF UP to cents. Shipping is untaxed. Decimal strings are exact. Return exactly subtotal_cents, tax_cents, total_cents.\nFACTS:\n{\"lines\":[{\"qty\":2,\"unit_cents\":1882,\"discount_percent\":\"50\"},{\"qty\":1,\"unit_cents\":1389,\"discount_percent\":\"50\"},{\"qty\":8,\"unit_cents\":1200,\"discount_percent\":\"12.5\"},{\"qty\":7,\"unit_cents\":1225,\"discount_percent\":\"0\"},{\"qty\":1,\"unit_cents\":110,\"discount_percent\":\"0\"},{\"qty\":8,\"unit_cents\":4282,\"discount_percent\":\"17.75\"},{\"qty\":1,\"unit_cents\":473,\"discount_percent\":\"0\"},{\"qty\":3,\"unit_cents\":2725,\"discount_percent\":\"0\"},{\"qty\":4,\"unit_cents\":739,\"discount_percent\":\"0\"}],\"shipping\":47,\"tax_percent\":\"7.5\"}",
+    "candidate": "{\"refs\":[\"lines\",\"shipping\",\"tax_percent\"],\"code\":\"from fractions import Fraction\\nfrom decimal import Decimal\\n\\ndef solve(facts):\\n    def half_up(value):\\n        n, d = value.numerator, value.denominator\\n        magnitude = (2 * abs(n) + d) // (2 * d)\\n        return -magnitude if n < 0 else magnitude\\n    subtotal = sum(half_up(Fraction(line['qty']) * line['unit_cents'] * (1 - Fraction(line['discount_percent']) / 100)) for line in facts['lines'])\\n    tax = half_up(Fraction(subtotal) * Fraction(facts['tax_percent']) / 100)\\n    return {'subtotal_cents': subtotal, 'tax_cents': tax, 'total_cents': subtotal + tax + facts['shipping']}\\n\\ndef check(answer, facts):\\n    def decimal_ratio(text):\\n        parts = Decimal(text).as_tuple()\\n        coefficient = 0\\n        for digit in parts.digits:\\n            coefficient = coefficient * 10 + digit\\n        if parts.sign:\\n            coefficient = -coefficient\\n        if parts.exponent >= 0:\\n            return coefficient * 10 ** parts.exponent, 1\\n        return coefficient, 10 ** (-parts.exponent)\\n    def rounded_ratio(numerator, denominator):\\n        quotient, remainder = divmod(abs(numerator), denominator)\\n        if remainder * 2 >= denominator:\\n            quotient += 1\\n        return -quotient if numerator < 0 else quotient\\n    if not isinstance(answer, dict) or set(answer) != {'subtotal_cents', 'tax_cents', 'total_cents'}:\\n        return False\\n    if not all(isinstance(value, int) and not isinstance(value, bool) for value in answer.values()):\\n        return False\\n    subtotal = 0\\n    for line in facts['lines']:\\n        discount, scale = decimal_ratio(line['discount_percent'])\\n        gross = line['qty'] * line['unit_cents']\\n        subtotal += rounded_ratio(gross * (100 * scale - discount), 100 * scale)\\n    rate, scale = decimal_ratio(facts['tax_percent'])\\n    tax = rounded_ratio(subtotal * rate, 100 * scale)\\n    return answer['subtotal_cents'] == subtotal and answer['tax_cents'] == tax and answer['total_cents'] == subtotal + tax + facts['shipping']\\n\"}",
+    "provider_completed": true,
+    "verification": {
+      "pass": true,
+      "reason": ""
+    },
+    "attempt": 0,
+    "remaining_attempts": 2
+  },
+  "phase": "end",
+  "output": {
+    "model": "laya-rl-agent",
+    "answers": {
+      "action": {
+        "type": "choice",
+        "choice": "stop",
+        "probabilities": {
+          "accept": 0.3197,
+          "escalate": 0.0167,
+          "stop": 0.6636
+        },
+        "confidence": 0.3584,
+        "answer_confidence": 0.6636,
+        "action": {
+          "act_probability": 1.0
+        },
+        "window": {
+          "index": 1,
+          "token_start": 380,
+          "token_end": 1115,
+          "count": 2
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 1621,
+      "output_tokens": 0,
+      "state_tokens": 1495,
+      "state_tokens_dropped": 0,
+      "truncated": 0,
+      "truncated_questions": [],
+      "windows": 2
+    }
+  },
+  "latency_s": 0.1428615999975591,
+  "calibrated_for_model_success": false,
+  "provider_billable_tokens": 0
+}

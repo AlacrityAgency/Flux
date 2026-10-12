@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "super-skill"
+version = "5.2.0-dev"
+description = "Full-stack application engineering and verification with an evidence ledger."
+readme = "SKILL.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = ["tests/fixtures", "node_modules", ".superagent"]
+python_files = ["test_*.py"]
+addopts = "-v"

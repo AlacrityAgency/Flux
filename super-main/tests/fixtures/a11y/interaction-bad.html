@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Interaction problems</title>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; }
+  .icon { width: 16px; height: 16px; padding: 0; border: 1px solid #333; background: #fff; }
+  .no-ring:focus { outline: none; }
+  .fake { display: inline-block; padding: 12px; background: #1d4ed8; color: #fff; }
+</style></head>
+<body><main id="root">
+  <h1>Toolbar</h1>
+  <div><button class="icon" aria-label="Bold">B</button><button class="icon" aria-label="Italic">I</button><button class="icon" aria-label="Underline">U</button></div>
+  <p><button class="no-ring" style="min-height:44px;padding:0 16px">Save draft</button></p>
+  <p><span class="fake" role="button">Publish</span></p>
+  <p><a href="#later" tabindex="3" style="display:inline-block;padding:12px">Jump ahead</a></p>
+</main></body>
+</html>
