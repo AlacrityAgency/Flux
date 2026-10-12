@@ -1,0 +1,41 @@
+{
+  "task_id": "E5",
+  "track": "engineering",
+  "family": "migration",
+  "arm": "normal",
+  "rep": 0,
+  "label": "E5__normal__r0",
+  "calls": [
+    "E5__normal__r0__call0"
+  ],
+  "laya_receipts": [],
+  "actions": [],
+  "online_checks": [
+    {
+      "pass": true,
+      "executed": 3,
+      "failures": [],
+      "latency_s": 0.0925677999985055
+    }
+  ],
+  "verification_depth": null,
+  "policy_accepted": true,
+  "correct": true,
+  "candidate_correct": true,
+  "false_reject": false,
+  "false_accept": false,
+  "audit": {
+    "pass": true,
+    "executed": 20,
+    "failures": [],
+    "latency_s": 0.06707040000037523
+  },
+  "answer": null,
+  "code": "def solve(facts):\n    rows = facts[\"rows\"]\n    seen = set()\n    for row in rows:\n        if row[\"id\"] in seen:\n            return {\"error\": \"duplicate\"}\n        seen.add(row[\"id\"])\n    if any(\"name\" not in row for row in rows):\n        return {\"error\": \"missing_name\"}\n    return {\"rows\": [{\"id\": row[\"id\"], \"display_name\": row[\"name\"]} for row in sorted(rows, key=lambda row: row[\"id\"])]}\n",
+  "failure": "",
+  "latency_s": 27.65222089999952,
+  "gate_records": [],
+  "review_receipts": [],
+  "workspace": "D:\\project\\Alacrity\\Flux\\benchmarks\\real_skill_compare_20261012_v2\\workspaces\\E5__normal__r0",
+  "test_integrity": true
+}

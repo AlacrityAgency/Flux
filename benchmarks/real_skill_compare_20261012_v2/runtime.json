@@ -1,0 +1,9 @@
+{
+  "load_sessions": [
+    {
+      "utc": "2026-10-12T20:19:10.379640+00:00",
+      "laya_load_s": 10.097777899998619,
+      "python": "D:\\project\\Alacrity\\Flux\\experiments\\flux_laya_policy_20261006\\.venv\\Scripts\\python.exe"
+    }
+  ]
+}

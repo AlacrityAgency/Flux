@@ -21,6 +21,7 @@ ROOT=HERE.parents[1]
 SKILL=Path('C:/Users/xio/.codex/skills/flux-v1')
 SUPER=ROOT/'super-main'
 CHECKPOINT=ROOT/'experiments/flux_laya_policy_20261006/checkpoint'
+CLEAN_PYTHON=Path('C:/Program Files/Python312/python.exe')
 sys.path.insert(0,str(SKILL/'scripts'))
 from call_model import normalize
 from validate_program import validate, audit
@@ -62,7 +63,7 @@ def program_check(task,code,hidden=False,checker=False):
     job={'code':code,'require_checker':checker,'cases':[{'facts':f,'expected':oracle(task,f)} for f in fs]}
     start=time.perf_counter()
     try:
-        r=subprocess.run([sys.executable,'-I',str(HERE/'evaluator_worker.py')],input=json.dumps(job),capture_output=True,text=True,encoding='utf-8',timeout=5)
+        r=subprocess.run([str(CLEAN_PYTHON),'-I','-S',str(HERE/'evaluator_worker.py')],input=json.dumps(job),capture_output=True,text=True,encoding='utf-8',timeout=5)
         result=json.loads(r.stdout)
     except Exception as exc:result={'pass':False,'executed':0,'failures':[{'reason':type(exc).__name__}]}
     result['latency_s']=time.perf_counter()-start;return result
@@ -137,7 +138,7 @@ def prepare():
       'created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'client_date':'2026-10-12','seed':SEED,
       'tasks':18,'reasoning_tasks':12,'engineering_tasks':6,'reasoning_repetitions':2,'engineering_repetitions':1,
       'scheduled_trials':len(schedule),'arms':ARMS,'native_plan':NATIVE,'matched_plan':MATCHED,
-      'normal_super_model':['codex','gpt-6.1-sol','medium'],'concurrency':2,'max_calls':230,
+      'normal_super_model':['codex','gpt-6.1-sol','medium'],'concurrency':2,'max_calls':290,
       'timeout_s':{'normal_per_call':90,'super_per_call':90,'flux_per_call':90},
       'budget':'All model sessions tool-free and 90s each. Normal one call; SUPER and FLux up to 3 calls. Retry policy is part of workflow, not an equal-call causal control. Caller runs actual public tests/gates outside model sessions. Wire helper count is not server-internal request count.',
       'controlled_comparison':'Normal and SUPER same model/effort/tools/fixtures; instruction content differs. FLux matched repeats Sol/medium even on retry, preserving other policy; this is a diagnostic ablation, not the native FLux ladder.',
@@ -146,6 +147,8 @@ def prepare():
       'acceptance':'Complete provider, canonical JSON and required artifact. FLux additionally requires compact AST/worker/public validation and guarded Laya acceptance. Wrong accepted candidates counted false_accept. SUPER readiness claims independently compared with recorded gate results.',
       'engineering_output':'Normal/SUPER return {code: source defining solve(facts)}. FLux returns refs+code with solve/check. Coordinator writes solution.py for every arm. Public tests/config identical. Hidden tests only final, no feedback on hidden failures.',
       'super_adapter':'Reasoning online full reference check. Engineering actual sa.py review once on baseline and each candidate, plus public tests and backend.behavior gate required for online acceptance. Missing unrelated review gates are gaps. Candidate same-model medium repairs up to two; after two failed attempts explicitly pivot. No validated full debug-case/unchanged-oracle workflow claim.',
+      'super_native_verdict_boundary':'Windows preflight: native ledger.intact rejects slash/backslash-different report key even with unchanged hashes. Native verdict STALE is retained. Harness accepts tested task correctness on independent checks + observed raw scenario PASS, never calls native SUPER technical verdict PASSED or release-ready. Both statuses separately reported.',
+      'runtime_adapter':'Laya uses existing venv. Evaluation subprocess uses stdlib Python -I -S, gates use clean system Python, avoiding unrelated pip_system_certs stdout contamination without modifying dependencies.',
       'preflight':'Prior pilot aborted for model-local tool policy rejections; all pilot data excluded. Tool-free adapter chosen before this fresh seed is sampled; no skill/model tuning on final holdout. GapCode Astra blocked in probe; final tier same model via successfully probed Codex. Initial native skills unmodified.',
       'usage':'sum input+output only; cached subset input, reasoning subset output. Unknown usage never zero. Dollar invoice/account weighting/electricity/coordinator tokens unmeasured. No savings percentage if compared usage incomplete.',
       'statistics':'Two repetitions averaged inside each unique reasoning-task cluster; 10000 paired task-cluster bootstrap samples, 95% percentile interval, Wilson interval on distinct-task all-repetitions-pass; exact paired discordance test. Engineering n=6 separate, no pooling.',
@@ -186,7 +189,7 @@ def setup_workspace(task,workspace):
     write(workspace/'superagent.json',{'version':1,'profile':'service','features':[],
       'environment':'test','testing':{'repeat':1,'static_workers':1,'suites':[{'name':'unittest','cwd':'.'}]},
       'acceptance':[{'id':'A1','criterion':task['task'],'gate':'backend.behavior','scenario':'task-contract'}],
-      'checks':{'backend.behavior':{'command':[sys.executable,str(HERE/'public_gate.py'),'--task-id',task['id'],'--project','.'],'expected':['task-contract']}}})
+      'checks':{'backend.behavior':{'command':[str(CLEAN_PYTHON),str(HERE/'public_gate.py'),'--task-id',task['id'],'--project','.'],'expected':['task-contract']}}})
     (workspace/'README.md').write_text(task['task'],encoding='utf-8')
 
 class Laya:
@@ -207,7 +210,7 @@ def call_once(provider,model,effort,prompt,label,workspace,instructions,tools,ti
         r=read(path);assert (r['provider'],r['model_requested'],r['effort_requested'],r['prompt'])==(provider,model,effort,prompt)
         return r # Only resumption of this exact frozen run, never a new sample.
     with CALL_LOCK:
-        if len(list((HERE/'receipts').glob('*.json')))+len(list((HERE/'reservations').glob('*.json')))>=230:raise RuntimeError('call budget')
+        if len(list((HERE/'receipts').glob('*.json')))+len(list((HERE/'reservations').glob('*.json')))>=290:raise RuntimeError('call budget')
         write(HERE/'reservations'/(label+'.json'),{'reserved':True})
     (HERE/'prompts').mkdir(exist_ok=True);(HERE/'prompts'/(label+'.txt')).write_text(prompt,encoding='utf-8')
     r=invoke(provider,model,effort,prompt,path,workspace,HERE/instructions,tools,timeout)
@@ -225,7 +228,7 @@ def full_audit(task,answer,code):
     return {'pass':equal(answer,oracle(task)),'executed':1,'failures':[] if equal(answer,oracle(task)) else [{'reason':'answer differs from exact reference'}]}
 
 def super_review(workspace,label,phase):
-    command=[sys.executable,str(SUPER/'core/bin/sa.py'),'--project',str(workspace),'review','--mode','change','--profile','service','--depth','quick','--json']
+    command=[str(CLEAN_PYTHON),str(SUPER/'core/bin/sa.py'),'--project',str(workspace),'review','--mode','change','--profile','service','--depth','quick','--json']
     start=time.perf_counter()
     try:
         p=subprocess.run(command,capture_output=True,text=True,encoding='utf-8',timeout=60)
@@ -302,7 +305,8 @@ def run_trial(item,laya,ts):
                                 relevant=[x for x in records if x.get('gate')=='backend.behavior' or x.get('gate_id')=='backend.behavior']
                                 # Runner status has its own immutable receipt; read review entries, not model claims.
                                 check['gate_observed']=bool(relevant)
-                                if not relevant:check={'pass':False,'reason':'Required backend.behavior gate not recorded'}
+                                check['gate_status']=relevant[-1].get('status') if relevant else None
+                                if not relevant or relevant[-1].get('status')!='PASS':check={'pass':False,'reason':'Required backend.behavior gate did not PASS','gate_status':check['gate_status']}
                     else:
                         answer=data;accepted=isinstance(data,dict);check={'pass':accepted and equal(answer,oracle(task)),'reason':'Independent contract verification failed'}
                 except Exception as exc:error=type(exc).__name__+': '+str(exc)[:160];check={'pass':False,'reason':error}
@@ -321,6 +325,7 @@ def run_trial(item,laya,ts):
     trial={'task_id':task['id'],'track':task['track'],'family':task['family'],'arm':arm,'rep':item['rep'],
       'label':label,'calls':calls,'laya_receipts':locals_,'actions':actions,'online_checks':checks,
       'verification_depth':depth,'policy_accepted':accepted,'correct':accepted and audit_result['pass'],
+      'candidate_correct':audit_result['pass'],'false_reject':not accepted and audit_result['pass'],
       'false_accept':accepted and not audit_result['pass'],'audit':audit_result,'answer':answer,'code':code,
       'failure':error,'latency_s':time.perf_counter()-start,'gate_records':gates,
       'review_receipts':review_labels,'workspace':str(workspace),'test_integrity':True}
@@ -360,6 +365,7 @@ def summarize(trials):
     return {'trials':len(trials),'distinct_tasks':len(cluster),'correct':sum(t['correct'] for t in trials),
       'all_repeats_correct_tasks':distinct_correct,'task_accuracy_wilson95':wilson(distinct_correct,len(cluster)),
       'false_accepts':sum(t['false_accept'] for t in trials),'accepted':sum(t['policy_accepted'] for t in trials),
+      'candidate_correct':sum(t['candidate_correct'] for t in trials),'false_rejects':sum(t['false_reject'] for t in trials),
       'provider_calls':len(receipts),'extra_attempts':sum(len(t['calls'])-1 for t in trials),
       'provider_failures':sum(not r['completed'] for r in receipts),'timeouts':sum(r['timeout'] for r in receipts),
       'unknown_usage_calls':unknown,'usage_complete':unknown==0,'usage_known_sum':usage,

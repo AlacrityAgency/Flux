@@ -1,0 +1,1 @@
+Fix solve(facts): validate entire rows before converting. Duplicate id rejects batch with {"error":"duplicate"}. Missing name rejects with {"error":"missing_name"} (duplicate check has precedence). Otherwise return {"rows": rows sorted by id, each exactly id and display_name preserving name string}. Do not mutate input.
