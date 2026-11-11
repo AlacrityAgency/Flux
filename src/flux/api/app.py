@@ -219,18 +219,27 @@ def create_app(engine=None, db_path=None):
         pass
     workspace = Workspace(engine.repo)
     local_runtime = LocalRuntime(engine.repo, workspace)
+    from flux.parallel import ParallelHub
+    from flux.parallel.api import mount_parallel_api
+    from flux.agentic import AgenticHub
+    from flux.agentic.api import mount_agentic_api
+    parallel = ParallelHub(engine.repo, workspace, local_runtime)
+    agentic = AgenticHub(engine.repo, workspace, local_runtime, events=parallel.events)
     jobs = {}
 
     @asynccontextmanager
     async def lifespan(app):
         local_runtime.recover()
+        parallel.recover()
         app.state.core.recover()
         # Never replay an in-flight provider request after an interrupted process.
         if owned:
             for record in engine.repo.list_runs(limit=10000):
                 if record["status"] in ACTIVE:
                     engine.repo.update_run_status(record["run_id"], "FAILED", "اجرای قبلی قطع شده است؛ برای جلوگیری از مصرف تکراری خودکار ادامه داده نشد.")
+        parallel.start()
         yield
+        await parallel.stop()
         await local_runtime.close()
         for run_id, job in list(jobs.items()):
             engine.cancel_run(run_id)
@@ -240,11 +249,17 @@ def create_app(engine=None, db_path=None):
             engine.repo.conn.close()
 
     app = FastAPI(title="Flux · Personal workspace", version=__version__, lifespan=lifespan)
-    app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "[::1]", "test", "testserver"])
+    import os as _os
+    extra_hosts = [h.strip() for h in _os.environ.get("FLUX_ALLOWED_HOSTS", "").split(",") if h.strip()]
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "[::1]", "test", "testserver", *extra_hosts])
     app.state.engine, app.state.repo, app.state.workspace = engine, engine.repo, workspace
     app.state.jobs = jobs
     app.state.local_runtime = local_runtime
+    app.state.parallel = parallel
+    app.state.agentic = agentic
     mount_local_api(app, local_runtime, STATIC_DIR)
+    mount_parallel_api(app, parallel, STATIC_DIR)
+    mount_agentic_api(app, agentic)
     from flux.core.api import mount_core_api
     mount_core_api(app,engine.repo,workspace,local_runtime)
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
@@ -258,11 +273,22 @@ def create_app(engine=None, db_path=None):
 
     @app.middleware("http")
     async def local_origin(request: Request, call_next):
+        token = _os.environ.get("FLUX_API_TOKEN", "")
+        set_cookie = False
+        if token:
+            import hmac
+            supplied = request.headers.get("authorization", "").removeprefix("Bearer ").strip() or request.cookies.get("flux_token", "")
+            if not supplied and request.method == "GET" and request.query_params.get("token"):
+                supplied, set_cookie = request.query_params["token"], True
+            if not hmac.compare_digest(supplied.encode(), token.encode()):
+                return JSONResponse({"detail": "توکن دسترسی دمون لازم است."}, status_code=401)
         if request.method not in ("GET", "HEAD", "OPTIONS"):
             origin = request.headers.get("origin")
             if origin and urlsplit(origin).netloc != request.headers.get("host"):
                 return JSONResponse({"detail": "درخواست باید از خود برنامه ارسال شود."}, status_code=403)
         response = await call_next(request)
+        if set_cookie:
+            response.set_cookie("flux_token", token, httponly=True, samesite="strict")
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "same-origin"
         design_page=request.url.path.startswith('/design-v2/')

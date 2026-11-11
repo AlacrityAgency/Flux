@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="theme-color" content="#0a0a0a">
+ <title>Flux · صندوق توجه، Worktree و پایپلاین DAG</title>
+ <link rel="icon" type="image/x-icon" href="/static/flux-mark.ico">
+ <link rel="stylesheet" href="/static/local.css">
+ <link rel="stylesheet" href="/static/attention.css">
+ <script src="/static/native.js" defer></script>
+</head>
+<body>
+ <main class="parallel-shell">
+  <header class="parallel-header">
+   <div class="header-top">
+    <nav class="header-links" aria-label="مسیرهای اصلی">
+     <a href="/chat">→ بازگشت به گفتگوها</a>
+     <a href="/">میز سازمان Alacrity</a>
+     <a href="/head">دفتر HEAD</a>
+    </nav>
+    <div class="header-actions">
+     <label class="inline-setting">سقف اجرای موازی
+      <input id="max-parallel-input" type="number" min="1" max="16" value="3">
+     </label>
+     <button id="scan-overlaps-btn" type="button">پایش همپوشانی</button>
+     <button id="notify-toggle-btn" type="button">اعلان مرورگر: خاموش</button>
+     <button id="refresh-all-btn" type="button">نوسازی</button>
+    </div>
+   </div>
+   <div class="header-brand">
+    <img src="/static/flux-mark.png" alt="" width="34" height="34">
+    <div>
+     <h1>صندوق هوشمند توجه و ارکستراسیون موازی</h1>
+     <p>مدیریت عامل‌های منتظر تأیید، درخت‌های کاری ایزوله، پیشگیری از تعارض، حافظهٔ گیت و پایپلاین‌های DAG</p>
+    </div>
+   </div>
+   <div class="telemetry-bar" id="telemetry-bar" role="status" aria-live="polite">
+    <span class="pill" id="stat-running">در حال اجرا: ۰ / ۳</span>
+    <span class="pill" id="stat-deferred">به تعویق افتاده: ۰</span>
+    <span class="pill urgent" id="stat-blocked">منتظر تأیید شما: ۰</span>
+    <span class="pill" id="stat-stream">جریان زنده: در حال اتصال…</span>
+   </div>
+   <div class="shortcut-bar" aria-label="میانبرهای صفحه‌کلید">
+    <span><kbd>j</kbd>/<kbd>k</kbd> پیمایش صف</span>
+    <span><kbd>Enter</kbd> پاسخ سریع درجا</span>
+    <span><kbd>o</kbd> پرش مستقیم به پرامپت</span>
+    <span><kbd>d</kbd> فصل‌بندی تغییرات (Diff Chapters)</span>
+    <span><kbd>a</kbd> تأیید پیشنهاد حافظه</span>
+    <span><kbd>r</kbd> علامت حل‌شده</span>
+    <span><kbd>1</kbd>–<kbd>9</kbd> انتخاب فوری</span>
+   </div>
+  </header>
+
+  <p id="global-error" class="alert-banner error" role="alert" hidden></p>
+  <p id="global-notice" class="alert-banner notice" role="status" hidden></p>
+
+  <section class="inbox-section" aria-labelledby="inbox-heading">
+   <div class="section-header">
+    <div>
+     <h2 id="inbox-heading">صف جلب توجه (Attention Inbox)</h2>
+     <p class="muted">مرتب‌شده بر اساس فوریت: ابتدا عامل‌های مسدودشده (نیازمند تأیید یا رفع ابهام)، سپس خطاها، هشدارهای همپوشانی و بازبینی‌ها.</p>
+    </div>
+    <div class="segmented" role="group" aria-label="فیلتر صندوق توجه">
+     <button id="filter-open" type="button" class="active">باز</button>
+     <button id="filter-all" type="button">همهٔ سوابق</button>
+    </div>
+   </div>
+   <div id="inbox-list" class="inbox-list" role="listbox" aria-label="موارد نیازمند توجه"></div>
+  </section>
+
+  <div class="sub-tabs" role="tablist" aria-label="ابزارهای اجرای موازی">
+   <button id="tab-worktrees" role="tab" aria-selected="true" aria-controls="panel-worktrees" type="button">۱ · Worktree ایزوله و پیشگیری از تعارض</button>
+   <button id="tab-pipelines" role="tab" aria-selected="false" aria-controls="panel-pipelines" type="button">۲ · پایپلاین‌های DAG</button>
+   <button id="tab-wiki" role="tab" aria-selected="false" aria-controls="panel-wiki" type="button">۳ · حافظهٔ مشترک گیت (Wiki)</button>
+  </div>
+
+  <section id="panel-worktrees" class="tab-panel" role="tabpanel" aria-labelledby="tab-worktrees">
+   <form id="worktree-form" class="card-form">
+    <h3>ایجاد محیط ایزولهٔ جدید (Git Worktree + پورت + دیتابیس + لینک وابستگی)</h3>
+    <div class="form-grid">
+     <label>پروژه (مخزن Git)
+      <select id="wt-project" required></select>
+     </label>
+     <label>نام محیط / عامل
+      <input id="wt-name" placeholder="مثلاً auth-refactor" maxlength="60" dir="ltr">
+     </label>
+     <label>شاخه یا کامیت مبنا
+      <input id="wt-base" value="HEAD" maxlength="200" dir="ltr" required>
+     </label>
+     <label>دامنهٔ فایل‌های مجاز (هر مورد با کاما)
+      <input id="wt-scope" placeholder="src/auth/, tests/test_auth.py" dir="ltr">
+     </label>
+    </div>
+    <div class="form-actions">
+     <button type="submit" class="primary">ساخت Worktree ایزوله</button>
+    </div>
+   </form>
+   <div id="worktree-list" class="entity-grid"></div>
+  </section>
+
+  <section id="panel-pipelines" class="tab-panel" role="tabpanel" aria-labelledby="tab-pipelines" hidden>
+   <div class="split-forms">
+    <form id="plan-form" class="card-form">
+     <h3>طراحی خودکار گراف وابستگی با عامل ارکستراتور</h3>
+     <label>پروژه
+      <select id="plan-project" required></select>
+     </label>
+     <label>دستیار ارکستراتور
+      <select id="plan-provider">
+       <option value="codex">Codex</option>
+       <option value="claude">Claude</option>
+       <option value="gemini">Gemini CLI</option>
+       <option value="gapcode">GapCode</option>
+       <option value="antigravity">Antigravity</option>
+      </select>
+     </label>
+     <label>هدف کلان پروژه
+      <textarea id="plan-objective" rows="3" placeholder="مثلاً: ابتدا مدل و مهاجرت دیتابیس سفارش‌ها را بساز و تستش را پاس کن، سپس به طور موازی API و صفحهٔ گزارش را پیاده‌سازی کن."></textarea>
+     </label>
+     <div class="form-actions">
+      <button type="submit">شکستن به گام‌های DAG (پیش‌نمایش)</button>
+     </div>
+    </form>
+
+    <form id="pipeline-form" class="card-form">
+     <h3>تعریف و اجرای پایپلاین DAG</h3>
+     <div class="form-grid">
+      <label>پروژه
+       <select id="pipe-project" required></select>
+      </label>
+      <label>نام پایپلاین
+       <input id="pipe-name" value="feature-pipeline" maxlength="80" dir="ltr" required>
+      </label>
+     </div>
+     <label>مشخصات گام‌ها و دروازه‌های تست (JSON آرایهٔ steps)
+      <textarea id="pipe-steps" rows="7" dir="ltr" required></textarea>
+     </label>
+     <div class="form-actions">
+      <label class="checkbox-label"><input id="pipe-autostart" type="checkbox" checked> شروع بلافاصله پس از ثبت</label>
+      <button type="submit" class="primary">ثبت پایپلاین</button>
+     </div>
+    </form>
+   </div>
+   <div id="pipeline-list" class="entity-stack"></div>
+  </section>
+
+  <section id="panel-wiki" class="tab-panel" role="tabpanel" aria-labelledby="tab-wiki" hidden>
+   <form id="wiki-form" class="card-form">
+    <div class="section-header">
+     <h3>حافظهٔ مشترک و ماندگار مخزن (<code>refs/flux/memory</code>)</h3>
+     <label class="inline-setting">پروژه
+      <select id="wiki-project"></select>
+     </label>
+    </div>
+    <p class="muted" id="wiki-head-info">هر نکتهٔ تأییدشده بدون آلوده کردن شاخه‌های کد، در مرجع گیت ذخیره شده و به پرامپت همهٔ عامل‌های موازی و نشست‌های بعدی تزریق می‌شود.</p>
+    <div class="form-grid">
+     <label>عنوان نکته / استاندارد
+      <input id="wiki-title" maxlength="160" required placeholder="مثلاً استاندارد اجرای تست‌ها در این مخزن">
+     </label>
+     <label>دسته
+      <select id="wiki-kind">
+       <option value="convention">استاندارد کدنویسی (convention)</option>
+       <option value="decision">تصمیم معماری (decision)</option>
+       <option value="pitfall">تله / خطای شناخته‌شده (pitfall)</option>
+       <option value="fix">ریشهٔ باگ رفع‌شده (fix)</option>
+       <option value="note">یادداشت عمومی (note)</option>
+      </select>
+     </label>
+    </div>
+    <label>متن دانش مشترک
+     <textarea id="wiki-body" rows="3" maxlength="8000" required placeholder="توضیح دقیق و خلاصه که سایر عامل‌ها باید رعایت کنند…"></textarea>
+    </label>
+    <div class="form-actions">
+     <label class="checkbox-label"><input id="wiki-pinned" type="checkbox"> سنجاق‌شده (همیشه به همهٔ پرامپت‌ها تزریق شود)</label>
+     <button type="submit" class="primary">افزودن به حافظهٔ گیت</button>
+    </div>
+   </form>
+   <div id="wiki-entries" class="entity-stack"></div>
+   <details class="history-box">
+    <summary>تاریخچهٔ کامیت‌های حافظه در گیت (<code>refs/flux/memory</code>)</summary>
+    <div id="wiki-history"></div>
+   </details>
+  </section>
+ </main>
+
+ <dialog id="chapters-dialog" class="wide-dialog" aria-labelledby="chapters-title">
+  <div class="panel-title">
+   <h2 id="chapters-title">بازبینی فصل‌بندی‌شدهٔ تغییرات (Diff Chapters)</h2>
+   <button id="close-chapters" type="button" class="icon-button" aria-label="بستن">✕</button>
+  </div>
+  <p id="chapters-summary" class="muted"></p>
+  <nav id="chapters-toc" class="chapters-toc" aria-label="فصل‌های تغییر"></nav>
+  <div id="chapters-body" class="chapters-body"></div>
+ </dialog>
+
+ <dialog id="overlaps-dialog" class="wide-dialog" aria-labelledby="overlaps-title">
+  <div class="panel-title">
+   <h2 id="overlaps-title">گزارش همپوشانی کد و پیشگیری از تعارض</h2>
+   <button id="close-overlaps" type="button" class="icon-button" aria-label="بستن">✕</button>
+  </div>
+  <div id="overlaps-body" class="entity-stack"></div>
+ </dialog>
+
+ <script src="/static/attention.js"></script>
+</body>
+</html>
+

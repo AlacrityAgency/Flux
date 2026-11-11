@@ -24,16 +24,20 @@ ACTIVE = {"queued", "running"}
 
 class ChatSpec(BaseModel):
     title: str = Field(default="گفت‌وگوی جدید", min_length=1, max_length=160)
-    provider: Literal["codex", "claude", "gemini", "gemini-api", "gemini-web", "deepseek-web", "gapcode", "antigravity", "notebooklm"] = "codex"
+    provider: Literal["codex", "claude", "gemini", "gemini-api", "gemini-web", "deepseek-web", "gapcode", "antigravity", "notebooklm", "ollama", "groq", "openrouter", "together"] = "codex"
     notebook_id: str = Field(default='', max_length=100, pattern=r'^[A-Za-z0-9_-]*$')
     model: str = Field(default="", max_length=100)
     cwd: str = Field(min_length=1, max_length=1000)
     access: Literal["read", "work"] = "work"
+    mode: Literal["act", "plan"] = "act"
+    surgical_edits: bool = False
     project_id: str = Field(default='',max_length=100)
+    worktree_id: str = Field(default='', max_length=100, pattern=r'^[A-Za-z0-9_-]*$')
 
     @model_validator(mode='after')
     def provider_scope(self):
-        if self.provider=='gemini-api':self.access='read'
+        if self.provider in {'gemini-api', 'ollama', 'groq', 'openrouter', 'together'} and not self.surgical_edits:
+            self.access = 'read'
         if self.provider in {'gemini-web','deepseek-web'}:
             self.access='read'
             if self.model:raise ValueError('مدل اتصال وب در خود سایت انتخاب می‌شود.')
@@ -67,6 +71,11 @@ class TurnSpec(BaseModel):
     prompt: str = Field(min_length=1, max_length=60000)
     request_key: str = Field(min_length=1, max_length=100)
     use_memory: bool = True
+    mode: Literal["inherit", "act", "plan"] = "inherit"
+    auto_heal: bool = True
+    max_heal_rounds: int = Field(default=2, ge=0, le=5)
+    use_repomap: bool = True
+    use_sentinel: bool = True
 
     @field_validator("prompt")
     @classmethod
@@ -297,6 +306,8 @@ class EventParser:
             elif kind in {"turn.failed", "error"}:
                 err = event.get("error") or event
                 self.error = str(err.get("message") or err)
+                if isinstance(err, dict) and err.get("code") in {"permission_denied", "approval_required"}:
+                    self.blocked = True
         else:
             self.session_id = event.get("session_id") or self.session_id
             if kind == "stream_event":
@@ -344,6 +355,16 @@ class LocalRuntime:
         self.quota_monitor = QuotaMonitor()
         self.status_time = 0
         self.google_status_cache = {}
+        # Parallel-work hooks (set by flux.parallel); all optional so the runtime works alone.
+        self.max_parallel = max(1, int(os.environ.get('FLUX_MAX_PARALLEL', '3') or 3))
+        self.gate = None             # callable(chat, prompt) -> None | {'action': 'defer', 'reason': ...}
+        self.listeners = []          # callables(turn, chat) after a turn settles or is deferred
+        self.worktree_env = None     # callable(worktree_id) -> dict of env vars
+        self.worktree_lookup = None  # callable(worktree_id) -> worktree dict
+        self.preface_hooks = []      # callables(chat, prompt) -> str appended to the preface
+        self.agentic = None          # optional AgenticHub (repomap, plan/act, surgical, checkpoints, feedback, sentinel)
+        self.isolated_jobs = set()
+        self._resume_lock = None
         self.conn.executescript('''
             CREATE TABLE IF NOT EXISTS local_chats (
                 id TEXT PRIMARY KEY, title TEXT NOT NULL, provider TEXT NOT NULL,
@@ -369,15 +390,34 @@ class LocalRuntime:
                 self.conn.execute("ALTER TABLE local_chats ADD COLUMN notebook_id TEXT NOT NULL DEFAULT ''")
         with self.repo._lock,self.conn:
             columns={r[1] for r in self.conn.execute('PRAGMA table_info(local_chats)')}
-            for name,definition in [('project_id',"TEXT NOT NULL DEFAULT ''"),('memory_signature',"TEXT NOT NULL DEFAULT ''"),('archived_at',"TEXT NOT NULL DEFAULT ''")]:
+            for name,definition in [
+                ('project_id',"TEXT NOT NULL DEFAULT ''"),
+                ('memory_signature',"TEXT NOT NULL DEFAULT ''"),
+                ('archived_at',"TEXT NOT NULL DEFAULT ''"),
+                ('worktree_id',"TEXT NOT NULL DEFAULT ''"),
+                ('mode',"TEXT NOT NULL DEFAULT 'act'"),
+                ('surgical_edits','INTEGER NOT NULL DEFAULT 0'),
+            ]:
                 if name not in columns:self.conn.execute(f'ALTER TABLE local_chats ADD COLUMN {name} {definition}')
             columns={r[1] for r in self.conn.execute('PRAGMA table_info(local_turns)')}
-            for name,definition in [('use_memory','INTEGER NOT NULL DEFAULT 1'),('context_meta',"TEXT NOT NULL DEFAULT '{}'")]:
+            for name,definition in [
+                ('use_memory','INTEGER NOT NULL DEFAULT 1'),
+                ('context_meta',"TEXT NOT NULL DEFAULT '{}'"),
+                ('hold',"TEXT NOT NULL DEFAULT '{}'"),
+                ('mode',"TEXT NOT NULL DEFAULT 'act'"),
+                ('auto_heal','INTEGER NOT NULL DEFAULT 1'),
+                ('max_heal_rounds','INTEGER NOT NULL DEFAULT 2'),
+                ('use_repomap','INTEGER NOT NULL DEFAULT 1'),
+                ('use_sentinel','INTEGER NOT NULL DEFAULT 1'),
+                ('checkpoint_before',"TEXT NOT NULL DEFAULT ''"),
+                ('checkpoint_after',"TEXT NOT NULL DEFAULT ''"),
+                ('agentic_meta',"TEXT NOT NULL DEFAULT '{}'"),
+            ]:
                 if name not in columns:self.conn.execute(f'ALTER TABLE local_turns ADD COLUMN {name} {definition}')
 
     def recover(self):
         with self.conn:
-            self.conn.execute("UPDATE local_turns SET state='interrupted', error=?, updated_at=? WHERE state IN ('queued','running')",
+            self.conn.execute("UPDATE local_turns SET state='interrupted', error=?, updated_at=? WHERE state IN ('queued','running','deferred')",
                               ("برنامه در اجرای قبلی بسته شد. ادامه فقط با پیام تازه انجام می‌شود.", now()))
 
     def usage_summary(self):
@@ -474,14 +514,14 @@ class LocalRuntime:
             if title is not None:
                 self.conn.execute("UPDATE local_chats SET title=? WHERE id=?", (title.strip(), ident))
             if archived is not None:
-                if archived and any(t["state"] in ACTIVE for t in chat["turns"]):
+                if archived and any(t["state"] in ACTIVE or t["state"] == 'deferred' for t in chat["turns"]):
                     raise RuntimeError("گفتگو در حال اجراست؛ ابتدا اجرا را متوقف کنید.")
                 self.conn.execute("UPDATE local_chats SET archived_at=? WHERE id=?", (now() if archived else '', ident))
         return self.chat(ident)
 
     def delete_chat(self, ident):
         chat = self.chat(ident)
-        if any(t["state"] in ACTIVE for t in chat["turns"]):
+        if any(t["state"] in ACTIVE or t["state"] == 'deferred' for t in chat["turns"]):
             raise RuntimeError("گفتگو در حال اجراست؛ ابتدا اجرا را متوقف کنید.")
         try:
             linked = self.conn.execute("SELECT 1 FROM core_operations WHERE chat_id=? LIMIT 1", (ident,)).fetchone()
@@ -503,21 +543,37 @@ class LocalRuntime:
             "SELECT id FROM local_turns WHERE chat_id=? ORDER BY created_at", (ident,))]}
 
     def create_chat(self, spec):
-        if spec.project_id:
+        if spec.worktree_id:
+            worktree = self.worktree_lookup(spec.worktree_id) if self.worktree_lookup else None
+            if not worktree or worktree['state'] != 'active' or Path(worktree['path']).resolve() != Path(spec.cwd).resolve():
+                raise ValueError('worktree فعال نیست یا با پوشهٔ گفتگو یکی نیست.')
+            if spec.project_id and spec.project_id != worktree['project_id']:
+                raise ValueError('worktree به پروژهٔ دیگری تعلق دارد.')
+            spec.project_id = worktree['project_id']
+        elif spec.project_id:
             project=self.workspace.get_project(spec.project_id)
             if not project or project['archived'] or Path(project['path']).resolve()!=Path(spec.cwd).resolve():
                 raise ValueError('پروژه و پوشهٔ گفتگو باید به یک پروژهٔ فعال اشاره کنند.')
         ident = "local_" + uuid.uuid4().hex
         with self.conn:
-            self.conn.execute("INSERT INTO local_chats (id,title,provider,model,cwd,access,session_id,created_at,updated_at,notebook_id,project_id) VALUES (?,?,?,?,?,?,NULL,?,?,?,?)",
-                              (ident, spec.title, spec.provider, spec.model, spec.cwd, spec.access, now(), now(), spec.notebook_id,spec.project_id))
+            self.conn.execute(
+                "INSERT INTO local_chats (id,title,provider,model,cwd,access,session_id,created_at,updated_at,notebook_id,project_id,worktree_id,mode,surgical_edits) VALUES (?,?,?,?,?,?,NULL,?,?,?,?,?,?,?)",
+                (ident, spec.title, spec.provider, spec.model, spec.cwd, spec.access, now(), now(), spec.notebook_id, spec.project_id, spec.worktree_id, spec.mode, int(spec.surgical_edits)),
+            )
         return self.chat(ident)
 
     def turn(self, ident):
         row = self.conn.execute("SELECT * FROM local_turns WHERE id=?", (ident,)).fetchone()
         if not row:
             raise KeyError(ident)
-        return {**dict(row), "usage": json.loads(row["usage"]), 'context_meta':json.loads(row['context_meta'])}
+        d = dict(row)
+        return {
+            **d,
+            "usage": json.loads(d["usage"] or "{}"),
+            "context_meta": json.loads(d.get("context_meta") or "{}"),
+            "hold": json.loads(d.get("hold") or "{}"),
+            "agentic_meta": json.loads(d.get("agentic_meta") or "{}"),
+        }
 
     def events(self, ident, after=0):
         self.turn(ident)
@@ -542,31 +598,93 @@ class LocalRuntime:
             if existing["chat_id"] != chat_id or existing["prompt"] != spec.prompt or bool(existing['use_memory'])!=spec.use_memory:
                 raise ValueError("شناسهٔ درخواست برای پیام دیگری استفاده شده است.")
             return self.turn(existing["id"])
-        if any(t["state"] in ACTIVE for t in chat["turns"]):
+        if any(t["state"] in ACTIVE or t["state"] == 'deferred' for t in chat["turns"]):
             raise RuntimeError("این گفتگو هنوز در حال اجراست.")
-        if self.jobs or getattr(self,'web_connecting',False):
+        isolated = bool(chat.get('worktree_id'))
+        if getattr(self,'web_connecting',False):
             raise RuntimeError("ابتدا اجرای جاری را تمام یا متوقف کنید؛ اجراها به ترتیب انجام می‌شوند.")
-        if chat['provider'] not in {'gemini-api','gemini-web','deepseek-web'} and not find_cli(chat["provider"]):
+        if not isolated and self.jobs:
+            raise RuntimeError("ابتدا اجرای جاری را تمام یا متوقف کنید؛ اجراها به ترتیب انجام می‌شوند.")
+        if isolated and set(self.jobs) - self.isolated_jobs:
+            raise RuntimeError("یک اجرای بدون worktree روی پوشهٔ اصلی فعال است؛ ابتدا آن را تمام یا متوقف کنید.")
+        if chat['provider'] not in {'gemini-api','gemini-web','deepseek-web','ollama','groq','openrouter','together'} and not find_cli(chat["provider"]):
             raise ValueError("ابزار انتخاب‌شده نصب نیست؛ راهنمای اتصال را باز کنید.")
         if not Path(chat["cwd"]).is_dir():
             raise ValueError("پوشهٔ کاری دیگر وجود ندارد.")
-        if chat['project_id']:
+        if chat['project_id'] and not isolated:
             project=self.workspace.get_project(chat['project_id'])
             if not project or project['archived'] or Path(project['path']).resolve()!=Path(chat['cwd']).resolve():raise ValueError('پروژهٔ گفتگو تغییر کرده است؛ گفتگوی تازه بسازید.')
+        hold = None
+        if isolated:
+            if len(self.jobs) >= self.max_parallel:
+                hold = {'action': 'defer', 'level': 'capacity', 'reason': f'ظرفیت اجرای موازی ({self.max_parallel}) پر است.'}
+            elif self.gate:
+                hold = self.gate(chat, spec.prompt)
         memory_on=spec.use_memory and chat['provider']!='notebooklm'
-        context=self.workspace.evidence_pack(spec.prompt,chat['project_id']) if memory_on else None
+        context=self.workspace.evidence_pack(spec.prompt,chat['project_id']) if memory_on and not hold else None
         signature=str(memory_on)+':'+self.workspace.memory_epoch(chat['project_id'])
         if signature!=chat['memory_signature']:
             chat['session_id']=None
         meta={k:v for k,v in context.items() if k not in {'rendered','evidence'}} if context else {'enabled':False,'provider_memory':'notebook-sources' if chat['provider']=='notebooklm' else 'off'}
+        effective_mode = (chat.get('mode') or 'act') if spec.mode == 'inherit' else spec.mode
         ident = "turn_" + uuid.uuid4().hex
         with self.conn:
-            self.conn.execute("INSERT INTO local_turns (id,chat_id,request_key,prompt,state,created_at,updated_at,use_memory,context_meta) VALUES (?,?,?,?,'queued',?,?,?,?)",
-                              (ident, chat_id, spec.request_key, spec.prompt, now(), now(),int(spec.use_memory),json.dumps(meta)))
+            self.conn.execute(
+                "INSERT INTO local_turns (id,chat_id,request_key,prompt,state,created_at,updated_at,use_memory,context_meta,hold,mode,auto_heal,max_heal_rounds,use_repomap,use_sentinel) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    ident, chat_id, spec.request_key, spec.prompt, 'deferred' if hold else 'queued', now(), now(),
+                    int(spec.use_memory), json.dumps(meta), json.dumps(hold or {}, ensure_ascii=False),
+                    effective_mode, int(spec.auto_heal), int(spec.max_heal_rounds), int(spec.use_repomap), int(spec.use_sentinel),
+                ),
+            )
             title = spec.prompt[:70] if not chat["turns"] else chat["title"]
-            self.conn.execute("UPDATE local_chats SET updated_at=?,title=?,session_id=?,memory_signature=? WHERE id=?", (now(), title,chat['session_id'],signature,chat_id))
-        self.jobs[ident] = asyncio.create_task(self.execute(ident, chat, context))
+            self.conn.execute("UPDATE local_chats SET updated_at=?,title=?,session_id=?,memory_signature=?,mode=? WHERE id=?", (now(), title,chat['session_id'],signature,effective_mode,chat_id))
+        if hold:
+            self.emit(ident, "state", {"state": "deferred", "hold": hold})
+            self._notify(ident, chat)
+            return self.turn(ident)
+        self._launch(ident, chat, context)
         return self.turn(ident)
+
+    def _launch(self, ident, chat, context):
+        if chat.get('worktree_id'):
+            self.isolated_jobs.add(ident)
+        self.jobs[ident] = asyncio.create_task(self.execute(ident, chat, context))
+
+    def _notify(self, ident, chat):
+        turn = self.turn(ident)
+        for listener in list(self.listeners):
+            try:
+                listener(turn, self.chat(chat['id']))
+            except Exception:
+                pass
+
+    async def resume_deferred(self):
+        """Start deferred worktree turns whose hold reason has cleared (capacity or overlap)."""
+        if self._resume_lock is None:
+            self._resume_lock = asyncio.Lock()
+        async with self._resume_lock:
+            rows = self.conn.execute("SELECT t.id, t.chat_id, t.prompt, t.use_memory FROM local_turns t "
+                                     "WHERE t.state='deferred' ORDER BY t.created_at").fetchall()
+            for row in rows:
+                if len(self.jobs) >= self.max_parallel or set(self.jobs) - self.isolated_jobs:
+                    return
+                chat = self.chat(row['chat_id'])
+                hold = await asyncio.to_thread(self.gate, chat, row['prompt']) if self.gate else None
+                if hold:
+                    with self.conn:
+                        self.conn.execute("UPDATE local_turns SET hold=?,updated_at=? WHERE id=?",
+                                          (json.dumps(hold, ensure_ascii=False), now(), row['id']))
+                    continue
+                memory_on = bool(row['use_memory']) and chat['provider'] != 'notebooklm'
+                context = self.workspace.evidence_pack(row['prompt'], chat['project_id']) if memory_on else None
+                meta = {k:v for k,v in context.items() if k not in {'rendered','evidence'}} if context else {'enabled': False}
+                if self.turn(row['id'])['state'] != 'deferred':
+                    continue  # cancelled meanwhile
+                self.update(row['id'], state='queued', hold='{}', context_meta=json.dumps(meta))
+                self.emit(row['id'], "state", {"state": "queued", "resumed": True})
+                self._notify(row['id'], chat)
+                self._launch(row['id'], chat, context)
 
     @staticmethod
     def preface(chat, context):
@@ -582,146 +700,261 @@ class LocalRuntime:
         stopping = threading.Event()
         readers = []
         writer = None
-        parser = EventParser(chat["provider"])
+        last_text = ""
         try:
             status = await self.status(refresh=True)
             provider_status = next(p for p in status["providers"] if p["id"] == chat["provider"])
             if not provider_status["authenticated"]:
                 raise RuntimeError(provider_status.get('detail') or "ورود با حساب اشتراکی آماده نیست. اتصال حساب‌ها را باز کنید.")
-            prompt = self.turn(ident)["prompt"]
-            preface=self.preface(chat,context)
-            prompt = preface + "\nUser request:\n" + prompt
+            turn_row = self.turn(ident)
+            user_prompt = turn_row["prompt"]
+            effective_mode = turn_row.get("mode") or chat.get("mode") or "act"
+            run_chat = dict(chat)
+            if effective_mode == "plan" and run_chat["provider"] != "antigravity":
+                run_chat["access"] = "read"
+
+            preface = self.preface(run_chat, context)
+            for hook in self.preface_hooks:
+                try:
+                    preface += hook(run_chat, user_prompt) or ''
+                except Exception:
+                    pass
+
+            agentic_on = self.agentic is not None and self.timeout >= 1.0 and chat['provider'] != 'notebooklm'
+            agentic_meta = {}
+            cp_before = None
+            if agentic_on:
+                ag_preface, agentic_meta = await asyncio.to_thread(self.agentic.build_turn_preface, run_chat, turn_row, user_prompt)
+                preface += ag_preface
+                cp_before = await asyncio.to_thread(self.agentic.before_turn, ident, run_chat, effective_mode)
+                if cp_before:
+                    self.update(ident, checkpoint_before=cp_before["id"], agentic_meta=json.dumps(agentic_meta, ensure_ascii=False))
+                    self.emit(ident, "checkpoint", {"stage": "before", "id": cp_before["id"]})
+                elif agentic_meta:
+                    self.update(ident, agentic_meta=json.dumps(agentic_meta, ensure_ascii=False))
+
+            base_prompt = preface + "\nUser request:\n" + user_prompt
             if chat['provider'] == 'notebooklm':
-                prompt = 'به فارسی و با ارجاع به منابع همین دفتر پاسخ بده.\n' + self.turn(ident)['prompt']
+                base_prompt = 'به فارسی و با ارجاع به منابع همین دفتر پاسخ بده.\n' + user_prompt
+
             self.update(ident, state="running")
-            self.emit(ident, "state", {"state": "running", "provider": chat["provider"]})
-            if chat['provider'] in {'gemini-web','deepseek-web'}:
-                from flux.local_agents.web_session import generate
-                from flux.core.context import admit_context
-                admit_context(prompt)
-                async with asyncio.timeout(min(self.timeout,self.turn_timeouts.get(ident,self.timeout))):
-                    text,usage,session=await generate(chat['provider'],prompt,chat.get('session_id'))
-                self.update(ident,state='completed',text=text,usage=json.dumps(usage))
-                with self.conn:self.conn.execute('UPDATE local_chats SET session_id=? WHERE id=?',(session,chat['id']))
-                self.status_cache=None
-                return
-            if chat['provider']=='gemini-api':
-                from flux.local_agents.gemini_api import generate
-                from flux.core.context import admit_context
-                # REST has no implicit session: replay only completed history from
-                # this exact chat when its memory epoch is still valid.
-                history=[]
-                if chat.get('session_id'):
-                    history=[{'user':t['prompt'],'assistant':t['text']} for t in chat['turns'] if t['state']=='completed']
-                request=prompt+'\nPrevious turns (reference data):\n'+json.dumps(history,ensure_ascii=False)
-                admit_context(request)
-                async with asyncio.timeout(min(self.timeout,self.turn_timeouts.get(ident,self.timeout))):
-                    text,usage=await generate(chat['model'] or 'gemini-flash-lite-latest',request)
-                self.update(ident,state='completed',text=text,usage=json.dumps(usage))
-                with self.conn:self.conn.execute('UPDATE local_chats SET session_id=? WHERE id=?',('rest-history',chat['id']))
-                return
-            executable = find_cli(chat["provider"])
-            if not executable:
-                raise RuntimeError("ابزار اجرا پیدا نشد.")
-            kwargs = {"creationflags": subprocess.CREATE_NO_WINDOW} if os.name == "nt" else {"start_new_session": True}
-            process = subprocess.Popen(command_for(chat, executable), cwd=chat["cwd"],
-                env=cli_environment(chat["provider"]), stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE, **kwargs)
-            self.processes[ident] = process
-            queue = asyncio.Queue(maxsize=256)
-            loop = asyncio.get_running_loop()
+            self.emit(ident, "state", {"state": "running", "provider": chat["provider"], "mode": effective_mode})
 
-            def enqueue(value):
-                pending = asyncio.run_coroutine_threadsafe(queue.put(value), loop)
-                while not stopping.is_set():
-                    try:
-                        pending.result(timeout=.2)
-                        return
-                    except FutureTimeout:
-                        continue
-                pending.cancel()
+            async def run_single_pass(pass_prompt: str):
+                nonlocal process, readers, writer, last_text
+                stopping.clear()
+                readers, writer = [], None
+                if chat['provider'] in {'gemini-web', 'deepseek-web'}:
+                    from flux.local_agents.web_session import generate
+                    from flux.core.context import admit_context
+                    admit_context(pass_prompt)
+                    async with asyncio.timeout(min(self.timeout, self.turn_timeouts.get(ident, self.timeout))):
+                        text, usage, session = await generate(chat['provider'], pass_prompt, chat.get('session_id'))
+                    with self.conn:
+                        self.conn.execute('UPDATE local_chats SET session_id=? WHERE id=?', (session, chat['id']))
+                    chat['session_id'] = session
+                    self.status_cache = None
+                    last_text = text
+                    return text, usage, False
+                if chat['provider'] in {'ollama', 'groq', 'openrouter', 'together'}:
+                    from flux.local_agents.free_apis import generate as free_generate
+                    from flux.core.context import admit_context
+                    history = []
+                    if chat.get('session_id'):
+                        history = [{'user': t['prompt'], 'assistant': t['text']} for t in chat['turns'] if t['state'] == 'completed']
+                    request = pass_prompt + ('\nPrevious turns:\n' + json.dumps(history, ensure_ascii=False) if history else '')
+                    admit_context(request)
+                    async with asyncio.timeout(min(self.timeout, self.turn_timeouts.get(ident, self.timeout))):
+                        text, usage = await free_generate(chat['provider'], chat.get('model') or '', request)
+                    with self.conn:
+                        self.conn.execute('UPDATE local_chats SET session_id=? WHERE id=?', ('chat-history', chat['id']))
+                    chat['session_id'] = 'chat-history'
+                    last_text = text
+                    return text, usage, False
+                if chat['provider'] == 'gemini-api':
+                    from flux.local_agents.gemini_api import generate
+                    from flux.core.context import admit_context
+                    history = []
+                    if chat.get('session_id'):
+                        history = [{'user': t['prompt'], 'assistant': t['text']} for t in chat['turns'] if t['state'] == 'completed']
+                    request = pass_prompt + '\nPrevious turns (reference data):\n' + json.dumps(history, ensure_ascii=False)
+                    admit_context(request)
+                    async with asyncio.timeout(min(self.timeout, self.turn_timeouts.get(ident, self.timeout))):
+                        text, usage = await generate(chat['model'] or 'gemini-flash-lite-latest', request)
+                    with self.conn:
+                        self.conn.execute('UPDATE local_chats SET session_id=? WHERE id=?', ('rest-history', chat['id']))
+                    chat['session_id'] = 'rest-history'
+                    last_text = text
+                    return text, usage, False
 
-            def read_stream(stream, source):
-                document = bytearray()
-                try:
+                executable = find_cli(chat["provider"])
+                if not executable:
+                    raise RuntimeError("ابزار اجرا پیدا نشد.")
+                kwargs = {"creationflags": subprocess.CREATE_NO_WINDOW} if os.name == "nt" else {"start_new_session": True}
+                env = cli_environment(chat["provider"])
+                if chat.get('worktree_id') and self.worktree_env:
+                    env.update(self.worktree_env(chat['worktree_id']))
+                parser = EventParser(chat["provider"])
+                process = subprocess.Popen(
+                    command_for(run_chat, executable), cwd=chat["cwd"],
+                    env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **kwargs,
+                )
+                self.processes[ident] = process
+                queue = asyncio.Queue(maxsize=256)
+                loop = asyncio.get_running_loop()
+
+                def enqueue(value):
+                    pending = asyncio.run_coroutine_threadsafe(queue.put(value), loop)
                     while not stopping.is_set():
-                        line = stream.readline(2_000_001)
-                        if not line:
-                            break
-                        if len(line) > 2_000_000:
-                            raise RuntimeError("خروجی ابزار بیش از اندازهٔ مجاز است.")
-                        if chat['provider'] == 'notebooklm' and source == 'stdout':
-                            document.extend(line)
-                            if len(document) > 2_000_000:
-                                raise RuntimeError('پاسخ NotebookLM بیش از اندازهٔ مجاز است.')
-                        else:
-                            enqueue((source, line.decode("utf-8", errors="replace")))
-                    if document:
-                        enqueue((source, document.decode('utf-8', errors='replace')))
-                except Exception as exc:
-                    enqueue(("stderr", str(exc)))
-                finally:
-                    enqueue((source, None))
+                        try:
+                            pending.result(timeout=.2)
+                            return
+                        except FutureTimeout:
+                            continue
+                    pending.cancel()
 
-            def send_input():
-                try:
-                    content = json.dumps({'event':'user','message':{'content':prompt}}, ensure_ascii=False)+'\n' if chat['provider'] == 'antigravity' else prompt
-                    process.stdin.write(content.encode("utf-8"))
-                    process.stdin.flush()
-                finally:
-                    process.stdin.close()
-
-            readers = [asyncio.create_task(asyncio.to_thread(read_stream, process.stdout, "stdout")),
-                       asyncio.create_task(asyncio.to_thread(read_stream, process.stderr, "stderr"))]
-            writer = asyncio.create_task(asyncio.to_thread(send_input))
-            stderr = ""
-            closed = 0
-            last_save = 0
-            async with asyncio.timeout(min(self.timeout,self.turn_timeouts.get(ident,self.timeout))):
-                while closed < 2:
-                    source, line = await queue.get()
-                    if line is None:
-                        closed += 1
-                        continue
-                    if source == "stderr":
-                        stderr = (stderr + line)[-8000:]
-                        continue
+                def read_stream(stream, source):
+                    document = bytearray()
                     try:
-                        event = json.loads(line)
-                    except json.JSONDecodeError:
-                        stderr = (stderr + line)[-8000:]
-                        continue
-                    if not isinstance(event, dict):
-                        continue
-                    for kind, payload in parser.feed(event):
-                        if kind != "text":
-                            self.emit(ident, kind, payload)
-                    if parser.session_id and parser.session_id != chat.get("session_id"):
-                        with self.conn:
-                            self.conn.execute("UPDATE local_chats SET session_id=? WHERE id=?", (parser.session_id, chat["id"]))
-                        chat["session_id"] = parser.session_id
-                    if time.monotonic() - last_save > .15:
-                        self.update(ident, text=parser.text)
-                        last_save = time.monotonic()
-                await asyncio.gather(writer, *readers)
-                code = await asyncio.to_thread(process.wait)
-            if parser.blocked:
-                self.update(ident, state="needs_input", text=parser.text, error="بعضی ابزارها مجوز نداشتند. فعالیت اجرا را بررسی کنید.")
-            elif code != 0 or not parser.complete or not parser.text.strip():
-                raise RuntimeError(parser.error or stderr.strip() or "اجرا بدون پاسخ کامل پایان یافت.")
+                        while not stopping.is_set():
+                            line = stream.readline(2_000_001)
+                            if not line:
+                                break
+                            if len(line) > 2_000_000:
+                                raise RuntimeError("خروجی ابزار بیش از اندازهٔ مجاز است.")
+                            if chat['provider'] == 'notebooklm' and source == 'stdout':
+                                document.extend(line)
+                                if len(document) > 2_000_000:
+                                    raise RuntimeError('پاسخ NotebookLM بیش از اندازهٔ مجاز است.')
+                            else:
+                                enqueue((source, line.decode("utf-8", errors="replace")))
+                        if document:
+                            enqueue((source, document.decode('utf-8', errors='replace')))
+                    except Exception as exc:
+                        enqueue(("stderr", str(exc)))
+                    finally:
+                        enqueue((source, None))
+
+                def send_input():
+                    try:
+                        content = json.dumps({'event': 'user', 'message': {'content': pass_prompt}}, ensure_ascii=False) + '\n' if chat['provider'] == 'antigravity' else pass_prompt
+                        process.stdin.write(content.encode("utf-8"))
+                        process.stdin.flush()
+                    finally:
+                        process.stdin.close()
+
+                readers = [asyncio.create_task(asyncio.to_thread(read_stream, process.stdout, "stdout")),
+                           asyncio.create_task(asyncio.to_thread(read_stream, process.stderr, "stderr"))]
+                writer = asyncio.create_task(asyncio.to_thread(send_input))
+                stderr = ""
+                closed = 0
+                last_save = 0
+                try:
+                    async with asyncio.timeout(min(self.timeout, self.turn_timeouts.get(ident, self.timeout))):
+                        while closed < 2:
+                            source, line = await queue.get()
+                            if line is None:
+                                closed += 1
+                                continue
+                            if source == "stderr":
+                                stderr = (stderr + line)[-8000:]
+                                continue
+                            try:
+                                event = json.loads(line)
+                            except json.JSONDecodeError:
+                                stderr = (stderr + line)[-8000:]
+                                continue
+                            if not isinstance(event, dict):
+                                continue
+                            for kind, payload in parser.feed(event):
+                                if kind != "text":
+                                    self.emit(ident, kind, payload)
+                            if parser.session_id and parser.session_id != chat.get("session_id"):
+                                with self.conn:
+                                    self.conn.execute("UPDATE local_chats SET session_id=? WHERE id=?", (parser.session_id, chat["id"]))
+                                chat["session_id"] = parser.session_id
+                            if time.monotonic() - last_save > .15:
+                                last_text = parser.text
+                                self.update(ident, text=parser.text)
+                                last_save = time.monotonic()
+                        await asyncio.gather(writer, *readers)
+                        code = await asyncio.to_thread(process.wait)
+                finally:
+                    stopping.set()
+                    if process:
+                        await asyncio.to_thread(kill_tree, process)
+                        await asyncio.to_thread(process.wait)
+                    pending = readers + ([writer] if writer else [])
+                    if pending:
+                        await asyncio.gather(*pending, return_exceptions=True)
+                    if process:
+                        for s in (process.stdout, process.stderr):
+                            s.close()
+                    self.processes.pop(ident, None)
+                    process, readers, writer = None, [], None
+
+                last_text = parser.text
+                if parser.blocked:
+                    return parser.text, parser.usage, True
+                if code != 0 or not parser.complete or not parser.text.strip():
+                    raise RuntimeError(parser.error or stderr.strip() or "اجرا بدون پاسخ کامل پایان یافت.")
+                return parser.text, parser.usage, False
+
+            current_prompt = base_prompt
+            round_idx = 0
+            had_failure = False
+            final_text, final_usage, was_blocked = "", {}, False
+            while True:
+                final_text, final_usage, was_blocked = await run_single_pass(current_prompt)
+                if was_blocked or not agentic_on:
+                    break
+                outcome = await asyncio.to_thread(
+                    self.agentic.process_round,
+                    ident, chat, turn_row, effective_mode, cp_before, final_text, round_idx, had_failure,
+                )
+                if outcome.get("plan"):
+                    agentic_meta["plan_id"] = outcome["plan"]["id"]
+                    agentic_meta["plan_steps"] = len(outcome["plan"]["steps"])
+                    self.emit(ident, "plan", {"id": outcome["plan"]["id"], "steps": len(outcome["plan"]["steps"])})
+                if outcome.get("surgical"):
+                    agentic_meta["surgical"] = outcome["surgical"]
+                    self.emit(ident, "surgical", outcome["surgical"])
+                if outcome.get("verification"):
+                    v = outcome["verification"]
+                    agentic_meta["verification"] = {"passed": v["passed"], "failed_checks": v["failed_checks"], "files_checked": v["files_checked"]}
+                    self.emit(ident, "verification", agentic_meta["verification"])
+                if outcome.get("checkpoint_after"):
+                    cp_after = outcome["checkpoint_after"]
+                    self.update(ident, checkpoint_after=cp_after["id"])
+                    self.emit(ident, "checkpoint", {"stage": "after", "id": cp_after["id"]})
+                agentic_meta["heal_rounds"] = round_idx
+                if outcome.get("needs_heal"):
+                    round_idx += 1
+                    had_failure = True
+                    self.emit(ident, "self_heal", {"round": round_idx, "reason": (outcome.get("verification") or {}).get("failed_checks") or ["surgical_edit"]})
+                    current_prompt = (
+                        preface + "\nOriginal user request:\n" + user_prompt + "\n\n" + outcome["repair_prompt"]
+                    )
+                    continue
+                break
+
+            if was_blocked:
+                self.update(ident, state="needs_input", text=final_text, error="بعضی ابزارها مجوز نداشتند. فعالیت اجرا را بررسی کنید.",
+                            agentic_meta=json.dumps(agentic_meta, ensure_ascii=False))
             else:
-                self.update(ident, state="completed", text=parser.text, usage=json.dumps(parser.usage))
+                self.update(ident, state="completed", text=final_text, usage=json.dumps(final_usage),
+                            agentic_meta=json.dumps(agentic_meta, ensure_ascii=False))
         except asyncio.CancelledError:
             stopping.set()
             if process:
                 await asyncio.to_thread(kill_tree, process)
-            self.update(ident, state="cancelled", text=parser.text)
+            self.update(ident, state="cancelled", text=last_text)
         except Exception as exc:
             stopping.set()
             if process:
                 await asyncio.to_thread(kill_tree, process)
             message = "مهلت اجرا تمام شد؛ برای ادامه پیام تازه بفرستید." if isinstance(exc, TimeoutError) else str(exc)
-            self.update(ident, state="failed", text=parser.text, error=message[-8000:])
+            self.update(ident, state="failed", text=last_text, error=message[-8000:])
         finally:
             stopping.set()
             if chat['provider'] in {'gemini-web','deepseek-web'}:
@@ -737,11 +970,21 @@ class LocalRuntime:
                     stream.close()
             self.processes.pop(ident, None)
             self.jobs.pop(ident, None)
+            self.isolated_jobs.discard(ident)
             self.turn_timeouts.pop(ident,None)
             self.emit(ident, "state", {"state": self.turn(ident)["state"]})
+            self._notify(ident, chat)
+            if self.conn.execute("SELECT 1 FROM local_turns WHERE state='deferred' LIMIT 1").fetchone():
+                asyncio.get_running_loop().create_task(self.resume_deferred())
 
     async def cancel(self, ident):
-        if self.turn(ident)["state"] not in ACTIVE:
+        current = self.turn(ident)
+        if current["state"] == 'deferred':
+            self.update(ident, state="cancelled", hold='{}')
+            self.emit(ident, "state", {"state": "cancelled"})
+            self._notify(ident, self.chat(current["chat_id"]))
+            return self.turn(ident)
+        if current["state"] not in ACTIVE:
             raise RuntimeError("این اجرا پایان یافته است.")
         job = self.jobs.get(ident)
         if job:
@@ -751,6 +994,8 @@ class LocalRuntime:
         if self.turn(ident)["state"] in ACTIVE:
             self.update(ident, state="cancelled")
             self.jobs.pop(ident, None)
+            self.isolated_jobs.discard(ident)
+            self._notify(ident, self.chat(current["chat_id"]))
         return self.turn(ident)
 
     async def close(self):
@@ -764,6 +1009,9 @@ class LocalRuntime:
             if provider in {'gemini-web','deepseek-web'}:
                 from flux.local_agents.web_session import inspect as inspect_web
                 return inspect_web(provider)
+            if provider in {'ollama', 'groq', 'openrouter', 'together'}:
+                from flux.local_agents.free_apis import inspect_provider
+                return inspect_provider(provider)
             executable = find_cli(provider)
             if provider=='gemini-api':
                 from flux.local_agents.gemini_api import get_provider_key
@@ -808,9 +1056,13 @@ class LocalRuntime:
             except Exception:
                 result["detail"] = "وضعیت ورود قابل بررسی نبود؛ راهنمای اتصال را ببینید."
             return result
-        values = await asyncio.gather(*(asyncio.to_thread(inspect, p) for p in ("codex", "claude", 'gemini-api','gemini-web','deepseek-web','gemini','gapcode','antigravity', 'notebooklm')))
+        values = await asyncio.gather(*(asyncio.to_thread(inspect, p) for p in ("codex", "claude", 'gemini-api','gemini-web','deepseek-web','gemini','gapcode','antigravity', 'notebooklm', 'ollama', 'groq', 'openrouter', 'together')))
         models = {"codex": [], "gapcode":[], 'gemini':list(GEMINI_CLI_MODELS), 'gemini-web':[],'deepseek-web':[], 'gemini-api':list(GEMINI_API_MODELS), "claude": ["sonnet", "opus", "haiku"], 'notebooklm': [],
-                  'antigravity': next(p.get('models', []) for p in values if p['id']=='antigravity')}
+                  'antigravity': next(p.get('models', []) for p in values if p['id']=='antigravity'),
+                  'ollama': next((p.get('models', []) for p in values if p['id']=='ollama'), []),
+                  'groq': next((p.get('models', []) for p in values if p['id']=='groq'), []),
+                  'openrouter': next((p.get('models', []) for p in values if p['id']=='openrouter'), []),
+                  'together': next((p.get('models', []) for p in values if p['id']=='together'), [])}
         cache = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "models_cache.json"
         try:
             models["codex"] = [m["slug"] for m in json.loads(cache.read_text(encoding="utf-8")).get("models", []) if m.get("slug")]

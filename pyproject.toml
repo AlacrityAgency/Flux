@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flux-engine"
-version = "0.5.1"
+version = "0.7.0"
 authors = [{name = "XioDr"}]
-description = "Flux Agentic Engine MVP"
+description = "Flux Agentic Engine — Tree-sitter RepoMap, Plan/Act, Compiler Self-Healing, Surgical Edits, Shadow Git Checkpoints & Isolated Parallel Worktrees"
 readme = "README.md"
+license = {text = "Apache-2.0"}
 requires-python = ">=3.12"
 dependencies = [
     "pydantic>=2.9.0",
@@ -19,6 +20,9 @@ dependencies = [
     "tiktoken>=0.9.0",
     "playwright==1.62.0"
 ]
+
+[project.scripts]
+flux = "flux.cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -33,6 +37,9 @@ pythonpath = ["src"]
 markers = [
     "asyncio: mark test as async coroutine"
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.package-data]
 flux = ["static/*", "static/fonts/*"]

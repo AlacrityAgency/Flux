@@ -96,9 +96,57 @@ def cmd_events(args):
         print(f"[{ev['sequence']}] {ev['created_at']} | {ev['from_state']} -> {ev['to_state']} | {ev['reason']}")
 
 
+def cmd_daemon(args):
+    """Headless daemon: the same API without UI side effects, suitable for servers and CI."""
+    import os
+    import uvicorn
+
+    if args.token:
+        os.environ["FLUX_API_TOKEN"] = args.token
+    loopback = args.host == "localhost" or _is_loopback(args.host)
+    if not args.uds and not loopback and not os.environ.get("FLUX_API_TOKEN"):
+        print("Refusing to bind a non-loopback address without --token or FLUX_API_TOKEN.", file=sys.stderr)
+        sys.exit(2)
+    if args.allow_host:
+        os.environ["FLUX_ALLOWED_HOSTS"] = ",".join(filter(None, [os.environ.get("FLUX_ALLOWED_HOSTS", ""), *args.allow_host]))
+    if args.max_parallel:
+        os.environ["FLUX_MAX_PARALLEL"] = str(args.max_parallel)
+    engine = get_configured_engine()
+    api_app = create_app(engine=engine)
+    where = args.uds or f"http://{args.host}:{args.port}"
+    print(f"Flux daemon listening on {where} (headless)", flush=True)
+    if args.uds:
+        uvicorn.run(api_app, uds=args.uds, log_level=args.log_level)
+    else:
+        uvicorn.run(api_app, host=args.host, port=args.port, log_level=args.log_level)
+
+
+def _is_loopback(host):
+    import ipaddress
+    try:
+        return ipaddress.ip_address(host.strip("[]")).is_loopback
+    except ValueError:
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(description="Flux Agentic Engine CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # daemon
+    p_daemon = subparsers.add_parser("daemon", help="Run the headless daemon (API + SSE + WebSocket)")
+    p_daemon.add_argument("--host", default="127.0.0.1")
+    p_daemon.add_argument("--port", type=int, default=8040)
+    p_daemon.add_argument("--uds", help="Listen on a Unix domain socket instead of TCP (POSIX)")
+    p_daemon.add_argument("--token", help="Bearer token required for every request (or FLUX_API_TOKEN)")
+    p_daemon.add_argument("--allow-host", action="append", default=[], help="Extra Host header to accept")
+    p_daemon.add_argument("--max-parallel", type=int, help="Maximum agents running at once in worktrees")
+    p_daemon.add_argument("--log-level", default="info")
+    p_daemon.set_defaults(func=cmd_daemon)
+
+    # ctl (client for a running daemon)
+    from flux.ctl import register as register_ctl
+    register_ctl(subparsers)
 
     # serve
     p_serve = subparsers.add_parser("serve", help="Start FastAPI service")

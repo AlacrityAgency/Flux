@@ -24,10 +24,13 @@ def protect(data, decrypt=False):
     finally:ctypes.windll.kernel32.LocalFree(out.data)
 
 
+ALLOWED_PROVIDERS = {'gemini', 'groq', 'openrouter', 'together'}
+
+
 def save_provider_key(provider,key):
-    if provider!='gemini':raise ValueError('Provider key is not supported.')
+    if provider not in ALLOWED_PROVIDERS:raise ValueError('Provider key is not supported.')
     key=key.strip()
-    if key and (len(key)<16 or not re.fullmatch(r'[A-Za-z0-9_.-]+',key)):raise ValueError('API key format is invalid.')
+    if key and (len(key)<8 or not re.fullmatch(r'[A-Za-z0-9_.:/-]+',key)):raise ValueError('API key format is invalid.')
     path=key_path();path.parent.mkdir(parents=True,exist_ok=True)
     data=json.loads(path.read_text(encoding='utf-8')) if path.is_file() else {}
     if key:data[provider]=base64.b64encode(protect(key.encode())).decode('ascii')

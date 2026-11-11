@@ -1,0 +1,161 @@
+{
+  "model": "gemini-3.8-flash",
+  "n_tasks": 12,
+  "trials_per_task": 2,
+  "mean_baseline_acc": 0.16666666666666666,
+  "mean_flux_ablation_acc": 0.125,
+  "mean_flux_laya_acc": 0.16666666666666666,
+  "mean_diff": 0.0,
+  "std_diff": 0.0,
+  "cohen_d": 0.0,
+  "mcnemar_discordant": {
+    "laya_win": 0,
+    "baseline_win": 0
+  },
+  "task_summary": [
+    {
+      "task_id": "logic_sat_0",
+      "family": "CSP / 3-SAT",
+      "gold": 5,
+      "baseline_acc": 1.0,
+      "flux_ablation_acc": 0.5,
+      "flux_laya_acc": 1.0,
+      "baseline_lat_p50": 25855.588600003102,
+      "flux_laya_lat_p50": 21637.699099999736,
+      "baseline_tokens": 3278.5,
+      "flux_laya_tokens": 1809.5
+    },
+    {
+      "task_id": "logic_knights_0",
+      "family": "CSP / Truth-Tellers",
+      "gold": 2,
+      "baseline_acc": 1.0,
+      "flux_ablation_acc": 1.0,
+      "flux_laya_acc": 1.0,
+      "baseline_lat_p50": 17233.23160000291,
+      "flux_laya_lat_p50": 6533.6209000015515,
+      "baseline_tokens": 2320.0,
+      "flux_laya_tokens": 897.5
+    },
+    {
+      "task_id": "logic_order_0",
+      "family": "CSP / Ordering",
+      "gold": 17,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "logic_assignment_0",
+      "family": "CSP / Assignment",
+      "gold": 4,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "crt_0",
+      "family": "Number Theory / CRT",
+      "gold": 237,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "modular_0",
+      "family": "Number Theory / ModExp",
+      "gold": 266,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "compositions_0",
+      "family": "Combinatorics / Compositions",
+      "gold": 270,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "coins_0",
+      "family": "Optimization / DP",
+      "gold": 8,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "coins_1",
+      "family": "Combinatorics / Coin Change",
+      "gold": 114,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "shortest_path_0",
+      "family": "Graph / Shortest Path",
+      "gold": 19,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "pattern_0",
+      "family": "Probability / Martingales",
+      "gold": 1302,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    },
+    {
+      "task_id": "inclusion_exclusion_0",
+      "family": "Combinatorics / PIE",
+      "gold": 97,
+      "baseline_acc": 0.0,
+      "flux_ablation_acc": 0.0,
+      "flux_laya_acc": 0.0,
+      "baseline_lat_p50": 0,
+      "flux_laya_lat_p50": 0.0,
+      "baseline_tokens": 0.0,
+      "flux_laya_tokens": 0.0
+    }
+  ]
+}

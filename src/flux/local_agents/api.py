@@ -7,8 +7,9 @@ from flux.local_agents.runtime import ChatSpec, TurnSpec
 from pydantic import BaseModel, Field, field_validator
 
 
-class GeminiKeyRequest(BaseModel):
-    api_key: str = Field(max_length=250,repr=False)
+class KeyRequest(BaseModel):
+    provider: Literal["gemini", "groq", "openrouter", "together"] = "gemini"
+    api_key: str = Field(max_length=250, repr=False)
 
 
 class ChatPatch(BaseModel):
@@ -63,11 +64,20 @@ def mount_local_api(app, runtime, static_dir):
             runtime.status_cache=None
 
     @router.put('/connections/gemini-api')
-    async def gemini_key(payload: GeminiKeyRequest):
+    async def gemini_key(payload: KeyRequest):
         from flux.local_agents.gemini_api import save_key
         save_key(payload.api_key)
         runtime.status_cache=None
         return {'saved':True,'has_key':bool(payload.api_key.strip()),'credential_validated':False}
+
+    @router.put('/connections/key/{provider}')
+    async def provider_key(provider: str, payload: KeyRequest):
+        from flux.local_agents.gemini_api import save_provider_key
+        if provider not in {"gemini", "groq", "openrouter", "together"}:
+            raise HTTPException(400, "پرووایدر نامعتبر است.")
+        save_provider_key(provider, payload.api_key)
+        runtime.status_cache = None
+        return {'saved': True, 'has_key': bool(payload.api_key.strip()), 'provider': provider}
 
     @router.get("/status")
     async def status(refresh: bool = False):

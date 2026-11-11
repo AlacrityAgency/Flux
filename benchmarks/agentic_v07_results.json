@@ -1,0 +1,35 @@
+{
+  "tokenizer": "tiktoken:cl100k_base",
+  "repomap": {
+    "files_scanned": 87,
+    "files_selected": 18,
+    "symbols_in_map": 166,
+    "dependency_edges": 126,
+    "engine": "tree-sitter+ast",
+    "raw_repo_tokens": 244707,
+    "repomap_tokens": 1824,
+    "token_reduction_pct": 99.25,
+    "compression_ratio_x": 134.16,
+    "cold_build_ms": 286.31,
+    "warm_cached_ms": 9.49
+  },
+  "surgical_edits": {
+    "target_file": "src/flux/local_agents/runtime.py",
+    "target_lines": 1089,
+    "full_rewrite_output_tokens": 14532,
+    "surgical_edit_output_tokens": 81,
+    "output_token_reduction_pct": 99.44,
+    "speedup_factor_x": 179.4,
+    "local_apply_ms": 20.231,
+    "estimated_llm_gen_full_s_at_95tps": 152.97,
+    "estimated_llm_gen_surgical_s_at_95tps": 0.85
+  },
+  "checkpoints_and_healing": {
+    "shadow_checkpoint_capture_ms": 536.5,
+    "shadow_checkpoint_rollback_ms": 363.85,
+    "user_git_polluted": false,
+    "verifier_fault_detection_ms": 4766.7,
+    "sentinel_lessons_recorded": 1
+  },
+  "live_gemini_3_8_flash_receipts": {}
+}
