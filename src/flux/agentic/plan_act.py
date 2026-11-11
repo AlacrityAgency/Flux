@@ -170,3 +170,4 @@ class PlanActManager:
             + (f"Target files: {files}\n" if files else "")
             + (f"Approved steps:\n{steps}\n" if steps else f"{body[:2500]}\n")
         )
+

@@ -1,6 +1,0 @@
-{
-  "id": "debug",
-  "description": "Evidence-backed hypothesis discovery, negative reproduction and unchanged-oracle fix verification.",
-  "workflow": "workflow.md",
-  "gates": []
-}

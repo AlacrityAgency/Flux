@@ -193,3 +193,4 @@ class ContextSentinel:
             "lessons_injected": picked_ids,
             "chars": len(rendered),
         }
+

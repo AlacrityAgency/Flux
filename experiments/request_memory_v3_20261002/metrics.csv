@@ -1,8 +1,0 @@
-arm,passed,tasks,closed_passed,closed_tasks,knowledge_passed,knowledge_tasks,mean_generation_seconds,input_tokens,mean_external_pack_tokens
-luna_flat,13,20,6,12,7,8,7.114119039996877,356767,2264.25
-luna_no_rag,7,20,7,12,0,8,6.528723729992635,338661,2.0
-luna_v1,13,20,6,12,7,8,6.954730414997902,356776,2265.375
-luna_v3_adaptive,12,20,5,12,7,8,7.143976499998826,353886,1726.125
-luna_v3_fixed,13,20,6,12,7,8,6.650736049993429,347047,871.25
-sol_no_rag,12,20,12,12,0,8,9.779897870006971,352501,2.0
-sol_v3_fixed,19,20,12,12,7,8,9.943252304999623,360887,871.25

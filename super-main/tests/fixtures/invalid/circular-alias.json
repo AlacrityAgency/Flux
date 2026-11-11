@@ -1,7 +1,0 @@
-{
-  "color": {
-    "$type": "color",
-    "a": {"$value": "{color.b}"},
-    "b": {"$value": "{color.a}"}
-  }
-}

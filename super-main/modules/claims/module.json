@@ -1,8 +1,0 @@
-{
-  "id": "claims",
-  "description": "Audit documents (reports, READMEs, feature specs, PDFs) against the code: does each claimed metric or feature exist, is it active, research-only or not measured, do names match what is computed, and are performance claims backed by validation numbers.",
-  "workflow": "workflow.md",
-  "gates": [
-    {"id": "claims.trace", "script": "gates/trace.py", "kind": "verdict", "description": "Trace document claims (metric identifiers, file references, performance claims) to the production code", "iso25010": ["Functional suitability", "Maintainability"]}
-  ]
-}

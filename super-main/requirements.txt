@@ -1,4 +1,0 @@
-# UI Design Skill Python Dependencies
-# All skill scripts use only the Python 3.8+ standard library.
-# Development and testing dependencies:
-pytest>=7.4.0

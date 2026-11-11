@@ -1,1 +1,0 @@
-{"phase":"before_generation_calls","error":"Legacy evidence grader expected task.kind; new task schema used family. Fixed before answer evaluation.","answer_model_calls":0,"planner_call_reused_after_prompt_hash_validation":true,"first_pass_embedding_index_ms":{"synthetic":3976.0933,"real":13657.7491},"weight_or_policy_tuning_from_answers":false}

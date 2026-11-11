@@ -52,6 +52,19 @@ test*.mp4
 /test_ageis_*.py
 /test_sol_*.py
 /inspect_*.py
+
+# Legacy experiments, old prototypes, and unneeded non-Flux assets
+/super-main/
+/flux-v1/
+/experiments/
+/benchmarks/four_arm_offline_20261015/
+/benchmarks/real_skill_compare_*/
+/assets/video/frames/
+/*.pdf
+/demo-tasks*.md
+/personal-demo*.md
+/hierarchy*.md
+/docs/ARCHITECTURE_AUDIT_AND_PARTITIONING_PLAN.md
 /*_success.txt
 /sol_debug_*.txt
 

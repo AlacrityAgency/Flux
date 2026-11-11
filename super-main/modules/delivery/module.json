@@ -1,9 +1,0 @@
-{
-  "id": "delivery",
-  "description": "Reproducible builds, environment configuration and tested deployment rollback.",
-  "workflow": "workflow.md",
-  "gates": [
-    {"id": "delivery.build", "script": "gates/check.py", "args": ["--check", "delivery.build"], "description": "Build plus artifact/startup assertions, not exit-code-only success", "iso25010": ["Maintainability"]},
-    {"id": "delivery.rollback", "script": "gates/check.py", "args": ["--check", "delivery.rollback"], "description": "Dedicated-environment rollback and compatibility smoke scenarios", "iso25010": ["Reliability"]}
-  ]
-}

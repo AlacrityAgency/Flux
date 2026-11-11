@@ -1,9 +1,0 @@
-{
-  "id": "backend",
-  "description": "Design and implement APIs, domain behaviour and retry-safe integrations.",
-  "workflow": "workflow.md",
-  "gates": [
-    {"id": "backend.behavior", "script": "gates/check.py", "args": ["--check", "backend.behavior"], "description": "Configured business-rule and API behavioural assertions", "iso25010": ["Functional suitability"]},
-    {"id": "backend.idempotency", "script": "gates/check.py", "args": ["--check", "backend.idempotency"], "description": "Duplicate delivery, concurrency and replay assertions", "iso25010": ["Reliability"]}
-  ]
-}

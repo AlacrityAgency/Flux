@@ -303,3 +303,4 @@ async def test_plan_act_self_healing_shadow_checkpoints_and_sentinel(agentic_env
         restored = (await client.post(f"/api/agentic/checkpoints/{cp_before}/restore")).json()
         assert restored["restored"] is True
         assert "negative transfer" not in (proj_dir / "src" / "payments" / "service.py").read_text(encoding="utf-8")
+

@@ -1,9 +1,0 @@
-{
-  "sources": [
-    {"source_id":"workspace.txt","text":"workspace human_owner: \"local-user\"\nworkspace concurrency: 4\nworkspace memory: \"project-scoped evidence\"","role":"canonical","schema":{"human_owner":"string","concurrency":"integer","memory":"string"}},
-    {"source_id":"contract.py","text":"from typing import Literal\nclass Contract:\n    human_owner: Literal['local-user']\n    def allowed(self):\n        return self.human_owner\n","format":"python","role":"contract","namespace":"flux"}
-  ],
-  "aliases":{"مالک انسانی":"human_owner","human owner":"human_owner","concurrency limit":"concurrency","حافظه":"memory"},
-  "request":{"request_id":"demo-owner-1","query":"مالک انسانی پروژه چه کسی است؟","task_kind":"factual"},
-  "policy":{"evidence_budget":3000,"prompt_budget":8000,"optional_units":1}
-}

@@ -1,9 +1,0 @@
-{
-  "id": "data",
-  "description": "Own schemas, transactional correctness, migrations and tested restoration.",
-  "workflow": "workflow.md",
-  "gates": [
-    {"id": "data.integration", "script": "gates/check.py", "args": ["--check", "data.integration"], "description": "Real-database constraints, transaction and migration scenarios", "iso25010": ["Reliability"]},
-    {"id": "data.restore", "script": "gates/check.py", "args": ["--check", "data.restore"], "description": "Restore into a disposable database and verify recovered records", "iso25010": ["Reliability"]}
-  ]
-}

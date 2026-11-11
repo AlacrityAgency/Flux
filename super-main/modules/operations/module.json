@@ -1,9 +1,0 @@
-{
-  "id": "operations",
-  "description": "SLOs, observability, load limits, dependency failures and recovery.",
-  "workflow": "workflow.md",
-  "gates": [
-    {"id": "operations.resilience", "script": "gates/check.py", "args": ["--check", "operations.resilience"], "description": "Dependency failure, readiness, redaction and recovery assertions", "iso25010": ["Reliability"]},
-    {"id": "operations.load", "script": "gates/check.py", "args": ["--check", "operations.load"], "description": "Configured load thresholds from k6 or a project scenario runner", "iso25010": ["Performance efficiency"]}
-  ]
-}

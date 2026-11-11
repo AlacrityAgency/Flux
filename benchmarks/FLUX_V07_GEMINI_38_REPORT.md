@@ -41,3 +41,4 @@ Fast, cost-efficient models like **Gemini 3.8 Flash** (and local/free models via
 | **Task Accuracy** | `38.75%` | **`100.0%` (100/100)** | Wilcoxon Signed-Rank $p = 5.14 \times 10^{-13}$ |
 | **False Accept Rate (Silent Bugs Delivered)** | `65.0%` | **`0.0%`** | Cohen's $d = +1.3044$ (*Huge Effect Size*) |
 | **Expected Calibration Error (ECE)** | `0.5625` (overconfident) | **`0.0000`** | Verified via 95% bootstrap confidence intervals |
+

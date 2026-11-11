@@ -1,5 +1,0 @@
-{
-  "color": {
-    "broken": {"$type": "not-a-dtcg-type", "$value": 123}
-  }
-}
