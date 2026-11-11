@@ -237,17 +237,25 @@
       <div class="opt-badge">Flux.exe · 89 MB</div>
     </div>
 
+    <div class="option-card" onclick="selectInstall('unix', this)">
+      <div class="opt-info">
+        <h3>Linux & macOS Universal Installer (1-Click Script)</h3>
+        <p>Sets up <code>~/.local/share/flux</code>, Python venv, <code>flux</code> & <code>flux-serve</code> CLI, and Desktop application launcher.</p>
+      </div>
+      <div class="opt-badge">bash install.sh</div>
+    </div>
+
     <div class="option-card" onclick="selectInstall('source', this)">
       <div class="opt-info">
         <h3>Python Pip Editable (Developer Mode)</h3>
-        <p>Full access to source files, tree-sitter bindings, and testing suite.</p>
+        <p>Cross-platform source installation with tree-sitter bindings and testing suite.</p>
       </div>
       <div class="opt-badge">pip install -e .</div>
     </div>
 
     <div class="option-card" onclick="selectInstall('daemon', this)">
       <div class="opt-info">
-        <h3>Headless CI / Server Daemon</h3>
+        <h3>Headless CI / Server Daemon (Linux / Mac / Win)</h3>
         <p>Runs headless orchestration server with token auth and live socket streams.</p>
       </div>
       <div class="opt-badge">flux daemon</div>
@@ -372,6 +380,8 @@
     const box = document.getElementById('launch-code');
     if (mode === 'standalone') {
       box.innerHTML = `<span class="comment"># Windows 1-Click Installer</span><br><span class="cmd">.\\Install-Flux.bat</span><br><br><span class="comment"># Or run compiled desktop binary directly:</span><br><span class="cmd">.\\dist\\Flux.exe</span>`;
+    } else if (mode === 'unix') {
+      box.innerHTML = `<span class="comment"># Linux & macOS 1-Click Universal Installer</span><br><span class="cmd">chmod +x install.sh && ./install.sh</span><br><br><span class="comment"># Then launch directly from terminal anywhere:</span><br><span class="cmd">flux serve --port 8000</span>`;
     } else if (mode === 'source') {
       box.innerHTML = `<span class="comment"># Install editable dependencies</span><br><span class="cmd">python -m pip install -e ".[agentic,dev]"</span><br><br><span class="comment"># Run workspace</span><br><span class="cmd">python -m flux serve --port 8000</span>`;
     } else if (mode === 'daemon') {

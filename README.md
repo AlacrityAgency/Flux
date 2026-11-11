@@ -101,18 +101,36 @@ Full reproducible scripts and raw receipts are available in [`benchmarks/FLUX_V0
 
 ## Quickstart
 
-### 1. Install from Source
+### 1. Installation
 
+#### A. Linux & macOS (1-Click Universal Installer)
+```bash
+git clone https://github.com/AlacrityAgency/Flux.git
+cd Flux
+chmod +x install.sh
+./install.sh
+```
+This automatically sets up a dedicated virtualenv, installs the `flux` & `flux-serve` CLI binaries into `~/.local/bin`, and registers a desktop application launcher (`flux.desktop` on Linux or `Flux.app` in `~/Applications` on macOS).
+
+#### B. Windows Desktop (1-Click Installer)
+Run `Setup-Flux.bat` or `Install-Flux.bat` from the repository root, or download the pre-compiled standalone binary from [GitHub Releases](https://github.com/AlacrityAgency/Flux/releases/tag/v0.7.0):
+```cmd
+.\Setup-Flux.bat
+```
+
+#### C. Python Pip (Developer Mode)
 ```bash
 git clone https://github.com/AlacrityAgency/Flux.git
 cd Flux
 python -m pip install -e ".[agentic,dev]"
 ```
 
-### 2. Launch the Web Workspace
+### 2. Launch the Web Workspace or Interactive Setup Wizard
 
 ```bash
+# Launch interactive web setup wizard:
 python -m flux serve --host 127.0.0.1 --port 8000
+# Then visit http://127.0.0.1:8000/setup or http://127.0.0.1:8000
 ```
 
 Open `http://127.0.0.1:8000` for the main Agentic Workspace (Plan/Act toggle, RepoMap, Auto-Heal, Surgical Edits, Free/Local Provider connections, and 1-click Shadow Checkpoint rollback) or `http://127.0.0.1:8000/attention` for the Parallel Multi-Agent Attention Inbox.
