@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background-color: #0A0A0A;
+    color: #F2F2EE;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px 56px;
+  }
+
+  /* Subtle background grid & ambient light */
+  .bg-glow {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(186, 237, 145, 0.12) 0%, rgba(10, 10, 10, 0) 70%);
+    pointer-events: none;
+  }
+  .bg-glow-2 {
+    position: absolute;
+    bottom: -150px;
+    left: 20%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(10, 10, 10, 0) 70%);
+    pointer-events: none;
+  }
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(242, 242, 238, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242, 242, 238, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .brand svg {
+    width: 38px;
+    height: 38px;
+  }
+  .brand-title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #F2F2EE;
+  }
+  .brand-tag {
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(186, 237, 145, 0.15);
+    color: #BAED91;
+    border: 1px solid rgba(186, 237, 145, 0.35);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+  }
+  .meta-tag {
+    font-size: 14px;
+    color: #888884;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  /* Main Hero Headline */
+  .hero {
+    position: relative;
+    z-index: 2;
+    margin-top: 6px;
+    margin-bottom: 12px;
+  }
+  .badge-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .badge-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #BAED91;
+    box-shadow: 0 0 10px #BAED91;
+  }
+  .badge-text {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: #BAED91;
+  }
+  .headline {
+    font-size: 44px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    color: #F2F2EE;
+  }
+  .headline span {
+    color: #BAED91;
+  }
+  .subhead {
+    margin-top: 10px;
+    font-size: 17px;
+    color: #A0A09C;
+    max-width: 900px;
+    line-height: 1.45;
+  }
+
+  /* Comparison Infographic Grid */
+  .grid-container {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 4px;
+  }
+
+  .card {
+    background: rgba(26, 26, 26, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px 18px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+  }
+  .card.highlight {
+    background: linear-gradient(180deg, rgba(26, 32, 24, 0.8) 0%, rgba(18, 20, 18, 0.8) 100%);
+    border-color: rgba(186, 237, 145, 0.35);
+  }
+
+  .card-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #7A7A76;
+    margin-bottom: 8px;
+  }
+  .card.highlight .card-label {
+    color: #BAED91;
+  }
+
+  .stat-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 4px 0;
+  }
+  .stat-row.baseline {
+    color: #7E7E7A;
+    font-size: 14px;
+  }
+  .stat-row.baseline .val {
+    text-decoration: line-through;
+    color: #E06C75;
+    font-weight: 600;
+  }
+  .stat-row.flux {
+    color: #F2F2EE;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-top: 2px;
+  }
+  .stat-row.flux .val {
+    color: #BAED91;
+  }
+
+  .card-footer {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 11px;
+    color: #92928E;
+    display: flex;
+    justify-content: space-between;
+  }
+  .badge-gain {
+    font-weight: 700;
+    color: #BAED91;
+  }
+
+  /* Bottom bar */
+  .footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 14px;
+    font-size: 13px;
+    color: #767672;
+  }
+  .features-pills {
+    display: flex;
+    gap: 8px;
+  }
+  .pill {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #C8C8C4;
+  }
+  .repo-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #F2F2EE;
+    font-weight: 600;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+  }
+  .repo-link span {
+    color: #BAED91;
+  }
+</style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <svg viewBox="0 0 256 256" fill="#F2F2EE">
+        <polygon points="48,40 220,40 192,84 92,84 92,180 64,224 48,224"/>
+        <polygon points="106,110 178,110 150,154 106,154"/>
+        <polygon fill="#BAED91" points="150,180 218,180 190,224 122,224"/>
+      </svg>
+      <div class="brand-title">Flux</div>
+      <div class="brand-tag">v0.7.0 Open Source</div>
+    </div>
+    <div class="meta-tag">Author: XioDr · Apache-2.0</div>
+  </div>
+
+  <!-- Hero Headline -->
+  <div class="hero">
+    <div class="badge-line">
+      <div class="badge-pulse"></div>
+      <div class="badge-text">Empirical Benchmark Receipt</div>
+    </div>
+    <div class="headline">Transforming <span>Gemini 3.8 Flash</span> into a Production Coder</div>
+    <div class="subhead">How a 6-part agentic software engineering harness eliminates context bloat, stops silent bugs, and delivers 100% verified accuracy.</div>
+  </div>
+
+  <!-- Infographic Metrics Grid -->
+  <div class="grid-container">
+    <!-- Card 1: Task Accuracy -->
+    <div class="card highlight">
+      <div>
+        <div class="card-label">Task Accuracy</div>
+        <div class="stat-row baseline">
+          <span>Raw Model:</span>
+          <span class="val">38.75%</span>
+        </div>
+        <div class="stat-row flux">
+          <span class="val">100.0%</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>100-Trial Paired Test</span>
+        <span class="badge-gain">+61.25% Gain</span>
+      </div>
+    </div>
+
+    <!-- Card 2: False Accept Rate -->
+    <div class="card highlight">
+      <div>
+        <div class="card-label">Silent Bugs (FAR)</div>
+        <div class="stat-row baseline">
+          <span>Raw Model:</span>
+          <span class="val">65.0%</span>
+        </div>
+        <div class="stat-row flux">
+          <span class="val">0.0%</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>Self-Healing Loop</span>
+        <span class="badge-gain">Zero Regressions</span>
+      </div>
+    </div>
+
+    <!-- Card 3: RepoMap Compression -->
+    <div class="card">
+      <div>
+        <div class="card-label">Repo Context Tokens</div>
+        <div class="stat-row baseline">
+          <span>Raw Code:</span>
+          <span class="val">244k</span>
+        </div>
+        <div class="stat-row flux">
+          <span class="val">1.8k</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>Tree-sitter + AST</span>
+        <span class="badge-gain">99.25% Saved</span>
+      </div>
+    </div>
+
+    <!-- Card 4: Surgical File Edits -->
+    <div class="card">
+      <div>
+        <div class="card-label">Edit Output Tokens</div>
+        <div class="stat-row baseline">
+          <span>Full Rewrite:</span>
+          <span class="val">14.5k</span>
+        </div>
+        <div class="stat-row flux">
+          <span class="val">81</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span>Surgical Diff</span>
+        <span class="badge-gain">179x Speedup</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer">
+    <div class="features-pills">
+      <div class="pill">Tree-sitter RepoMap</div>
+      <div class="pill">Plan / Act Mode</div>
+      <div class="pill">Self-Healing Verifier</div>
+      <div class="pill">Shadow Git</div>
+      <div class="pill">Isolated Worktrees</div>
+    </div>
+    <div class="repo-link">
+      <span>github.com/</span>AlacrityAgency/Flux
+    </div>
+  </div>
+</body>
+</html>
+

@@ -48,6 +48,10 @@ work/
 # Local diagnostic captures
 /*_output.txt
 /*_result.txt
+test*.mp4
+/test_ageis_*.py
+/test_sol_*.py
+/inspect_*.py
 /*_success.txt
 /sol_debug_*.txt
 

@@ -263,6 +263,13 @@ def create_app(engine=None, db_path=None):
     from flux.core.api import mount_core_api
     mount_core_api(app,engine.repo,workspace,local_runtime)
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+    @app.get("/setup", response_class=FileResponse)
+    async def setup_wizard():
+        setup_file = STATIC_DIR / "setup.html"
+        if not setup_file.is_file():
+            raise HTTPException(404, "صفحهٔ نصب پیدا نشد.")
+        return FileResponse(setup_file, media_type="text/html")
     design_root = (Path(sys._MEIPASS)/"flux"/"design-v2" if getattr(sys,"frozen",False) else Path(__file__).resolve().parents[3]/"docs"/"design-v2")
     @app.get("/design-v2/{page}")
     async def design_preview(page: str):
