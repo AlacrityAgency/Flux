@@ -24,7 +24,20 @@ dependencies = [
 [project.scripts]
 flux = "flux.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/AlacrityAgency/Flux"
+Repository = "https://github.com/AlacrityAgency/Flux"
+Issues = "https://github.com/AlacrityAgency/Flux/issues"
+
 [project.optional-dependencies]
+agentic = [
+    "tree-sitter>=0.24.0",
+    "tree-sitter-python>=0.23.0",
+    "tree-sitter-javascript>=0.23.0",
+    "tree-sitter-typescript>=0.23.0",
+    "ruff>=0.8.0",
+    "mypy>=1.11.0"
+]
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0"
